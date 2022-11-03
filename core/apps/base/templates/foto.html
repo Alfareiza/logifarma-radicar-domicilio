@@ -1,0 +1,13 @@
+{% extends "base/base.html" %}
+
+{% block title %}Foto de la fórmula{% endblock %}
+
+{% block content %}
+    <h2>Radicando Domicilio</h2>
+    <p>Envia fotografía de la formula médica...</p>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ wizard.management_form }}
+        <input type="submit" value="Continuar"/>
+    </form>
+{% endblock %}

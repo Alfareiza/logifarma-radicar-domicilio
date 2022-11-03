@@ -1,0 +1,26 @@
+{% extends "base/base.html" %}
+
+{% block title %}Autorización de servicio{% endblock %}
+
+{% block content %}
+    <h1>Autorización de servicio</h1>
+    <p>Ingresa el número de autorización de ser...</p>
+    {% for field in form %}
+        {{ field.error }}
+    {% endfor %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+        {{ wizard.management_form }}
+        {% if wizard.form.forms %}
+            {{ wizard.form.management_form }}
+            {% for form in wizard.form.forms %}
+                {{ form.as_table }}
+            {% endfor %}
+        {% else %}
+            {{ wizard.form }}
+        {% endif %}
+        </table>
+        <input type="submit" value="Continuar"/>
+    </form>
+{% endblock %}

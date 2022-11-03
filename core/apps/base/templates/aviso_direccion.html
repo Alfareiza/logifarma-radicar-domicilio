@@ -1,0 +1,14 @@
+{% extends "base/base.html" %}
+
+{% block title %}Dirección{% endblock %}
+
+{% block content %}
+    <h2>A que dirección enviamos tu domicilio?</h2>
+    <p>El envío de tu domicilio será Gratis</p>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ wizard.management_form }}
+    <input type="submit" value="Entiendo"/>
+    </form>
+{% endblock %}
+

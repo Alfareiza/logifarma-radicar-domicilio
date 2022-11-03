@@ -1,0 +1,15 @@
+{% extends "base/base.html" %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+    <h2>Radicando Domicilio</h2>
+    <p>Estás por radicar tu domicilio</p>
+    <p>Una vez finalices con tu solicitud....</p>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ wizard.management_form }}
+        <input type="submit" value="Continuar"/>
+    </form>
+{% endblock %}
+
