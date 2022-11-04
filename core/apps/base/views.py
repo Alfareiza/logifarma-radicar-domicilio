@@ -26,27 +26,28 @@ def autorizacion_servicio(request):
     a la vista 4, sino  responderá con un mensaje de 
     error.
     '''
-    if request.method == 'POST':
-        form = AutorizacionForm(request.POST)
-        if form.is_valid():
-            num_aut = form.data['query']
-            print('>>>> NUM-AUT ', num_aut)
-            # llama las dos apis, si no
-            # hace un redirect a foto.html ?
-            if num_aut == '123456':
-                print('match!!!')
-                return HttpResponseRedirect(reverse('base:foto'))
-            else:
-                print('nada, el numero no es el mismo')
-                return render(request,
-                              "base/autorizacion.html",
-                              {'form': AutorizacionForm()}
-                              )
-
-    return render(request,
-                  "base/autorizacion.html",
-                  {'form': AutorizacionForm()}
-                  )
+    ...
+    # if request.method == 'POST':
+    #     form = AutorizacionForm(request.POST)
+    #     if form.is_valid():
+    #         num_aut = form.data['query']
+    #         print('>>>> NUM-AUT ', num_aut)
+    #         # llama las dos apis, si no
+    #         # hace un redirect a foto.html ?
+    #         if num_aut == '123456':
+    #             print('match!!!')
+    #             return HttpResponseRedirect(reverse('base:foto'))
+    #         else:
+    #             print('nada, el numero no es el mismo')
+    #             return render(request,
+    #                           "base/autorizacion.html",
+    #                           {'form': AutorizacionForm()}
+    #                           )
+    #
+    # return render(request,
+    #               "base/autorizacion.html",
+    #               {'form': AutorizacionForm()}
+    #               )
 
 
 def foto(request):
