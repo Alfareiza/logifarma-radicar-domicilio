@@ -86,7 +86,10 @@ import os
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 # modify your db NAME as below:
-DATABASES = {'default': {'NAME': os.path.join(PROJECT_PATH, 'mysite.sqlite3')}}
+DATABASES = {'default':
+                 {'NAME': os.path.join(PROJECT_PATH, 'mysite.sqlite3'),
+                 'ENGINE': 'django.db.backends.sqlite3'}
+             }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
