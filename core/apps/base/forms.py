@@ -2,9 +2,7 @@ from datetime import datetime
 
 from django import forms
 
-from core.apps.base.resources.api_calls import api1 as call_api_eps
-
-from core.apps.base.resources.api_calls import api1 as call_api_2
+from core.apps.base.resources.api_calls import call_api_eps
 
 
 class Home(forms.Form):
