@@ -2,11 +2,10 @@
 
 from django.urls import path
 
-from core.apps.base.views import ContactWizard, ve
+from core.apps.base.views import ContactWizard
 
 app_name = 'base'
 
 urlpatterns = [
-    path('', ContactWizard.as_view(), name='home'),
-    path('ve', ve, name='ve')
+    path('', ContactWizard.as_view(), name='home')
 ]

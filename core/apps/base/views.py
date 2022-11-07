@@ -13,16 +13,6 @@ from django.core.mail import EmailMessage
 
 logger = logging.getLogger('django')
 
-
-def ve(request):
-    if request.method == 'POST':
-        print(f'request.POST={request.POST}')
-        form = FotoFormulaMedica(request.POST)
-        print(f'form={form}')
-        if form.is_valid():
-            print(request.POST)
-
-
 FORMS = [
     ("home", Home),
     ("instrucciones", Instrucciones),
