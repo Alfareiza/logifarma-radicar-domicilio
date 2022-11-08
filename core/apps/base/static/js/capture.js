@@ -99,7 +99,7 @@
       startbutton2.style.display = "block"
 
       video.style.display = "none"
-      photo.style.display = "block"
+      photo.style.display = "unset"
     } else {
       clearphoto();
     }
@@ -117,8 +117,8 @@ function myFunction() {
     var video = document.getElementById('video');
     var photo = document.getElementById('photo');
       continuarbtn.style.display = "none";
-      startbutton1.style.display = "block";
+      startbutton1.style.display = "grid";
       startbutton2.style.display = "none";
       photo.style.display = "none";
-      video.style.display = "grid";
+      video.style.display = "initial";
 }
