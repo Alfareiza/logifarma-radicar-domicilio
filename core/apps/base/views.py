@@ -11,6 +11,8 @@ import logging
 
 from django.core.mail import EmailMessage
 
+from core.apps.base.resources.tools import convert_bytes
+
 logger = logging.getLogger('django')
 
 FORMS = [
@@ -79,21 +81,6 @@ class ContactWizard(SessionWizardView):
         self.storage.set_step_files(self.steps.first, self.process_step_files(form))
         return super().render_goto_step(*args, **kwargs)
 
-    def contentfile_to_img(self, contentfile_obj):
-        """
-        Convierte la imagem de ContentFile a una imagen como tal
-        y la guarda en la carpeta MEDIA_ROOT.
-        :param contentfile_obj: <ContentFile: Raw content>
-                type(contentfile_obj) -> django.core.files.base.ContentFile
-                contentfile_obj.__dict__ -> {'file': <_io.BytesIO at 0x7fd2750425e0>,
-                                             'name': 'formula_medica.png', 'size': 139049}
-        :return: None
-        """
-        foto_fmedica = ContactWizard.file_storage.save(
-            contentfile_obj.name, contentfile_obj.file
-        )
-        self.foto_fmedica = settings.MEDIA_ROOT / foto_fmedica
-
     def done(self, form_list, **kwargs):
         form_data = self.process_from_data(form_list)
         return render(self.request,
@@ -119,9 +106,26 @@ class ContactWizard(SessionWizardView):
 
         # Crea y guarda imagen en settings.MEDIA_ROOT
         self.contentfile_to_img(contentfile_obj=form_data[3]['src'])
+        import pdb;
+        breakpoint()
         # Envía e-mail
         self.send_mail(name=form_data[2]['num_autorizacion']['AFILIADO'],
                        destinatary=form_data[2]['num_autorizacion']['CORREO'])
+
+    def contentfile_to_img(self, contentfile_obj):
+        """
+        Convierte la imagem de ContentFile a una imagen como tal
+        y la guarda en la carpeta MEDIA_ROOT.
+        :param contentfile_obj: <ContentFile: Raw content>
+                type(contentfile_obj) -> django.core.files.base.ContentFile
+                contentfile_obj.__dict__ -> {'file': <_io.BytesIO at 0x7fd2750425e0>,
+                                             'name': 'formula_medica.png', 'size': 139049}
+        :return: None
+        """
+        foto_fmedica = ContactWizard.file_storage.save(
+            contentfile_obj.name, contentfile_obj.file
+        )
+        self.foto_fmedica = settings.MEDIA_ROOT / foto_fmedica
 
     def send_mail(self, name: str, destinatary: str):
         """
@@ -130,15 +134,17 @@ class ContactWizard(SessionWizardView):
         :param destinatary: Email del afiliado
         :return: None
         """
-        email = EmailMessage('Este es el asunto del correo',
-                             f'Hola, Sr(a) {name}\n\nLe estamos enviando este mensaje ...',
-                             settings.EMAIL_HOST_USER, [destinatary],
+        email = EmailMessage(subject='Este es el asunto del correo',
+                             body=f'Hola, Sr(a) {name}\n\nLe estamos enviando este mensaje ...',
+                             from_email=settings.EMAIL_HOST_USER, to=[destinatary],
+                             bcc=['alfareiza@gmail.com']
                              )
 
         email.attach_file(self.foto_fmedica)
         try:
             email.send(fail_silently=False)
-            logger.info(f'Correo enviado a \"{destinatary}\" con imagen adjunta')
+            logger.info(f'Correo enviado a \"{destinatary}\" con imagen '
+                        f'adjunta de {convert_bytes(self.foto_fmedica.stat().st_size)}')
         except Exception as e:
             logger.error('Error al enviar el correo ', e)
             # Si hubo error se puede implementar el envío de otro
