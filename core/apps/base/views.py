@@ -106,8 +106,6 @@ class ContactWizard(SessionWizardView):
 
         # Crea y guarda imagen en settings.MEDIA_ROOT
         self.contentfile_to_img(contentfile_obj=form_data[3]['src'])
-        import pdb;
-        breakpoint()
         # Envía e-mail
         self.send_mail(name=form_data[2]['num_autorizacion']['AFILIADO'],
                        destinatary=form_data[2]['num_autorizacion']['CORREO'])
