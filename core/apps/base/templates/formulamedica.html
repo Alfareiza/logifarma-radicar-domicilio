@@ -1,0 +1,57 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Fórmula de la fórmula{% endblock %}
+
+
+{% block js %}
+<script>
+function noReq() {
+    var req = document.getElementById('id_fotoFormulaMedica-src');
+    req.removeAttribute('required');
+}
+</script>
+{% endblock %}
+
+{% block content %}
+    <h2>Radicando Domicilio</h2>
+    <p>Escoja el medio en como va a enviar la foto de la formula médica...</p>
+    {% for field in form %}
+        {{ field.error }}
+    {% endfor %}
+    <div class="container text-center">
+      <div class="row align-items-center">
+        <div class="col"></div>
+        <div class="col-6">
+            <div class="col align-self-center">
+              <form enctype="multipart/form-data" action="" method="post">
+                    {% csrf_token %}
+                    {{ wizard.management_form }}
+                    {% if wizard.form.forms %}
+                        {{ wizard.form.management_form }}
+                    {% else %}
+                        <div class="col align-self-center">
+                           <td>
+                              <input type="file" name="fotoFormulaMedica-src" accept="image/*"
+                                     required="" id="id_fotoFormulaMedica-src">
+                           </td>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col" style="display: grid;">
+                                <button type="submit" class="btn btn-success"
+                                        name="wizard_goto_step" value="foto"
+                                        onClick="noReq()">Take Photo</button>
+                            </div>
+                            <div class="col" style="display: grid;">
+                                <button type="submit" class="btn btn-primary"
+                                name="wizard_goto_step" value="avisoDireccion">Continue</button>
+                            </div>
+                        </div>
+                    {% endif %}
+              </form>
+            </div>
+        </div>
+        <div class="col"></div>
+      </div>
+    </div>
+{% endblock %}

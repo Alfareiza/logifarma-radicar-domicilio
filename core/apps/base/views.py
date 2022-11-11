@@ -1,42 +1,42 @@
+import logging
 import shutil
 
 from django.core.files.storage import FileSystemStorage
+from django.core.mail import EmailMessage
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from formtools.wizard.views import SessionWizardView
 
 from core import settings
 from core.apps.base.forms import *
-import logging
-
-from django.core.mail import EmailMessage
-
 from core.apps.base.resources.tools import convert_bytes
 
 logger = logging.getLogger('django')
 
-FORMS = [
+FORMS = (
     ("home", Home),
     ("instrucciones", Instrucciones),
     ("autorizacionServicio", AutorizacionServicio),
     ("fotoFormulaMedica", FotoFormulaMedica),
+    ("foto", Foto),
     ("avisoDireccion", AvisoDireccion),
     ("eligeMunicipio", EligeMunicipio),
     ("eligeBarrio", EligeBarrio),
     ("digitaDireccion", DigitaDireccion),
     ("digitaCelular", DigitaCelular)
-]
+)
 
 TEMPLATES = {
     "home": "home.html",
     "instrucciones": "instrucciones.html",
     "autorizacionServicio": "autorizacion.html",
-    "fotoFormulaMedica": "foto.html",
+    "fotoFormulaMedica": "formulamedica.html",
+    "foto": "foto.html",
     "avisoDireccion": "aviso_direccion.html",
     "eligeMunicipio": "elige_municipio.html",
     "eligeBarrio": "elige_barrio.html",
     "digitaDireccion": "digita_direccion.html",
-    "digitaCelular": "digita_celular.html"}
+    "digitaCelular": "digita_celular.html"
+}
 
 
 class ContactWizard(SessionWizardView):
@@ -62,7 +62,7 @@ class ContactWizard(SessionWizardView):
                         required id="id_autorizacionServicio-num_autorizacion">
                     </td>
                 </tr>
-        :return:
+        :return: Un objeto <class 'django.http.request.QueryDict'>
             Ex.:
                 <QueryDict:
                     {
@@ -72,7 +72,19 @@ class ContactWizard(SessionWizardView):
                     }
                 >
         """
-        # logger.info(self.get_form_step_data(form))
+        logger.info(self.get_form_step_data(form))
+        # 1. Validate if in "fotoFormulaMedica" was an image loaded
+        # Si it was, then skip to the "avisoDireccion"
+        # 2. Else, that's because the user clicked on "Take Photo",
+        # and it have to go to the "capturafoto" view.
+        # if self.steps.current == 'fotoFormulaMedica':
+        #     import pdb; breakpoint()
+        #     src_foto = form.data['fotoFormulaMedica-src']
+        #     if len(src_foto) > 10_000:
+        #         ...
+        #     # Validation 1.
+        #     # Validation 2.
+
         return self.get_form_step_data(form)
 
     def render_goto_step(self, *args, **kwargs):
@@ -154,7 +166,7 @@ class ContactWizard(SessionWizardView):
         """
         Elimina la carpeta donde se guardó la imagen y
         lo que en ella se encuentre.
-        :param MEDIA_ROOT: 'tmp_logifrm/formula_medica.png'
+        :param MEDIA_ROOT: 'tmp/formula_medica.png'
         :return: None
         """
         try:

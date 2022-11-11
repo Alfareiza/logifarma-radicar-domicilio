@@ -5,6 +5,7 @@ from django import forms
 
 from core.apps.base.resources.api_calls import call_api_eps
 
+
 class Home(forms.Form):
     """
     Vista 1: Página inicial de la aplicación
@@ -63,11 +64,19 @@ class FotoFormulaMedica(forms.Form):
     Página donde el usuário toma una foto o la escoje
     de su celular.
     """
-    # src = forms.ImageField(label='Foto')
-    src = forms.CharField(label='Foto')
+    src = forms.ImageField(label='Foto')
+
+
+class Foto(forms.Form):
+    """
+    Vista 5:
+    Página donde el usuário toma una foto o la escoje
+    de su celular.
+    """
 
     def clean_src(self):
-        import base64; from django.core.files.base import ContentFile
+        import base64;
+        from django.core.files.base import ContentFile
         formato, imgstr = self.cleaned_data.get('src').split(';base64,')
         ext = formato.split('/')[-1]
         return ContentFile(base64.b64decode(imgstr), name=f'formula_medica.{ext}')
@@ -75,34 +84,34 @@ class FotoFormulaMedica(forms.Form):
 
 class AvisoDireccion(forms.Form):
     """
-    Vista 5:
+    Vista 6:
     """
     ...
 
 
 class EligeMunicipio(forms.Form):
     """
-    Vista 6:
+    Vista 7:
     """
     ...
 
 
 class EligeBarrio(forms.Form):
     """
-    Vista 7:
+    Vista 8:
     """
     ...
 
 
 class DigitaDireccion(forms.Form):
     """
-    Vista 8:
+    Vista 9:
     """
     direccion = forms.CharField(max_length=40)
 
 
 class DigitaCelular(forms.Form):
     """
-    Vista 9:
+    Vista 10:
     """
     celular = forms.IntegerField()
