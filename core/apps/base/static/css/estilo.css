@@ -1,0 +1,708 @@
+
+/*mobile*/
+@media only screen and (max-width: 499px){
+
+h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
+    font-family: 'Montserrat', sans-serif; }
+        
+        header, main, footer, aside, nav, figure, figcaption, article { display: block;}
+        
+        h1, h2, h3, h4, h5, h6, p {margin: 0; }
+        
+        body { margin: 0 !important;}
+    
+    html {scroll-behavior: smooth;}
+
+
+main { width: 100%; height: auto; position: relative; margin: 0 auto; float: none;}
+
+main section#vist1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+main section#vist1 div#vist1 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+    height: 14vh;}
+
+main section#vist1 div#vist1 img#img1 { position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 6% 25%;}
+
+main section#vist1 div#vist1_1 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+    height: 20vh;}
+
+main section#vist1 div#vist1_1 img#img2 {position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 5% 25%;}
+
+main section#vist1 article#vist1 { position: relative;
+    margin: 0px auto 30%;
+    padding: 12% 10% 9% 11%;}
+
+main section#vist1 article#vist1 p#vist1 {position: relative;
+    font-weight: 500;
+    font-size: 1.3em }
+
+main section#vist1 button#btn_vist1 { position: relative;
+    padding: 3% 14%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 24%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+
+main section#vist2 button#btn_2 {margin: 2% 0% 0% 3%;
+    position: relative;
+    border: 0px;
+    background: #ffff;}
+
+main section#vist2 button#btn_2 p#btn {position: relative;
+    font-size: 1.2em;
+    color: #468bc4;}
+
+main section#vist2 div#vist2 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+main section#vist2 div#vist2 img#img1 { position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 3% 25%;}
+
+main section#vist2 div#vist2_text { position: relative;
+    margin: 0 auto;
+    width: 100%;
+    height: 15vh;
+    font-weight: 500;}
+
+main section#vist2 div#vist2_text h1 { font-size: 1.5em;
+    padding: 0 0 0 2%;}
+
+main section#vist2 div#vist2_text p {font-size: 1em;
+    padding: 2% 0 0 4%;}
+
+main section#vist2 nav#vist2 { width: 100%;
+    height: auto;
+    position: relative;
+    margin: 1vh 0% 0% 0%;
+    float: none;}
+
+main section#vist2 nav#vist2 div#img { width: 100%;
+    height: 15vh;}
+
+main section#vist2 nav#vist2 div#img img#vist2 { position: absolute;
+    padding: 0% 0% 0% 5%; width: 20%;}
+
+main section#vist2 nav#vist2 div#img p#vist2 {padding: 0px 2% 0 29%;}
+
+main section#vist2 button#btn_vist2 {    position: relative;
+    padding: 3% 14%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 24%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4} 
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+
+main section#vist3 button#btn_3 {margin: 2% 0% 0% 3%;
+    position: relative;
+    border: 0px;
+    background: #ffff;}
+    
+main section#vist3 button#btn_3 p#btn {position: relative;
+    font-size: 1.2em;
+    color: #468bc4;}
+
+main section#vist3 div#vist3 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+main section#vist3 div#vist3 img#img1 { position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 3% 25%;}
+
+main section#vist3 div#vist3_text {position: relative;
+    padding: 0% 0% 0% 9%;}
+
+main section#vist3 p#vist3 { font-size: 1em;}
+
+main section#vist3 h1#vist3 { font-size: 1.4em; font-weight: 500;}
+
+main section#vist3 input#inp_vist3 {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+main section#vist3 input#aut :focus {border-bottom: 1px solid #0572ce;
+    box-shadow: 0 1px 0 0 #0572ce;}
+
+main section#vist3 p#vist3_t { position: relative;
+    text-align: center;
+    margin: 1%;}
+
+main section#vist3 div#vist3_img {position: relative;
+    width: 100%;
+    height: 30vh;}
+
+main section#vist3 div#vist3_img img#vist3 {width: 90%;
+    padding: 5%}
+
+main section#vist3 p#vist3_t2 {padding: 6% 6% 1% 6%}
+
+main section#vist3 div#tet {margin: 2% 0 5% 0px; }
+
+main section#vist3 div#tet a#vist3 {left: 34%;
+    position: relative; font-size: 1.3em;}
+
+main section#vist3 button#btn_vist3 {    position: relative;
+    padding: 3% 14%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 24%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+
+main section#vist4 button#btn_4 {margin: 2% 0% 0% 3%;
+    position: relative;
+    border: 0px;
+    background: #ffff;}
+    
+main section#vist4 button#btn_4 p#btn {position: relative;
+    font-size: 1.2em;
+    color: #468bc4;}
+
+main section#vist4 div#vist4 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+main section#vist4 div#vist4 img#img1 { position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 2% 25%;}
+
+main section#vist4 h1#vist4 {width: 75%;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 1.4em;
+    font-weight: 400;}
+
+main section#vist4 p#vist4 {    width: 75%;
+    text-align: center;
+    margin: 5% auto;
+    font-size: 0.9em}
+
+main section#vist4 p#vist4_1 { width: 63%;
+    text-align: center;
+    margin: 4% auto;
+    font-size: 1em;
+    color: red;}
+
+main section#vist4 fieldset.form-group {    border: 0px;}
+main section#vist4 fieldset.form-group div.radio_check {position: relative;
+    margin: 0px 0 10px;}
+main section#vist4 fieldset.form-group div.radio_check input.check-input {width: 18px;
+    height: 18px;}
+
+
+main section#vist4 article#vist4 {position: relative;
+    width: 100%;
+    height: 37vh;
+    border: solid 0px;}
+
+.none {display: none;}
+
+main section#vist4 article#vist4 input.control-file {    position: absolute;
+    top: 15%;
+    left: 12%}
+
+main section#vist4 article#vist4 video#video {position: relative; width: 100%; height: 32vh;} 
+
+main section#vist4 input#foto {position: relative;
+    width: 60%;
+    height: 6vh;
+    left: 20%;
+    font-size: 1.5em;
+    margin: 5% 0 0 0;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;
+    border-radius: 6px;}
+
+main section#vist4 input#arc {position: relative;
+    width: 60%;
+    height: 6vh;
+    left: 20%;
+    font-size: 1.4em;
+    margin: 5% 0 0 0;
+    background: #0000;}
+
+main section#vist4 button#btn_vist4 {    position: relative;
+    padding: 3% 14%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 24%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist5 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+
+main section#vist5 button#btn_5 {margin: 2% 0% 0% 3%;
+    position: relative;
+    border: 0px;
+    background: #ffff;}
+    
+main section#vist5 button#btn_5 p#btn {position: relative;
+    font-size: 1.2em;
+    color: #468bc4;}
+
+main section#vist5 div#vist5 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+main section#vist5 div#vist5 img#img1 { position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 3% 25%;}
+
+
+main section#vist5 h1#vist5 {width: 81%;
+    text-align: center;
+    margin: 5% auto;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+main section#vist5 p#vist5 { width: 81%;
+    text-align: center;
+    margin: 12% auto;
+    font-size: 1em;
+    font-weight: 300;}
+
+main section#vist5 div#vist5_1 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+main section#vist5 div#vist5_1 img#img2 {position: fixed;
+    width: 58%;
+    z-index: 9;
+    left: 22%;}
+
+main section#vist5 div#vist5_1 img#img3 { position: relative;
+    margin: 0% auto;
+    width: 74%;
+    padding: 3% 10%;}
+
+main section#vist5 button#btn_vist5 { position: relative;
+    padding: 3% 14%;
+    margin: 11% auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 24%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist6 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+
+main section#vist6 button#btn_6 {margin: 2% 0% 0% 3%;
+    position: relative;
+    border: 0px;
+    background: #ffff;}
+    
+main section#vist6 button#btn_6 p#btn {position: relative;
+    font-size: 1.2em;
+    color: #468bc4;}
+
+main section#vist6 div#vist6 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+main section#vist6 div#vist6 img#img1 { position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 3% 25%;}
+
+main section#vist6 h1#vist6 {width: 81%;
+    text-align: center;
+    margin: 5% auto;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+main section#vist6 input#inp_vist6 {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+main section#vist6 input#aut :focus {border-bottom: 1px solid #0572ce;
+    box-shadow: 0 1px 0 0 #0572ce;}
+
+main section#vist6 p#vist6 {position: relative;
+    width: 93%;
+    text-align: center;
+    font-size: 0.7em;
+    font-weight: 600;}
+
+main section#vist6 div#vist6_list {}
+
+
+/* main section#vist6 nav#vist6 { width: 71%;
+    height: 25vh;
+    position: relative;
+    margin: 11% auto;
+    float: none;
+    overflow-y: scroll;
+    padding: 6%;}
+
+main section#vist6 nav#vist6 div#ra {position: relative;
+    width: 100%; margin: 1% 0%; }
+
+main section#vist6 nav#vist6 input#rad {position: relative;
+    margin: 3% 4%;
+    width: 20px;
+    height: 20px;}
+
+main section#vist6 label#radi_tex {position: relative;
+    font-size: 1.2em;
+    font-weight: 500;
+    margin: 0% 3% 0 0px;} */
+
+main section#vist6 button#btn_vist6 { position: relative;
+    padding: 3% 14%;
+    margin: 11% auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    top: 40%;
+    left: 24%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+
+main section#vist7 button#btn_7 {margin: 2% 0% 0% 3%;
+    position: relative;
+    border: 0px;
+    background: #ffff;}
+    
+main section#vist7 button#btn_7 p#btn {position: relative;
+    font-size: 1.2em;
+    color: #468bc4;}
+
+main section#vist7 div#vist7 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+main section#vist7 div#vist7 img#img1 { position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 3% 25%;}
+
+main section#vist7 h1#vist7 {width: 81%;
+    text-align: center;
+    margin: 5% auto;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+main section#vist7 input#inp_vist7 {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+
+datalist {
+  position: absolute;
+  background-color: white;
+  border: 1px solid blue;
+  border-radius: 0 0 5px 5px;
+  border-top: none;
+  font-family: sans-serif;
+  width: 350px;
+  padding: 5px;
+  max-height: 10rem;
+  overflow-y: auto
+  
+}
+
+option {
+  background-color: white;
+  padding: 4px;
+  color: blue;
+  margin-bottom: 1px;
+   font-size: 18px;
+  cursor: pointer;
+}
+
+main section#vist7 nav#vist7 { width: 71%;
+    height: 25vh;
+    position: relative;
+    margin: 11% auto;
+    float: none;
+    overflow-y: scroll;
+    padding: 6%;}
+
+main section#vist7 nav#vist7 div#ra {position: relative;
+    width: 100%; margin: 1% 0%;}
+
+main section#vist7 nav#vist7 input#rad7 {position: relative;
+    margin: 3% 4%;
+    width: 20px;
+    height: 20px;}
+
+main section#vist7 label#radi_tex7 {position: relative;
+    font-size: 1.2em;
+    font-weight: 500;
+    margin: 0% 3% 0 0px;}
+
+main section#vist7 button#btn_vist7 { position: relative;
+    padding: 3% 14%;
+    margin: 11% auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    top: 40%;
+    left: 24%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+
+main section#vist8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+
+main section#vist8 button#btn_8 {margin: 2% 0% 0% 3%;
+    position: relative;
+    border: 0px;
+    background: #ffff;}
+    
+main section#vist8 button#btn_8 p#btn {position: relative;
+    font-size: 1.2em;
+    color: #468bc4;}
+
+main section#vist8 div#vist8 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+main section#vist8 div#vist8 img#img1 { position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 3% 25%;}
+
+main section#vist8 h1#vist8 {width: 81%;
+    text-align: center;
+    margin: 6% auto;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+main section#vist8 input#inp_vist8 {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+main section#vist8 input#aut :focus {border-bottom: 1px solid #0572ce;
+    box-shadow: 0 1px 0 0 #0572ce;}
+
+main section#vist8 p#vist8 {position: relative;
+    width: 93%;
+    text-align: center;
+    font-size: 0.7em;
+    font-weight: 600;
+    margin: 0 auto;}
+
+
+main section#vist8 button#btn_vist8 { position: relative;
+    padding: 3% 14%;
+    margin: 11% auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 24%;
+    top: 40%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+
+main section#vist9 button#btn_9 {margin: 2% 0% 0% 3%;
+    position: relative;
+    border: 0px;
+    background: #ffff;}
+    
+main section#vist9 button#btn_9 p#btn {position: relative;
+    font-size: 1.2em;
+    color: #468bc4;}
+
+main section#vist9 div#vist9 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+main section#vist9 div#vist9 img#img1 { position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 3% 25%;}
+
+main section#vist9 h1#vist9 {width: 81%;
+    text-align: center;
+    margin: 6% auto;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+main section#vist9 input#inp_vist9 {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+main section#vist9 input#aut :focus {border-bottom: 1px solid #0572ce;
+    box-shadow: 0 1px 0 0 #0572ce;}
+
+main section#vist9 p#vist9 {position: relative;
+    width: 84%;
+    text-align: center;
+    font-size: 0.7em;
+    font-weight: 600;
+    margin: 0% auto;}
+
+main section#vist9 h1#vist9_t {width: 81%;
+    text-align: center;
+    margin: 17% auto 0%;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+main section#vist9 input#inp_vist9_t {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+main section#vist9 input#aut :focus {border-bottom: 1px solid #0572ce;
+    box-shadow: 0 1px 0 0 #0572ce;}
+
+main section#vist9 p#vist9_t {position: relative;
+    width: 84%;
+    text-align: center;
+    font-size: 0.7em;
+    font-weight: 600;
+    margin: 0% auto;}
+
+main section#vist9 button#btn_vist9 { position: relative;
+    padding: 3% 14%;
+    margin: 11% auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 24%;
+    top: 10%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+
+
+main section#vist10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+
+main section#vist10 button#btn_10 {margin: 2% 0% 0% 3%;
+    position: relative;
+    border: 0px;
+    background: #ffff;}
+    
+main section#vist10 button#btn_10 p#btn {position: relative;
+    font-size: 1.2em;
+    color: #468bc4;}
+
+main section#vist10 div#vist10 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+main section#vist10 div#vist10 img#img1 { position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 3% 25%;}
+
+
+main section#vist10 h1#vist10 {width: 74%;
+    text-align: left;
+    margin: 20% auto 15%;
+    font-size: 1.4em;
+    font-weight: 600;}
+
+main section#vist10 p#vist10 {position: relative;
+    width: 74%;
+    text-align: left;
+    font-size: 1.5em;
+    font-weight: 200;
+    margin: 0% auto;}
+
+
+main section#vist10 button#btn_vist10 { position: relative;
+    padding: 3% 14%;
+    margin: 11% auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 24%;
+    top: 22%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+
+
+}
+
+/*mobile*/
+@media only screen and (max-width: 342px){
+
+main section#vist2 nav#vist2 div#img p#vist2 {font-size: 0.8em;}
+}
