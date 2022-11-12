@@ -83,8 +83,8 @@ class ContactWizard(SessionWizardView):
 
     def done(self, form_list, **kwargs):
         form_data = self.process_from_data(form_list)
-        for param in form_list[2:]:
-            logger.info(f'=> {form_list[param].cleaned_data}')
+        for i, param in enumerate(form_list, 1):
+            logger.info(f'=> {i}. {form_list[param].cleaned_data}')
         return render(self.request,
                       'done.html',
                       context={'form_data': form_data}
