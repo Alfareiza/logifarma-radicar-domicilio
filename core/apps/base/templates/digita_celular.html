@@ -3,25 +3,37 @@
 {% block title %}Digita Celular{% endblock %}
 
 {% block content %}
-    <h2>Digita Celular</h2>
-    <p>Te informaremos por este medio cuando el domicilio....</p>
-    {% for field in form %}
-        {{ field.error }}
-    {% endfor %}
+<section id="vist9">
+
+    <button id="btn_9"><p id="btn">< Atras</p></button>
+
+    <div id="vist9">
+        <img id="img1" src="../static/img/LogLogifarma.png" alt="">
+    </div>
+
+    <h1 id="vist9">¿Cual es tu nuemro de celular?</h1>
     <form action="" method="post">
         {% csrf_token %}
-        <table>
         {{ wizard.management_form }}
         {% if wizard.form.forms %}
+            <!--NOTHING-->
             {{ wizard.form.management_form }}
             {% for form in wizard.form.forms %}
                 {{ form.as_table }}
             {% endfor %}
         {% else %}
-            {{ wizard.form }}
+            <input type="number" name="digitaCelular-celular" required=""
+                   id="id_digitaCelular-celular" placeholder="Digitar..">
+            <p id="vist9">Te informaremos por este medio cuando el domicilio este en camino.</p>
+
+            <h1 id="vist9_t">¿Cual es tu Correo electronico?</h1>
+            <input type="email" name="digitaCelular-email" id="id_digitaCelular-email"
+                   placeholder="Digitar..">
+
+            <p id="vist9_t">Este campo no es obligatorio.</p>
         {% endif %}
-        </table>
-        <input type="submit" value="Finalizar"/>
+        <button id="btn_vist9" type="submit">Continuar</button>
     </form>
+</section>
 {% endblock %}
 

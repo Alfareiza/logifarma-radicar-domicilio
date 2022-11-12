@@ -3,22 +3,49 @@
 {% block title %}Autorización de servicio{% endblock %}
 
 {% block content %}
-    <h1>Autorización de servicio</h1>
-    <p>Ingresa el número de autorización de ser...</p>
-    {% for field in form %}
-        {{ field.error }}
-    {% endfor %}
+<section id="vist3">
+    <button id="btn_3"><p id="btn">< Atras</p></button>
+
+    <div id="vist3">
+        <img id="img1" src="../static/img/LogLogifarma.png" alt="">
+    </div>
+    <div id="vist3_text">
+            <p id="vist3">Ingresa el numero de</p>
+            <h1 id="vist3">Autorizacion de servicio</h1>
+    </div>
+    {{ form.errors.num_autorizacion }}
     <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
         {% if wizard.form.forms %}
+            <!--NOTHING-->
             {{ wizard.form.management_form }}
-            <!--<input type="hidden" name="contact_wizard-current_step" value="autorizacionServicio" id="id_contact_wizard-current_step">-->
-            <label for="id_autorizacionServicio-num_autorizacion">Num autorizacion:</label>
-            <input type="number" name="autorizacionServicio-num_autorizacion" min="100000" required="" id="id_autorizacionServicio-num_autorizacion":>
+                {% for form in wizard.form.forms %}
+                    {{ form.as_table }}
+                {% endfor %}
         {% else %}
-            {{ wizard.form }}
+            <input type="number" placeholder="Buscar.."
+               name="autorizacionServicio-num_autorizacion"
+               min="100000" required=""
+               id="id_autorizacionServicio-num_autorizacion":>
         {% endif %}
-        <input type="submit" value="Continuar"/>
+        <p id="vist3_t">
+            Validemos que la autorizacion este activa <br>
+            imagen de referencia
+        </p>
+        <div id="vist3_img">
+            <img id="vist3" src="../static/img/ImgAutorizacion.jpg" alt="">
+        </div>
+
+        <p id="vist3_t2">
+            Si no cuenta con el nuemro de autorizacion por favor
+            comuníquese con Cajacopi-EPS para mayor informacion:
+        </p>
+        <div id="tet">
+            <a id="vist3" href="">08000111446</a>
+        </div>
+
+        <button id="btn_vist3" type="submit">Continuar</button>
     </form>
+</section>
 {% endblock %}

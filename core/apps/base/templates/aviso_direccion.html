@@ -3,12 +3,28 @@
 {% block title %}Dirección{% endblock %}
 
 {% block content %}
-    <h2>A que dirección enviamos tu domicilio?</h2>
-    <p>El envío de tu domicilio será Gratis</p>
+<section id="vist5">
+    <button id="btn_5"><p id="btn">< Atras</p></button>
+
+    <div id="vist5">
+        <img id="img1" src="../static/img/LogLogifarma.png" alt="">
+    </div>
+
+    <h1 id="vist5">¿A que direccion enviaremos tu domicilio?</h1>
+
+    <p id="vist5">
+        El envio de tu domicilio sera Gratis.
+        Te lo haremos llegar lo mas pronto posible
+    </p>
+
+    <div id="vist5_1">
+        <img id="img2" src="../static/img/LogLogifdomicilio.png">
+        <img id="img3" src="../static/img/Imagen1.png" alt="">
+    </div>
     <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
-    <input type="submit" value="Entiendo"/>
+        <button id="btn_vist5" type="submit">Entiendo</button>
     </form>
+</section>
 {% endblock %}
-

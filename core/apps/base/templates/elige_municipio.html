@@ -3,25 +3,37 @@
 {% block title %}Elige Municipio{% endblock %}
 
 {% block content %}
-    <h2>Elige Municipio</h2>
-    <p>Elige el municipio donde enviaremos tu domicilio...</p>
-    {% for field in form %}
-        {{ field.error }}
-    {% endfor %}
+    <button id="btn_6"><p id="btn">< Atras</p></button>
+
+    <div id="vist6">
+        <img id="img1" src="../static/img/LogLogifarma.png" alt="">
+    </div>
+
+    <h1 id="vist6">Elige el municipio donde enviaremos tu domicilio.</h1>
+
+    <!--<input type="text" name="" list="list6" placeholder="Buscar.." id="inp_vist6">-->
+
+    <p id="vist6">* Solo aplica para el departamento del Atlantico</p>
+    {{ form.errors.municipio }}
     <form action="" method="post">
-        {% csrf_token %}
-        <table>
-        {{ wizard.management_form }}
-        {% if wizard.form.forms %}
-            {{ wizard.form.management_form }}
-            {% for form in wizard.form.forms %}
-                {{ form.as_table }}
-            {% endfor %}
-        {% else %}
-            {{ wizard.form }}
-        {% endif %}
-        </table>
-        <input type="submit" value="Continuar"/>
+            {% csrf_token %}
+            {{ wizard.management_form }}
+            {% if wizard.form.forms %}
+                {{ wizard.form.management_form }}
+            {% else %}
+                <input type="hidden" name="contact_wizard-current_step"
+                       value="eligeMunicipio" id="id_contact_wizard-current_step">
+                <label for="id_eligeMunicipio-municipio">Municipio:</label>
+                <select name="eligeMunicipio-municipio" id="id_eligeMunicipio-municipio">
+                    <option value="0">Escoja un municipio</option>
+                    <option value="1">Barranquilla, Atlantico</option>
+                    <option value="2">Soledad, Atlantico</option>
+                    <option value="3">Malambo, Atlantico</option>
+                    <option value="4">Baranoa, Atlantico</option>
+                    <option value="5">Galapa, Atlantico</option>
+                </select>
+            {% endif %}
+        <button id="btn_vist6" type="submit">Continuar</button>
     </form>
 {% endblock %}
 

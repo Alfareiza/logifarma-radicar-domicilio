@@ -1,27 +1,39 @@
 {% extends "base/base.html" %}
 
-{% block title %}Elige Barrio{% endblock %}
+{% block title %}Elige el barrio{% endblock %}
 
 {% block content %}
-    <h2>Elige el Barrio</h2>
-    <p>Elige el barrio donde enviaremos tu domicilio</p>
-    {% for field in form %}
-        {{ field.error }}
-    {% endfor %}
+    <button id="btn_7"><p id="btn">< Atras</p></button>
+
+    <div id="vist7">
+        <img id="img1" src="../static/img/LogLogifarma.png" alt="">
+    </div>
+
+    <h1 id="vist7">Elige el barrio donde enviaremos tu domicilio.</h1>
+
+    <!--<input type="text" name="" list="list7" placeholder="Buscar.." id="inp_vist7">-->
+
+    <p id="vist7">* Solo aplica para el departamento del Atlantico</p>
+    {{ form.errors.barrio }}
     <form action="" method="post">
-        {% csrf_token %}
-        <table>
-        {{ wizard.management_form }}
-        {% if wizard.form.forms %}
-            {{ wizard.form.management_form }}
-            {% for form in wizard.form.forms %}
-                {{ form.as_table }}
-            {% endfor %}
-        {% else %}
-            {{ wizard.form }}
+            {% csrf_token %}
+            {{ wizard.management_form }}
+            {% if wizard.form.forms %}
+                {{ wizard.form.management_form }}
+            {% else %}
+                <input type="hidden" name="contact_wizard-current_step"
+                       value="eligeBarrio" id="id_contact_wizard-current_step">
+                <label for="id_eligeBarrio-barrio">Barrio:</label>
+                <select name="eligeBarrio-barrio" id="id_eligeBarrio-barrio">
+                    <option value="0">Escoja un barrio</option>
+                    <option value="1">El Valle, Atlantico</option>
+                    <option value="2">Barrio 2</option>
+                    <option value="3">Barrio 3</option>
+                    <option value="4">Barrio 4</option>
+                    <option value="5">Barrio 5</option>
+                </select>
         {% endif %}
-        </table>
-        <input type="submit" value="Continuar"/>
+        <button id="btn_vist7" type="submit">Continuar</button>
     </form>
 {% endblock %}
 

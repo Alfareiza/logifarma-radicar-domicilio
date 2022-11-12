@@ -132,53 +132,51 @@ function myFunction() {
 {% endblock %}
 
 {% block content %}
-    <h2>Radicando Domicilio</h2>
-    <p>Envia fotografía de la formula médica...</p>
+<section id="vist4">
+    <button id="btn_4"><p id="btn">< Atras</p></button>
+
+    <div id="vist4">
+        <img id="img1" src="../static/img/LogLogifarma.png" alt="">
+    </div>
+
+    <h1 id="vist4">¡Envia fotografia de la formula medica!</h1>
+    <p id="vist4">Tomar foto de la formula medica</p>
+    <p id="vist4_1"> Recuerda, los medicamenos de la autorizacion deben coincidir con los de la formula</p>
     {% for field in form %}
         {{ field.error }}
     {% endfor %}
-    <div class="container text-center">
-      <div class="row align-items-center">
-        <div class="col"></div>
-        <div class="col-6">
-            <div class="col align-self-center">
-              <form enctype="multipart/form-data" action="" method="post">
-                    {% csrf_token %}
-                    {{ wizard.management_form }}
-                    {% if wizard.form.forms %}
-                        {{ wizard.form.management_form }}
-                    {% else %}
-
-                        <div class="col align-self-center">
-                            <video autoplay loop muted playsinline id="video">Video stream not available.</video>
-                            <input id="id_fotoFormulaMedica-src" value=""
-                                   name="fotoFormulaMedica-src" type="text"
-                                   style="display: none;">
-                            <canvas id="canvas" style="display: none;"></canvas>
-                            <img id="photo" alt="your image" style="display: none;">
-                           <!--<input type="hidden" name="contact_wizard-current_step" value="fotoFormulaMedica" id="id_contact_wizard-current_step">-->
-                           <!--<label for="id_fotoFormulaMedica-src">Foto:</label>
-                           <td>
-                              <input type="file" name="fotoFormulaMedica-src" accept="image/*"
-                                     required="" id="id_fotoFormulaMedica-src">
-                            </td>-->
-                        </div>
-                        <div class="row mt-3">
-                            <div id='tomarfoto-btn' class="col" style="display: grid;">
-                                <button class="btn btn-primary" type="button" >Tomar Foto</button>
-                            </div>
-                            <div id='tomarotrafoto-btn' class="col" style="display: none;" onClick="myFunction()">
-                                <button class="btn btn-danger" type="button" >Tomar Otra Foto</button>
-                            </div>
-                            <div id='continuar-btn' class="col" style="display: none;">
-                                <input type="submit" class="btn btn-success" value="Continuar"/>
-                            </div>
-                        </div>
-                    {% endif %}
-              </form>
-            </div>
-        </div>
-        <div class="col"></div>
-      </div>
-    </div>
+        <form enctype="multipart/form-data" action="" method="post">
+            {% csrf_token %}
+            {{ wizard.management_form }}
+            {% if wizard.form.forms %}
+                {{ wizard.form.management_form }}
+            {% else %}
+                <div class="row mt-3">
+                    <video autoplay loop muted playsinline id="video">Video stream not available.</video>
+                    <input id="id_fotoFormulaMedica-src" value=""
+                           name="fotoFormulaMedica-src" type="text"
+                           style="display: none;">
+                    <canvas id="canvas" style="display: none;"></canvas>
+                    <img id="photo" alt="your image" style="display: none;">
+                   <!--<input type="hidden" name="contact_wizard-current_step" value="fotoFormulaMedica" id="id_contact_wizard-current_step">-->
+                   <!--<label for="id_fotoFormulaMedica-src">Foto:</label>
+                   <td>
+                      <input type="file" name="fotoFormulaMedica-src" accept="image/*"
+                             required="" id="id_fotoFormulaMedica-src">
+                    </td>-->
+                </div>
+                <div class="row mt-3">
+                    <div id='tomarfoto-btn' class="col" style="display: grid;">
+                        <button class="btn btn-primary" type="button" >Tomar Foto</button>
+                    </div>
+                    <div id='tomarotrafoto-btn' class="col" style="display: none;" onClick="myFunction()">
+                        <button class="btn btn-danger" type="button" >Tomar Otra Foto</button>
+                    </div>
+                    <div id='continuar-btn' class="col" style="display: none;">
+                        <input type="submit" class="btn btn-success" value="Continuar"/>
+                    </div>
+                </div>
+            {% endif %}
+        </form>
+</section>
 {% endblock %}
