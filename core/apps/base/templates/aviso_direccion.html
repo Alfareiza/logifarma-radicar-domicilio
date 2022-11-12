@@ -1,4 +1,5 @@
 {% extends "base/base.html" %}
+{% load static %}
 
 {% block title %}Dirección{% endblock %}
 
@@ -7,7 +8,7 @@
     <button id="btn_5"><p id="btn">< Atras</p></button>
 
     <div id="vist5">
-        <img id="img1" src="../static/img/LogLogifarma.png" alt="">
+        <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
     </div>
 
     <h1 id="vist5">¿A que direccion enviaremos tu domicilio?</h1>
@@ -18,8 +19,8 @@
     </p>
 
     <div id="vist5_1">
-        <img id="img2" src="../static/img/LogLogifdomicilio.png">
-        <img id="img3" src="../static/img/Imagen1.png" alt="">
+        <img id="img2" src="{% static 'img/LogLogifdomicilio.png' %}">
+        <img id="img3" src="{% static 'img/Imagen1.png' %}" alt="">
     </div>
     <form action="" method="post">
         {% csrf_token %}

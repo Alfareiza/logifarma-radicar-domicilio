@@ -1,6 +1,7 @@
 {% extends "base/base.html" %}
+{% load static %}
 
-{% block title %}Digita Celular{% endblock %}
+{% block title %}Digite celular{% endblock %}
 
 {% block content %}
 <section id="vist9">
@@ -8,10 +9,10 @@
     <button id="btn_9"><p id="btn">< Atras</p></button>
 
     <div id="vist9">
-        <img id="img1" src="../static/img/LogLogifarma.png" alt="">
+        <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
     </div>
 
-    <h1 id="vist9">¿Cual es tu nuemro de celular?</h1>
+    <h1 id="vist9">¿Cual es su nùmero de celular?</h1>
     <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}

@@ -1,14 +1,15 @@
 {% extends "base/base.html" %}
+{% load static %}
 
 {% block title %}Inicio{% endblock %}
 
 {% block content %}
 <section id="vist1">
     <div id="vist1">
-        <img id="img1" src="../static/img/LogLogifarma.png" alt="">
+        <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
     </div>
     <div id="vist1_1">
-        <img id="img2" src="../static/img/IconAdvertencia.jpg" alt="">
+        <img id="img2" src="{% static 'img/IconAdvertencia.jpg' %}" alt="">
     </div>
 
     <article id="vist1">
