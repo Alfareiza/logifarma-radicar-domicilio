@@ -1,4 +1,5 @@
 {% extends "base/base.html" %}
+{% load static %}
 
 {% block title %}Elige el barrio{% endblock %}
 
@@ -6,7 +7,7 @@
     <button id="btn_7"><p id="btn">< Atras</p></button>
 
     <div id="vist7">
-        <img id="img1" src="../static/img/LogLogifarma.png" alt="">
+        <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
     </div>
 
     <h1 id="vist7">Elige el barrio donde enviaremos tu domicilio.</h1>
