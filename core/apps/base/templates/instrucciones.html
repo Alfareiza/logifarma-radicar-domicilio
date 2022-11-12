@@ -3,17 +3,48 @@
 {% block title %}Instrucciones{% endblock %}
 
 {% block content %}
-    <h1>Paso a paso</h1>
-    <ul>
-        <li>Autorización de Servicios</li>
-        <li>Formula médica o MIPRES</li>
-        <li>Lugar de entrega del domicilio</li>
-        <li>Número de celular (Whatsapp)</li>
-    </ul>
+<section id="vist2">
+    <button id="btn_2"><p id="btn">< Atras</p></button>
+    <div id="vist2">
+        <img id="img1" src="../static/img/LogLogifarma.png" alt="">
+    </div>
+
+    <div id="vist2_text">
+        <h1>Paso a paso</h1>
+        <p>¡Es muy facil de hacerlo! <br><br> La solicitud cuenta con <strong> 4 pasos...</strong></p>
+    </div>
+
+    <nav id="vist2">
+        <div id="img">
+            <img id="vist2" src="../static/img/IconAutorizacion.jpg" alt="">
+            <p id="vist2"><strong>1.Autorizacion de servicio</strong><br>
+                Debes contar con el numero de aoutorizacion de servicio de
+                Cajacopi-EPS
+            </p>
+        </div>
+        <div id="img">
+            <img id="vist2" src="../static/img/IconFormulaMedica.jpg" alt="">
+            <p id="vist2"><strong>2.Formula medica o MIPRES</strong><br>
+                Tener a la mano formula medica o MIPRES (No PBS).
+                Necesitamos una imagen de ella</p>
+        </div>
+        <div id="img">
+            <img id="vist2" src="../static/img/IconUbicacion.jpg" alt="">
+            <p id="vist2"><strong>3.Lugar de entraga del omicilio</strong><br>
+                Nos informal el lugar donde quieres recibir tu domicilio.
+                (aplica solo para el departamento del ATLANTICO).</p>
+        </div>
+        <div id="img">
+            <img id="vist2" src="../static/img/IconWhatsApp.jpg" alt="">
+            <p id="vist2"><strong>4.Numero de celular (WhatsApp)</strong><br>
+                Lo usaremos para informarte cuando el domicilio este en camino
+            </p>
+        </div>
+    </nav>
     <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
-    <input type="submit" value="Continuar"/>
-
+        <button id="btn_vist2" type="submit">Continuar</button>
+    </form>
+</section>
 {% endblock %}
-

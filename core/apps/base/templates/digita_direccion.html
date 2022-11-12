@@ -3,25 +3,31 @@
 {% block title %}Digita Dirección{% endblock %}
 
 {% block content %}
-    <h2>Digita Dirección</h2>
-    <p>A que dirección enviamos tu domicilio?</p>
-    {% for field in form %}
-        {{ field.error }}
-    {% endfor %}
+<section id="vist8">
+    <button id="btn_8"><p id="btn">< Atras</p></button>
+
+    <div id="vist8">
+        <img id="img1" src="../static/img/LogLogifarma.png" alt="">
+    </div>
+    <h1 id="vist8">¿A que direccion enviamos tu domicilio?</h1>
+    {{ form.errors.direccion }}
     <form action="" method="post">
         {% csrf_token %}
-        <table>
         {{ wizard.management_form }}
         {% if wizard.form.forms %}
+            <!--NOTHING-->
             {{ wizard.form.management_form }}
-            {% for form in wizard.form.forms %}
-                {{ form.as_table }}
-            {% endfor %}
+                {% for form in wizard.form.forms %}
+                    {{ form.as_table }}
+                {% endfor %}
         {% else %}
-            {{ wizard.form }}
+            <p id="vist8">Digita la direccion donde enviaremos tu domicilio.</p>
+            <input type="text" name="digitaDireccion-direccion" maxlength="40"
+                   required="" id="id_digitaDireccion-direccion" placeholder="Digitar..">
         {% endif %}
-        </table>
-        <input type="submit" value="Continuar"/>
+
+        <button id="btn_vist8" type="submit">Continuar</button>
     </form>
 {% endblock %}
+</section>
 

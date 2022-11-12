@@ -3,13 +3,28 @@
 {% block title %}Inicio{% endblock %}
 
 {% block content %}
-    <h2>Radicando Domicilio</h2>
-    <p>Estás por radicar tu domicilio</p>
-    <p>Una vez finalices con tu solicitud....</p>
+<section id="vist1">
+    <div id="vist1">
+        <img id="img1" src="../static/img/LogLogifarma.png" alt="">
+    </div>
+    <div id="vist1_1">
+        <img id="img2" src="../static/img/IconAdvertencia.jpg" alt="">
+    </div>
+
+    <article id="vist1">
+        <p id="vist1">
+            Estas por radicar tu domicilio.<br><br>
+            Una vez finalices con tu solicitud, iniciaremos la
+            gestión para que el domicilio sea enviado lo más
+            pronto posible.
+        </p>
+    </article>
     <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
-        <input type="submit" value="Continuar"/>
+        <button id="btn_vist1" type="submit">Continuar</button>
     </form>
+</section>
 {% endblock %}
+
 
