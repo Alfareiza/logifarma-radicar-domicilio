@@ -1,16 +1,13 @@
+import logging
 import shutil
 
 from django.core.files.storage import FileSystemStorage
+from django.core.mail import EmailMessage
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from formtools.wizard.views import SessionWizardView
 
 from core import settings
 from core.apps.base.forms import *
-import logging
-
-from django.core.mail import EmailMessage
-
 from core.apps.base.resources.tools import convert_bytes
 
 logger = logging.getLogger('django')
@@ -72,7 +69,7 @@ class ContactWizard(SessionWizardView):
                     }
                 >
         """
-        logger.info(self.get_form_step_data(form))
+        # logger.info(self.get_form_step_data(form))
         return self.get_form_step_data(form)
 
     def render_goto_step(self, *args, **kwargs):
@@ -84,7 +81,7 @@ class ContactWizard(SessionWizardView):
     def done(self, form_list, **kwargs):
         form_data = self.process_from_data(form_list)
         for i, param in enumerate(form_list, 1):
-            logger.info(f'=> {i}. {form_list[param].cleaned_data}')
+            logger.info(f'=> {i}. {form_list.cleaned_data}')
         return render(self.request,
                       'done.html',
                       context={'form_data': form_data}
@@ -104,7 +101,7 @@ class ContactWizard(SessionWizardView):
                 se debe retonar en esta función.
         """
         form_data = [form.cleaned_data for form in form_list]
-        logger.info(f"RESP_API={form_data[2]['num_autorizacion']}")
+        # logger.info(f"RESP_API={form_data[2]['num_autorizacion']}")
 
         # Crea y guarda imagen en settings.MEDIA_ROOT
         self.contentfile_to_img(contentfile_obj=form_data[3]['src'])
