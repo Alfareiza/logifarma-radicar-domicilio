@@ -1,9 +1,8 @@
-from datetime import datetime
-
 from decouple import config
 from django import forms
 
-from core.apps.base.resources.api_calls import call_api_eps
+from core.apps.base.resources.api_calls import call_api_eps, call_api_medicar
+from core.settings import DEBUG
 
 
 class Home(forms.Form):
@@ -32,31 +31,35 @@ class AutorizacionServicio(forms.Form):
     num_autorizacion = forms.IntegerField(min_value=100_000)
 
     def clean_num_autorizacion(self):
-        # ====== PRIMERA API ======
+        num_aut = self.cleaned_data.get('num_autorizacion')
 
-        # resp_api1 = call_api_eps(self.cleaned_data.get('num_autorizacion'))
+        # ====== # Validaciones API EPS ======
+        resp_eps = call_api_eps(num_aut)
 
-        # resp_api1 = {"codigo": "1", "mensaje": "Datos no encontrados!2"}
-        resp_api1 = {"ESTADO_AFILIADO": "ACTIVO", "ESTADO_AUTORIZACION": "PROCESADA",
-                     "CORREO": config('EMAIL_TEST'), "AFILIADO": "Lorem Ipsum José"}
-
-        if resp_api1.get('codigo') == "1":
+        if resp_eps.get('codigo') == "1":
             raise forms.ValidationError("Número de autorización no encontrado")
 
-        # Validaciones
-        if resp_api1.get('ESTADO_AFILIADO') != 'ACTIVO':
+        if resp_eps.get('ESTADO_AFILIADO') != 'ACTIVO':
             raise forms.ValidationError("Afiliado no se encuentra activo")
 
-        if resp_api1.get('ESTADO_AUTORIZACION') != 'PROCESADA':
+        if resp_eps.get('ESTADO_AUTORIZACION') != 'PROCESADA':
             raise forms.ValidationError("El estado de la autorización no está activa.")
 
-        # if (datetime.now() - resp_api1.get('FECHA_AUTORIZACION')).days > 30:
+        # if (datetime.now() - resp_eps.get('FECHA_AUTORIZACION')).days > 30:
         #     raise forms.ValidationError("Esta autorización se encuentra vencida.")
-        resp_api1['NUMERO_AUTORIZACION'] = self.cleaned_data.get('num_autorizacion')
-        return resp_api1
 
-        # ====== SEGUNDA API ======
-        # resp_api1 = {"error": "No se han encontrado registros."}
+        # ====== # Validaciones API MEDICAR ======
+        if DEBUG is not False:
+            resp_mcar = call_api_medicar(num_aut)
+
+            if resp_mcar.get('autorizacion'):
+                raise forms.ValidationError(f"Este domicilio se encuentra radicado en "
+                                            f"{resp_mcar.get('nombre_centro_factura')[:-5].strip()}")
+
+        resp_eps['NUMERO_AUTORIZACION'] = num_aut
+        resp_eps['CORREO_TEST'] = config('EMAIL_TEST')
+
+        return resp_eps
 
 
 class FotoFormulaMedica(forms.Form):

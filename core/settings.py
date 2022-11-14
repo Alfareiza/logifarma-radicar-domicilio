@@ -9,10 +9,12 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
+import logging
+from functools import partial
 from os.path import join
 from pathlib import Path
+
 from decouple import config
-from functools import partial
 from dj_database_url import parse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -135,3 +137,5 @@ MEDIA_ROOT = BASE_DIR / 'tmp'
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+logger = logging.getLogger('django')

@@ -1,4 +1,4 @@
-import logging
+import json
 import shutil
 
 from django.core.files.storage import FileSystemStorage
@@ -9,8 +9,7 @@ from formtools.wizard.views import SessionWizardView
 from core import settings
 from core.apps.base.forms import *
 from core.apps.base.resources.tools import convert_bytes
-
-logger = logging.getLogger('django')
+from core.settings import logger
 
 FORMS = [
     ("home", Home),
@@ -108,24 +107,10 @@ class ContactWizard(SessionWizardView):
         self.contentfile_to_img(contentfile_obj=form_data[3]['src'])
         # Envía e-mail
         self.send_mail(name=form_data[2]['num_autorizacion']['AFILIADO'],
-                       destinatary=form_data[2]['num_autorizacion']['CORREO'])
+                       body=form_data[2]['num_autorizacion'],
+                       destinatary=form_data[2]['num_autorizacion']['CORREO_TEST'])
 
-    def contentfile_to_img(self, contentfile_obj):
-        """
-        Convierte la imagem de ContentFile a una imagen como tal
-        y la guarda en la carpeta MEDIA_ROOT.
-        :param contentfile_obj: <ContentFile: Raw content>
-                type(contentfile_obj) -> django.core.files.base.ContentFile
-                contentfile_obj.__dict__ -> {'file': <_io.BytesIO at 0x7fd2750425e0>,
-                                             'name': 'formula_medica.png', 'size': 139049}
-        :return: None
-        """
-        foto_fmedica = ContactWizard.file_storage.save(
-            contentfile_obj.name, contentfile_obj.file
-        )
-        self.foto_fmedica = settings.MEDIA_ROOT / foto_fmedica
-
-    def send_mail(self, name: str, destinatary: str):
+    def send_mail(self, name: str, destinatary: str, body: str):
         """
         Envía email con imagen adjunta.
         :param name: Nombre del afiliado.
@@ -133,7 +118,8 @@ class ContactWizard(SessionWizardView):
         :return: None
         """
         email = EmailMessage(subject='Este es el asunto del correo',
-                             body=f'Hola, Sr(a) {name}\n\nLe estamos enviando este mensaje ...',
+                             body=f"Hola, Sr(a) {name}\n\nLe estamos enviando este mensaje:\n"
+                                  f"{json.dumps(body, indent=2)}",
                              from_email=settings.EMAIL_HOST_USER, to=[destinatary],
                              bcc=['alfareiza@gmail.com']
                              )
@@ -149,6 +135,21 @@ class ContactWizard(SessionWizardView):
             # email avisando de este error.
         finally:
             self.del_folder(settings.MEDIA_ROOT)
+
+    def contentfile_to_img(self, contentfile_obj):
+        """
+        Convierte la imagem de ContentFile a una imagen como tal
+        y la guarda en la carpeta MEDIA_ROOT.
+        :param contentfile_obj: <ContentFile: Raw content>
+                type(contentfile_obj) -> django.core.files.base.ContentFile
+                contentfile_obj.__dict__ -> {'file': <_io.BytesIO at 0x7fd2750425e0>,
+                                             'name': 'formula_medica.png', 'size': 139049}
+        :return: None
+        """
+        foto_fmedica = ContactWizard.file_storage.save(
+            contentfile_obj.name, contentfile_obj.file
+        )
+        self.foto_fmedica = settings.MEDIA_ROOT / foto_fmedica
 
     def del_folder(self, MEDIA_ROOT):
         """
