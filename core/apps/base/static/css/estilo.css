@@ -60,7 +60,7 @@ main section#vist1 button#btn_vist1 { position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+main section#vist2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 main section#vist2 button#btn_2 {margin: 2% 0% 0% 3%;
     position: relative;
@@ -119,7 +119,7 @@ main section#vist2 button#btn_vist2 {    position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+main section#vist3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 main section#vist3 button#btn_3 {margin: 2% 0% 0% 3%;
     position: relative;
@@ -187,7 +187,7 @@ main section#vist3 button#btn_vist3 {    position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+main section#vist4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 main section#vist4 button#btn_4 {margin: 2% 0% 0% 3%;
     position: relative;
@@ -276,7 +276,7 @@ main section#vist4 button#btn_vist4 {    position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist5 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+main section#vist5 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 main section#vist5 button#btn_5 {margin: 2% 0% 0% 3%;
     position: relative;
@@ -338,7 +338,7 @@ main section#vist5 button#btn_vist5 { position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist6 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+main section#vist6 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 main section#vist6 button#btn_6 {margin: 2% 0% 0% 3%;
     position: relative;
@@ -380,8 +380,6 @@ main section#vist6 p#vist6 {position: relative;
     font-size: 0.7em;
     font-weight: 600;}
 
-main section#vist6 div#vist6_list {}
-
 
 /* main section#vist6 nav#vist6 { width: 71%;
     height: 25vh;
@@ -418,7 +416,7 @@ main section#vist6 button#btn_vist6 { position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+main section#vist7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 main section#vist7 button#btn_7 {margin: 2% 0% 0% 3%;
     position: relative;
@@ -511,7 +509,7 @@ main section#vist7 button#btn_vist7 { position: relative;
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
 
-main section#vist8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+main section#vist8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 main section#vist8 button#btn_8 {margin: 2% 0% 0% 3%;
     position: relative;
@@ -569,7 +567,7 @@ main section#vist8 button#btn_vist8 { position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+main section#vist9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 main section#vist9 button#btn_9 {margin: 2% 0% 0% 3%;
     position: relative;
@@ -650,7 +648,7 @@ main section#vist9 button#btn_vist9 { position: relative;
 
 
 
-main section#vist10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: none;}
+main section#vist10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 main section#vist10 button#btn_10 {margin: 2% 0% 0% 3%;
     position: relative;
