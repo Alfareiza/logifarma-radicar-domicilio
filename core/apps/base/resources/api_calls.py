@@ -271,7 +271,10 @@ def call_api_medicar(num_aut: int) -> dict:
     }
     response = requests.request("POST", url, headers=headers, data=payload)
     result = json.loads(response.text.encode('utf8'))
-    return result[0]
+    try:
+        return result[0]
+    except KeyError:
+        return result
 
 
 def should_i_call_auth():
