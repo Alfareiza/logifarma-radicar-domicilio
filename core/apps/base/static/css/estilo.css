@@ -1,6 +1,6 @@
 
 /*mobile*/
-@media only screen and (max-width: 499px){
+@media only screen and (max-width: 500px){
 
 h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
     font-family: 'Montserrat', sans-serif; }
