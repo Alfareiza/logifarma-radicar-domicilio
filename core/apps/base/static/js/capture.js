@@ -28,7 +28,7 @@
     startbutton1 = document.getElementById('tomarfoto-btn');
     startbutton2 = document.getElementById('tomarotrafoto-btn');
 
-    navigator.mediaDevices.getUserMedia({video: true, audio: false})
+    navigator.mediaDevices.getUserMedia({video: { facingMode: "environment" }, audio: false})
     .then(function(stream) {
       video.srcObject = stream;
       video.play();
