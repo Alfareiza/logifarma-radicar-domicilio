@@ -101,11 +101,12 @@ class ContactWizard(SessionWizardView):
                 se debe retonar en esta función.
         """
         form_data = [form.cleaned_data for form in form_list]
-        # logger.info(f"RESP_API={form_data[2]['num_autorizacion']}")
+        # logger.info(f"RESP_API={form_data[2]}")
 
         # Crea y guarda imagen en settings.MEDIA_ROOT
         self.contentfile_to_img(contentfile_obj=form_data[3]['src'])
         # Envía e-mail
+        import pdb; breakpoint()
         self.send_mail(name=form_data[2]['num_autorizacion']['AFILIADO'],
                        body=form_data[2]['num_autorizacion'],
                        destinatary=form_data[2]['num_autorizacion']['CORREO_TEST'])
