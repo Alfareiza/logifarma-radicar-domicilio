@@ -120,7 +120,7 @@ class ContactWizard(SessionWizardView):
         email = EmailMessage(subject='Este es el asunto del correo',
                              body=f"Hola, Sr(a) {name}\n\nLe estamos enviando este mensaje:\n"
                                   f"{json.dumps(body, indent=2)}",
-                             from_email=settings.EMAIL_HOST_USER, to=[destinatary],
+                             from_email=settings.EMAIL_HOST_USER, to=destinatary,
                              bcc=['alfareiza@gmail.com']
                              )
 

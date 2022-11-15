@@ -1,5 +1,4 @@
-from decouple import config
-from django import forms
+from decouple import config, Csv
 
 from core.apps.base.resources.api_calls import call_api_eps, call_api_medicar
 from core.settings import DEBUG
@@ -57,7 +56,7 @@ class AutorizacionServicio(forms.Form):
                                             f"{resp_mcar.get('nombre_centro_factura')[:-5].strip()}")
 
         resp_eps['NUMERO_AUTORIZACION'] = num_aut
-        resp_eps['CORREO_TEST'] = config('EMAIL_TEST')
+        resp_eps['CORREO_TEST'] = config('EMAIL_TEST', cast=Csv())
 
         return resp_eps
 
