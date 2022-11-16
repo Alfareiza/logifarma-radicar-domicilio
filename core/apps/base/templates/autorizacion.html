@@ -5,14 +5,14 @@
 
 {% block content %}
 <section id="vist3">
-    <button id="btn_3"><p id="btn">< Atras</p></button>
+    <button id="btn_3" class="atras"><p id="btn" class="b_atras">< Atrás</p></button>
 
-    <div id="vist3">
+    <div id="vist">
         <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
     </div>
     <div id="vist3_text">
-            <p id="vist3">Ingresa el numero de</p>
-            <h1 id="vist3">Autorizacion de servicio</h1>
+            <p id="vist3">Ingresa el número de</p>
+            <h1 id="vist3">Autorización de servicio</h1>
     </div>
     {{ form.errors.num_autorizacion }}
     <form action="" method="post">
@@ -25,13 +25,13 @@
                     {{ form.as_table }}
                 {% endfor %}
         {% else %}
-            <input type="number" placeholder="Buscar.."
+            <input type="number" placeholder="Digitar el nuemro.." class="inp_vist3"
                name="autorizacionServicio-num_autorizacion"
                min="100000" required=""
                id="id_autorizacionServicio-num_autorizacion":>
         {% endif %}
         <p id="vist3_t">
-            Validemos que la autorizacion este activa <br>
+            Validemos que la autorización este activa <br>
             imagen de referencia
         </p>
         <div id="vist3_img">
@@ -39,14 +39,14 @@
         </div>
 
         <p id="vist3_t2">
-            Si no cuenta con el nuemro de autorizacion por favor
-            comuníquese con Cajacopi-EPS para mayor informacion:
+            Si no cuenta con el núemro de autorización por favor
+            comunícate con Cajacopi-EPS para mayor información:
         </p>
         <div id="tet">
-            <a id="vist3" href="">3330333124</a>
+            <a id="vist3" href="">08000111446</a>
         </div>
 
-        <button id="btn_vist3" type="submit">Continuar</button>
+        <button id="btn_vist3" class="btn" type="submit">Continuar</button>
     </form>
 </section>
 {% endblock %}

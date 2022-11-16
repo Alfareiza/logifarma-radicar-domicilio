@@ -4,9 +4,9 @@
 {% block title %}Elige el barrio{% endblock %}
 
 {% block content %}
-    <button id="btn_7"><p id="btn">< Atras</p></button>
+    <button id="btn_7" class="atras"><p id="btn" class="b_atras">< Atras</p></button>
 
-    <div id="vist7">
+    <div id="vist">
         <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
     </div>
 
@@ -14,7 +14,6 @@
 
     <!--<input type="text" name="" list="list7" placeholder="Buscar.." id="inp_vist7">-->
 
-    <p id="vist7">* Solo aplica para el departamento del Atlantico</p>
     {{ form.errors.barrio }}
     <form action="" method="post">
             {% csrf_token %}
@@ -22,10 +21,11 @@
             {% if wizard.form.forms %}
                 {{ wizard.form.management_form }}
             {% else %}
+            <div class="elec">
                 <input type="hidden" name="contact_wizard-current_step"
                        value="eligeBarrio" id="id_contact_wizard-current_step">
-                <label for="id_eligeBarrio-barrio">Barrio:</label>
-                <select name="eligeBarrio-barrio" id="id_eligeBarrio-barrio">
+                <label class="label_vist" for="id_eligeBarrio-barrio">Barrio:</label>
+                <select  class="select_opt" name="eligeBarrio-barrio" id="id_eligeBarrio-barrio">
                     <option value="0">Escoja un barrio</option>
                     <option value="1">El Valle, Atlantico</option>
                     <option value="2">Barrio 2</option>
@@ -33,8 +33,9 @@
                     <option value="4">Barrio 4</option>
                     <option value="5">Barrio 5</option>
                 </select>
+            </div>
         {% endif %}
-        <button id="btn_vist7" type="submit">Continuar</button>
+        <button id="btn_vist7" class="btn_dir" type="submit">Aceptar</button>
     </form>
 {% endblock %}
 
