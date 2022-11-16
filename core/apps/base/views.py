@@ -4,12 +4,13 @@ import shutil
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 from django.shortcuts import render
+from django.template.loader import get_template
 from formtools.wizard.views import SessionWizardView
 
 from core import settings
 from core.apps.base.forms import *
 from core.apps.base.resources.tools import convert_bytes
-from core.settings import logger
+from core.settings import logger, BASE_DIR
 
 FORMS = [
     ("home", Home),
@@ -34,6 +35,7 @@ TEMPLATES = {
     "digitaDireccion": "digita_direccion.html",
     "digitaCelular": "digita_celular.html"}
 
+htmly = get_template(BASE_DIR / "core/apps/base/templates/correo.html")
 
 class ContactWizard(SessionWizardView):
     # template_name = 'start.html'
@@ -79,9 +81,6 @@ class ContactWizard(SessionWizardView):
 
     def done(self, form_list, **kwargs):
         form_data = self.process_from_data(form_list)
-        for i, param in enumerate(form_list, 1):
-            if param:
-                logger.info(f'=> {i}. {param.cleaned_data}')
         return render(self.request,
                       'done.html',
                       context={'form_data': form_data}
@@ -101,30 +100,41 @@ class ContactWizard(SessionWizardView):
                 se debe retonar en esta función.
         """
         form_data = [form.cleaned_data for form in form_list]
-        # logger.info(f"RESP_API={form_data[2]}")
 
         # Crea y guarda imagen en settings.MEDIA_ROOT
         self.contentfile_to_img(contentfile_obj=form_data[3]['src'])
-        # Envía e-mail
-        import pdb; breakpoint()
-        self.send_mail(name=form_data[2]['num_autorizacion']['AFILIADO'],
-                       body=form_data[2]['num_autorizacion'],
-                       destinatary=form_data[2]['num_autorizacion']['CORREO_TEST'])
 
-    def send_mail(self, name: str, destinatary: str, body: str):
+        # Construye las variables que serán enviadas al template
+        info_email = {
+            **form_data[2]['num_autorizacion'],
+            **form_data[5],
+            **form_data[6],
+            **form_data[7],
+            **form_data[8],
+        }
+        logger.info('Enviando correo con esta info: ', info_email)
+        body = htmly.render(info_email)
+
+        # Envía e-mail
+        self.send_mail(
+            subject=f"{form_data[2]['num_autorizacion']['NUMERO_AUTORIZACION']} - "
+                    f"Este es el número de radicación de tu domicilio - Logifarma",
+            destinatary=form_data[2]['num_autorizacion']['CORREO_TEST'],
+            html_content=body
+            )
+
+    def send_mail(self, subject: str, destinatary: str, html_content):
         """
         Envía email con imagen adjunta.
         :param name: Nombre del afiliado.
         :param destinatary: Email del afiliado
         :return: None
         """
-        email = EmailMessage(subject='Este es el asunto del correo',
-                             body=f"Hola, Sr(a) {name}\n\nLe estamos enviando este mensaje:\n"
-                                  f"{json.dumps(body, indent=2)}",
-                             from_email=settings.EMAIL_HOST_USER, to=destinatary,
-                             bcc=['alfareiza@gmail.com']
-                             )
-
+        email = EmailMessage(
+                      subject, html_content, from_email=settings.EMAIL_HOST_USER,
+                      to=destinatary, bcc=['alfareiza@gmail.com']
+                      )
+        email.content_subtype = "html"
         email.attach_file(self.foto_fmedica)
         try:
             email.send(fail_silently=False)
