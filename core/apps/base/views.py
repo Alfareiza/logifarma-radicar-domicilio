@@ -118,7 +118,7 @@ class ContactWizard(SessionWizardView):
         # Envía e-mail
         self.send_mail(
             subject=f"{form_data[2]['num_autorizacion']['NUMERO_AUTORIZACION']} - "
-                    f"Este es el número de radicación de tu domicilio - Logifarma",
+                    f"Este es el número de radicación de tu domicilio en Logifarma",
             destinatary=form_data[2]['num_autorizacion']['CORREO_TEST'],
             html_content=body
             )
@@ -135,8 +135,8 @@ class ContactWizard(SessionWizardView):
                       to=destinatary, bcc=['alfareiza@gmail.com']
                       )
         email.content_subtype = "html"
-        email.attach_file(self.foto_fmedica)
         try:
+            email.attach_file(self.foto_fmedica)
             email.send(fail_silently=False)
             logger.info(f'Correo enviado a \"{destinatary}\" con imagen '
                         f'adjunta de {convert_bytes(self.foto_fmedica.stat().st_size)}')
