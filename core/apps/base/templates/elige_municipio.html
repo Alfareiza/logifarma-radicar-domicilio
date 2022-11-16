@@ -4,9 +4,9 @@
 {% block title %}Elige Municipio{% endblock %}
 
 {% block content %}
-    <button id="btn_6"><p id="btn">< Atras</p></button>
+    <button id="btn_6" class="atras"><p id="btn" class="b_atras">< Atrás</p></button>
 
-    <div id="vist6">
+    <div id="vist">
         <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
     </div>
 
@@ -14,7 +14,7 @@
 
     <!--<input type="text" name="" list="list6" placeholder="Buscar.." id="inp_vist6">-->
 
-    <p id="vist6">* Solo aplica para el departamento del Atlantico</p>
+    <p id="p_vist6">* Solo aplica para el departamento del Atlantico</p>
     {{ form.errors.municipio }}
     <form action="" method="post">
             {% csrf_token %}
@@ -22,10 +22,11 @@
             {% if wizard.form.forms %}
                 {{ wizard.form.management_form }}
             {% else %}
-                <input type="hidden" name="contact_wizard-current_step"
+                <div class="elec">
+                <input class="inp_vist" type="hidden" name="contact_wizard-current_step"
                        value="eligeMunicipio" id="id_contact_wizard-current_step">
-                <label for="id_eligeMunicipio-municipio">Municipio:</label>
-                <select name="eligeMunicipio-municipio" id="id_eligeMunicipio-municipio">
+                <label class="label_vist" for="id_eligeMunicipio-municipio">Municipio:</label>
+                <select class="select_opt" name="eligeMunicipio-municipio" id="id_eligeMunicipio-municipio">
                     <option value="0">Escoja un municipio</option>
                     <option value="1">Barranquilla, Atlantico</option>
                     <option value="2">Soledad, Atlantico</option>
@@ -33,8 +34,9 @@
                     <option value="4">Baranoa, Atlantico</option>
                     <option value="5">Galapa, Atlantico</option>
                 </select>
+            </div>
             {% endif %}
-        <button id="btn_vist6" type="submit">Continuar</button>
+        <button id="btn_vist6" class="btn_muni" type="submit">Aceptar</button>
     </form>
 {% endblock %}
 
