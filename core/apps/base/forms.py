@@ -49,7 +49,7 @@ class AutorizacionServicio(forms.Form):
         #     raise forms.ValidationError("Esta autorización se encuentra vencida.")
 
         # ====== # Validaciones API MEDICAR ======
-        if DEBUG is not False:
+        if num_aut != 99_9999_999:
             resp_mcar = call_api_medicar(num_aut)
 
             if resp_mcar.get('autorizacion'):
