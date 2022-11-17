@@ -34,7 +34,7 @@ class AutorizacionServicio(forms.Form):
         num_aut = self.cleaned_data.get('num_autorizacion')
 
         # ====== # Validaciones API EPS ======
-        if num_aut != 99_999_999:
+        if num_aut != 99999999:
             resp_eps = call_api_eps(num_aut)
 
             if resp_eps.get('codigo') == "1":
@@ -50,7 +50,6 @@ class AutorizacionServicio(forms.Form):
             #     raise forms.ValidationError("Esta autorización se encuentra vencida.")
 
             # ====== # Validaciones API MEDICAR ======
-            num_aut != 99_9999_999:
             resp_mcar = call_api_medicar(num_aut)
 
             if resp_mcar.get('autorizacion'):
