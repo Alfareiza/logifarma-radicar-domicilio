@@ -49,17 +49,19 @@ class AutorizacionServicio(forms.Form):
             # if (datetime.now() - resp_eps.get('FECHA_AUTORIZACION')).days > 30:
             #     raise forms.ValidationError("Esta autorización se encuentra vencida.")
 
-        # ====== # Validaciones API MEDICAR ======
-        if num_aut != 99_9999_999:
+            # ====== # Validaciones API MEDICAR ======
+            num_aut != 99_9999_999:
             resp_mcar = call_api_medicar(num_aut)
 
             if resp_mcar.get('autorizacion'):
                 raise forms.ValidationError(f"Este domicilio se encuentra radicado en "
                                             f"{resp_mcar.get('nombre_centro_factura')[:-5].strip()}")
 
-        resp_eps['NUMERO_AUTORIZACION'] = num_aut
-        resp_eps['CORREO_TEST'] = config('EMAIL_TEST', cast=Csv())
-        return resp_eps
+            resp_eps['NUMERO_AUTORIZACION'] = num_aut
+            resp_eps['CORREO_TEST'] = config('EMAIL_TEST', cast=Csv())
+            return resp_eps
+        else:
+            return num_aut
 
 
 class FotoFormulaMedica(forms.Form):
