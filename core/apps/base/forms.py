@@ -34,19 +34,20 @@ class AutorizacionServicio(forms.Form):
         num_aut = self.cleaned_data.get('num_autorizacion')
 
         # ====== # Validaciones API EPS ======
-        resp_eps = call_api_eps(num_aut)
+        if num_aut != 99_999_999:
+            resp_eps = call_api_eps(num_aut)
 
-        if resp_eps.get('codigo') == "1":
-            raise forms.ValidationError("Número de autorización no encontrado")
+            if resp_eps.get('codigo') == "1":
+                raise forms.ValidationError("Número de autorización no encontrado")
 
-        if resp_eps.get('ESTADO_AFILIADO') != 'ACTIVO':
-            raise forms.ValidationError("Afiliado no se encuentra activo")
+            if resp_eps.get('ESTADO_AFILIADO') != 'ACTIVO':
+                raise forms.ValidationError("Afiliado no se encuentra activo")
 
-        if resp_eps.get('ESTADO_AUTORIZACION') != 'PROCESADA':
-            raise forms.ValidationError("El estado de la autorización no está activa.")
+            if resp_eps.get('ESTADO_AUTORIZACION') != 'PROCESADA':
+                raise forms.ValidationError("El estado de la autorización no está activa.")
 
-        # if (datetime.now() - resp_eps.get('FECHA_AUTORIZACION')).days > 30:
-        #     raise forms.ValidationError("Esta autorización se encuentra vencida.")
+            # if (datetime.now() - resp_eps.get('FECHA_AUTORIZACION')).days > 30:
+            #     raise forms.ValidationError("Esta autorización se encuentra vencida.")
 
         # ====== # Validaciones API MEDICAR ======
         if num_aut != 99_9999_999:
