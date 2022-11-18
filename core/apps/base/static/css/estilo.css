@@ -1,6 +1,1615 @@
+h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
+    font-family: 'Montserrat', sans-serif; }
+        
+        header, main, footer, aside, nav, figure, figcaption, article { display: block;}
+        
+        h1, h2, h3, h4, h5, h6, p {margin: 0; }
+        
+        body { margin: 0 !important;}
+    
+    html {scroll-behavior: smooth;}
+
+
+main { width: 100%; height: auto; position: relative; margin: 0 auto; float: none;}
+
+
+.atras {margin: 0% 0% 0% 2%;
+    position: absolute;
+    border: 0px;
+    background: #ffff;
+    top: 2%;
+    z-index: 9;}
+    
+.b_atras {
+    position: relative;
+    font-size: 1.5em;
+    color: #468bc4;
+}
+
+#vist{position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+    height: 13vh;}
+
+#img1 {position: relative;
+    margin: 0% auto;
+    width: 17%;
+    padding: 1% 41.5%;}
+
+.elec {position: relative;
+    width: 80%;
+    height: 10vh;
+    margin: 3% auto 0 auto;}
+
+.label_vist {position: relative;
+    font-size: 1.5em;
+    color: #333;}
+
+.select_opt {position: relative;
+    padding: 1%;
+    color: #0572ce;
+    border-color: #0572ce;
+    font-size: 1.5em;}
+
+.btn {position: absolute;
+    padding: 0% 3%;
+    margin: 0 auto;
+    font-size: 2em;
+    border-radius: 12px;
+    left: 42%;
+    top: 90%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+main section#vist1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+main section#vist1 div#vist1 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+    height: 14vh;}
+
+main section#vist1 div#vist1 img#img1 { position: relative;
+    margin: 0% auto;
+    width: 17%;
+    padding: 1% 41.5%;}
+
+main section#vist1 div#vist1_1 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+    height: 20vh;}
+
+main section#vist1 div#vist1_1 img#img2 {position: relative;
+    margin: 0% auto;
+    width: 19%;
+    padding: 2% 40.5%;}
+
+main section#vist1 article#vist1 { position: relative;
+    margin: 0px auto 0%;
+    padding: 8% 10% 4% 11%;}
+
+main section#vist1 article#vist1 p#vist1 {position: relative;
+    font-weight: 500;
+    font-size: 1.3em;
+    text-align: center;}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section#vist2 div#vist2_text { position: relative;
+    margin: 0 auto;
+    width: 100%;
+    height: 17vh;
+    font-weight: 500;}
+
+main section#vist2 div#vist2_text h1 { font-size: 1.5em;
+    padding: 0 0 0 2%;}
+
+main section#vist2 div#vist2_text p {font-size: 1em;
+    padding: 1% 0 0 4%;}
+
+main section#vist2 nav#vist2 { width: 100%;
+    height: auto;
+    position: relative;
+    margin: 1vh 0% 0% 0%;
+    float: none;}
+
+main section#vist2 nav#vist2 div#img { width: 100%;
+    height: 15vh;}
+
+main section#vist2 nav#vist2 div#img img#vist2 { position: absolute;
+    padding: 0% 0% 0% 16%; width: 6%; height: 17%;}
+
+main section#vist2 nav#vist2 div#img p#vist2 {padding: 0px 2% 0 29%; font-size: 1.2em; height: 10vh;}
+ 
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+.modal {position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(0, 0, 0, 0.5);
+    transition: all 500ms ease;
+    z-index: 99;
+width: 100%;
+height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+opacity: 1;
+visibility: visible;
+}
+
+.conten {width: 40%;
+    height: 30%;
+    margin: auto;
+    background: #fff;
+    box-shadow: 1px 7px 25px rgb(0, 0, 0, 0.6);
+    transition: all 500ms ease;
+    position: relative;
+}
+
+.conten header {padding: 10px;
+    background: #db8046;
+    color: #fff;
+    font-size: 2em;
+}
+
+.conten button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.texto {position: relative;
+margin: 5%;
+font-size: 1.5em;
+}
+
+
+@keyframes girar {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
+
+main section#vist3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+main section#vist3 div#vist3_text {position: relative;
+    padding: 0% 0% 0% 9%;}
+
+main section#vist3 p#vist3 { font-size: 1.1em; }
+
+main section#vist3 h1#vist3 { font-size: 1.5em; font-weight: 500;}
+
+main section#vist3 input.inp_vist3 {margin: 2% 28%;
+    padding: 1% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 44%;}
+main section#vist3 input#aut :focus {border-bottom: 1px solid #0572ce;
+    box-shadow: 0 1px 0 0 #0572ce;}
+
+main section#vist3 p#vist3_t { position: relative;
+    text-align: center;
+    margin: 1%;
+    font-size: 1em;}
+
+main section#vist3 div#vist3_img {position: relative;
+    width: 60%;
+    height: 75vh;
+    margin: 0 auto;}
+
+main section#vist3 div#vist3_img img#vist3 {width: 90%;
+    padding: 5%}
+
+main section#vist3 p#vist3_t2 {padding: 1% 6% 1% 6%; font-size: 1em; text-align: center;}
+
+main section#vist3 div#tet {margin: 2% 0 5% 0px; }
+
+main section#vist3 div#tet a#vist3 {left: 43%;
+    position: relative; font-size: 1.7em;}
+
+
+.conten_carga { background: #ffffff;
+    height: 7.1%;
+    width: 50%;
+    left: 24%;
+    top: 88%;
+    position: absolute;
+    -webkit-animation: all 1s ease;
+    -o-ani-webkit-animation: all 1s ease;
+    animation: all 1s ease;
+    z-index: 999;
+    display: none;
+    border: solid #3333;
+    border-radius: 16px
+}
+
+.carga {border: solid 7px #ccc;
+    border-top-color: #f4266a;
+    border-top-style: groove;
+    height: 59%;
+    width: 15%;
+    border-radius: 100%;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: girar 1.5s linear infinite;
+    -o-animation: girar 1.5s linear infinite ;
+    animation: girar 1.5s linear infinite;
+}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section#vist4 h1#vist4 {width: 75%;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 1.4em;
+    font-weight: 400;}
+
+main section#vist4 p#vist4 {    width: 75%;
+    text-align: center;
+    margin: 2% auto;
+    font-size: 1em}
+
+main section#vist4 p#vist4_1 { width: 44%;
+    text-align: center;
+    margin: 1% auto;
+    font-size: 1.3em;
+    color: red;}
+
+
+#video {position: relative;
+    width: 36%;
+    height: 55vh;
+    padding: 0 1% 0 1%;
+    margin: 0px 31% 3px 31%} 
+
+.img_fot {position: relative;
+    width: 45%;
+    height: 57vh;
+    padding: 0 27% 0 28%;}
+
+
+.btn1 {position: relative;
+    padding: 0.5% 1%;
+    margin: 0 auto;
+    font-size: 1.3em;
+    border-radius: 12px;
+    left: 32%;
+    top: 16px;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+.btn2 {position: absolute;
+    padding: 0.5% 3%;
+    margin: 0 auto;
+    font-size: 1.3em;
+    border-radius: 12px;
+    left: 55%;
+    top: 98.3%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4}
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist5 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section#vist5 h1#vist5 {width: 81%;
+    height: 11vh;
+    text-align: center;
+    margin: 0% auto;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+main section#vist5 p#vist5 { width: 81%;
+    height: 10vh;
+    text-align: center;
+    margin: 0% auto;
+    font-size: 1em;
+    font-weight: 300;}
+
+main section#vist5 div#vist5_1 {position: relative;
+    margin: 0 auto;
+    width: 32%;
+    padding: 0;}
+
+
+main section#vist5 div#vist5_1 img#img3 { position: relative;
+    margin: 0% auto;
+    width: 74%;
+    padding: 3% 10%;}
+
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist6 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+#vist6 {width: 81%;
+    height: 11vh;
+    text-align: center;
+    margin: 3% auto 0;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+#inp_vist6 {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+    
+main section#vist6 input#aut :focus {border-bottom: 1px solid #0572ce;
+    box-shadow: 0 1px 0 0 #0572ce;}
+
+#p_vist6 {position: relative;
+    width: 93%;
+    height: 3vh;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: 600;
+    margin: 0px auto 0% auto}
+    
+.btn_muni {position: fixed;
+    padding: 0.5% 5%;
+    margin: 0 auto;
+    font-size: 1.5em;
+    border-radius: 12px;
+    left: 41%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+#vist7 {width: 81%;
+    height: 10vh;
+    text-align: center;
+    margin: 5% auto;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+main section#vist7 input#inp_vist7 {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+
+
+option {
+  background-color: white;
+  padding: 4px;
+  color: rgb(107, 107, 197);
+  margin-bottom: 1px;
+   font-size: 1em;
+  cursor: pointer;
+}
+
+.btn_dir {position: fixed;
+    padding: 0.5% 5%;
+    margin: 0 auto;
+    font-size: 1.5em;
+    border-radius: 12px;
+    left: 41%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+
+main section#vist8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+main section#vist8 h1#vist8 {width: 81%;
+    height: 8vh;
+    text-align: center;
+    margin: 2% auto 0;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+.inp_vist8 {margin: 1% 30%;
+    padding: 1% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 40%;}
+
+
+.p_vist8 {position: relative;
+    width: 64%;
+    height: 10vh;
+    font-size: 1em;
+    font-weight: 600;
+    margin: 3% auto 0;
+    text-align: center;}
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+#ti_vist9 {width: 81%;
+    height: 8vh;
+    text-align: center;
+    margin: 2% auto 0;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+.inp_vist9 {margin: 1% 30%;
+    padding: 1% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 40%;}
+
+
+#p_vist9 {position: relative;
+    width: 64%;
+    height: 10vh;
+    font-size: 1em;
+    font-weight: 600;
+    margin: 3% auto 0;
+    text-align: center;}
+
+#vist9_t {position: relative; width: 81%;
+    text-align: center;
+    margin: 3% auto 0%;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+
+main section#vist9 p#vist9_t {position: relative;
+    width: 84%;
+    text-align: center;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin: 0% auto;}
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+
+
+main section#vist10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section#vist10 h1#vist10 {width: 61%;
+    text-align: center;
+    margin: 7% auto 7%;
+    font-size: 1.4em;
+    font-weight: 600;}
+
+main section#vist10 p#vist10 {position: relative;
+    width: 65%;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: 200;
+    margin: 0% auto;}
+
+
+@media only screen and (max-width: 822px){
+
+h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
+    font-family: 'Montserrat', sans-serif; }
+        
+        header, main, footer, aside, nav, figure, figcaption, article { display: block;}
+        
+        h1, h2, h3, h4, h5, h6, p {margin: 0; }
+        
+        body { margin: 0 !important;}
+    
+    html {scroll-behavior: smooth;}
+
+
+main { width: 100%; height: auto; position: relative; margin: 0 auto; float: none;}
+
+
+.atras {margin: 0% 0% 0% 2%;
+    position: absolute;
+    border: 0px;
+    background: #ffff;
+    top: 2%;
+    z-index: 9;}
+    
+.b_atras {
+    position: relative;
+    font-size: 2.5em;
+    color: #468bc4;
+}
+
+#vist{position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+#img1 {position: relative;
+    margin: 0% auto;
+    width: 36%;
+    padding: 3% 32%;}
+
+.elec {position: relative;
+    width: 80%;
+    height: 15vh;
+    margin: 8% auto 0 auto;}
+
+.label_vist {position: relative;
+    font-size: 2.2em;
+    color: #333;}
+
+.select_opt {position: relative;
+    padding: 2.5%;
+    color: #0572ce;
+    border-color: #0572ce;
+    font-size: 2em;}
+
+.btn {position: absolute;
+    padding: 3% 14%;
+    margin: 0 auto;
+    font-size: 2em;
+    border-radius: 12px;
+    left: 29%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+main section#vist1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+main section#vist1 div#vist1 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+    height: 14vh;}
+
+main section#vist1 div#vist1 img#img1 { position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 6% 25%;}
+
+main section#vist1 div#vist1_1 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+    height: 20vh;}
+
+main section#vist1 div#vist1_1 img#img2 {position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 5% 25%;}
+
+main section#vist1 article#vist1 { position: relative;
+    margin: 0px auto 30%;
+    padding: 12% 10% 9% 11%;}
+
+main section#vist1 article#vist1 p#vist1 {position: relative;
+    font-weight: 500;
+    font-size: 1.3em;
+    text-align: center;}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section#vist2 div#vist2_text { position: relative;
+    margin: 0 auto;
+    width: 100%;
+    height: 15vh;
+    font-weight: 500;}
+
+main section#vist2 div#vist2_text h1 { font-size: 2.5em;
+    padding: 0 0 0 2%;}
+
+main section#vist2 div#vist2_text p {font-size: 1.5em;
+    padding: 2% 0 0 4%;}
+
+main section#vist2 nav#vist2 { width: 100%;
+    height: auto;
+    position: relative;
+    margin: 1vh 0% 0% 0%;
+    float: none;}
+
+main section#vist2 nav#vist2 div#img { width: 100%;
+    height: 15vh;}
+
+main section#vist2 nav#vist2 div#img img#vist2 { position: absolute;
+    padding: 0% 0% 0% 5%; width: 20%;}
+
+main section#vist2 nav#vist2 div#img p#vist2 {padding: 0px 2% 0 29%; font-size: 1.8em;}
+ 
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+.modal {position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(0, 0, 0, 0.5);
+    transition: all 500ms ease;
+    z-index: 99;
+width: 100%;
+height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+opacity: 1;
+visibility: visible;
+}
+
+.conten {width: 40%;
+    height: 30%;
+    margin: auto;
+    background: #fff;
+    box-shadow: 1px 7px 25px rgb(0, 0, 0, 0.6);
+    transition: all 500ms ease;
+    position: relative;
+}
+
+.conten header {padding: 10px;
+    background: #db8046;
+    color: #fff;
+    font-size: 2em;
+}
+
+.conten button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.texto {position: relative;
+margin: 5%;
+font-size: 1.5em;
+}
+
+
+@keyframes girar {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
+
+main section#vist3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+main section#vist3 div#vist3_text {position: relative;
+    padding: 0% 0% 0% 9%;}
+
+main section#vist3 p#vist3 { font-size: 1.9em; }
+
+main section#vist3 h1#vist3 { font-size: 2.4em; font-weight: 500;}
+
+main section#vist3 input.inp_vist3 {margin: 5% 14%;
+    padding: 1% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1.9em;
+    width: 70%;}
+main section#vist3 input#aut :focus {border-bottom: 1px solid #0572ce;
+    box-shadow: 0 1px 0 0 #0572ce;}
+
+main section#vist3 p#vist3_t { position: relative;
+    text-align: center;
+    margin: 1%;
+    font-size: 1.2em;}
+
+main section#vist3 div#vist3_img {position: relative;
+    width: 100%;
+    height: 30vh;}
+
+main section#vist3 div#vist3_img img#vist3 {width: 90%;
+    padding: 5%}
+
+main section#vist3 p#vist3_t2 {padding: 6% 6% 1% 6%; font-size: 1.5em; text-align: center;}
+
+main section#vist3 div#tet {margin: 2% 0 5% 0px; }
+
+main section#vist3 div#tet a#vist3 {left: 41%;
+    position: relative; font-size: 1.7em;}
+
+
+.conten_carga { background: #ffffff;
+    height: 7.1%;
+    width: 50%;
+    left: 24%;
+    top: 88%;
+    position: absolute;
+    -webkit-animation: all 1s ease;
+    -o-ani-webkit-animation: all 1s ease;
+    animation: all 1s ease;
+    z-index: 999;
+    display: none;
+    border: solid #3333;
+    border-radius: 16px
+}
+
+.carga {border: solid 7px #ccc;
+    border-top-color: #f4266a;
+    border-top-style: groove;
+    height: 59%;
+    width: 15%;
+    border-radius: 100%;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: girar 1.5s linear infinite;
+    -o-animation: girar 1.5s linear infinite ;
+    animation: girar 1.5s linear infinite;
+}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section#vist4 h1#vist4 {width: 75%;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 2.4em;
+    font-weight: 400;}
+
+main section#vist4 p#vist4 {    width: 75%;
+    text-align: center;
+    margin: 5% auto;
+    font-size: 1.6em}
+
+main section#vist4 p#vist4_1 { width: 63%;
+    text-align: center;
+    margin: 4% auto;
+    font-size: 1.7em;
+    color: red;}
+
+
+#video {position: relative; 
+    width: 95%; 
+    height: 39vh;
+    padding: 0 2% 0 2.5%;} 
+
+.img_fot {position: relative;
+    width: 93%;
+    height: 39vh;
+    padding: 0 2% 0 3%;}
+
+
+.btn1 {position: absolute;
+    padding: 3% 5%;
+    margin: 0 auto;
+    font-size: 2em;
+    border-radius: 12px;
+    left: 6%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+.btn2 {position: absolute;
+    padding: 3% 10%;
+    margin: 0 auto;
+    font-size: 2em;
+    border-radius: 12px;
+    left: 55%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist5 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section#vist5 h1#vist5 {width: 81%;
+    height: 11vh;
+    text-align: center;
+    margin: 0% auto;
+    font-size: 2.4em;
+    font-weight: 300;}
+
+main section#vist5 p#vist5 { width: 81%;
+    height: 10vh;
+    text-align: center;
+    margin: 0% auto;
+    font-size: 1.5em;
+    font-weight: 300;}
+
+main section#vist5 div#vist5_1 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+main section#vist5 div#vist5_1 img#img2 {position: fixed;
+    width: 58%;
+    z-index: 9;
+    left: 22%;}
+
+main section#vist5 div#vist5_1 img#img3 { position: relative;
+    margin: 0% auto;
+    width: 74%;
+    padding: 3% 10%;}
+
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist6 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+#vist6 {width: 81%;
+    height: 11vh;
+    text-align: center;
+    margin: 3% auto 0;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+#inp_vist6 {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+    
+main section#vist6 input#aut :focus {border-bottom: 1px solid #0572ce;
+    box-shadow: 0 1px 0 0 #0572ce;}
+
+#p_vist6 {position: relative;
+    width: 93%;
+    height: 3vh;
+    text-align: center;
+    font-size: 1em;
+    font-weight: 600;
+    margin: 0px auto 0% auto}
+    
+.btn_muni {position: fixed;
+    padding: 0.5% 5%;
+    margin: 0 auto;
+    font-size: 1.5em;
+    border-radius: 12px;
+    left: 41%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+#vist7 {width: 81%;
+    height: 10vh;
+    text-align: center;
+    margin: 5% auto;
+    font-size: 2.4em;
+    font-weight: 300;}
+
+main section#vist7 input#inp_vist7 {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+
+
+option {
+  background-color: white;
+  padding: 4px;
+  color: rgb(107, 107, 197);
+  margin-bottom: 1px;
+   font-size: 1em;
+  cursor: pointer;
+}
+
+.btn_dir {position: fixed;
+    padding: 0.5% 5%;
+    margin: 0 auto;
+    font-size: 1.5em;
+    border-radius: 12px;
+    left: 41%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+
+main section#vist8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+main section#vist8 h1#vist8 {width: 81%;
+    height: 10vh;
+    text-align: center;
+    margin: 6% auto 0;
+    font-size: 2.4em;
+    font-weight: 300;}
+
+.inp_vist8 {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 2.5em;
+    width: 70%;}
+
+
+.p_vist8 {position: relative;
+    width: 64%;
+    height: 10vh;
+    text-align: left;
+    font-size: 1.3em;
+    font-weight: 600;
+    margin: 0 auto 0;}
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+#ti_vist9 {position: relative;
+    width: 81%;
+    text-align: center;
+    margin: 6% auto;
+    font-size: 2.4em;
+    font-weight: 300;}
+
+.inp_vist9 {position: relative;
+    margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 2.2em;
+    width: 70%;}
+
+
+#p_vist9 {position: relative;
+    width: 64%;
+    text-align: left;
+    font-size: 1.2em;
+    font-weight: 600;
+    margin: 0% auto;}
+
+#vist9_t {position: relative; width: 81%;
+    text-align: center;
+    margin: 17% auto 0%;
+    font-size: 2.4em;
+    font-weight: 300;}
+
+
+main section#vist9 p#vist9_t {position: relative;
+    width: 84%;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: 600;
+    margin: 0% auto;}
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+
+
+main section#vist10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section#vist10 h1#vist10 {width: 61%;
+    text-align: left;
+    margin: 20% auto 15%;
+    font-size: 1.4em;
+    font-weight: 600;}
+
+main section#vist10 p#vist10 {position: relative;
+    width: 65%;
+    text-align: left;
+    font-size: 1.5em;
+    font-weight: 200;
+    margin: 0% auto;}
+
+}
+
+
 
 /*mobile*/
-@media only screen and (max-width: 500px){
+@media only screen and (max-width: 499px){
+
+h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
+    font-family: 'Montserrat', sans-serif; }
+        
+        header, main, footer, aside, nav, figure, figcaption, article { display: block;}
+        
+        h1, h2, h3, h4, h5, h6, p {margin: 0; }
+        
+        body { margin: 0 !important;}
+    
+    html {scroll-behavior: smooth;}
+
+
+main { width: 100%; height: auto; position: relative; margin: 0 auto; float: none;}
+
+
+.atras {margin: 0% 0% 0% 2%;
+    position: absolute;
+    border: 0px;
+    background: #ffff;
+    top: 2%;
+    z-index: 9;}
+    
+.b_atras {
+    position: relative;
+    font-size: 1.4em;
+    color: #468bc4;
+}
+
+#vist{position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+#img1 {position: relative;
+    margin: 0% auto;
+    width: 36%;
+    padding: 3% 32%;}
+
+.elec {position: relative;
+    width: 80%;
+    margin: 11% auto 0 auto;}
+
+.label_vist {position: relative;
+    font-size: 1.2em;
+    color: #333;}
+
+.select_opt {position: relative;
+    padding: 2.5%;
+    color: #0572ce;
+    border-color: #0572ce;
+    font-size: 1em;}
+
+.btn {position: absolute;
+    padding: 3% 14%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 25%;
+    top: 84%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+main section#vist1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+main section#vist1 div#vist1 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+    height: 14vh;}
+
+main section#vist1 div#vist1 img#img1 { position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 6% 25%;}
+
+main section#vist1 div#vist1_1 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+    height: 20vh;}
+
+main section#vist1 div#vist1_1 img#img2 {position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 5% 25%;}
+
+main section#vist1 article#vist1 { position: relative;
+    margin: 0px auto 0%;
+    padding: 12% 10% 9% 11%;}
+
+main section#vist1 article#vist1 p#vist1 {position: relative;
+    font-weight: 500;
+    font-size: 1.3em;
+    text-align: center;}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section#vist2 div#vist2_text { position: relative;
+    margin: 0 auto;
+    width: 100%;
+    height: 15vh;
+    font-weight: 500;}
+
+main section#vist2 div#vist2_text h1 { font-size: 1.5em;
+    padding: 0 0 0 2%;}
+
+main section#vist2 div#vist2_text p {font-size: 1em;
+    padding: 2% 0 0 4%;}
+
+main section#vist2 nav#vist2 { width: 100%;
+    height: auto;
+    position: relative;
+    margin: 1vh 0% 0% 0%;
+    float: none;}
+
+main section#vist2 nav#vist2 div#img { width: 100%;
+    height: 15vh;}
+
+main section#vist2 nav#vist2 div#img img#vist2 { position: absolute;
+    padding: 0% 0% 0% 5%; width: 20%;}
+
+main section#vist2 nav#vist2 div#img p#vist2 {padding: 0px 2% 0 29%;
+    font-size: 1em;}
+ 
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+.modal {position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(0, 0, 0, 0.5);
+    transition: all 500ms ease;
+    z-index: 99;
+width: 100%;
+height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+opacity: 1;
+visibility: visible;
+}
+
+.conten {width: 58%;
+    height: 30%;
+    margin: auto;
+    background: #fff;
+    box-shadow: 1px 7px 25px rgb(0, 0, 0, 0.6);
+    transition: all 500ms ease;
+    position: relative;
+}
+
+.conten header {padding: 10px;
+    background: #db8046;
+    color: #fff;
+    font-size: 1em;
+}
+
+.conten button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.texto {position: relative;
+margin: 5%;
+font-size: 0.8em;
+}
+
+
+@keyframes girar {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
+
+main section#vist3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+main section#vist3 div#vist3_text {position: relative;
+    padding: 0% 0% 0% 9%;}
+
+main section#vist3 p#vist3 { font-size: 1em;}
+
+main section#vist3 h1#vist3 { font-size: 1.4em; font-weight: 500;}
+
+main section#vist3 input.inp_vist3 {margin: 5% 14%;
+    padding: 1% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+main section#vist3 input#aut :focus {border-bottom: 1px solid #0572ce;
+    box-shadow: 0 1px 0 0 #0572ce;}
+
+main section#vist3 p#vist3_t { position: relative;
+    text-align: center;
+    margin: 1%;
+    font-size: 0.8em;}
+
+main section#vist3 div#vist3_img {position: relative;
+    width: 100%;
+    height: 30vh;}
+
+main section#vist3 div#vist3_img img#vist3 {width: 90%;
+    padding: 5%}
+
+main section#vist3 p#vist3_t2 {padding: 6% 6% 1% 6%;
+    font-size: 1em;
+    text-align: center;}
+
+main section#vist3 div#tet {margin: 2% 0 5% 0px; }
+
+main section#vist3 div#tet a#vist3 {left: 34%;
+    position: relative; font-size: 1.3em;}
+
+main section#vist3 button#btn_vist3 {position: absolute;
+    padding: 3% 14%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 25%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+.conten_carga { background: #ffffff;
+    height: 7.1%;
+    width: 50%;
+    left: 24%;
+    top: 88%;
+    position: absolute;
+    -webkit-animation: all 1s ease;
+    -o-ani-webkit-animation: all 1s ease;
+    animation: all 1s ease;
+    z-index: 999;
+    display: none;
+    border: solid #3333;
+    border-radius: 16px
+}
+
+.carga {border: solid 7px #ccc;
+    border-top-color: #f4266a;
+    border-top-style: groove;
+    height: 59%;
+    width: 15%;
+    border-radius: 100%;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: girar 1.5s linear infinite;
+    -o-animation: girar 1.5s linear infinite ;
+    animation: girar 1.5s linear infinite;
+}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+main section#vist4 button#btn_4 {margin: 2% 0% 0% 3%;
+    position: relative;
+    border: 0px;
+    background: #ffff;}
+    
+main section#vist4 button#btn_4 p#btn {position: relative;
+    font-size: 1.2em;
+    color: #468bc4;}
+
+main section#vist4 div#vist4 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+main section#vist4 div#vist4 img#img1 { position: relative;
+    margin: 0% auto;
+    width: 50%;
+    padding: 2% 25%;}
+
+main section#vist4 h1#vist4 {width: 75%;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 1.4em;
+    font-weight: 400;}
+
+main section#vist4 p#vist4 {    width: 75%;
+    text-align: center;
+    margin: 5% auto;
+    font-size: 0.9em}
+
+main section#vist4 p#vist4_1 { width: 63%;
+    text-align: center;
+    margin: 4% auto;
+    font-size: 1em;
+    color: red;}
+
+
+#video {position: relative; 
+    width: 95%; 
+    height: 39vh;
+    padding: 0 2% 0 2.5%;
+    margin: 0;} 
+
+.img_fot {position: relative;
+    width: 93%;
+    height: 39vh;
+    padding: 0 2% 0 3%;}
+
+
+.btn1 {position: absolute;
+    padding: 3% 5%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 3%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+.btn2 {position: absolute;
+    padding: 3% 10%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 53%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist5 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section#vist5 h1#vist5 {width: 81%;
+    height: 10vh;
+    text-align: center;
+    margin: 2% auto;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+main section#vist5 p#vist5 {width: 81%;
+    height: 6vh;
+    text-align: center;
+    margin: 2% auto;
+    font-size: 1em;
+    font-weight: 300;}
+
+main section#vist5 div#vist5_1 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+main section#vist5 div#vist5_1 img#img2 {position: fixed;
+    width: 58%;
+    z-index: 9;
+    left: 22%;}
+
+main section#vist5 div#vist5_1 img#img3 { position: relative;
+    margin: 0% auto;
+    width: 74%;
+    padding: 3% 10%;}
+
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist6 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+#vist6 {width: 81%;
+    height: 10vh;
+    text-align: center;
+    margin: 2% auto;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+#inp_vist6 {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+main section#vist6 input#aut :focus {border-bottom: 1px solid #0572ce;
+    box-shadow: 0 1px 0 0 #0572ce;}
+
+#p_vist6 {position: relative;
+    width: 93%;
+    height: 5vh;
+    text-align: center;
+    font-size: 0.7em;
+    font-weight: 600;
+    margin: 0px auto 5% auto;}
+    
+.btn_muni {position: fixed;
+    padding: 3% 14%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 25%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+#vist7 {width: 81%;
+    height: 8vh;
+    text-align: center;
+    margin: 4% auto;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+main section#vist7 input#inp_vist7 {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+
+
+option {
+  background-color: white;
+  padding: 4px;
+  color: rgb(107, 107, 197);
+  margin-bottom: 1px;
+   font-size: 1em;
+  cursor: pointer;
+}
+
+.btn_dir {position: fixed;
+    padding: 3% 14%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 25%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+
+main section#vist8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+main section#vist8 h1#vist8 {width: 81%;
+    height: 10vh;
+    text-align: center;
+    margin: 5% auto;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+.inp_vist8 {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+
+
+.p_vist8 {position: relative;
+    width: 64%;
+    text-align: left;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin: 0 auto;}
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section#vist9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+#ti_vist9 {position: relative;
+    width: 81%;
+    text-align: center;
+    margin: 6% auto;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+.inp_vist9 {position: relative;
+    margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+
+
+#p_vist9 {position: relative;
+    width: 64%;
+    text-align: left;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin: 0% auto;}
+
+#vist9_t {position: relative; width: 81%;
+    text-align: center;
+    margin: 17% auto 0%;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+main section#vist9 input#inp_vist9_t {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+main section#vist9 input#aut :focus {border-bottom: 1px solid #0572ce;
+    box-shadow: 0 1px 0 0 #0572ce;}
+
+main section#vist9 p#vist9_t {position: relative;
+    width: 84%;
+    text-align: center;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin: 0% auto;}
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+
+
+main section#vist10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section#vist10 h1#vist10 {width: 61%;
+    text-align: left;
+    margin: 20% auto 15%;
+    font-size: 1.4em;
+    font-weight: 600;}
+
+main section#vist10 p#vist10 {position: relative;
+    width: 65%;
+    text-align: left;
+    font-size: 1.5em;
+    font-weight: 200;
+    margin: 0% auto;}
+
+
+
+}
+
+
+@media only screen and (max-width: 320px){
 
 h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
     font-family: 'Montserrat', sans-serif; }
@@ -90,12 +1699,13 @@ main section#vist1 div#vist1_1 img#img2 {position: relative;
     padding: 5% 25%;}
 
 main section#vist1 article#vist1 { position: relative;
-    margin: 0px auto 30%;
+    margin: 0px auto 0%;
     padding: 12% 10% 9% 11%;}
 
 main section#vist1 article#vist1 p#vist1 {position: relative;
     font-weight: 500;
-    font-size: 1.3em }
+    font-size: 1.3em;
+    text-align: center;}
 
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
@@ -132,8 +1742,56 @@ main section#vist2 nav#vist2 div#img p#vist2 {padding: 0px 2% 0 29%;}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+.modal {position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(0, 0, 0, 0.5);
+    transition: all 500ms ease;
+    z-index: 99;
+width: 100%;
+height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+opacity: 1;
+visibility: visible;
+}
 
+.conten {width: 58%;
+    height: 30%;
+    margin: auto;
+    background: #fff;
+    box-shadow: 1px 7px 25px rgb(0, 0, 0, 0.6);
+    transition: all 500ms ease;
+    position: relative;
+}
+
+.conten header {padding: 10px;
+    background: #db8046;
+    color: #fff;
+}
+
+.conten button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.texto {position: relative;
+margin: 5%;
+font-size: 0.8em;
+}
+
+
+@keyframes girar {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
+
+main section#vist3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 main section#vist3 div#vist3_text {position: relative;
     padding: 0% 0% 0% 9%;}
@@ -180,6 +1838,40 @@ main section#vist3 button#btn_vist3 {position: absolute;
     border-color: #468bc4;
     color: #468bc4;}
 
+.conten_carga { background: #ffffff;
+    height: 7.1%;
+    width: 50%;
+    left: 24%;
+    top: 88%;
+    position: absolute;
+    -webkit-animation: all 1s ease;
+    -o-ani-webkit-animation: all 1s ease;
+    animation: all 1s ease;
+    z-index: 999;
+    display: none;
+    border: solid #3333;
+    border-radius: 16px
+}
+
+.carga {border: solid 7px #ccc;
+    border-top-color: #f4266a;
+    border-top-style: groove;
+    height: 59%;
+    width: 15%;
+    border-radius: 100%;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: girar 1.5s linear infinite;
+    -o-animation: girar 1.5s linear infinite ;
+    animation: girar 1.5s linear infinite;
+}
+
+
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
 main section#vist4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
@@ -222,13 +1914,14 @@ main section#vist4 p#vist4_1 { width: 63%;
 
 
 #video {position: relative; 
-    width: 100%; 
-    height: 38vh;} 
+    width: 95%; 
+    height: 39vh;
+    padding: 0 2% 0 2.5%;} 
 
 .img_fot {position: relative;
-    width: 95%;
+    width: 93%;
     height: 39vh;
-    padding: 0 2% 0 2%}
+    padding: 0 2% 0 3%;}
 
 
 .btn1 {position: absolute;
@@ -466,6 +2159,7 @@ main section#vist10 p#vist10 {position: relative;
 
 
 }
+
 
 /*mobile*/
 @media only screen and (max-width: 342px){
