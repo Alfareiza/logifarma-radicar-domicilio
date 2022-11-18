@@ -14,6 +14,19 @@
             <p id="vist3">Ingresa el número de</p>
             <h1 id="vist3">Autorización de servicio</h1>
     </div>
+
+    <div class="modal">
+        <div class="conten">
+            <header>¡Bienvenido!</header>
+            <button type="button" id="" class="close">X</button>
+            <div class="contenido">
+                <p class="texto">
+                    Número de autorización errado.
+                </p>
+            </div>
+        </div>
+    </div>
+
     {{ form.errors.num_autorizacion }}
     <form action="" method="post">
         {% csrf_token %}
@@ -25,7 +38,7 @@
                     {{ form.as_table }}
                 {% endfor %}
         {% else %}
-            <input type="number" placeholder="Digitar el nuemro.." class="inp_vist3"
+            <input type="number" placeholder="Digitar el número.." class="inp_vist3"
                name="autorizacionServicio-num_autorizacion"
                min="100000" required=""
                id="id_autorizacionServicio-num_autorizacion":>
@@ -47,6 +60,11 @@
         </div>
 
         <button id="btn_vist3" class="btn" type="submit">Continuar</button>
+
+        <div id="" class="conten_carga">
+            <div id="" class="carga"></div>
+        </div>
     </form>
+
 </section>
 {% endblock %}
