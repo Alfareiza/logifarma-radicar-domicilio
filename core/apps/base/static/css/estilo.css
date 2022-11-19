@@ -146,33 +146,44 @@ opacity: 1;
 visibility: visible;
 }
 
-.conten {width: 40%;
-    height: 30%;
+.conten {width: 50%;
+    height: 40%;
     margin: auto;
     background: #fff;
     box-shadow: 1px 7px 25px rgb(0, 0, 0, 0.6);
     transition: all 500ms ease;
     position: relative;
+    border: solid 4px #3367c7;
+    transform: translateY(0%);
 }
 
-.conten header {padding: 10px;
-    background: #db8046;
+.conten header {padding: 4px;
+    background: #3367c7;
     color: #fff;
-    font-size: 2em;
 }
+
+.modal_btn {position: relative;
+    margin: 0 auto;
+    width: 8.5%;
+    height: 5vh;
+    top: -31px;}
 
 .conten button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    position: relative;
+    top: 0;
+    padding: 13px 18px;
     color: #fff;
-    font-size: 15px;
+    font-size: 1.5em;
     cursor: pointer;
+    border: solid 1px #2a57a9;
+    border-radius: 26px;
+    background: #3367c7;
 }
 
 .texto {position: relative;
-margin: 5%;
-font-size: 1.5em;
+    margin: 3%;
+    font-size: 1.3em;
+    text-align: center;
 }
 
 
@@ -230,7 +241,6 @@ main section#vist3 div#tet a#vist3 {left: 43%;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
     z-index: 999;
-    display: none;
     border: solid #3333;
     border-radius: 16px
 }
@@ -518,6 +528,21 @@ main section#vist10 p#vist10 {position: relative;
     margin: 0% auto;}
 
 
+/* .
+.
+.
+.
+.
+.---------------------------------------------------------------------------------
+.
+.
+.
+.
+.
+.
+ */
+
+
 @media only screen and (max-width: 822px){
 
 h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
@@ -667,33 +692,44 @@ opacity: 1;
 visibility: visible;
 }
 
-.conten {width: 40%;
-    height: 30%;
+.conten {width: 70%;
+    height: 40%;
     margin: auto;
     background: #fff;
     box-shadow: 1px 7px 25px rgb(0, 0, 0, 0.6);
     transition: all 500ms ease;
     position: relative;
+    border: solid 4px #3367c7;
+    transform: translateY(0%);
 }
 
-.conten header {padding: 10px;
-    background: #db8046;
+.conten header {padding: 4px;
+    background: #3367c7;
     color: #fff;
-    font-size: 2em;
 }
+
+.modal_btn {position: relative;
+    margin: 0 auto;
+    width: 10%;
+    height: 5vh;
+    top: -31px;}
 
 .conten button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    position: relative;
+    top: 0;
+    padding: 13px 18px;
     color: #fff;
-    font-size: 15px;
+    font-size: 1.5em;
     cursor: pointer;
+    border: solid 1px #2a57a9;
+    border-radius: 26px;
+    background: #3367c7;
 }
 
 .texto {position: relative;
-margin: 5%;
-font-size: 1.5em;
+    margin: 3%;
+    font-size: 1.5em;
+    text-align: center;
 }
 
 
@@ -749,8 +785,7 @@ main section#vist3 div#tet a#vist3 {left: 41%;
     -webkit-animation: all 1s ease;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
-    z-index: 999;
-    display: none;
+    z-index: 99;
     border: solid #3333;
     border-radius: 16px
 }
@@ -1042,7 +1077,19 @@ main section#vist10 p#vist10 {position: relative;
 
 }
 
-
+/* .
+.
+.
+.
+.
+.---------------------------------------------------------------------------------
+.
+.
+.
+.
+.
+.
+ */
 
 /*mobile*/
 @media only screen and (max-width: 499px){
@@ -1194,33 +1241,44 @@ opacity: 1;
 visibility: visible;
 }
 
-.conten {width: 58%;
-    height: 30%;
+.conten {width: 70%;
+    height: 40%;
     margin: auto;
     background: #fff;
     box-shadow: 1px 7px 25px rgb(0, 0, 0, 0.6);
     transition: all 500ms ease;
     position: relative;
+    border: solid 4px #3367c7;
+    transform: translateY(0%);
 }
 
-.conten header {padding: 10px;
-    background: #db8046;
+.conten header {padding: 4px;
+    background: #3367c7;
     color: #fff;
-    font-size: 1em;
 }
+
+.modal_btn {position: relative;
+    margin: 0 auto;
+    width: 18%;
+    height: 5vh;
+    top: -31px;}
 
 .conten button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    position: relative;
+    top: 0;
+    padding: 13px 18px;
     color: #fff;
-    font-size: 15px;
+    font-size: 1em;
     cursor: pointer;
+    border: solid 1px #2a57a9;
+    border-radius: 26px;
+    background: #3367c7;
 }
 
 .texto {position: relative;
-margin: 5%;
-font-size: 0.8em;
+    margin: 3%;
+    font-size: 1em;
+    text-align: center;
 }
 
 
@@ -1274,7 +1332,7 @@ main section#vist3 button#btn_vist3 {position: absolute;
     font-size: 1.1em;
     border-radius: 12px;
     left: 25%;
-    top: 88%;
+    top: 90%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -1283,13 +1341,13 @@ main section#vist3 button#btn_vist3 {position: absolute;
     height: 7.1%;
     width: 50%;
     left: 24%;
-    top: 88%;
+    top: 90%;
     position: absolute;
     -webkit-animation: all 1s ease;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
-    z-index: 999;
-    display: none;
+    z-index: 99;
+    
     border: solid #3333;
     border-radius: 16px
 }
@@ -1312,6 +1370,10 @@ main section#vist3 button#btn_vist3 {position: absolute;
     animation: girar 1.5s linear infinite;
 }
 
+@keyframes girar {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -1608,6 +1670,20 @@ main section#vist10 p#vist10 {position: relative;
 
 }
 
+/* 
+.
+.
+.
+.
+.
+.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+.
+.
+.
+.
+.
+ */
 
 @media only screen and (max-width: 320px){
 
@@ -1757,32 +1833,44 @@ opacity: 1;
 visibility: visible;
 }
 
-.conten {width: 58%;
-    height: 30%;
+.conten {width: 70%;
+    height: 40%;
     margin: auto;
     background: #fff;
     box-shadow: 1px 7px 25px rgb(0, 0, 0, 0.6);
     transition: all 500ms ease;
     position: relative;
+    border: solid 4px #3367c7;
+    transform: translateY(0%);
 }
 
-.conten header {padding: 10px;
-    background: #db8046;
+.conten header {padding: 4px;
+    background: #3367c7;
     color: #fff;
 }
+
+.modal_btn {position: relative;
+    margin: 0 auto;
+    width: 31%;
+    height: 5vh;
+    top: -31px;}
 
 .conten button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    position: relative;
+    top: 0;
+    padding: 13px 18px;
     color: #fff;
-    font-size: 15px;
+    font-size: 1em;
     cursor: pointer;
+    border: solid 1px #2a57a9;
+    border-radius: 26px;
+    background: #3367c7;
 }
 
 .texto {position: relative;
-margin: 5%;
-font-size: 0.8em;
+    margin: 3%;
+    font-size: 1em;
+    text-align: center;
 }
 
 
@@ -1848,9 +1936,8 @@ main section#vist3 button#btn_vist3 {position: absolute;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
     z-index: 999;
-    display: none;
     border: solid #3333;
-    border-radius: 16px
+    border-radius: 16px;
 }
 
 .carga {border: solid 7px #ccc;

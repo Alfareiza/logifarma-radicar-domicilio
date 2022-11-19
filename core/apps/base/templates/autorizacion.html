@@ -14,14 +14,19 @@
             <p id="vist3">Ingresa el número de</p>
             <h1 id="vist3">Autorización de servicio</h1>
     </div>
-
-    <div class="modal">
-        <div class="conten">
-            <header>¡Bienvenido!</header>
-            <button type="button" id="" class="close">X</button>
+    <script src="{% static 'js/modal.js' %}"></script>
+    <div class="modal" id="modal_vist">
+        <div class="conten" id="cont_mod">
+            <header></header>
+            <div class="modal_btn">
+                <button type="button" id="btn_modal" class="close">X</button>
+            </div>
             <div class="contenido">
                 <p class="texto">
-                    Número de autorización errado.
+                    El número de autorización (número digitado) No existe. <br><br>
+                    Por favor verifique.<br><br>
+                    Si es el que tiene, comunicarse con cajacopi EPS al 018000111446
+
                 </p>
             </div>
         </div>
