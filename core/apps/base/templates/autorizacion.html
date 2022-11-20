@@ -5,34 +5,36 @@
 
 {% block content %}
 <section id="vist3">
-    <button id="btn_3" class="atras"><p id="btn" class="b_atras">< Atrás</p></button>
+    <button class="atras" id="btn_3">
+        <p id="btn" class="b_atras">< Atrás</p>
+    </button>
 
     <div id="vist">
         <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
     </div>
-    <div id="vist3_text">
-            <p id="vist3">Ingresa el número de</p>
-            <h1 id="vist3">Autorización de servicio</h1>
-    </div>
-    <script src="{% static 'js/modal.js' %}"></script>
-    <div class="modal" id="modal_vist">
-        <div class="conten" id="cont_mod">
-            <header></header>
-            <div class="modal_btn">
-                <button type="button" id="btn_modal" class="close">X</button>
-            </div>
-            <div class="contenido">
-                <p class="texto">
-                    El número de autorización (número digitado) No existe. <br><br>
-                    Por favor verifique.<br><br>
-                    Si es el que tiene, comunicarse con cajacopi EPS al 018000111446
 
-                </p>
+    {% if form.errors %}
+        <div id="vist3_text">
+                <p id="vist3">Ingresa el número de</p>
+                <h1 id="vist3">Autorización de servicio</h1>
+        </div>
+        <script src="{% static 'js/modal.js' %}"></script>
+        <div class="modal" id="modal_vist">
+            <div class="conten" id="cont_mod">
+                <header></header>
+                <div class="modal_btn">
+                    <button type="button" id="btn_modal" class="close">X</button>
+                </div>
+                <div class="contenido">
+                    <p class="texto">
+                       {{ form.errors.num_autorizacion.as_text|cut:"* "|linebreaksbr }}
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 
-    {{ form.errors.num_autorizacion }}
+    
     <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
@@ -43,10 +45,10 @@
                     {{ form.as_table }}
                 {% endfor %}
         {% else %}
-            <input type="number" placeholder="Digitar el número.." class="inp_vist3"
+            <input type="number" placeholder="Digite el número.." class="inp_vist3"
                name="autorizacionServicio-num_autorizacion"
                min="100000" required=""
-               id="id_autorizacionServicio-num_autorizacion":>
+               id="id_autorizacionServicio-num_autorizacion">
         {% endif %}
         <p id="vist3_t">
             Validemos que la autorización este activa <br>
@@ -57,18 +59,18 @@
         </div>
 
         <p id="vist3_t2">
-            Si no cuenta con el núemro de autorización por favor
+            Si no cuenta con el número de autorización por favor
             comunícate con Cajacopi-EPS para mayor información:
         </p>
         <div id="tet">
-            <a id="vist3" href="">08000111446</a>
+            <a id="vist3" href="">08000 111 446</a>
         </div>
 
         <button id="btn_vist3" class="btn" type="submit">Continuar</button>
 
-        <div id="" class="conten_carga">
+    <!--<div id="" class="conten_carga">
             <div id="" class="carga"></div>
-        </div>
+        </div>-->
     </form>
 
 </section>

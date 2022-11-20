@@ -34,11 +34,14 @@ class AutorizacionServicio(forms.Form):
         num_aut = self.cleaned_data.get('num_autorizacion')
 
         # ====== # Validaciones API EPS ======
-        if num_aut != 99999999:
+        if num_aut != 99_999_999:
             resp_eps = call_api_eps(num_aut)
 
             if resp_eps.get('codigo') == "1":
-                raise forms.ValidationError("Número de autorización no encontrado")
+                raise forms.ValidationError(f"Número de autorización {num_aut} no encontrado\n\n"
+                                             "Por favor verifique\n\n"
+                                             "Si el número está correcto, comuníquese con cajacopi EPS\n"
+                                             "al 01 8000 111 446")
 
             if resp_eps.get('ESTADO_AFILIADO') != 'ACTIVO':
                 raise forms.ValidationError("Afiliado no se encuentra activo")
