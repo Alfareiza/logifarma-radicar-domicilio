@@ -12,7 +12,6 @@
     </div>
 
     <h1 id="vist4">¡Envia fotografia de la formula medica!</h1>
-    <p id="vist4">Tomar foto de la formula medica</p>
     <p id="vist4_1"> Recuerda, los medicamenos de la autorización deben coincidir con los de la formula</p>
     {% for field in form %}
         {{ field.error }}
@@ -40,7 +39,10 @@
                 </div>
                 <div class="row mt-3">
                     <div id='tomarfoto-btn' class="col" style="display: grid;">
-                        <button class="btn btn-primary" type="button" >Tomar Foto</button>
+                        <button class="btn_f btn-primary" type="button" >Tomar Foto</button>
+                    </div>
+                    <div id="" class="btn_archi" >
+                        <input type="file" id="" class="arch_btn" >
                     </div>
                     <div id='tomarotrafoto-btn' class="col" style="display: none;" onClick="myFunction()">
                         <button class="btn1 btn-danger" type="button" >Tomar Otra Foto</button>
