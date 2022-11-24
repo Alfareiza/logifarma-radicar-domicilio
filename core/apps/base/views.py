@@ -1,6 +1,3 @@
-import json
-import shutil
-
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 from django.shortcuts import render
@@ -9,7 +6,7 @@ from formtools.wizard.views import SessionWizardView
 
 from core import settings
 from core.apps.base.forms import *
-from core.apps.base.resources.tools import convert_bytes
+from core.apps.base.resources.tools import convert_bytes, del_folder
 from core.settings import logger, BASE_DIR
 
 FORMS = [
@@ -75,7 +72,7 @@ class ContactWizard(SessionWizardView):
 
     def render_goto_step(self, *args, **kwargs):
         form = self.get_form(data=self.request.POST, files=self.request.FILES)
-        self.storage.set_step_data(self.steps.current, self.process_step(form))
+        # self.storage.set_step_data(self.steps.current, self.process_step(form))
         self.storage.set_step_files(self.steps.first, self.process_step_files(form))
         return super().render_goto_step(*args, **kwargs)
 
@@ -112,7 +109,9 @@ class ContactWizard(SessionWizardView):
             **form_data[7],
             **form_data[8],
         }
-        logger.info('Enviando correo con esta info: ', info_email)
+        for log in info_email:
+            logger.debug(f'Enviando correo con : {log}=> {info_email[log]}')
+
         body = htmly.render(info_email)
 
         # Envía e-mail
@@ -138,14 +137,14 @@ class ContactWizard(SessionWizardView):
         try:
             email.attach_file(self.foto_fmedica)
             email.send(fail_silently=False)
-            logger.info(f'Correo enviado a \"{destinatary}\" con imagen '
+            logger.info(f'Correo enviado a {destinatary} con imagen '
                         f'adjunta de {convert_bytes(self.foto_fmedica.stat().st_size)}')
         except Exception as e:
             logger.error('Error al enviar el correo ', e)
             # Si hubo error se puede implementar el envío de otro
             # email avisando de este error.
         finally:
-            self.del_folder(settings.MEDIA_ROOT)
+            del_folder(settings.MEDIA_ROOT)
 
     def contentfile_to_img(self, contentfile_obj):
         """
@@ -161,15 +160,3 @@ class ContactWizard(SessionWizardView):
             contentfile_obj.name, contentfile_obj.file
         )
         self.foto_fmedica = settings.MEDIA_ROOT / foto_fmedica
-
-    def del_folder(self, MEDIA_ROOT):
-        """
-        Elimina la carpeta donde se guardó la imagen y
-        lo que en ella se encuentre.
-        :param MEDIA_ROOT: 'tmp_logifrm/formula_medica.png'
-        :return: None
-        """
-        try:
-            shutil.rmtree(MEDIA_ROOT)
-        except FileNotFoundError as e:
-            logger.error('Error al borrar la carpeta: ', e)
