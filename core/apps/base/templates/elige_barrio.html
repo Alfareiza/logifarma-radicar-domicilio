@@ -4,23 +4,21 @@
 {% block title %}Elige el barrio{% endblock %}
 
 {% block content %}
-    <button id="btn_7" class="atras"><p id="btn" class="b_atras">< Atrás</p></button>
+<section id="vist7">
+     <form action="" method="post">
+        {% csrf_token %}
+        {{ wizard.management_form }}
 
-    <div id="vist">
-        <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
-    </div>
+        {% include "base/logo.html" %}
 
-    <h1 id="vist7">Elige el barrio donde enviaremos tu domicilio.</h1>
+        <h1 id="vist7">Elige el barrio donde enviaremos tu domicilio.</h1>
 
-    <!--<input type="text" name="" list="list7" placeholder="Buscar.." id="inp_vist7">-->
+        <!--<input type="text" name="" list="list7" placeholder="Buscar.." id="inp_vist7">-->
 
-    {{ form.errors.barrio }}
-    <form action="" method="post">
-            {% csrf_token %}
-            {{ wizard.management_form }}
-            {% if wizard.form.forms %}
-                {{ wizard.form.management_form }}
-            {% else %}
+        {{ form.errors.barrio }}
+        {% if wizard.form.forms %}
+            {{ wizard.form.management_form }}
+        {% else %}
             <div class="elec">
                 <input type="hidden" name="contact_wizard-current_step"
                        value="eligeBarrio" id="id_contact_wizard-current_step">
@@ -36,12 +34,13 @@
             </div>
 
             <h1 id="vist8">¿A que dirección enviamos tu domicilio?</h1>
-            
+
             <input class="inp_vist8 " type="text" name="digitaDireccion-direccion" maxlength="40"
                    required="" id="id_digitaDireccion-direccion" placeholder="...">
             <p class="p_vist8">Digita la dirección donde enviaremos tu domicilio.</p>
         {% endif %}
-        <button id="btn_vist7" class="btn_dir" type="submit">Aceptar</button>
+        <button class="btn_dir" type="submit">Continuar</button>
     </form>
+</section>
 {% endblock %}
 

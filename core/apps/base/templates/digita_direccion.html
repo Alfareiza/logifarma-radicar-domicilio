@@ -5,16 +5,15 @@
 
 {% block content %}
 <section id="vist8">
-    <button id="btn_8" class="atras"><p id="btn" class="b_atras">< Atrás</p></button>
-
-    <div id="vist">
-        <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
-    </div>
-    <h1 id="vist8">¿A que dirección enviamos tu domicilio?</h1>
-    {{ form.errors.direccion }}
     <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
+
+        {% include "base/logo.html" %}
+
+        <h1 id="vist8">¿A que dirección enviamos tu domicilio?</h1>
+
+        {{ form.errors.direccion }}
         {% if wizard.form.forms %}
             <!--NOTHING-->
             {{ wizard.form.management_form }}
@@ -22,14 +21,12 @@
                     {{ form.as_table }}
                 {% endfor %}
         {% else %}
-    
             <input class="inp_vist8 " type="text" name="digitaDireccion-direccion" maxlength="40"
                    required="" id="id_digitaDireccion-direccion" placeholder="...">
             <p class="p_vist8">Digita la dirección donde enviaremos tu domicilio.</p>
         {% endif %}
-
-        <button id="btn_vist8" class="btn" type="submit">Aceptar</button>
+        <button class="btn" type="submit">Continuar</button>
     </form>
-{% endblock %}
 </section>
+{% endblock %}
 

@@ -5,17 +5,13 @@
 
 {% block content %}
 <section id="vist9">
-
-    <button id="btn_9" class="atras"><p id="btn" class="b_atras">< Atrás</p></button>
-
-    <div id="vist">
-        <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
-    </div>
-
-    <h1 id="ti_vist9">¿Cual es su número de celular?</h1>
     <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
+        {% include "base/logo.html" %}
+
+        <h1 id="ti_vist9">¿Cual es su número de celular?</h1>
+
         {% if wizard.form.forms %}
             <!--NOTHING-->
             {{ wizard.form.management_form }}
@@ -33,7 +29,7 @@
 
             <p id="vist9_t">(Este campo no es obligatorio).</p>
         {% endif %}
-        <button id="btn_vist9" class="btn" type="submit">Aceptar</button>
+        <button class="btn" type="submit">Aceptar</button>
     </form>
 </section>
 {% endblock %}
