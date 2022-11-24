@@ -5,53 +5,49 @@
 
 {% block content %}
 <section id="vist4">
-    <button id="btn_4" class="atras"><p id="btn" class="b_atras">< Atrás</p></button>
+     <form enctype="multipart/form-data" action="" method="post">
+        {% csrf_token %}
+        {{ wizard.management_form }}
+        {% include "base/logo.html" %}
 
-    <div id="vist">
-        <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
-    </div>
-
-    <h1 id="vist4">¡Envia fotografia de la formula medica!</h1>
-    <p id="vist4_1"> Recuerda, los medicamenos de la autorización deben coincidir con los de la formula</p>
-    {% for field in form %}
-        {{ field.error }}
-    {% endfor %}
-        <form enctype="multipart/form-data" action="" method="post">
-            {% csrf_token %}
-            {{ wizard.management_form }}
-            {% if wizard.form.forms %}
-                {{ wizard.form.management_form }}
-            {% else %}
-                <div class="row mt-3">
-                    <script src="{% static 'js/capture.js' %}"></script>
-                    <video autoplay loop muted playsinline id="video">Video stream not available.</video>
-                    <input id="id_fotoFormulaMedica-src" value=""
-                           name="fotoFormulaMedica-src" type="text"
-                           style="display: none;">
-                    <canvas id="canvas" style="display: none;"></canvas>
-                    <img class="img_fot" id="photo" alt="your image" style="display: none;">
-                   <!--<input type="hidden" name="contact_wizard-current_step" value="fotoFormulaMedica" id="id_contact_wizard-current_step">-->
-                   <!--<label for="id_fotoFormulaMedica-src">Foto:</label>
-                   <td>
-                      <input type="file" name="fotoFormulaMedica-src" accept="image/*"
-                             required="" id="id_fotoFormulaMedica-src">
-                    </td>-->
+        <h1 id="vist4">¡Envia fotografia de la formula medica!</h1>
+        <p id="vist4_1"> Recuerda, los medicamenos de la autorización deben coincidir con los de la formula</p>
+        {% for field in form %}
+            {{ field.error }}
+        {% endfor %}
+        {% if wizard.form.forms %}
+            {{ wizard.form.management_form }}
+        {% else %}
+            <div class="row mt-3">
+                <script src="{% static 'js/capture.js' %}"></script>
+                <video autoplay loop muted playsinline id="video">Video stream not available.</video>
+                <input id="id_fotoFormulaMedica-src" value=""
+                       name="fotoFormulaMedica-src" type="text"
+                       style="display: none;">
+                <canvas id="canvas" style="display: none;"></canvas>
+                <img class="img_fot" id="photo" alt="your image" style="display: none;">
+               <!--<input type="hidden" name="contact_wizard-current_step" value="fotoFormulaMedica" id="id_contact_wizard-current_step">-->
+               <!--<label for="id_fotoFormulaMedica-src">Foto:</label>
+               <td>
+                  <input type="file" name="fotoFormulaMedica-src" accept="image/*"
+                         required="" id="id_fotoFormulaMedica-src">
+                </td>-->
+            </div>
+            <div class="row mt-3">
+                <div id='tomarfoto-btn' class="col" style="display: grid;">
+                    <button class="btn_f btn-primary" type="button" >Tomar Foto</button>
                 </div>
-                <div class="row mt-3">
-                    <div id='tomarfoto-btn' class="col" style="display: grid;">
-                        <button class="btn_f btn-primary" type="button" >Tomar Foto</button>
-                    </div>
-                    <div id="" class="btn_archi" >
-                        <input type="file" id="" class="arch_btn" >
-                    </div>
-                    <div id='tomarotrafoto-btn' class="col" style="display: none;" onClick="myFunction()">
-                        <button class="btn1 btn-danger" type="button" >Tomar Otra Foto</button>
-                    </div>
-                    <div id='continuar-btn' class="col" style="display: none;">
-                        <input type="submit" class="btn2 btn-success" value="Continuar"/>
-                    </div>
+                <div id="" class="btn_archi" >
+                    <input type="file" id="" class="arch_btn" >
                 </div>
-            {% endif %}
-        </form>
+                <div id='tomarotrafoto-btn' class="col" style="display: none;" onClick="myFunction()">
+                    <button class="btn1 btn-danger" type="button" >Tomar Otra Foto</button>
+                </div>
+                <div id='continuar-btn' class="col" style="display: none;">
+                    <input type="submit" class="btn2 btn-success" value="Continuar"/>
+                </div>
+            </div>
+        {% endif %}
+    </form>
 </section>
 {% endblock %}

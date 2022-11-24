@@ -5,39 +5,34 @@
 
 {% block content %}
 <section id="vist3">
-    <button class="atras" id="btn_3">
-        <p id="btn" class="b_atras">< Atrás</p>
-    </button>
-
-    <div id="vist">
-        <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
-    </div>
-
-    {% if form.errors %}
-        <div id="vist3_text">
-                <p id="vist3">Ingresa el número de</p>
-                <h1 id="vist3">Autorización de servicio</h1>
-        </div>
-        <script src="{% static 'js/modal.js' %}"></script>
-        <div class="modal" id="modal_vist">
-            <div class="conten" id="cont_mod">
-                <header></header>
-                <div class="modal_btn">
-                    <button type="button" id="btn_modal" class="close">X</button>
-                </div>
-                <div class="contenido">
-                    <p class="texto">
-                       {{ form.errors.num_autorizacion.as_text|cut:"* "|linebreaksbr }}
-                    </p>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-
-    
     <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
+
+        {% include "base/logo.html" %}
+
+        {% if form.errors %}
+            <script src="{% static 'js/modal.js' %}"></script>
+            <div class="modal" id="modal_vist">
+                <div class="conten" id="cont_mod">
+                    <header></header>
+                    <div class="modal_btn">
+                        <button type="button" id="btn_modal" class="close">X</button>
+                    </div>
+                    <div class="contenido">
+                        <p class="texto">
+                           {{ form.errors.num_autorizacion.as_text|cut:"* "|linebreaksbr }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div id="vist3_text">
+            <p id="vist3">Ingresa el número de</p>
+            <h1 id="vist3">Autorización de servicio</h1>
+        </div>
+
         {% if wizard.form.forms %}
             <!--NOTHING-->
             {{ wizard.form.management_form }}
@@ -47,8 +42,7 @@
         {% else %}
             <input type="number" placeholder="Digite el número.." class="inp_vist3"
                name="autorizacionServicio-num_autorizacion"
-               min="100000" required=""
-               id="id_autorizacionServicio-num_autorizacion">
+               min="100000" id="id_autorizacionServicio-num_autorizacion">
         {% endif %}
         <p id="vist3_t">
             Validemos que la autorización este activa <br>
@@ -66,12 +60,11 @@
             <a id="vist3" href="">08000 111 446</a>
         </div>
 
-        <button id="btn_vist3" class="btn" type="submit">Continuar</button>
+        <button class="btn" type="submit">Continuar</button>
 
-    <!--<div id="" class="conten_carga">
+        <!--<div id="" class="conten_carga">
             <div id="" class="carga"></div>
         </div>-->
     </form>
-
 </section>
 {% endblock %}

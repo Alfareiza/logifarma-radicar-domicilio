@@ -5,25 +5,25 @@
 
 {% block content %}
 <section id="vist1">
-    <div id="vist1">
-        <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
-    </div>
-    <div id="vist1_1">
-        <img id="img2" src="{% static 'img/IconAdvertencia.jpg' %}" alt="">
-    </div>
-
-    <article id="vist1">
-        <p id="vist1">
-            Estas por radicar tu domicilio.<br><br>
-            Una vez finalices con tu solicitud, iniciaremos la
-            gestión para que el domicilio sea enviado lo más
-            pronto posible.
-        </p>
-    </article>
     <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
-        <button id="btn_vist1" class="btn" type="submit">Continuar</button>
+        <div id="vist1">
+            <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
+        </div>
+        <div id="vist1_1">
+            <img id="img2" src="{% static 'img/IconAdvertencia.jpg' %}" alt="">
+        </div>
+
+        <article id="vist1">
+            <p id="vist1">
+                Estas por radicar tu domicilio.<br><br>
+                Una vez finalices con tu solicitud, iniciaremos la
+                gestión para que el domicilio sea enviado lo más
+                pronto posible.
+            </p>
+        </article>
+        <button class="btn" type="submit">Continuar</button>
     </form>
 </section>
 {% endblock %}

@@ -5,26 +5,23 @@
 
 {% block content %}
 <section id="vist5">
-    <button id="btn_5" class="atras"><p id="btn" class="b_atras">< Atrás</p></button>
-
-    <div id="vist">
-        <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
-    </div>
-
-    <h1 id="vist5">¿A que dirección enviaremos tu domicilio?</h1>
-
-    <p id="vist5">
-        El envio de tu domicilio será Gratis.
-        Te lo haremos llegar lo más pronto posible
-    </p>
-
-    <div id="vist5_1">
-        <img id="img3" src="{% static 'img/Imagen1.png' %}" alt="">
-    </div>
-    <form action="" method="post">
+     <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
-        <button id="btn_vist5" class="btn" type="submit">Entiendo</button>
+        {% include "base/logo.html" %}
+
+        <h1 id="vist5">¿A que dirección enviaremos tu domicilio?</h1>
+
+        <p id="vist5">
+            El envio de tu domicilio será Gratis.
+            Te lo haremos llegar lo más pronto posible
+        </p>
+
+        <div id="vist5_1">
+            <img id="img3" src="{% static 'img/Imagen1.png' %}" alt="">
+        </div>
+
+        <button class="btn" type="submit">Entiendo</button>
     </form>
 </section>
 {% endblock %}

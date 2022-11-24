@@ -4,25 +4,23 @@
 {% block title %}Elige Municipio{% endblock %}
 
 {% block content %}
-    <button id="btn_6" class="atras"><p id="btn" class="b_atras">< Atrás</p></button>
+<section id="vist6">
+     <form action="" method="post">
+        {% csrf_token %}
+        {{ wizard.management_form }}
 
-    <div id="vist">
-        <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
-    </div>
+        {% include "base/logo.html" %}
 
-    <h1 id="vist6">Elige el municipio donde enviaremos tu domicilio.</h1>
+        <h1 id="vist6">Elige el municipio donde enviaremos tu domicilio.</h1>
 
-    <!--<input type="text" name="" list="list6" placeholder="Buscar.." id="inp_vist6">-->
+        <!--<input type="text" name="" list="list6" placeholder="Buscar.." id="inp_vist6">-->
 
-    <p id="p_vist6">* Solo aplica para el departamento del Atlantico</p>
-    {{ form.errors.municipio }}
-    <form action="" method="post">
-            {% csrf_token %}
-            {{ wizard.management_form }}
-            {% if wizard.form.forms %}
-                {{ wizard.form.management_form }}
-            {% else %}
-                <div class="elec">
+        <p id="p_vist6">* Solo aplica para el departamento del Atlantico</p>
+        {{ form.errors.municipio }}
+        {% if wizard.form.forms %}
+            {{ wizard.form.management_form }}
+        {% else %}
+            <div class="elec">
                 <input class="inp_vist" type="hidden" name="contact_wizard-current_step"
                        value="eligeMunicipio" id="id_contact_wizard-current_step">
                 <label class="label_vist" for="id_eligeMunicipio-municipio">Municipio:</label>
@@ -35,8 +33,9 @@
                     <option value="5">Galapa, Atlantico</option>
                 </select>
             </div>
-            {% endif %}
-        <button id="btn_vist6" class="btn_muni" type="submit">Aceptar</button>
+        {% endif %}
+        <button class="btn_muni" type="submit">Continuar</button>
     </form>
+</section>
 {% endblock %}
 
