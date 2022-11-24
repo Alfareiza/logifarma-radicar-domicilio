@@ -16,8 +16,9 @@ FORMS = [
     ("fotoFormulaMedica", FotoFormulaMedica),
     ("avisoDireccion", AvisoDireccion),
     ("eligeMunicipio", EligeMunicipio),
-    ("eligeBarrio", EligeBarrio),
-    ("digitaDireccion", DigitaDireccion),
+    ## ("eligeBarrio", EligeBarrio),
+    ## ("digitaDireccion", DigitaDireccion),
+    ("digitaDireccionBarrio", DireccionBarrio),
     ("digitaCelular", DigitaCelular)
 ]
 
@@ -28,8 +29,9 @@ TEMPLATES = {
     "fotoFormulaMedica": "foto.html",
     "avisoDireccion": "aviso_direccion.html",
     "eligeMunicipio": "elige_municipio.html",
-    "eligeBarrio": "elige_barrio.html",
-    "digitaDireccion": "digita_direccion.html",
+    ## "eligeBarrio": "elige_barrio.html",
+    ##"digitaDireccion": "digita_direccion.html",
+    "digitaDireccionBarrio": "direccion_barrio.html",
     "digitaCelular": "digita_celular.html"}
 
 htmly = get_template(BASE_DIR / "core/apps/base/templates/correo.html")
@@ -104,13 +106,14 @@ class ContactWizard(SessionWizardView):
         # Construye las variables que serán enviadas al template
         info_email = {
             **form_data[2]['num_autorizacion'],
-            **form_data[5],
-            **form_data[6],
-            **form_data[7],
-            **form_data[8],
+            **form_data[5],  # Ciudad
+            **form_data[6],  # Barrio y dirección
+            **form_data[7],  # Celular e e-mail
         }
+
+        logger.info('Enviando correo con : ')
         for log in info_email:
-            logger.debug(f'Enviando correo con : {log}=> {info_email[log]}')
+            logger.info(f'\t\t== {log} ==> {info_email[log]}')
 
         body = htmly.render(info_email)
 
