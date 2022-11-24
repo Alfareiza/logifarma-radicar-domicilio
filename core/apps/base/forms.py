@@ -28,13 +28,10 @@ class AutorizacionServicio(forms.Form):
     a la vista 4, sino  responderá con un mensaje de
     error.
     """
-    num_autorizacion = forms.IntegerField(min_value=100_000, required=False)
+    num_autorizacion = forms.IntegerField(min_value=100_000)
 
     def clean_num_autorizacion(self):
         num_aut = self.cleaned_data.get('num_autorizacion')
-
-        if num_aut is None:
-            raise forms.ValidationError("Por favor ingrese el número de autorización.")
 
         # ====== # Validaciones API EPS ======
         if num_aut == 99_999_999:
@@ -119,7 +116,7 @@ class EligeMunicipio(forms.Form):
         return self.MUNICIPIOS[int(municipio)][1]
 
 
-class EligeBarrio(forms.Form):
+class DireccionBarrio(forms.Form):
     """
     Vista 7:
     """
@@ -133,6 +130,7 @@ class EligeBarrio(forms.Form):
     )
 
     barrio = forms.ChoiceField(choices=BARRIOS)
+    direccion = forms.CharField(max_length=40)
 
     def clean_barrio(self):
         barrio = self.cleaned_data.get('barrio')
@@ -141,16 +139,9 @@ class EligeBarrio(forms.Form):
         return self.BARRIOS[int(barrio)][1]
 
 
-class DigitaDireccion(forms.Form):
-    """
-    Vista 8:
-    """
-    direccion = forms.CharField(max_length=40)
-
-
 class DigitaCelular(forms.Form):
     """
-    Vista 9:
+    Vista 8:
     """
     celular = forms.IntegerField()
     email = forms.EmailField(required=False)

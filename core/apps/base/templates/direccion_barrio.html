@@ -21,9 +21,11 @@
         {% else %}
             <div class="elec">
                 <input type="hidden" name="contact_wizard-current_step"
-                       value="eligeBarrio" id="id_contact_wizard-current_step">
-                <label class="label_vist" for="id_eligeBarrio-barrio">Barrio:</label>
-                <select  class="select_opt" name="eligeBarrio-barrio" id="id_eligeBarrio-barrio">
+                       value="digitaDireccionBarrio"
+                       id="id_contact_wizard-current_step">
+                <label class="label_vist">Barrio:</label>
+                <select  class="select_opt" name="digitaDireccionBarrio-barrio"
+                         id="id_digitaDireccionBarrio-barrio">
                     <option value="0">Escoja un barrio</option>
                     <option value="1">El Valle, Atlantico</option>
                     <option value="2">Barrio 2</option>
@@ -35,8 +37,10 @@
 
             <h1 class="vista8">¿A que dirección enviamos tu domicilio?</h1>
 
-            <input class="inp_vist8 " type="text" name="digitaDireccion-direccion" maxlength="40"
-                   required="" id="id_digitaDireccion-direccion" placeholder="...">
+            <input required class="inp_vist8 " type="text"
+                   name="digitaDireccionBarrio-direccion"
+                   maxlength="40" id="id_digitaDireccionBarrio-direccion"
+                   placeholder="...">
             <p class="p_vist8">Digita la dirección donde enviaremos tu domicilio.</p>
         {% endif %}
         <button class="btn_dir" type="submit">Continuar</button>
