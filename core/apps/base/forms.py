@@ -1,8 +1,8 @@
 from decouple import config, Csv
-
 from django import forms
+
 from core.apps.base.resources.api_calls import call_api_eps, call_api_medicar
-from core.settings import DEBUG
+from core.apps.base.resources.tools import read_json
 
 
 class Home(forms.Form):
@@ -28,42 +28,49 @@ class AutorizacionServicio(forms.Form):
     a la vista 4, sino  responderá con un mensaje de
     error.
     """
-    num_autorizacion = forms.IntegerField(min_value=100_000)
+    num_autorizacion = forms.IntegerField(min_value=100_000, required=False)
 
     def clean_num_autorizacion(self):
         num_aut = self.cleaned_data.get('num_autorizacion')
 
+        if num_aut is None:
+            raise forms.ValidationError("Por favor ingrese el número de autorización.")
+
         # ====== # Validaciones API EPS ======
-        if num_aut != 99_999_999:
+        if num_aut == 99_999_999:
+            resp_eps = read_json('resources/fake.json')
+        else:
             resp_eps = call_api_eps(num_aut)
 
-            if resp_eps.get('codigo') == "1":
-                raise forms.ValidationError(f"Número de autorización {num_aut} no encontrado\n\n"
-                                             "Por favor verifique\n\n"
-                                             "Si el número está correcto, comuníquese con cajacopi EPS\n"
-                                             "al 01 8000 111 446")
+        if resp_eps.get('codigo') == "1":
+            raise forms.ValidationError(f"Número de autorización {num_aut} no encontrado\n\n"
+                                        "Por favor verifique\n\n"
+                                        "Si el número está correcto, comuníquese con cajacopi EPS\n"
+                                        "al 01 8000 111 446")
 
-            if resp_eps.get('ESTADO_AFILIADO') != 'ACTIVO':
-                raise forms.ValidationError("Afiliado no se encuentra activo")
+        if resp_eps.get('ESTADO_AFILIADO') != 'ACTIVO':
+            raise forms.ValidationError("Afiliado no se encuentra activo")
 
-            if resp_eps.get('ESTADO_AUTORIZACION') != 'PROCESADA':
-                raise forms.ValidationError("El estado de la autorización no está activa.")
+        if resp_eps.get('ESTADO_AUTORIZACION') != 'PROCESADA':
+            raise forms.ValidationError("El estado de la autorización no está activa.")
 
-            # if (datetime.now() - resp_eps.get('FECHA_AUTORIZACION')).days > 30:
-            #     raise forms.ValidationError("Esta autorización se encuentra vencida.")
+        # if (datetime.now() - resp_eps.get('FECHA_AUTORIZACION')).days > 30:
+        #     raise forms.ValidationError("Esta autorización se encuentra vencida.")
 
-            # ====== # Validaciones API MEDICAR ======
+        # ====== # Validaciones API MEDICAR ======
+        if num_aut == 99_999_999:
+            resp_mcar = {"error": "No se han encontrado registros."}
+        else:
             resp_mcar = call_api_medicar(num_aut)
 
-            if resp_mcar.get('autorizacion'):
-                raise forms.ValidationError(f"Este domicilio se encuentra radicado en "
-                                            f"{resp_mcar.get('nombre_centro_factura')[:-5].strip()}")
+        if resp_mcar.get('autorizacion'):
+            raise forms.ValidationError(f"Este domicilio se encuentra radicado en "
+                                        f"{resp_mcar.get('nombre_centro_factura')[:-5].strip()}")
 
-            resp_eps['NUMERO_AUTORIZACION'] = num_aut
-            resp_eps['CORREO_TEST'] = config('EMAIL_TEST', cast=Csv())
-            return resp_eps
-        else:
-            return num_aut
+        resp_eps['NUMERO_AUTORIZACION'] = num_aut
+        resp_eps['CORREO_TEST'] = config('EMAIL_TEST', cast=Csv())
+
+        return resp_eps
 
 
 class FotoFormulaMedica(forms.Form):
