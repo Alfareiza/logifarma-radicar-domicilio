@@ -1,0 +1,10 @@
+{% load static %}
+{% if wizard.steps.prev %}
+    <button class="atras" formnovalidate name="wizard_goto_step"
+            type="submit" value="{{ wizard.steps.prev }}">
+        <p class="b_atras">< Atrás</p>
+    </button>
+{% endif %}
+<div id="vist1">
+    <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
+</div>
