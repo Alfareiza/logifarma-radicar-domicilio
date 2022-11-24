@@ -4,14 +4,14 @@
 {% block title %}Elige el barrio{% endblock %}
 
 {% block content %}
-<section id="vist7">
+<section class="vista7">
      <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
 
         {% include "base/logo.html" %}
 
-        <h1 id="vist7">Elige el barrio donde enviaremos tu domicilio.</h1>
+        <h1 class="vist7">Elige el barrio donde enviaremos tu domicilio.</h1>
 
         <!--<input type="text" name="" list="list7" placeholder="Buscar.." id="inp_vist7">-->
 
@@ -33,7 +33,7 @@
                 </select>
             </div>
 
-            <h1 id="vist8">¿A que dirección enviamos tu domicilio?</h1>
+            <h1 class="vista8">¿A que dirección enviamos tu domicilio?</h1>
 
             <input class="inp_vist8 " type="text" name="digitaDireccion-direccion" maxlength="40"
                    required="" id="id_digitaDireccion-direccion" placeholder="...">

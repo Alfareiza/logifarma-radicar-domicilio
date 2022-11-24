@@ -4,7 +4,7 @@
 {% block title %}Autorización de servicio{% endblock %}
 
 {% block content %}
-<section id="vist3">
+<section class="vista3">
     <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
@@ -28,9 +28,9 @@
             </div>
         {% endif %}
 
-        <div id="vist3_text">
-            <p id="vist3">Ingresa el número de</p>
-            <h1 id="vist3">Autorización de servicio</h1>
+        <div class="vist3_text">
+            <p class="vist3">Ingresa el número de</p>
+            <h1 class="vist3">Autorización de servicio</h1>
         </div>
 
         {% if wizard.form.forms %}
@@ -44,27 +44,29 @@
                name="autorizacionServicio-num_autorizacion"
                min="100000" id="id_autorizacionServicio-num_autorizacion">
         {% endif %}
-        <p id="vist3_t">
+        <p class="vist3_t">
             Validemos que la autorización este activa <br>
             imagen de referencia
         </p>
-        <div id="vist3_img">
-            <img id="vist3" src="{% static 'img/ImgAutorizacion.jpg' %}" alt="">
+        <div class="vist3_img">
+            <img class="vist3" src="{% static 'img/ImgAutorizacion.jpg' %}" alt="">
         </div>
 
-        <p id="vist3_t2">
+        <p class="vist3_t2">
             Si no cuenta con el número de autorización por favor
             comunícate con Cajacopi-EPS para mayor información:
         </p>
-        <div id="tet">
-            <a id="vist3" href="">08000 111 446</a>
+        <div class="tet">
+            <a class="vist3" href="">08000 111 446</a>
         </div>
 
-        <button class="btn" type="submit">Continuar</button>
+        <button class="btn" type="submit">
+            <p>Continuar</p>
+            <div id="" class="conten_carga">
+                <div id="" class="carga"></div>
+            </div>
+        </button>
 
-        <!--<div id="" class="conten_carga">
-            <div id="" class="carga"></div>
-        </div>-->
     </form>
 </section>
 {% endblock %}

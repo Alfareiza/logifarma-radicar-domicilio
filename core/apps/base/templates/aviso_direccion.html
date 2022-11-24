@@ -4,21 +4,21 @@
 {% block title %}Dirección{% endblock %}
 
 {% block content %}
-<section id="vist5">
+<section class="vista5">
      <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
         {% include "base/logo.html" %}
 
-        <h1 id="vist5">¿A que dirección enviaremos tu domicilio?</h1>
+        <h1 class="vist5">¿A que dirección enviaremos tu domicilio?</h1>
 
-        <p id="vist5">
+        <p class="vist5">
             El envio de tu domicilio será Gratis.
             Te lo haremos llegar lo más pronto posible
         </p>
 
-        <div id="vist5_1">
-            <img id="img3" src="{% static 'img/Imagen1.png' %}" alt="">
+        <div class="vist5_1">
+            <img class="img3" src="{% static 'img/Imagen1.png' %}" alt="">
         </div>
 
         <button class="btn" type="submit">Entiendo</button>

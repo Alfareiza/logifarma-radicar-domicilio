@@ -4,19 +4,19 @@
 {% block title %}Inicio{% endblock %}
 
 {% block content %}
-<section id="vist1">
+<section class="vista1">
     <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
-        <div id="vist1">
-            <img id="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
+        <div class="vist1">
+            <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
         </div>
-        <div id="vist1_1">
-            <img id="img2" src="{% static 'img/IconAdvertencia.jpg' %}" alt="">
+        <div class="vist1_1">
+            <img class="img2" src="{% static 'img/IconAdvertencia.jpg' %}" alt="">
         </div>
 
-        <article id="vist1">
-            <p id="vist1">
+        <article class="vist1">
+            <p class="vist1">
                 Estas por radicar tu domicilio.<br><br>
                 Una vez finalices con tu solicitud, iniciaremos la
                 gestión para que el domicilio sea enviado lo más

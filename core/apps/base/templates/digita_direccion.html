@@ -4,14 +4,14 @@
 {% block title %}Digita Dirección{% endblock %}
 
 {% block content %}
-<section id="vist8">
+<section class="vista8">
     <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
 
         {% include "base/logo.html" %}
 
-        <h1 id="vist8">¿A que dirección enviamos tu domicilio?</h1>
+        <h1 class="vist8">¿A que dirección enviamos tu domicilio?</h1>
 
         {{ form.errors.direccion }}
         {% if wizard.form.forms %}

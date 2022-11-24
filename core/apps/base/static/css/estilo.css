@@ -32,7 +32,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     padding: 0;
     height: 13vh;}
 
-#img1 {position: relative;
+.img1 {position: relative;
     margin: 0% auto;
     width: 17%;
     padding: 1% 41.5%;}
@@ -63,35 +63,35 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     border-color: #468bc4;
     color: #468bc4;}
 
-main section#vist1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-main section#vist1 div#vist1 {position: relative;
+main section.vista1 div.vist1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;
     height: 14vh;}
 
-main section#vist1 div#vist1 img#img1 { position: relative;
+main section.vista1 div.vist1 img.img1 { position: relative;
     margin: 0% auto;
     width: 17%;
     padding: 1% 41.5%;}
 
-main section#vist1 div#vist1_1 {position: relative;
+main section.vista1 div.vist1_1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;
     height: 20vh;}
 
-main section#vist1 div#vist1_1 img#img2 {position: relative;
+main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
     width: 19%;
     padding: 2% 40.5%;}
 
-main section#vist1 article#vist1 { position: relative;
+main section.vista1 article.vist1 { position: relative;
     margin: 0px auto 0%;
     padding: 8% 10% 4% 11%;}
 
-main section#vist1 article#vist1 p#vist1 {position: relative;
+main section.vista1 article.vist1 p.vist1 {position: relative;
     font-weight: 500;
     font-size: 1.3em;
     text-align: center;}
@@ -99,34 +99,34 @@ main section#vist1 article#vist1 p#vist1 {position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vist2 div#vist2_text { position: relative;
+main section.vista2 div.vist2_text { position: relative;
     margin: 0 auto;
     width: 100%;
     height: 17vh;
     font-weight: 500;}
 
-main section#vist2 div#vist2_text h1 { font-size: 1.5em;
+main section.vista2 div.ist2_text h1 { font-size: 1.5em;
     padding: 0 0 0 2%;}
 
-main section#vist2 div#vist2_text p {font-size: 1em;
+main section.vista2 div.vist2_text p {font-size: 1em;
     padding: 1% 0 0 4%;}
 
-main section#vist2 nav#vist2 { width: 100%;
+main section.vista2 nav.vist2 { width: 100%;
     height: auto;
     position: relative;
     margin: 1vh 0% 0% 0%;
     float: none;}
 
-main section#vist2 nav#vist2 div#img { width: 100%;
+main section.vista2 nav.vist2 div.img { width: 100%;
     height: 15vh;}
 
-main section#vist2 nav#vist2 div#img img#vist2 { position: absolute;
+main section.vista2 nav.vist2 div.img img.vist2 { position: absolute;
     padding: 0% 0% 0% 16%; width: 6%; height: 17%;}
 
-main section#vist2 nav#vist2 div#img p#vist2 {padding: 0px 2% 0 29%; font-size: 1.2em; height: 10vh;}
+main section.vista2 nav.vist2 div.img p.vist2 {padding: 0px 2% 0 29%; font-size: 1.2em; height: 10vh;}
  
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
@@ -192,64 +192,64 @@ visibility: visible;
     100% { transform: rotate(360deg);}
 }
 
-main section#vist3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-main section#vist3 div#vist3_text {position: relative;
+main section.vista3 div.vist3_text {position: relative;
     padding: 0% 0% 0% 9%;}
 
-main section#vist3 p#vist3 { font-size: 1.1em; }
+main section.vista3 p.vist3 { font-size: 1.1em; }
 
-main section#vist3 h1#vist3 { font-size: 1.5em; font-weight: 500;}
+main section.vista3 h1.vist3 { font-size: 1.5em; font-weight: 500;}
 
-main section#vist3 input.inp_vist3 {margin: 2% 28%;
+main section.vista3 input.inp_vist3 {margin: 2% 28%;
     padding: 1% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
     width: 44%;}
-main section#vist3 input#aut :focus {border-bottom: 1px solid #0572ce;
+main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
-main section#vist3 p#vist3_t { position: relative;
+main section.vista3 p.vist3_t { position: relative;
     text-align: center;
     margin: 1%;
     font-size: 1em;}
 
-main section#vist3 div#vist3_img {position: relative;
+main section.vista3 div.vist3_img {position: relative;
     width: 60%;
     height: 75vh;
     margin: 0 auto;}
 
-main section#vist3 div#vist3_img img#vist3 {width: 90%;
+main section.vista3 div.vist3_img img.vist3 {width: 90%;
     padding: 5%}
 
-main section#vist3 p#vist3_t2 {padding: 1% 6% 1% 6%; font-size: 1em; text-align: center;}
+main section.vista3 p.vist3_t2 {padding: 1% 6% 1% 6%; font-size: 1em; text-align: center;}
 
-main section#vist3 div#tet {margin: 2% 0 5% 0px; }
+main section.vista3 div.tet {margin: 2% 0 5% 0px; }
 
-main section#vist3 div#tet a#vist3 {left: 43%;
+main section.vista3 div.tet a.vist3 {left: 43%;
     position: relative; font-size: 1.7em;}
 
 
 .conten_carga { background: #ffffff;
-    height: 7.1%;
-    width: 50%;
-    left: 24%;
-    top: 88%;
+    height: 100%;
+    width: 100%;
+    left: -1%;
+    top: -5%;
     position: absolute;
     -webkit-animation: all 1s ease;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
-    z-index: 999;
+    z-index: 99;
     border: solid #3333;
-    border-radius: 16px
+    border-radius: 12px;
 }
 
 .carga {border: solid 7px #ccc;
     border-top-color: #f4266a;
     border-top-style: groove;
-    height: 59%;
-    width: 15%;
+    height: 24px;
+    width: 24px;
     border-radius: 100%;
     
     position: absolute;
@@ -266,28 +266,28 @@ main section#vist3 div#tet a#vist3 {left: 43%;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vist4 h1#vist4 {width: 75%;
+main section.vista4 h1.vist4 {width: 75%;
     text-align: center;
     margin: 0 auto;
     font-size: 1.4em;
     font-weight: 400;}
 
-main section#vist4 p#vist4 {    width: 75%;
+main section.vista4 p.vist4 {    width: 75%;
     text-align: center;
     margin: 2% auto;
     font-size: 1em}
 
-main section#vist4 p#vist4_1 { width: 44%;
+main section.vista4 p.vist4_1 { width: 44%;
     text-align: center;
     margin: 1% auto;
     font-size: 1.3em;
     color: red;}
 
 
-#video {position: relative;
+.video {position: relative;
     width: 36%;
     height: 55vh;
     padding: 0 1% 0 1%;
@@ -322,30 +322,30 @@ main section#vist4 p#vist4_1 { width: 44%;
     color: #468bc4}
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist5 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista5 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vist5 h1#vist5 {width: 81%;
+main section.vista5 h1.vist5 {width: 81%;
     height: 11vh;
     text-align: center;
     margin: 0% auto;
     font-size: 1.4em;
     font-weight: 300;}
 
-main section#vist5 p#vist5 { width: 81%;
+main section.vista5 p.vist5 { width: 81%;
     height: 10vh;
     text-align: center;
     margin: 0% auto;
     font-size: 1em;
     font-weight: 300;}
 
-main section#vist5 div#vist5_1 {position: relative;
+main section.vista5 div.vist5_1 {position: relative;
     margin: 0 auto;
     width: 32%;
     padding: 0;}
 
 
-main section#vist5 div#vist5_1 img#img3 { position: relative;
+main section.vista5 div.vist5_1 img.img3 { position: relative;
     margin: 0% auto;
     width: 74%;
     padding: 3% 10%;}
@@ -355,27 +355,18 @@ main section#vist5 div#vist5_1 img#img3 { position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist6 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-#vist6 {width: 81%;
+.vist6 {width: 81%;
     height: 11vh;
     text-align: center;
     margin: 3% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
-#inp_vist6 {margin: 5% 14%;
-    padding: 3% 0;
-    border: 0px;
-    border-bottom: solid 1px;
-    font-size: 1em;
-    width: 70%;}
-    
-main section#vist6 input#aut :focus {border-bottom: 1px solid #0572ce;
-    box-shadow: 0 1px 0 0 #0572ce;}
 
-#p_vist6 {position: relative;
+.p_vist6 {position: relative;
     width: 93%;
     height: 3vh;
     text-align: center;
@@ -395,17 +386,17 @@ main section#vist6 input#aut :focus {border-bottom: 1px solid #0572ce;
     color: #468bc4;}
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-#vist7 {width: 81%;
+.vist7 {width: 81%;
     height: 10vh;
     text-align: center;
     margin: 5% auto;
     font-size: 1.4em;
     font-weight: 300;}
 
-main section#vist7 input#inp_vist7 {margin: 5% 14%;
+main section.vista7 input.inp_vist7 {margin: 5% 14%;
     padding: 3% 0;
     border: 0px;
     border-bottom: solid 1px;
@@ -436,9 +427,9 @@ option {
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
 
-main section#vist8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-#vist8 {width: 81%;
+.vist8 {width: 81%;
     height: 8vh;
     text-align: center;
     margin: 2% auto 0;
@@ -465,10 +456,10 @@ main section#vist8 {width: 100%; height: 100vh; position: relative; margin: 0 au
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section#vista9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-#ti_vist9 {width: 81%;
+.ti_vist9 {width: 81%;
     height: 8vh;
     text-align: center;
     margin: 2% auto 0;
@@ -483,7 +474,7 @@ main section#vist9 {width: 100%; height: 100vh; position: relative; margin: 0 au
     width: 40%;}
 
 
-#p_vist9 {position: relative;
+.p_vist9 {position: relative;
     width: 64%;
     height: 10vh;
     font-size: 1em;
@@ -491,14 +482,14 @@ main section#vist9 {width: 100%; height: 100vh; position: relative; margin: 0 au
     margin: 3% auto 0;
     text-align: center;}
 
-#vist9_t {position: relative; width: 81%;
+.vist9_t {position: relative; width: 81%;
     text-align: center;
     margin: 3% auto 0%;
     font-size: 1.4em;
     font-weight: 300;}
 
 
-main section#vist9 p#vist9_t {position: relative;
+main section.vista9 p.vist9_t {position: relative;
     width: 84%;
     text-align: center;
     font-size: 0.8em;
@@ -511,16 +502,16 @@ main section#vist9 p#vist9_t {position: relative;
 
 
 
-main section#vist10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vist10 h1#vist10 {width: 61%;
+main section.vista10 h1.vist10 {width: 61%;
     text-align: center;
     margin: 7% auto 7%;
     font-size: 1.4em;
     font-weight: 600;}
 
-main section#vist10 p#vist10 {position: relative;
+main section.vista10 p.vist10 {position: relative;
     width: 65%;
     text-align: center;
     font-size: 1.5em;
@@ -578,7 +569,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     width: 100%;
     padding: 0;}
 
-#img1 {position: relative;
+.img1 {position: relative;
     margin: 0% auto;
     width: 36%;
     padding: 3% 32%;}
@@ -609,35 +600,35 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     border-color: #468bc4;
     color: #468bc4;}
 
-main section#vist1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-main section#vist1 div#vist1 {position: relative;
+main section.vista1 div.vist1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;
     height: 14vh;}
 
-main section#vist1 div#vist1 img#img1 { position: relative;
+main section.vista1 div.vist1 img.img1 { position: relative;
     margin: 0% auto;
     width: 50%;
     padding: 6% 25%;}
 
-main section#vist1 div#vist1_1 {position: relative;
+main section.vista1 div.vist1_1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;
     height: 20vh;}
 
-main section#vist1 div#vist1_1 img#img2 {position: relative;
+main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
     width: 50%;
     padding: 5% 25%;}
 
-main section#vist1 article#vist1 { position: relative;
+main section.vista1 article.vist1 { position: relative;
     margin: 0px auto 30%;
     padding: 12% 10% 9% 11%;}
 
-main section#vist1 article#vist1 p#vist1 {position: relative;
+main section.vista1 article.vist1 p.vist1 {position: relative;
     font-weight: 500;
     font-size: 1.3em;
     text-align: center;}
@@ -645,34 +636,34 @@ main section#vist1 article#vist1 p#vist1 {position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vist2 div#vist2_text { position: relative;
+main section.vista2 div.vist2_text { position: relative;
     margin: 0 auto;
     width: 100%;
     height: 15vh;
     font-weight: 500;}
 
-main section#vist2 div#vist2_text h1 { font-size: 2.5em;
+main section.vista2 div.vist2_text h1 { font-size: 2.5em;
     padding: 0 0 0 2%;}
 
-main section#vist2 div#vist2_text p {font-size: 1.5em;
+main section.vista2 div.vist2_text p {font-size: 1.5em;
     padding: 2% 0 0 4%;}
 
-main section#vist2 nav#vist2 { width: 100%;
+main section.vista2 nav.vist2 { width: 100%;
     height: auto;
     position: relative;
     margin: 1vh 0% 0% 0%;
     float: none;}
 
-main section#vist2 nav#vist2 div#img { width: 100%;
+main section.vista2 nav#vist2 div.img { width: 100%;
     height: 15vh;}
 
-main section#vist2 nav#vist2 div#img img#vist2 { position: absolute;
+main section.vista2 nav.vist2 div.img img.vist2 { position: absolute;
     padding: 0% 0% 0% 5%; width: 20%;}
 
-main section#vist2 nav#vist2 div#img p#vist2 {padding: 0px 2% 0 29%; font-size: 1.8em;}
+main section.vista2 nav.vist2 div.img p.vist2 {padding: 0px 2% 0 29%; font-size: 1.8em;}
  
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
@@ -738,63 +729,63 @@ visibility: visible;
     100% { transform: rotate(360deg);}
 }
 
-main section#vist3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-main section#vist3 div#vist3_text {position: relative;
+main section.vista3 div.vist3_text {position: relative;
     padding: 0% 0% 0% 9%;}
 
-main section#vist3 p#vist3 { font-size: 1.9em; }
+main section#vist3 p.vist3 { font-size: 1.9em; }
 
-main section#vist3 h1#vist3 { font-size: 2.4em; font-weight: 500;}
+main section.vista3 h1.vist3 { font-size: 2.4em; font-weight: 500;}
 
-main section#vist3 input.inp_vist3 {margin: 5% 14%;
+main section.vista3 input.inp_vist3 {margin: 5% 14%;
     padding: 1% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1.9em;
     width: 70%;}
-main section#vist3 input#aut :focus {border-bottom: 1px solid #0572ce;
+main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
-main section#vist3 p#vist3_t { position: relative;
+main section.vista3 p.vist3_t { position: relative;
     text-align: center;
     margin: 1%;
     font-size: 1.2em;}
 
-main section#vist3 div#vist3_img {position: relative;
+main section.vista3 div.vist3_img {position: relative;
     width: 100%;
     height: 30vh;}
 
-main section#vist3 div#vist3_img img#vist3 {width: 90%;
+main section.ist3 div.vist3_img img.vist3 {width: 90%;
     padding: 5%}
 
-main section#vist3 p#vist3_t2 {padding: 6% 6% 1% 6%; font-size: 1.5em; text-align: center;}
+main section.vista3 p.vist3_t2 {padding: 6% 6% 1% 6%; font-size: 1.5em; text-align: center;}
 
-main section#vist3 div#tet {margin: 2% 0 5% 0px; }
+main section#vist3 div.tet {margin: 2% 0 5% 0px; }
 
-main section#vist3 div#tet a#vist3 {left: 41%;
+main section.vista3 div.tet a.vist3 {left: 41%;
     position: relative; font-size: 1.7em;}
 
 
 .conten_carga { background: #ffffff;
-    height: 7.1%;
-    width: 50%;
-    left: 24%;
-    top: 88%;
+    height: 100%;
+    width: 100%;
+    left: -1%;
+    top: -5%;
     position: absolute;
     -webkit-animation: all 1s ease;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
     z-index: 99;
     border: solid #3333;
-    border-radius: 16px
+    border-radius: 12px;
 }
 
 .carga {border: solid 7px #ccc;
     border-top-color: #f4266a;
     border-top-style: groove;
-    height: 59%;
-    width: 15%;
+    height: 24px;
+    width: 24px;
     border-radius: 100%;
     
     position: absolute;
@@ -811,28 +802,28 @@ main section#vist3 div#tet a#vist3 {left: 41%;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vist4 h1#vist4 {width: 75%;
+main section.vista4 h1.vist4 {width: 75%;
     text-align: center;
     margin: 0 auto;
     font-size: 2.4em;
     font-weight: 400;}
 
-main section#vist4 p#vist4 {    width: 75%;
+main section.vista4 p.vist4 {    width: 75%;
     text-align: center;
     margin: 5% auto;
     font-size: 1.6em}
 
-main section#vist4 p#vist4_1 { width: 63%;
+main section.vista4 p.vist4_1 { width: 63%;
     text-align: center;
     margin: 4% auto;
     font-size: 1.7em;
     color: red;}
 
 
-#video {position: relative; 
+.video {position: relative; 
     width: 95%; 
     height: 39vh;
     padding: 0 2% 0 2.5%;} 
@@ -866,34 +857,34 @@ main section#vist4 p#vist4_1 { width: 63%;
     color: #468bc4;}
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist5 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista5 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vist5 h1#vist5 {width: 81%;
+main section.vista5 h1.vist5 {width: 81%;
     height: 11vh;
     text-align: center;
     margin: 0% auto;
     font-size: 2.4em;
     font-weight: 300;}
 
-main section#vist5 p#vist5 { width: 81%;
+main section.vista5 p.vist5 { width: 81%;
     height: 10vh;
     text-align: center;
     margin: 0% auto;
     font-size: 1.5em;
     font-weight: 300;}
 
-main section#vist5 div#vist5_1 {position: relative;
+main section.vista5 div.vist5_1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;}
 
-main section#vist5 div#vist5_1 img#img2 {position: fixed;
+main section.vista5 div.vist5_1 img.img2 {position: fixed;
     width: 58%;
     z-index: 9;
     left: 22%;}
 
-main section#vist5 div#vist5_1 img#img3 { position: relative;
+main section.vista5 div.vist5_1 img.img3 { position: relative;
     margin: 0% auto;
     width: 74%;
     padding: 3% 10%;}
@@ -903,27 +894,19 @@ main section#vist5 div#vist5_1 img#img3 { position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist6 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-#vist6 {width: 81%;
+.vist6 {width: 81%;
     height: 11vh;
     text-align: center;
     margin: 3% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
-#inp_vist6 {margin: 5% 14%;
-    padding: 3% 0;
-    border: 0px;
-    border-bottom: solid 1px;
-    font-size: 1em;
-    width: 70%;}
-    
-main section#vist6 input#aut :focus {border-bottom: 1px solid #0572ce;
-    box-shadow: 0 1px 0 0 #0572ce;}
 
-#p_vist6 {position: relative;
+
+.p_vist6 {position: relative;
     width: 93%;
     height: 3vh;
     text-align: center;
@@ -943,17 +926,17 @@ main section#vist6 input#aut :focus {border-bottom: 1px solid #0572ce;
     color: #468bc4;}
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-#vist7 {width: 81%;
+.vist7 {width: 81%;
     height: 10vh;
     text-align: center;
     margin: 5% auto;
     font-size: 2.4em;
     font-weight: 300;}
 
-main section#vist7 input#inp_vist7 {margin: 5% 14%;
+main section.vista7 input.inp_vist7 {margin: 5% 14%;
     padding: 3% 0;
     border: 0px;
     border-bottom: solid 1px;
@@ -984,9 +967,9 @@ option {
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
 
-main section#vist8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-#vist8 {width: 81%;
+.vist8 {width: 81%;
     height: 10vh;
     text-align: center;
     margin: 6% auto 0;
@@ -1013,10 +996,10 @@ main section#vist8 {width: 100%; height: 100vh; position: relative; margin: 0 au
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-#ti_vist9 {position: relative;
+.ti_vist9 {position: relative;
     width: 81%;
     text-align: center;
     margin: 6% auto;
@@ -1032,21 +1015,21 @@ main section#vist9 {width: 100%; height: 100vh; position: relative; margin: 0 au
     width: 70%;}
 
 
-#p_vist9 {position: relative;
+.p_vist9 {position: relative;
     width: 64%;
     text-align: left;
     font-size: 1.2em;
     font-weight: 600;
     margin: 0% auto;}
 
-#vist9_t {position: relative; width: 81%;
+.vist9_t {position: relative; width: 81%;
     text-align: center;
     margin: 17% auto 0%;
     font-size: 2.4em;
     font-weight: 300;}
 
 
-main section#vist9 p#vist9_t {position: relative;
+main section.vista9 p.vist9_t {position: relative;
     width: 84%;
     text-align: center;
     font-size: 1.2em;
@@ -1059,16 +1042,16 @@ main section#vist9 p#vist9_t {position: relative;
 
 
 
-main section#vist10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vist10 h1#vist10 {width: 61%;
+main section.vista10 h1.vist10 {width: 61%;
     text-align: left;
     margin: 20% auto 15%;
     font-size: 1.4em;
     font-weight: 600;}
 
-main section#vist10 p#vist10 {position: relative;
+main section.vista10 p.vist10 {position: relative;
     width: 65%;
     text-align: left;
     font-size: 1.5em;
@@ -1127,7 +1110,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     width: 100%;
     padding: 0;}
 
-#img1 {position: relative;
+.img1 {position: relative;
     margin: 0% auto;
     width: 36%;
     padding: 3% 32%;}
@@ -1158,35 +1141,35 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     border-color: #468bc4;
     color: #468bc4;}
 
-main section#vist1 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista1 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-main section#vist1 div#vist1 {position: relative;
+main section.vista1 div.vist1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;
     height: 13vh;}
 
-main section#vist1 div#vist1 img#img1 { position: relative;
+main section.vista1 div.vist1 img.img1 { position: relative;
     margin: 0% auto;
     width: 50%;
     padding: 6% 25%;}
 
-main section#vist1 div#vist1_1 {position: relative;
+main section.vista1 div.vist1_1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;
     height: 20vh;}
 
-main section#vist1 div#vist1_1 img#img2 {position: relative;
+main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
     width: 50%;
     padding: 5% 25%;}
 
-main section#vist1 article#vist1 { position: relative;
+main section.vista1 article.vist1 { position: relative;
     margin: 0px auto 0%;
     padding: 12% 10% 9% 11%;}
 
-main section#vist1 article#vist1 p#vist1 {position: relative;
+main section.vista1 article.vist1 p.vist1 {position: relative;
     font-weight: 500;
     font-size: 1.3em;
     text-align: center;}
@@ -1194,34 +1177,34 @@ main section#vist1 article#vist1 p#vist1 {position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist2 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista2 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vist2 div#vist2_text { position: relative;
+main section.vista2 div.vist2_text { position: relative;
     margin: 2% auto;
     width: 100%;
     height: 13vh;
     font-weight: 500;}
 
-main section#vist2 div#vist2_text h1 { font-size: 1.3em;
+main section.vista2 div.vist2_text h1 { font-size: 1.3em;
     padding: 0 0 0 4%;}
 
-main section#vist2 div#vist2_text p {font-size: 1em;
+main section.vista2 div.vist2_text p {font-size: 1em;
     padding: 2% 0 0 4%;}
 
-main section#vist2 nav#vist2 { width: 100%;
+main section.vista2 nav.vist2 { width: 100%;
     height: auto;
     position: relative;
     margin: 3% 0;
     float: none;}
 
-main section#vist2 nav#vist2 div#img { width: 100%;
+main section.vista2 nav.vist2 div.img { width: 100%;
     height: 13vh;}
 
-main section#vist2 nav#vist2 div#img img#vist2 { position: absolute;
+main section.vista2 nav.vist2 div.img img.vist2 { position: absolute;
     padding: 0% 0% 0% 7%; width: 18%;}
 
-main section#vist2 nav#vist2 div#img p#vist2 {padding: 0px 2% 0 29%;
+main section.vista2 nav.vist2 div.img p.vist2 {padding: 0px 2% 0 29%;
     font-size: 0.9em;}
  
 
@@ -1288,46 +1271,46 @@ visibility: visible;
     100% { transform: rotate(360deg);}
 }
 
-main section#vist3 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista3 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-main section#vist3 div#vist3_text {position: relative;
+main section.vista3 div.vist3_text {position: relative;
     padding: 0% 0% 0% 9%;}
 
-main section#vist3 p#vist3 { font-size: 1em;}
+main section.vista3 p.vist3 { font-size: 1em;}
 
-main section#vist3 h1#vist3 { font-size: 1.4em; font-weight: 500;}
+main section.vista3 h1.vist3 { font-size: 1.4em; font-weight: 500;}
 
-main section#vist3 input.inp_vist3 {margin: 5% 14%;
+main section.vista3 input.inp_vist3 {margin: 5% 14%;
     padding: 1% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
     width: 70%;}
-main section#vist3 input#aut :focus {border-bottom: 1px solid #0572ce;
+main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
-main section#vist3 p#vist3_t { position: relative;
+main section.vista3 p.vist3_t { position: relative;
     text-align: center;
     margin: 1%;
     font-size: 0.8em;}
 
-main section#vist3 div#vist3_img {position: relative;
+main section.vista3 div.vist3_img {position: relative;
     width: 100%;
     height: 30vh;}
 
-main section#vist3 div#vist3_img img#vist3 {width: 90%;
+main section#vista3 div.vist3_img img.vist3 {width: 90%;
     padding: 5%}
 
-main section#vist3 p#vist3_t2 {padding: 6% 6% 1% 6%;
+main section.vista3 p#vist3_t2 {padding: 6% 6% 1% 6%;
     font-size: 1em;
     text-align: center;}
 
-main section#vist3 div#tet {margin: 2% 0 5% 0px; }
+main section.vista3 div.tet {margin: 2% 0 5% 0px; }
 
-main section#vist3 div#tet a#vist3 {left: 34%;
+main section.vista3 div.tet a.vist3 {left: 34%;
     position: relative; font-size: 1.3em;}
 
-main section#vist3 button#btn_vist3 {position: absolute;
+main section.vista3 button.btn_vist3 {position: absolute;
     padding: 3% 14%;
     margin: 0 auto;
     font-size: 1.1em;
@@ -1339,25 +1322,24 @@ main section#vist3 button#btn_vist3 {position: absolute;
     color: #468bc4;}
 
 .conten_carga { background: #ffffff;
-    height: 7.1%;
-    width: 50%;
-    left: 24%;
-    top: 90%;
+    height: 100%;
+    width: 100%;
+    left: -1%;
+    top: -5%;
     position: absolute;
     -webkit-animation: all 1s ease;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
     z-index: 99;
-    
     border: solid #3333;
-    border-radius: 16px
+    border-radius: 12px;
 }
 
 .carga {border: solid 7px #ccc;
     border-top-color: #f4266a;
     border-top-style: groove;
-    height: 59%;
-    width: 15%;
+    height: 24px;
+    width: 24px;
     border-radius: 100%;
     
     position: absolute;
@@ -1378,17 +1360,17 @@ main section#vist3 button#btn_vist3 {position: absolute;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist4 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista4 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vist4 h1#vist4 {width: 75%;
+main section.vista4 h1.vist4 {width: 75%;
     text-align: center;
     margin: 0 auto;
     font-size: 1.4em;
     font-weight: 400;}
 
 
-main section#vist4 p#vist4_1 { width: 80%;
+main section.vista4 p.vist4_1 { width: 80%;
     text-align: center;
     margin: 4% auto;
     font-size: 1em;
@@ -1462,34 +1444,34 @@ main section#vist4 p#vist4_1 { width: 80%;
     color: #468bc4;}
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist5 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista5 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vist5 h1#vist5 {width: 81%;
+main section.vista5 h1.vist5 {width: 81%;
     height: 10vh;
     text-align: center;
     margin: 2% auto;
     font-size: 1.4em;
     font-weight: 300;}
 
-main section#vist5 p#vist5 {width: 81%;
+main section.vista5 p.vist5 {width: 81%;
     height: 6vh;
     text-align: center;
     margin: 2% auto;
     font-size: 1em;
     font-weight: 300;}
 
-main section#vist5 div#vist5_1 {position: relative;
+main section.vista5 div.vist5_1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;}
 
-main section#vist5 div#vist5_1 img#img2 {position: fixed;
+main section.vista5 div.vist5_1 img.img2 {position: fixed;
     width: 58%;
     z-index: 9;
     left: 22%;}
 
-main section#vist5 div#vist5_1 img#img3 { position: relative;
+main section.vista5 div.vist5_1 img.img3 { position: relative;
     margin: 0% auto;
     width: 74%;
     padding: 3% 10%;}
@@ -1499,26 +1481,18 @@ main section#vist5 div#vist5_1 img#img3 { position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist6 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista6 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-#vist6 {width: 81%;
+.vist6 {width: 81%;
     height: 10vh;
     text-align: center;
     margin: 2% auto;
     font-size: 1.4em;
     font-weight: 300;}
 
-#inp_vist6 {margin: 5% 14%;
-    padding: 3% 0;
-    border: 0px;
-    border-bottom: solid 1px;
-    font-size: 1em;
-    width: 70%;}
-main section#vist6 input#aut :focus {border-bottom: 1px solid #0572ce;
-    box-shadow: 0 1px 0 0 #0572ce;}
 
-#p_vist6 {position: relative;
+.p_vist6 {position: relative;
     width: 93%;
     height: 5vh;
     text-align: center;
@@ -1538,17 +1512,17 @@ main section#vist6 input#aut :focus {border-bottom: 1px solid #0572ce;
     color: #468bc4;}
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist7 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista7 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-#vist7 {width: 81%;
+.vist7 {width: 81%;
     height: 8vh;
     text-align: center;
     margin: 4% auto;
     font-size: 1.4em;
     font-weight: 300;}
 
-main section#vist7 input#inp_vist7 {margin: 5% 14%;
+main section.vista7 input.inp_vist7 {margin: 5% 14%;
     padding: 3% 0;
     border: 0px;
     border-bottom: solid 1px;
@@ -1582,9 +1556,9 @@ option {
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
 
-main section#vist8 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista8 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-#vist8 {width: 81%;
+.vist8 {width: 81%;
     height: 10vh;
     text-align: center;
     margin: 5% auto 0;
@@ -1611,10 +1585,10 @@ main section#vist8 {width: 100%; height: 90vh; position: relative; margin: 0 aut
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist9 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista9 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-#ti_vist9 {position: relative;
+.ti_vist9 {position: relative;
     width: 81%;
     text-align: center;
     margin: 6% auto 0;
@@ -1630,29 +1604,29 @@ main section#vist9 {width: 100%; height: 90vh; position: relative; margin: 0 aut
     width: 70%;}
 
 
-#p_vist9 {position: relative;
+.p_vist9 {position: relative;
     width: 64%;
     text-align: left;
     font-size: 0.8em;
     font-weight: 600;
     margin: 0% auto;}
 
-#vist9_t {position: relative; width: 81%;
+.vist9_t {position: relative; width: 81%;
     text-align: center;
     margin: 17% auto 0%;
     font-size: 1.4em;
     font-weight: 300;}
 
-main section#vist9 input#inp_vist9_t {margin: 5% 14%;
+main section.vista9 input.inp_vist9_t {margin: 5% 14%;
     padding: 3% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
     width: 70%;}
-main section#vist9 input#aut :focus {border-bottom: 1px solid #0572ce;
+main section.vista9 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
-main section#vist9 p#vist9_t {position: relative;
+main section.vista9 p.vist9_t {position: relative;
     width: 84%;
     text-align: center;
     font-size: 0.8em;
@@ -1665,16 +1639,16 @@ main section#vist9 p#vist9_t {position: relative;
 
 
 
-main section#vist10 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista10 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vist10 h1#vist10 {width: 61%;
+main section.vista10 h1.vist10 {width: 61%;
     text-align: left;
     margin: 20% auto 15%;
     font-size: 1.4em;
     font-weight: 600;}
 
-main section#vist10 p#vist10 {position: relative;
+main section.vista10 p.vist10 {position: relative;
     width: 65%;
     text-align: left;
     font-size: 1.5em;
@@ -1735,7 +1709,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     width: 100%;
     padding: 0;}
 
-#img1 {position: relative;
+.img1 {position: relative;
     margin: 0% auto;
     width: 36%;
     padding: 3% 32%;}
@@ -1765,35 +1739,35 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     border-color: #468bc4;
     color: #468bc4;}
 
-main section#vist1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-main section#vist1 div#vist1 {position: relative;
+main section.vista1 div.vist1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;
     height: 14vh;}
 
-main section#vist1 div#vist1 img#img1 { position: relative;
+main section.vista1 div.vist1 img.img1 { position: relative;
     margin: 0% auto;
     width: 50%;
     padding: 6% 25%;}
 
-main section#vist1 div#vist1_1 {position: relative;
+main section.vista1 div.vist1_1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;
     height: 20vh;}
 
-main section#vist1 div#vist1_1 img#img2 {position: relative;
+main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
     width: 50%;
     padding: 5% 25%;}
 
-main section#vist1 article#vist1 { position: relative;
+main section.vista1 article.vist1 { position: relative;
     margin: 0px auto 0%;
     padding: 12% 10% 9% 11%;}
 
-main section#vist1 article#vist1 p#vist1 {position: relative;
+main section.vista1 article.vist1 p.vist1 {position: relative;
     font-weight: 500;
     font-size: 1.3em;
     text-align: center;}
@@ -1801,34 +1775,34 @@ main section#vist1 article#vist1 p#vist1 {position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vist2 div#vist2_text { position: relative;
+main section#vista2 div#vist2_text { position: relative;
     margin: 0 auto;
     width: 100%;
     height: 15vh;
     font-weight: 500;}
 
-main section#vist2 div#vist2_text h1 { font-size: 1.5em;
+main section#vista2 div#vist2_text h1 { font-size: 1.5em;
     padding: 0 0 0 2%;}
 
-main section#vist2 div#vist2_text p {font-size: 1em;
+main section#vista2 div#vist2_text p {font-size: 1em;
     padding: 2% 0 0 4%;}
 
-main section#vist2 nav#vist2 { width: 100%;
+main section#vista2 nav#vist2 { width: 100%;
     height: auto;
     position: relative;
     margin: 1vh 0% 0% 0%;
     float: none;}
 
-main section#vist2 nav#vist2 div#img { width: 100%;
+main section#vista2 nav#vist2 div#img { width: 100%;
     height: 15vh;}
 
-main section#vist2 nav#vist2 div#img img#vist2 { position: absolute;
+main section#vista2 nav#vist2 div#img img#vist2 { position: absolute;
     padding: 0% 0% 0% 5%; width: 20%;}
 
-main section#vist2 nav#vist2 div#img p#vist2 {padding: 0px 2% 0 29%;}
+main section#vista2 nav#vist2 div#img p#vist2 {padding: 0px 2% 0 29%;}
  
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
@@ -1894,43 +1868,43 @@ visibility: visible;
     100% { transform: rotate(360deg);}
 }
 
-main section#vist3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-main section#vist3 div#vist3_text {position: relative;
+main section.vista3 div.vist3_text {position: relative;
     padding: 0% 0% 0% 9%;}
 
-main section#vist3 p#vist3 { font-size: 1em;}
+main section.vista3 p.vist3 { font-size: 1em;}
 
-main section#vist3 h1#vist3 { font-size: 1.4em; font-weight: 500;}
+main section.vista3 h1.vist3 { font-size: 1.4em; font-weight: 500;}
 
-main section#vist3 input.inp_vist3 {margin: 5% 14%;
+main section.vista3 input.inp_vist3 {margin: 5% 14%;
     padding: 1% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
     width: 70%;}
-main section#vist3 input#aut :focus {border-bottom: 1px solid #0572ce;
+main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
-main section#vist3 p#vist3_t { position: relative;
+main section.vista3 p.vist3_t { position: relative;
     text-align: center;
     margin: 1%;}
 
-main section#vist3 div#vist3_img {position: relative;
+main section.vista3 div.vist3_img {position: relative;
     width: 100%;
     height: 30vh;}
 
-main section#vist3 div#vist3_img img#vist3 {width: 90%;
+main section.vista3 div.vist3_img img.vist3 {width: 90%;
     padding: 5%}
 
-main section#vist3 p#vist3_t2 {padding: 6% 6% 1% 6%}
+main section.vista3 p.vist3_t2 {padding: 6% 6% 1% 6%}
 
-main section#vist3 div#tet {margin: 2% 0 5% 0px; }
+main section.vista3 div.tet {margin: 2% 0 5% 0px; }
 
-main section#vist3 div#tet a#vist3 {left: 34%;
+main section.vista3 div.tet a.vist3 {left: 34%;
     position: relative; font-size: 1.3em;}
 
-main section#vist3 button#btn_vist3 {position: absolute;
+main section.vista3 button.btn_vist3 {position: absolute;
     padding: 3% 14%;
     margin: 0 auto;
     font-size: 1.1em;
@@ -1942,24 +1916,24 @@ main section#vist3 button#btn_vist3 {position: absolute;
     color: #468bc4;}
 
 .conten_carga { background: #ffffff;
-    height: 7.1%;
-    width: 50%;
-    left: 24%;
-    top: 88%;
+    height: 100%;
+    width: 100%;
+    left: -1%;
+    top: -5%;
     position: absolute;
     -webkit-animation: all 1s ease;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
-    z-index: 999;
+    z-index: 99;
     border: solid #3333;
-    border-radius: 16px;
+    border-radius: 12px;
 }
 
 .carga {border: solid 7px #ccc;
     border-top-color: #f4266a;
     border-top-style: groove;
-    height: 59%;
-    width: 15%;
+    height: 24px;
+    width: 24px;
     border-radius: 100%;
     
     position: absolute;
@@ -1976,46 +1950,46 @@ main section#vist3 button#btn_vist3 {position: absolute;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-main section#vist4 button#btn_4 {margin: 2% 0% 0% 3%;
+main section.vista4 button.btn_4 {margin: 2% 0% 0% 3%;
     position: relative;
     border: 0px;
     background: #ffff;}
     
-main section#vist4 button#btn_4 p#btn {position: relative;
+main section.vista4 button.btn_4 p.btn {position: relative;
     font-size: 1.2em;
     color: #468bc4;}
 
-main section#vist4 div#vist4 {position: relative;
+main section.vista4 div.vist4 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;}
 
-main section#vist4 div#vist4 img#img1 { position: relative;
+main section.vista4 div.vist4 img.img1 { position: relative;
     margin: 0% auto;
     width: 50%;
     padding: 2% 25%;}
 
-main section#vist4 h1#vist4 {width: 75%;
+main section.vista4 h1.vist4 {width: 75%;
     text-align: center;
     margin: 0 auto;
     font-size: 1.4em;
     font-weight: 400;}
 
-main section#vist4 p#vist4 {    width: 75%;
+main section.vista4 p.vist4 {    width: 75%;
     text-align: center;
     margin: 5% auto;
     font-size: 0.9em}
 
-main section#vist4 p#vist4_1 { width: 63%;
+main section.vista4 p.vist4_1 { width: 63%;
     text-align: center;
     margin: 4% auto;
     font-size: 1em;
     color: red;}
 
 
-#video {position: relative; 
+.video {position: relative; 
     width: 95%; 
     height: 39vh;
     padding: 0 2% 0 2.5%;} 
@@ -2049,32 +2023,32 @@ main section#vist4 p#vist4_1 { width: 63%;
     color: #468bc4;}
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist5 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista5 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vist5 h1#vist5 {width: 81%;
+main section.vista5 h1.vist5 {width: 81%;
     text-align: center;
     margin: 5% auto;
     font-size: 1.4em;
     font-weight: 300;}
 
-main section#vist5 p#vist5 { width: 81%;
+main section.vista5 p.vist5 { width: 81%;
     text-align: center;
     margin: 12% auto;
     font-size: 1em;
     font-weight: 300;}
 
-main section#vist5 div#vist5_1 {position: relative;
+main section.vista5 div.vist5_1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;}
 
-main section#vist5 div#vist5_1 img#img2 {position: fixed;
+main section.vista5 div.vist5_1 img.img2 {position: fixed;
     width: 58%;
     z-index: 9;
     left: 22%;}
 
-main section#vist5 div#vist5_1 img#img3 { position: relative;
+main section.vista5 div.vist5_1 img.img3 { position: relative;
     margin: 0% auto;
     width: 74%;
     padding: 3% 10%;}
@@ -2084,25 +2058,17 @@ main section#vist5 div#vist5_1 img#img3 { position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist6 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-#vist6 {width: 81%;
+.vist6 {width: 81%;
     text-align: center;
     margin: 5% auto;
     font-size: 1.4em;
     font-weight: 300;}
 
-#inp_vist6 {margin: 5% 14%;
-    padding: 3% 0;
-    border: 0px;
-    border-bottom: solid 1px;
-    font-size: 1em;
-    width: 70%;}
-main section#vist6 input#aut :focus {border-bottom: 1px solid #0572ce;
-    box-shadow: 0 1px 0 0 #0572ce;}
 
-#p_vist6 {position: relative;
+.p_vist6 {position: relative;
     width: 93%;
     text-align: center;
     font-size: 0.7em;
@@ -2121,16 +2087,16 @@ main section#vist6 input#aut :focus {border-bottom: 1px solid #0572ce;
     color: #468bc4;}
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-#vist7 {width: 81%;
+.vist7 {width: 81%;
     text-align: center;
     margin: 5% auto;
     font-size: 1.4em;
     font-weight: 300;}
 
-main section#vist7 input#inp_vist7 {margin: 5% 14%;
+main section.vista7 input.inp_vist7 {margin: 5% 14%;
     padding: 3% 0;
     border: 0px;
     border-bottom: solid 1px;
@@ -2161,9 +2127,9 @@ option {
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
 
-main section#vist8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-#vist8 {width: 81%;
+.vist8 {width: 81%;
     text-align: center;
     margin: 6% auto;
     font-size: 1.4em;
@@ -2188,10 +2154,10 @@ main section#vist8 {width: 100%; height: 100vh; position: relative; margin: 0 au
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vist9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-#ti_vist9 {position: relative;
+.ti_vist9 {position: relative;
     width: 81%;
     text-align: center;
     margin: 6% auto;
@@ -2214,22 +2180,22 @@ main section#vist9 {width: 100%; height: 100vh; position: relative; margin: 0 au
     font-weight: 600;
     margin: 0% auto;}
 
-#vist9_t {position: relative; width: 81%;
+.vist9_t {position: relative; width: 81%;
     text-align: center;
     margin: 17% auto 0%;
     font-size: 1.4em;
     font-weight: 300;}
 
-main section#vist9 input#inp_vist9_t {margin: 5% 14%;
+main section.vista9 input.inp_vist9_t {margin: 5% 14%;
     padding: 3% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
     width: 70%;}
-main section#vist9 input#aut :focus {border-bottom: 1px solid #0572ce;
+main section.vista9 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
-main section#vist9 p#vist9_t {position: relative;
+main section.vista9 p.vist9_t {position: relative;
     width: 84%;
     text-align: center;
     font-size: 0.8em;
@@ -2242,16 +2208,16 @@ main section#vist9 p#vist9_t {position: relative;
 
 
 
-main section#vist10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vist10 h1#vist10 {width: 61%;
+main section.vista10 h1.vist10 {width: 61%;
     text-align: left;
     margin: 20% auto 15%;
     font-size: 1.4em;
     font-weight: 600;}
 
-main section#vist10 p#vist10 {position: relative;
+main section.vista10 p.vist10 {position: relative;
     width: 65%;
     text-align: left;
     font-size: 1.5em;

@@ -4,18 +4,17 @@
 {% block title %}Elige Municipio{% endblock %}
 
 {% block content %}
-<section id="vist6">
+<section class="vista6">
      <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
-
         {% include "base/logo.html" %}
 
-        <h1 id="vist6">Elige el municipio donde enviaremos tu domicilio.</h1>
+        <h1 class="vist6">Elige el municipio donde enviaremos tu domicilio.</h1>
 
         <!--<input type="text" name="" list="list6" placeholder="Buscar.." id="inp_vist6">-->
 
-        <p id="p_vist6">* Solo aplica para el departamento del Atlantico</p>
+        <p class="p_vist6">* Solo aplica para el departamento del Atlantico</p>
         {{ form.errors.municipio }}
         {% if wizard.form.forms %}
             {{ wizard.form.management_form }}
