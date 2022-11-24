@@ -4,13 +4,13 @@
 {% block title %}Digite celular{% endblock %}
 
 {% block content %}
-<section id="vist9">
+<section class="vista9">
     <form action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
         {% include "base/logo.html" %}
 
-        <h1 id="ti_vist9">¿Cual es su número de celular?</h1>
+        <h1 class="ti_vist9">¿Cual es su número de celular?</h1>
 
         {% if wizard.form.forms %}
             <!--NOTHING-->
@@ -21,13 +21,13 @@
         {% else %}
             <input class="inp_vist9" type="number" name="digitaCelular-celular" required=""
                    id="id_digitaCelular-celular" placeholder="Digitar..">
-            <p id="p_vist9">Te informaremos por este medio cuando el domicilio este en camino.</p>
+            <p class="p_vist9">Te informaremos por este medio cuando el domicilio este en camino.</p>
 
-            <h1 id="vist9_t">¿Cual es tu Correo electrónico?</h1>
+            <h1 class="vist9_t">¿Cual es tu Correo electrónico?</h1>
             <input class="inp_vist9" type="email" name="digitaCelular-email" id="id_digitaCelular-email"
                    placeholder="Digitar..">
 
-            <p id="vist9_t">(Este campo no es obligatorio).</p>
+            <p class="vist9_t">(Este campo no es obligatorio).</p>
         {% endif %}
         <button class="btn" type="submit">Aceptar</button>
     </form>
