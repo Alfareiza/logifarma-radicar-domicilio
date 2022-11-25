@@ -111,7 +111,7 @@ class ContactWizard(SessionWizardView):
             **form_data[7],  # Celular e e-mail
         }
 
-        logger.info('Enviando correo con : ')
+        logger.info('E-mail será enviado con la siguiente información : ')
         for log in info_email:
             logger.info(f'\t\t== {log} ==> {info_email[log]}')
 
@@ -119,9 +119,10 @@ class ContactWizard(SessionWizardView):
 
         # Envía e-mail
         self.send_mail(
-            subject=f"{form_data[2]['num_autorizacion']['NUMERO_AUTORIZACION']} - "
-                    f"Este es el número de radicación de tu domicilio en Logifarma",
-            destinatary=form_data[2]['num_autorizacion']['CORREO_TEST'],
+            subject=f"{info_email['NUMERO_AUTORIZACION']} - Este es el "
+                    "número de radicación de tu domicilio en Logifarma",
+            destinatary=info_email['CORREO_TEST'],
+            # destinatary=info_email['email'],  # Producción
             html_content=body
             )
 
@@ -134,7 +135,7 @@ class ContactWizard(SessionWizardView):
         """
         email = EmailMessage(
                       subject, html_content, from_email=settings.EMAIL_HOST_USER,
-                      to=destinatary, bcc=['alfareiza@gmail.com']
+                      to=destinatary, bcc=['radicacion.domicilios@logifarma.co']
                       )
         email.content_subtype = "html"
         try:
