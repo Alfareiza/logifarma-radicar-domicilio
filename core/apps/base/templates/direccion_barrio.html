@@ -24,15 +24,7 @@
                        value="digitaDireccionBarrio"
                        id="id_contact_wizard-current_step">
                 <label class="label_vist">Barrio:</label>
-                <select  class="select_opt" name="digitaDireccionBarrio-barrio"
-                         id="id_digitaDireccionBarrio-barrio">
-                    <option value="0">Escoja un barrio</option>
-                    <option value="1">El Valle, Atlantico</option>
-                    <option value="2">Barrio 2</option>
-                    <option value="3">Barrio 3</option>
-                    <option value="4">Barrio 4</option>
-                    <option value="5">Barrio 5</option>
-                </select>
+                {{ wizard.form.barrio }}
             </div>
 
             <h1 class="vista8">¿A que dirección enviamos tu domicilio?</h1>

@@ -1,6 +1,7 @@
 from decouple import config, Csv
 from django import forms
 
+from core.apps.base.models import Municipio, Barrio
 from core.apps.base.resources.api_calls import call_api_eps, call_api_medicar
 from core.apps.base.resources.tools import read_json
 
@@ -94,49 +95,37 @@ class AvisoDireccion(forms.Form):
     ...
 
 
-class EligeMunicipio(forms.Form):
+class EligeMunicipio(forms.ModelForm):
     """
     Vista 6:
     """
-    MUNICIPIOS = (
-        ("0", "Escoja un municipio"),
-        ("1", "Barranquilla, Atlantico"),
-        ("2", "Soledad, Atlantico"),
-        ("3", "Malambo, Atlantico"),
-        ("4", "Baranoa, Atlantico"),
-        ("5", "Galapa, Atlantico"),
-    )
 
-    municipio = forms.ChoiceField(choices=MUNICIPIOS)
+    class Meta:
+        model = Municipio
+        exclude = ['name', 'departamento']
 
-    def clean_municipio(self):
-        municipio = self.cleaned_data.get('municipio')
-        if municipio == '0':
-            raise forms.ValidationError("Escoja un municipio antes de continuar")
-        return self.MUNICIPIOS[int(municipio)][1]
+    municipio = forms.ModelChoiceField(queryset=Municipio.objects.all(),
+                                       empty_label="Seleccione un municipio",
+                                       widget=forms.Select(
+                                           attrs={'class': 'select_opt'}
+                                       ),
+                                       label=False
+                                       )
 
 
 class DireccionBarrio(forms.Form):
     """
     Vista 7:
     """
-    BARRIOS = (
-        ("0", "Escoja un barrio"),
-        ("1", "El Valle, Atlantico"),
-        ("2", "Barrio 2"),
-        ("3", "Barrio 3"),
-        ("4", "Barrio 4"),
-        ("5", "Barrio 5"),
-    )
-
-    barrio = forms.ChoiceField(choices=BARRIOS)
+    barrio = forms.ChoiceField(widget=forms.Select(attrs={'class': 'select_opt'}))
     direccion = forms.CharField(max_length=40)
 
     def clean_barrio(self):
-        barrio = self.cleaned_data.get('barrio')
-        if barrio == '0':
+        barr = self.cleaned_data.get('barrio')
+        if barr == 'X':
             raise forms.ValidationError("Escoja un barrio antes de continuar")
-        return self.BARRIOS[int(barrio)][1]
+        barr_obj = Barrio.objects.get(id=int(barr))
+        return barr_obj.name.title()
 
 
 class DigitaCelular(forms.Form):
