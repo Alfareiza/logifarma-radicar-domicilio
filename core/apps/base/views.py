@@ -6,6 +6,7 @@ from formtools.wizard.views import SessionWizardView
 
 from core import settings
 from core.apps.base.forms import *
+from core.apps.base.models import Barrio
 from core.apps.base.resources.tools import convert_bytes, del_folder
 from core.settings import logger, BASE_DIR
 
@@ -16,8 +17,6 @@ FORMS = [
     ("fotoFormulaMedica", FotoFormulaMedica),
     ("avisoDireccion", AvisoDireccion),
     ("eligeMunicipio", EligeMunicipio),
-    ## ("eligeBarrio", EligeBarrio),
-    ## ("digitaDireccion", DigitaDireccion),
     ("digitaDireccionBarrio", DireccionBarrio),
     ("digitaCelular", DigitaCelular)
 ]
@@ -29,12 +28,11 @@ TEMPLATES = {
     "fotoFormulaMedica": "foto.html",
     "avisoDireccion": "aviso_direccion.html",
     "eligeMunicipio": "elige_municipio.html",
-    ## "eligeBarrio": "elige_barrio.html",
-    ##"digitaDireccion": "digita_direccion.html",
     "digitaDireccionBarrio": "direccion_barrio.html",
     "digitaCelular": "digita_celular.html"}
 
 htmly = get_template(BASE_DIR / "core/apps/base/templates/correo.html")
+
 
 class ContactWizard(SessionWizardView):
     # template_name = 'start.html'
@@ -85,6 +83,27 @@ class ContactWizard(SessionWizardView):
                       context={'form_data': form_data}
                       )
 
+    def get_form(self, step=None, data=None, files=None):
+        """
+        Renderiza el formulario con el fin de preestablecer campos
+        al iniciar la vista
+        :param step: None
+        :param data: None
+        :param files: None
+        :return: Formulario de vista 7 con información de barrio diligenciada
+                 a partir de municipio escogido en vista 6
+        """
+        form = super(ContactWizard, self).get_form(step, data, files)
+        step = step or self.steps.current
+        if step == 'digitaDireccionBarrio':
+            if form1_cleaned_data := self.get_cleaned_data_for_step('eligeMunicipio'):
+                barrios_mun = Barrio.objects.filter(
+                    municipio__id=form1_cleaned_data['municipio'].id
+                ).order_by('name')
+                form.fields['barrio'].choices = [(str(b.id), b.name.title()) for b in barrios_mun]
+                form.fields['barrio'].choices.insert(0, ('X', 'Seleccione un municipio'))
+        return form
+
     def process_from_data(self, form_list):
         """
         Se encarga de crear y guardar imagen, y luego envía el correo
@@ -121,10 +140,10 @@ class ContactWizard(SessionWizardView):
         self.send_mail(
             subject=f"{info_email['NUMERO_AUTORIZACION']} - Este es el "
                     "número de radicación de tu domicilio en Logifarma",
-            destinatary=info_email['CORREO_TEST'],
+            destinatary=info_email['CORREO_TEST'] + [info_email['email']],
             # destinatary=info_email['email'],  # Producción
             html_content=body
-            )
+        )
 
     def send_mail(self, subject: str, destinatary: str, html_content):
         """
@@ -134,9 +153,9 @@ class ContactWizard(SessionWizardView):
         :return: None
         """
         email = EmailMessage(
-                      subject, html_content, from_email=settings.EMAIL_HOST_USER,
-                      to=destinatary, bcc=['radicacion.domicilios@logifarma.co']
-                      )
+            subject, html_content, from_email=settings.EMAIL_HOST_USER,
+            to=destinatary, bcc=['radicacion.domicilios@logifarma.co']
+        )
         email.content_subtype = "html"
         try:
             email.attach_file(self.foto_fmedica)

@@ -20,17 +20,8 @@
             {{ wizard.form.management_form }}
         {% else %}
             <div class="elec">
-                <input class="inp_vist" type="hidden" name="contact_wizard-current_step"
-                       value="eligeMunicipio" id="id_contact_wizard-current_step">
-                <label class="label_vist" for="id_eligeMunicipio-municipio">Municipio:</label>
-                <select class="select_opt" name="eligeMunicipio-municipio" id="id_eligeMunicipio-municipio">
-                    <option value="0">Escoja un municipio</option>
-                    <option value="1">Barranquilla, Atlantico</option>
-                    <option value="2">Soledad, Atlantico</option>
-                    <option value="3">Malambo, Atlantico</option>
-                    <option value="4">Baranoa, Atlantico</option>
-                    <option value="5">Galapa, Atlantico</option>
-                </select>
+                <label class="label_vist">Municipio:</label>
+                {{ wizard.form }}
             </div>
         {% endif %}
         <button class="btn_muni" type="submit">Continuar</button>
