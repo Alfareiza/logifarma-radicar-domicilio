@@ -20,8 +20,8 @@ class Municipio(Model):
 
 
 class Barrio(Model):
-    name = CharField(max_length=250)
-    zona = CharField(max_length=10)
+    name = CharField(max_length=128)
+    zona = CharField(max_length=20)
     municipio = ForeignKey(Municipio, on_delete=CASCADE)
     cod_zona = IntegerField()
     status = IntegerField()
