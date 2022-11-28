@@ -29,7 +29,16 @@
 
             <p class="vist9_t">(Este campo no es obligatorio).</p>
         {% endif %}
-        <button class="btn" type="submit">Finalizar</button>
+
+        <script src="{% static 'js/carga.js' %}"></script>
+        <div class="load" id="load_a">
+                <img class="conten" class="cargac" src="{% static 'img/Loading.gif' %}" alt="">
+        </div>
+
+
+        <button class="btn" id="btn_final" type="submit">Finalizar</button>
+
+
     </form>
 </section>
 {% endblock %}
