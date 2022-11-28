@@ -77,15 +77,7 @@ class FotoFormulaMedica(forms.Form):
     Página donde el usuário toma una foto o la escoje
     de su celular.
     """
-    # src = forms.ImageField(label='Foto')
-    src = forms.CharField(label='Foto')
-
-    def clean_src(self):
-        import base64;
-        from django.core.files.base import ContentFile
-        formato, imgstr = self.cleaned_data.get('src').split(';base64,')
-        ext = formato.split('/')[-1]
-        return ContentFile(base64.b64decode(imgstr), name=f'formula_medica.{ext}')
+    src = forms.ImageField(label=False)
 
 
 class AvisoDireccion(forms.Form):
@@ -134,3 +126,11 @@ class DigitaCelular(forms.Form):
     """
     celular = forms.IntegerField()
     email = forms.EmailField(required=False)
+
+    def clean_celular(self):
+        cel = self.cleaned_data.get('celular')
+        if str(cel)[0] != 3 or len(str(cel)) != 10:
+            import pdb
+            breakpoint()
+            raise forms.ValidationError("Número de celular incorrecto")
+        return cel
