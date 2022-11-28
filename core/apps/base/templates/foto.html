@@ -4,6 +4,7 @@
 {% block title %}Foto de la fórmula{% endblock %}
 
 {% block content %}
+
 <section class="vista4">
      <form enctype="multipart/form-data" action="" method="post">
         {% csrf_token %}
@@ -18,36 +19,52 @@
         {% if wizard.form.forms %}
             {{ wizard.form.management_form }}
         {% else %}
-            <div class="row mt-3">
-                <script src="{% static 'js/capture.js' %}"></script>
-                <video autoplay loop muted playsinline id="video" class="video">Video stream not available.</video>
-                <input id="id_fotoFormulaMedica-src" value=""
-                       name="fotoFormulaMedica-src" type="text"
-                       style="display: none;">
-                <canvas id="canvas" style="display: none;"></canvas>
-                <img class="img_fot" id="photo" alt="your image" style="display: none;">
-               <!--<input type="hidden" name="contact_wizard-current_step" value="fotoFormulaMedica" id="id_contact_wizard-current_step">-->
-               <!--<label for="id_fotoFormulaMedica-src">Foto:</label>
-               <td>
-                  <input type="file" name="fotoFormulaMedica-src" accept="image/*"
-                         required="" id="id_fotoFormulaMedica-src">
-                </td>-->
+
+            <div class="container">
+                <div  style="object-fit: contain;">
+                    <img id="file-preview" class="img_fot">
+                </div>
+                <div class="btn_archi">
+<!--                    <label for="file" id="fotoFormulaMedica-src">Select an Image</label>-->
+                    <input required type="file" name="fotoFormulaMedica-src" accept="image/*"
+                       id="id_fotoFormulaMedica-src"
+                           class="arch_btn" >
+                </div>
             </div>
-            <div class="row mt-3">
-                <div id='tomarfoto-btn' class="col" style="display: grid;">
-                    <button class="btn_f btn-primary" type="button" >Tomar Foto</button>
-                </div>
-                <div id="" class="btn_archi" >
-                    <input type="file" id="" class="arch_btn" >
-                </div>
-                <div id='tomarotrafoto-btn' class="col" style="display: none;" onClick="myFunction()">
-                    <button class="btn1 btn-danger" type="button" >Tomar Otra Foto</button>
-                </div>
+<!--                <script src="{% static 'js/capture.js' %}"></script>-->
+<!--                <video autoplay loop muted playsinline id="video" class="video">Video stream not available.</video>-->
+<!--                <canvas id="canvas" style="display: none;"></canvas>-->
+<!--                <img class="img_fot" id="photo" alt="your image" style="display: none;">-->
+               <!--<input type="hidden" name="contact_wizard-current_step" value="fotoFormulaMedica" id="id_contact_wizard-current_step">-->
+               <!--<label for="id_fotoFormulaMedica-src">Foto:</label>-->
+
+<!--                <div id='tomarfoto-btn' class="col" style="display: grid;">-->
+<!--                    <button class="btn_f btn-primary" type="button" >Tomar Foto</button>-->
+<!--                </div>-->
+
+<!--                <div id='tomarotrafoto-btn' class="col" style="display: none;" onClick="myFunction()">-->
+<!--                    <button class="btn1 btn-danger" type="button" >Tomar Otra Foto</button>-->
+<!--                </div>-->
+
                 <div id='continuar-btn' class="col" style="display: none;">
                     <input type="submit" class="btn2 btn-success" value="Continuar"/>
                 </div>
-            </div>
         {% endif %}
     </form>
 </section>
+<script>
+    const continuarbtn = document.getElementById("continuar-btn");
+    const uploadButton = document.getElementById('id_fotoFormulaMedica-src');
+    uploadButton.addEventListener('change', (e)=>{
+    const currFiles = e.target.files
+    if(currFiles.length > 0){
+          let src = URL.createObjectURL(currFiles[0])
+          let imagePreview = document.getElementById('file-preview')
+          imagePreview.src = src
+          imagePreview.style.display = "block"
+
+          continuarbtn.style.display = "block";
+        }
+    })
+</script>
 {% endblock %}

@@ -67,7 +67,7 @@ class ContactWizard(SessionWizardView):
                     }
                 >
         """
-        # logger.info(self.get_form_step_data(form))
+        logger.info(self.get_form_step_data(form))
         return self.get_form_step_data(form)
 
     def render_goto_step(self, *args, **kwargs):
