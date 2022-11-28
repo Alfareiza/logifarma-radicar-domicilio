@@ -1301,7 +1301,7 @@ main section.vista3 div.vist3_img {position: relative;
 main section#vista3 div.vist3_img img.vist3 {width: 90%;
     padding: 5%}
 
-main section.vista3 p#vist3_t2 {padding: 6% 6% 1% 6%;
+main section.vista3 p.vist3_t2 {padding: 6% 6% 1% 6%;
     font-size: 1em;
     text-align: center;}
 
@@ -1331,6 +1331,7 @@ main section.vista3 button.btn_vist3 {position: absolute;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
     z-index: 99;
+    display: none;
     border: solid #3333;
     border-radius: 12px;
 }
@@ -1357,6 +1358,7 @@ main section.vista3 button.btn_vist3 {position: absolute;
     0% { transform: rotate(0deg);}
     100% { transform: rotate(360deg);}
 }
+
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -1633,7 +1635,29 @@ main section.vista9 p.vist9_t {position: relative;
     font-weight: 600;
     margin: 0% auto;}
 
+.load{position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(0, 0, 0, 0.5);
+    transition: all 500ms ease;
+    z-index: 99;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+}
 
+.cargac {width: 15%;
+    height: 8%;
+    margin: auto;
+    box-shadow: 1px 7px 25px rgb(0 0 0 / 6%);
+    transition: all 500ms ease;
+    position: relative;
+    transform: translateY(0%);
+}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
