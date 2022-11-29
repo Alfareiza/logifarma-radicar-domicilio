@@ -241,6 +241,7 @@ main section.vista3 div.tet a.vist3 {left: 43%;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
     z-index: 99;
+    display: none;
     border: solid #3333;
     border-radius: 12px;
 }
@@ -799,6 +800,7 @@ main section.vista3 div.tet a.vist3 {left: 41%;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
     z-index: 99;
+    display: none;
     border: solid #3333;
     border-radius: 12px;
 }
@@ -1993,6 +1995,7 @@ main section.vista3 button.btn_vist3 {position: absolute;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
     z-index: 99;
+    display: none;
     border: solid #3333;
     border-radius: 12px;
 }

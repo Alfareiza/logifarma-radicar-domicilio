@@ -30,7 +30,6 @@
             <p class="vist9_t">(Este campo no es obligatorio).</p>
         {% endif %}
 
-        <script src="{% static 'js/carga.js' %}"></script>
         <div class="load" id="load_a">
                 <img class="cargac" src="{% static 'img/Loading.gif' %}" alt="">
         </div>
@@ -38,8 +37,9 @@
 
         <button class="btn" id="btn_final" type="submit">Finalizar</button>
 
-
     </form>
+
+    <script src="{% static 'js/carga_final.js' %}"></script>
 </section>
 {% endblock %}
 
