@@ -1,17 +1,19 @@
 
-const carga = document.getElementById('btn_carga') ;
+const carga = document.getElementById("btn_carga") ;
 
-document.getElementById('btn_conti').addEventListener("click", cargar);
+document.getElementById("btn_conti").addEventListener("click", cargar);
 
 function cargar() {
+    
     carga.style.display = "block";
-}
+};
 
-const carga_ds = document.getElementById('load_a') ;
 
-document.getElementById('btn_btn_final').addEventListener("click", cargadd);
+const carga_ds = document.getElementById("load_a") ;
 
-function cargadd() {
+document.getElementById("btn_final").addEventListener("click", cargad);
+
+function cargad() {
     carga_ds.style.opacity = "1";
     carga_ds.style.visibility = "visible";
 }
