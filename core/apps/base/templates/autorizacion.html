@@ -40,7 +40,7 @@
                     {{ form.as_table }}
                 {% endfor %}
         {% else %}
-            <input required type="number" placeholder="Digite el número.." class="inp_vist3"
+            <input required type="number" placeholder="Ingresa el número.." class="inp_vist3"
                name="autorizacionServicio-num_autorizacion"
                min="100000" id="id_autorizacionServicio-num_autorizacion">
         {% endif %}
@@ -60,15 +60,14 @@
             <a class="vist3" href="">08000 111 446</a>
         </div>
 
-        <script src="{% static 'js/carga.js' %}"></script>
-        <button class="btn" id="btn_conti" type="submit">
-            <p>Continuar</p>
+        <button class="btn" id="btn_conti"  type="submit">
+            Continuar
             <div id="btn_carga" class="conten_carga">
                 <div class="carga"></div>
             </div>
         </button>
-        
 
     </form>
+    <script src="{% static 'js/carga.js' %}"></script>
 </section>
 {% endblock %}
