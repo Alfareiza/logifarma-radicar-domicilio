@@ -241,6 +241,7 @@ main section.vista3 div.tet a.vist3 {left: 43%;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
     z-index: 99;
+    display: none;
     border: solid #3333;
     border-radius: 12px;
 }
@@ -496,7 +497,29 @@ main section.vista9 p.vist9_t {position: relative;
     font-weight: 600;
     margin: 0% auto;}
 
+.load{position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(0, 0, 0, 0.5);
+    transition: all 500ms ease;
+    z-index: 99;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+}
 
+.cargac {width: 95%;
+    height: 70%;
+    margin: auto;
+    box-shadow: 1px 7px 25px rgb(0 0 0 / 1%);
+    transition: all 500ms ease;
+    position: relative;
+    transform: translateY(0%);
+}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -538,13 +561,13 @@ main section.vista10 p.vist10 {position: relative;
 
 h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
     font-family: 'Montserrat', sans-serif; }
-        
+
         header, main, footer, aside, nav, figure, figcaption, article { display: block;}
-        
+
         h1, h2, h3, h4, h5, h6, p {margin: 0; }
-        
+
         body { margin: 0 !important;}
-    
+
     html {scroll-behavior: smooth;}
 
 
@@ -557,7 +580,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     background: #ffff;
     top: 2%;
     z-index: 9;}
-    
+
 .b_atras {
     position: relative;
     font-size: 2.5em;
@@ -664,7 +687,7 @@ main section.vista2 nav.vist2 div.img img.vist2 { position: absolute;
     padding: 0% 0% 0% 5%; width: 20%;}
 
 main section.vista2 nav.vist2 div.img p.vist2 {padding: 0px 2% 0 29%; font-size: 1.8em;}
- 
+
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -777,6 +800,7 @@ main section.vista3 div.tet a.vist3 {left: 41%;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
     z-index: 99;
+    display: none;
     border: solid #3333;
     border-radius: 12px;
 }
@@ -787,7 +811,7 @@ main section.vista3 div.tet a.vist3 {left: 41%;
     height: 24px;
     width: 24px;
     border-radius: 100%;
-    
+
     position: absolute;
     top: 0;
     left: 0;
@@ -823,10 +847,10 @@ main section.vista4 p.vist4_1 { width: 63%;
     color: red;}
 
 
-.video {position: relative; 
-    width: 95%; 
+.video {position: relative;
+    width: 95%;
     height: 39vh;
-    padding: 0 2% 0 2.5%;} 
+    padding: 0 2% 0 2.5%;}
 
 .img_fot {position: relative;
     width: 93%;
@@ -913,7 +937,7 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1em;
     font-weight: 600;
     margin: 0px auto 0% auto}
-    
+
 .btn_muni {position: fixed;
     padding: 0.5% 5%;
     margin: 0 auto;
@@ -1036,7 +1060,29 @@ main section.vista9 p.vist9_t {position: relative;
     font-weight: 600;
     margin: 0% auto;}
 
+.load{position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(0, 0, 0, 0.5);
+    transition: all 500ms ease;
+    z-index: 99;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+}
 
+.cargac {width: 95%;
+    height: 70%;
+    margin: auto;
+    box-shadow: 1px 7px 25px rgb(0 0 0 / 1%);
+    transition: all 500ms ease;
+    position: relative;
+    transform: translateY(0%);
+}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -1079,13 +1125,13 @@ main section.vista10 p.vist10 {position: relative;
 
 h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
     font-family: 'Montserrat', sans-serif; }
-        
+
         header, main, footer, aside, nav, figure, figcaption, article { display: block;}
-        
+
         h1, h2, h3, h4, h5, h6, p {margin: 0; }
-        
+
         body { margin: 0 !important;}
-    
+
     html {scroll-behavior: smooth;}
 
 
@@ -1098,7 +1144,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     background: #ffff;
     top: 3%;
     z-index: 9;}
-    
+
 .b_atras {
     position: relative;
     font-size: 1.4em;
@@ -1206,7 +1252,7 @@ main section.vista2 nav.vist2 div.img img.vist2 { position: absolute;
 
 main section.vista2 nav.vist2 div.img p.vist2 {padding: 0px 2% 0 29%;
     font-size: 0.9em;}
- 
+
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -1301,7 +1347,7 @@ main section.vista3 div.vist3_img {position: relative;
 main section#vista3 div.vist3_img img.vist3 {width: 90%;
     padding: 5%}
 
-main section.vista3 p#vist3_t2 {padding: 6% 6% 1% 6%;
+main section.vista3 p.vist3_t2 {padding: 6% 6% 1% 6%;
     font-size: 1em;
     text-align: center;}
 
@@ -1331,6 +1377,7 @@ main section.vista3 button.btn_vist3 {position: absolute;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
     z-index: 99;
+    display: none;
     border: solid #3333;
     border-radius: 12px;
 }
@@ -1341,7 +1388,7 @@ main section.vista3 button.btn_vist3 {position: absolute;
     height: 24px;
     width: 24px;
     border-radius: 100%;
-    
+
     position: absolute;
     top: 0;
     left: 0;
@@ -1357,6 +1404,7 @@ main section.vista3 button.btn_vist3 {position: absolute;
     0% { transform: rotate(0deg);}
     100% { transform: rotate(360deg);}
 }
+
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -1377,11 +1425,11 @@ main section.vista4 p.vist4_1 { width: 80%;
     color: red;}
 
 
-#video {position: relative; 
-    width: 95%; 
+#video {position: relative;
+    width: 95%;
     height: 39vh;
     padding: 0 2% 0 2.5%;
-    margin: 0;} 
+    margin: 0;}
 
 .img_fot {position: relative;
     width: 93%;
@@ -1499,7 +1547,7 @@ main section.vista6 {width: 100%; height: 90vh; position: relative; margin: 0 au
     font-size: 0.7em;
     font-weight: 600;
     margin: 0px auto 5% auto;}
-    
+
 .btn_muni {position: fixed;
     padding: 3% 14%;
     margin: 0 auto;
@@ -1633,7 +1681,29 @@ main section.vista9 p.vist9_t {position: relative;
     font-weight: 600;
     margin: 0% auto;}
 
+.load{position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(0, 0, 0, 0.5);
+    transition: all 500ms ease;
+    z-index: 99;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+}
 
+.cargac {width: 95%;
+    height: 70%;
+    margin: auto;
+    box-shadow: 1px 7px 25px rgb(0 0 0 / 1%);
+    transition: all 500ms ease;
+    position: relative;
+    transform: translateY(0%);
+}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -1659,7 +1729,7 @@ main section.vista10 p.vist10 {position: relative;
 
 }
 
-/* 
+/*
 .
 .
 .
@@ -1678,13 +1748,13 @@ main section.vista10 p.vist10 {position: relative;
 
 h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
     font-family: 'Montserrat', sans-serif; }
-        
+
         header, main, footer, aside, nav, figure, figcaption, article { display: block;}
-        
+
         h1, h2, h3, h4, h5, h6, p {margin: 0; }
-        
+
         body { margin: 0 !important;}
-    
+
     html {scroll-behavior: smooth;}
 
 
@@ -1697,7 +1767,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     background: #ffff;
     top: 2%;
     z-index: 9;}
-    
+
 .b_atras {
     position: relative;
     font-size: 1.4em;
@@ -1803,7 +1873,7 @@ main section#vista2 nav#vist2 div#img img#vist2 { position: absolute;
     padding: 0% 0% 0% 5%; width: 20%;}
 
 main section#vista2 nav#vist2 div#img p#vist2 {padding: 0px 2% 0 29%;}
- 
+
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -1925,6 +1995,7 @@ main section.vista3 button.btn_vist3 {position: absolute;
     -o-ani-webkit-animation: all 1s ease;
     animation: all 1s ease;
     z-index: 99;
+    display: none;
     border: solid #3333;
     border-radius: 12px;
 }
@@ -1935,7 +2006,7 @@ main section.vista3 button.btn_vist3 {position: absolute;
     height: 24px;
     width: 24px;
     border-radius: 100%;
-    
+
     position: absolute;
     top: 0;
     left: 0;
@@ -1956,7 +2027,7 @@ main section.vista4 button.btn_4 {margin: 2% 0% 0% 3%;
     position: relative;
     border: 0px;
     background: #ffff;}
-    
+
 main section.vista4 button.btn_4 p.btn {position: relative;
     font-size: 1.2em;
     color: #468bc4;}
@@ -1989,10 +2060,10 @@ main section.vista4 p.vist4_1 { width: 63%;
     color: red;}
 
 
-.video {position: relative; 
-    width: 95%; 
+.video {position: relative;
+    width: 95%;
     height: 39vh;
-    padding: 0 2% 0 2.5%;} 
+    padding: 0 2% 0 2.5%;}
 
 .img_fot {position: relative;
     width: 93%;
@@ -2074,7 +2145,7 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 0.7em;
     font-weight: 600;
     margin: 0px auto 9% auto;}
-    
+
 .btn_muni {position: fixed;
     padding: 3% 14%;
     margin: 0 auto;
@@ -2202,7 +2273,29 @@ main section.vista9 p.vist9_t {position: relative;
     font-weight: 600;
     margin: 0% auto;}
 
+.load{position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(0, 0, 0, 0.5);
+    transition: all 500ms ease;
+    z-index: 99;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+}
 
+.cargac {width: 95%;
+    height: 70%;
+    margin: auto;
+    box-shadow: 1px 7px 25px rgb(0 0 0 / 1%);
+    transition: all 500ms ease;
+    position: relative;
+    transform: translateY(0%);
+}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
