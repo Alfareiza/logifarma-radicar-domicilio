@@ -10,6 +10,23 @@
         {{ wizard.management_form }}
         {% include "base/logo.html" %}
 
+        {% if form.errors %}
+            <script src="{% static 'js/modal.js' %}"></script>
+            <div class="modal" id="modal_vist">
+                <div class="conten" id="cont_mod">
+                    <header></header>
+                    <div class="modal_btn">
+                        <button type="button" id="btn_modal" class="close">X</button>
+                    </div>
+                    <div class="contenido">
+                        <p class="texto">
+                           {{ form.errors.celular.as_text|cut:"* "|linebreaksbr }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
         <h1 class="ti_vist9">¿Cual es su número de celular?</h1>
 
         {% if wizard.form.forms %}
