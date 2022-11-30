@@ -2,6 +2,8 @@ from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 from django.shortcuts import render
 from django.template.loader import get_template
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
 from formtools.wizard.views import SessionWizardView
 
 from core import settings
@@ -38,6 +40,16 @@ class ContactWizard(SessionWizardView):
     # template_name = 'start.html'
     form_list = FORMS
     file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
+
+    csrf_protected_method = method_decorator(csrf_protect)
+
+    @csrf_protected_method
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @csrf_protected_method
+    def post(self, *args, **kwargs):
+        return super().post(*args, **kwargs)
 
     def get_template_names(self):
         return [TEMPLATES[self.steps.current]]
