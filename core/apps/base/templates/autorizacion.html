@@ -5,7 +5,7 @@
 
 {% block content %}
 <section class="vista3">
-    <form action="" method="post">
+    <form id="form-id" action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
 
@@ -60,14 +60,15 @@
             <a class="vist3" href="tel:+60108000 111 446">08000 111 446</a>
         </div>
 
-        <button class="btn" id="btn_conti"  type="submit">
+        <button class="btn" id="btn_conti" type="submit">
             Continuar
             <div id="btn_carga" class="conten_carga">
                 <div class="carga"></div>
             </div>
         </button>
+        <script src="{% static 'js/carga.js' %}"></script>
 
     </form>
-    <script src="{% static 'js/carga.js' %}"></script>
+
 </section>
 {% endblock %}
