@@ -131,3 +131,5 @@ dmypy.json
 # Django Stuff
 staticfiles/
 stored.pickle
+
+temp/
