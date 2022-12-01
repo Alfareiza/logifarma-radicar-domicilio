@@ -1,3 +1,4 @@
+
 h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
     font-family: 'Montserrat', sans-serif; }
         
@@ -39,8 +40,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 
 .elec {position: relative;
     width: 80%;
-    height: 10vh;
-    margin: 3% auto 0 auto;}
+    height: 13vh;
+    margin: 0% auto 0 auto;}
 
 .label_vist {position: relative;
     font-size: 1.5em;
@@ -50,15 +51,16 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     padding: 1%;
     color: #0572ce;
     border-color: #0572ce;
-    font-size: 1.5em;}
+    font-size: 1.5em;
+    width: 100%;}
 
 .btn {position: absolute;
-    padding: 0% 3%;
+    padding: 0.6% 3%;
     margin: 0 auto;
     font-size: 2em;
     border-radius: 12px;
     left: 42%;
-    top: 90%;
+    top: 88%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -104,7 +106,7 @@ main section.vista2 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 main section.vista2 div.vist2_text { position: relative;
     margin: 0 auto;
-    width: 100%;
+    width: 82%;
     height: 17vh;
     font-weight: 500;}
 
@@ -124,9 +126,9 @@ main section.vista2 nav.vist2 div.img { width: 100%;
     height: 15vh;}
 
 main section.vista2 nav.vist2 div.img img.vist2 { position: absolute;
-    padding: 0% 0% 0% 16%; width: 6%; height: 17%;}
+    padding: 0% 0% 0% 20%; width: 5%; height: 16%;}
 
-main section.vista2 nav.vist2 div.img p.vist2 {padding: 0px 2% 0 29%; font-size: 1.2em; height: 10vh;}
+main section.vista2 nav.vist2 div.img p.vist2 {padding: 0px 2% 0 28%; font-size: 1.2em; height: 10vh;}
  
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
@@ -201,7 +203,7 @@ main section.vista3 p.vist3 { font-size: 1.1em; }
 
 main section.vista3 h1.vist3 { font-size: 1.5em; font-weight: 500;}
 
-main section.vista3 input.inp_vist3 {margin: 2% 28%;
+main section.vista3 input.inp_vist3 {margin: 1% 28%;
     padding: 1% 0;
     border: 0px;
     border-bottom: solid 1px;
@@ -210,22 +212,32 @@ main section.vista3 input.inp_vist3 {margin: 2% 28%;
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
-main section.vista3 p.vist3_t { position: relative;
+main section.vista3 p.vist3_t {position: relative;
     text-align: center;
-    margin: 1%;
-    font-size: 1em;}
+    margin: 5% 0px 2% 5%;
+    font-size: 1em;
+    width: 44%;}
 
-main section.vista3 div.vist3_img {position: relative;
-    width: 60%;
-    height: 75vh;
-    margin: 0 auto;}
+main section.vista3 div.vist3_img {position: absolute;
+    width: 40%;
+    top: 35%;
+    right: 7%;
+    height: 50vh;
+    margin: 0 auto;
+    filter: drop-shadow(0px 1px 2px black);}
 
-main section.vista3 div.vist3_img img.vist3 {width: 90%;
-    padding: 5%}
+main section.vista3 div.vist3_img img.vist3 {width: 100%;
+height: 100%;
+padding: 0%;}
 
-main section.vista3 p.vist3_t2 {padding: 1% 6% 1% 6%; font-size: 1em; text-align: center;}
+main section.vista3 p.vist3_t2 {position: relative;
+    text-align: center;
+    font-size: 1em;
+    width: 32%;
+    margin: 4% 0px 2% 11%}
 
-main section.vista3 div.tet {margin: 2% 0 5% 0px; }
+main section.vista3 div.tet {margin: 4% 0 4% 58px;
+    width: 44%; }
 
 main section.vista3 div.tet a.vist3 {left: 43%;
     position: relative; font-size: 1.7em;}
@@ -276,10 +288,6 @@ main section.vista4 h1.vist4 {width: 75%;
     font-size: 1.4em;
     font-weight: 400;}
 
-main section.vista4 p.vist4 {    width: 75%;
-    text-align: center;
-    margin: 2% auto;
-    font-size: 1em}
 
 main section.vista4 p.vist4_1 { width: 44%;
     text-align: center;
@@ -294,11 +302,53 @@ main section.vista4 p.vist4_1 { width: 44%;
     padding: 0 1% 0 1%;
     margin: 0px 31% 3px 31%} 
 
-.img_fot {position: relative;
-    width: 45%;
-    height: 57vh;
-    padding: 0 27% 0 28%;}
+.conten_foto {position: relative;
+    width: 43%;
+    height: 50vh;
+    padding: 0%;
+    margin: 0 auto;
+    overflow: hidden;}
 
+.img_fot {position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0 0% 0 0%;
+    object-fit: contain;
+    overflow: hidden;
+    margin: 0 auto;}
+
+.btn_archi {position: absolute;
+    top: 90%;
+    left: 43%;
+    width: 14%;
+    height: 7%;
+    border: solid 2px #468bc4;
+    border-radius: 12px;
+    color: #468bc4;
+    display: block;
+    font-size: 1.5em;}
+
+.btn_archi::before {content: 'Adjuntar foto';
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    position: relative;
+    top: 26%;}
+
+.arch_btn {opacity: 0;
+    width: 200px;
+    height: 32px;}
+
+.btn_f {position: absolute;
+    padding: 3% 14%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 25%;
+    top: 81%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
 
 .btn1 {position: relative;
     padding: 0.5% 1%;
@@ -312,15 +362,15 @@ main section.vista4 p.vist4_1 { width: 44%;
     color: #468bc4;}
 
 .btn2 {position: absolute;
-    padding: 0.5% 3%;
+    padding: 1.1% 4.6%;
     margin: 0 auto;
     font-size: 1.3em;
     border-radius: 12px;
-    left: 55%;
-    top: 98.3%;
+    left: 43%;
+    top: 82%;
     background: #ffffff;
     border-color: #468bc4;
-    color: #468bc4}
+    color: #468bc4;}
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
 main section.vista5 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
@@ -393,7 +443,7 @@ main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 a
 .vist7 {width: 81%;
     height: 10vh;
     text-align: center;
-    margin: 5% auto;
+    margin: 4% auto;
     font-size: 1.4em;
     font-weight: 300;}
 
@@ -449,7 +499,7 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     width: 64%;
     height: 10vh;
     font-size: 1em;
-    font-weight: 600;
+    font-weight: 400;
     margin: 3% auto 0;
     text-align: center;}
 
@@ -457,7 +507,7 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section#vista9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
 .ti_vist9 {width: 81%;
@@ -479,7 +529,7 @@ main section#vista9 {width: 100%; height: 100vh; position: relative; margin: 0 a
     width: 64%;
     height: 10vh;
     font-size: 1em;
-    font-weight: 600;
+    font-weight: 400;
     margin: 3% auto 0;
     text-align: center;}
 
@@ -494,7 +544,7 @@ main section.vista9 p.vist9_t {position: relative;
     width: 84%;
     text-align: center;
     font-size: 0.8em;
-    font-weight: 600;
+    font-weight: 400;
     margin: 0% auto;}
 
 .load{position: fixed;
@@ -541,6 +591,605 @@ main section.vista10 p.vist10 {position: relative;
     font-weight: 200;
     margin: 0% auto;}
 
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+@media only screen and (max-width: 1899px){
+
+
+h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
+    font-family: 'Montserrat', sans-serif; }
+        
+        header, main, footer, aside, nav, figure, figcaption, article { display: block;}
+        
+        h1, h2, h3, h4, h5, h6, p {margin: 0; }
+        
+        body { margin: 0 !important;}
+    
+    html {scroll-behavior: smooth;}
+
+
+main { width: 100%; height: auto; position: relative; margin: 0 auto; float: none;}
+
+
+.atras {margin: 0% 0% 0% 2%;
+    position: absolute;
+    border: 0px;
+    background: #ffff;
+    top: 2%;
+    z-index: 9;}
+    
+.b_atras {
+    position: relative;
+    font-size: 1.5em;
+    color: #468bc4;
+}
+
+#vist{position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+    height: 13vh;}
+
+.img1 {position: relative;
+    margin: 0% auto;
+    width: 17%;
+    padding: 1% 41.5%;}
+
+.elec {position: relative;
+    width: 80%;
+    height: 13vh;
+    margin: 0% auto 0 auto;}
+
+.label_vist {position: relative;
+    font-size: 1.5em;
+    color: #333;}
+
+.select_opt {position: relative;
+    padding: 1%;
+    color: #0572ce;
+    border-color: #0572ce;
+    font-size: 1.5em;
+    width: 100%;}
+
+.btn {position: absolute;
+    padding: 0.6% 3%;
+    margin: 0 auto;
+    font-size: 2em;
+    border-radius: 12px;
+    left: 42%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+main section.vista1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+main section.vista1 div.vist1 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+    height: 14vh;}
+
+main section.vista1 div.vist1 img.img1 { position: relative;
+    margin: 0% auto;
+    width: 17%;
+    padding: 1% 41.5%;}
+
+main section.vista1 div.vist1_1 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+    height: 20vh;}
+
+main section.vista1 div.vist1_1 img.img2 {position: relative;
+    margin: 0% auto;
+    width: 19%;
+    padding: 2% 40.5%;}
+
+main section.vista1 article.vist1 { position: relative;
+    margin: 0px auto 0%;
+    padding: 8% 10% 4% 11%;}
+
+main section.vista1 article.vist1 p.vist1 {position: relative;
+    font-weight: 500;
+    font-size: 1.3em;
+    text-align: center;}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section.vista2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section.vista2 div.vist2_text { position: relative;
+    margin: 0 auto;
+    width: 82%;
+    height: 17vh;
+    font-weight: 500;}
+
+main section.vista2 div.ist2_text h1 { font-size: 1.5em;
+    padding: 0 0 0 2%;}
+
+main section.vista2 div.vist2_text p {font-size: 1em;
+    padding: 1% 0 0 4%;}
+
+main section.vista2 nav.vist2 { width: 100%;
+    height: auto;
+    position: relative;
+    margin: 1vh 0% 0% 0%;
+    float: none;}
+
+main section.vista2 nav.vist2 div.img { width: 100%;
+    height: 15vh;}
+
+main section.vista2 nav.vist2 div.img img.vist2 { position: absolute;
+    padding: 0% 0% 0% 20%; width: 5%; height: 16%;}
+
+main section.vista2 nav.vist2 div.img p.vist2 {padding: 0px 2% 0 28%; font-size: 1.2em; height: 10vh;}
+ 
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+.modal {position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(0, 0, 0, 0.5);
+    transition: all 500ms ease;
+    z-index: 99;
+width: 100%;
+height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+opacity: 1;
+visibility: visible;
+}
+
+.conten {width: 50%;
+    height: 40%;
+    margin: auto;
+    background: #fff;
+    box-shadow: 1px 7px 25px rgb(0, 0, 0, 0.6);
+    transition: all 500ms ease;
+    position: relative;
+    border: solid 4px #3367c7;
+    transform: translateY(0%);
+}
+
+.conten header {padding: 4px;
+    background: #3367c7;
+    color: #fff;
+}
+
+.modal_btn {position: relative;
+    margin: 0 auto;
+    width: 8.5%;
+    height: 5vh;
+    top: -31px;}
+
+.conten button {
+    position: relative;
+    top: 0;
+    padding: 13px 18px;
+    color: #fff;
+    font-size: 1.5em;
+    cursor: pointer;
+    border: solid 1px #2a57a9;
+    border-radius: 26px;
+    background: #3367c7;
+}
+
+.texto {position: relative;
+    margin: 3%;
+    font-size: 1.3em;
+    text-align: center;
+}
+
+
+@keyframes girar {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
+
+main section.vista3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+main section.vista3 div.vist3_text {position: relative;
+    padding: 0% 0% 0% 9%;}
+
+main section.vista3 p.vist3 { font-size: 1.1em; }
+
+main section.vista3 h1.vist3 { font-size: 1.5em; font-weight: 500;}
+
+main section.vista3 input.inp_vist3 {margin: 1% 28%;
+    padding: 1% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 44%;}
+main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
+    box-shadow: 0 1px 0 0 #0572ce;}
+
+main section.vista3 p.vist3_t {position: relative;
+    text-align: center;
+    margin: 5% 0px 2% 5%;
+    font-size: 1em;
+    width: 44%;}
+
+main section.vista3 div.vist3_img {position: absolute;
+    width: 40%;
+    top: 35%;
+    right: 7%;
+    height: 50vh;
+    margin: 0 auto;
+    filter: drop-shadow(0px 1px 2px black);}
+
+main section.vista3 div.vist3_img img.vist3 {width: 100%;
+height: 100%;
+padding: 0%;}
+
+main section.vista3 p.vist3_t2 {position: relative;
+    text-align: center;
+    font-size: 1em;
+    width: 44%;
+    margin: 4% 0px 2% 5%}
+
+main section.vista3 div.tet {margin: 4% 0 4% 0px;
+    width: 44%; }
+
+main section.vista3 div.tet a.vist3 {left: 43%;
+    position: relative; font-size: 1.7em;}
+
+
+.conten_carga { background: #ffffff;
+    height: 100%;
+    width: 100%;
+    left: -1%;
+    top: -5%;
+    position: absolute;
+    -webkit-animation: all 1s ease;
+    -o-ani-webkit-animation: all 1s ease;
+    animation: all 1s ease;
+    z-index: 99;
+    display: none;
+    border: solid #3333;
+    border-radius: 12px;
+}
+
+.carga {border: solid 7px #ccc;
+    border-top-color: #f4266a;
+    border-top-style: groove;
+    height: 24px;
+    width: 24px;
+    border-radius: 100%;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: girar 1.5s linear infinite;
+    -o-animation: girar 1.5s linear infinite ;
+    animation: girar 1.5s linear infinite;
+}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section.vista4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section.vista4 h1.vist4 {width: 75%;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 1.4em;
+    font-weight: 400;}
+
+
+main section.vista4 p.vist4_1 { width: 44%;
+    text-align: center;
+    margin: 1% auto;
+    font-size: 1.3em;
+    color: red;}
+
+
+.video {position: relative;
+    width: 36%;
+    height: 55vh;
+    padding: 0 1% 0 1%;
+    margin: 0px 31% 3px 31%} 
+
+.conten_foto {position: relative;
+    width: 470px;
+    height: 300px;
+    padding: 0%;
+    margin: 0 auto;
+    overflow: hidden;}
+
+.img_fot {position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0 0% 0 0%;
+    object-fit: contain;
+    overflow: hidden;
+    margin: 0 auto;}
+
+.btn_archi {position: absolute;
+    top: 86%;
+    left: 43%;
+    width: 14%;
+    height: 7%;
+    border: solid 2px #468bc4;
+    border-radius: 12px;
+    color: #468bc4;
+    display: block;
+    font-size: 1.1em;}
+
+.btn_archi::before {content: 'Adjuntar foto';
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    position: relative;
+    top: 26%;}
+
+.arch_btn {opacity: 0;
+    width: 200px;
+    height: 32px;}
+
+.btn_f {position: absolute;
+    padding: 3% 14%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 25%;
+    top: 81%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+.btn1 {position: relative;
+    padding: 0.5% 1%;
+    margin: 0 auto;
+    font-size: 1.3em;
+    border-radius: 12px;
+    left: 32%;
+    top: 16px;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+.btn2 {position: absolute;
+    padding: 0.8% 3.5%;
+    margin: 0 auto;
+    font-size: 1.3em;
+    border-radius: 12px;
+    left: 43%;
+    top: 86%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section.vista5 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section.vista5 h1.vist5 {width: 81%;
+    height: 11vh;
+    text-align: center;
+    margin: 0% auto;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+main section.vista5 p.vist5 { width: 81%;
+    height: 10vh;
+    text-align: center;
+    margin: 0% auto;
+    font-size: 1em;
+    font-weight: 300;}
+
+main section.vista5 div.vist5_1 {position: relative;
+    margin: 0 auto;
+    width: 32%;
+    padding: 0;}
+
+
+main section.vista5 div.vist5_1 img.img3 { position: relative;
+    margin: 0% auto;
+    width: 74%;
+    padding: 3% 10%;}
+
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+.vist6 {width: 81%;
+    height: 11vh;
+    text-align: center;
+    margin: 3% auto 0;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+
+.p_vist6 {position: relative;
+    width: 93%;
+    height: 3vh;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: 600;
+    margin: 0px auto 0% auto}
+    
+.btn_muni {position: fixed;
+    padding: 0.5% 5%;
+    margin: 0 auto;
+    font-size: 1.5em;
+    border-radius: 12px;
+    left: 41%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+.vist7 {width: 81%;
+    height: 10vh;
+    text-align: center;
+    margin: 4% auto;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+main section.vista7 input.inp_vist7 {margin: 5% 14%;
+    padding: 3% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 70%;}
+
+
+option {
+  background-color: white;
+  padding: 4px;
+  color: rgb(107, 107, 197);
+  margin-bottom: 1px;
+   font-size: 1em;
+  cursor: pointer;
+}
+
+.btn_dir {position: fixed;
+    padding: 0.5% 5%;
+    margin: 0 auto;
+    font-size: 1.5em;
+    border-radius: 12px;
+    left: 41%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+
+main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+.vist8 {width: 81%;
+    height: 8vh;
+    text-align: center;
+    margin: 2% auto 0;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+.inp_vist8 {margin: 1% 30%;
+    padding: 1% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 40%;}
+
+
+.p_vist8 {position: relative;
+    width: 64%;
+    height: 10vh;
+    font-size: 1em;
+    font-weight: 400;
+    margin: 3% auto 0;
+    text-align: center;}
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+.ti_vist9 {width: 81%;
+    height: 8vh;
+    text-align: center;
+    margin: 2% auto 0;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+.inp_vist9 {margin: 1% 30%;
+    padding: 1% 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 40%;}
+
+
+.p_vist9 {position: relative;
+    width: 64%;
+    height: 10vh;
+    font-size: 1em;
+    font-weight: 400;
+    margin: 3% auto 0;
+    text-align: center;}
+
+.vist9_t {position: relative; width: 81%;
+    text-align: center;
+    margin: 3% auto 0%;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+
+main section.vista9 p.vist9_t {position: relative;
+    width: 84%;
+    text-align: center;
+    font-size: 0.8em;
+    font-weight: 400;
+    margin: 0% auto;}
+
+.load{position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(0, 0, 0, 0.5);
+    transition: all 500ms ease;
+    z-index: 99;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.cargac {width: 95%;
+    height: 70%;
+    margin: auto;
+    box-shadow: 1px 7px 25px rgb(0 0 0 / 1%);
+    transition: all 500ms ease;
+    position: relative;
+    transform: translateY(0%);
+}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+
+
+main section.vista10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section.vista10 h1.vist10 {width: 61%;
+    text-align: center;
+    margin: 7% auto 7%;
+    font-size: 1.4em;
+    font-weight: 600;}
+
+main section.vista10 p.vist10 {position: relative;
+    width: 65%;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: 200;
+    margin: 0% auto;}
+
+}
 
 /* .
 .
@@ -610,7 +1259,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     padding: 2.5%;
     color: #0572ce;
     border-color: #0572ce;
-    font-size: 2em;}
+    font-size: 2em;
+    width: 100%;}
 
 .btn {position: absolute;
     padding: 3% 14%;
@@ -773,20 +1423,30 @@ main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
 main section.vista3 p.vist3_t { position: relative;
     text-align: center;
     margin: 1%;
-    font-size: 1.2em;}
+    font-size: 1.2em;
+width: 100%;}
 
 main section.vista3 div.vist3_img {position: relative;
+    width: 80%;
+    height: 30vh;
+    top: 0;
+    right: 0;
+    margin: 6% auto 1%;
+    filter: drop-shadow(0px 1px 2px black);}
+
+main section.ist3 div.vist3_img img.vist3 {position: relative;
     width: 100%;
-    height: 30vh;}
+    height: 100%;}
 
-main section.ist3 div.vist3_img img.vist3 {width: 90%;
-    padding: 5%}
+main section.vista3 p.vist3_t2 {padding: 6% 6% 1% 6%;
+    font-size: 1.5em;
+    text-align: center;
+    width: 88%;
+    margin: 0;}
 
-main section.vista3 p.vist3_t2 {padding: 6% 6% 1% 6%; font-size: 1.5em; text-align: center;}
+main section.vist3 div.tet {margin: 2% 0 5% 0px; }
 
-main section#vist3 div.tet {margin: 2% 0 5% 0px; }
-
-main section.vista3 div.tet a.vist3 {left: 41%;
+main section.vista3 div.tet a.vist3 {left: 89%;
     position: relative; font-size: 1.7em;}
 
 
@@ -835,10 +1495,6 @@ main section.vista4 h1.vist4 {width: 75%;
     font-size: 2.4em;
     font-weight: 400;}
 
-main section.vista4 p.vist4 {    width: 75%;
-    text-align: center;
-    margin: 5% auto;
-    font-size: 1.6em}
 
 main section.vista4 p.vist4_1 { width: 63%;
     text-align: center;
@@ -852,11 +1508,53 @@ main section.vista4 p.vist4_1 { width: 63%;
     height: 39vh;
     padding: 0 2% 0 2.5%;}
 
-.img_fot {position: relative;
-    width: 93%;
-    height: 39vh;
-    padding: 0 2% 0 3%;}
+.conten_foto {position: relative;
+    width: 100%;
+    height: 420px;
+    padding: 0%;
+    margin: 0 auto;
+    overflow: hidden;}
 
+.img_fot {position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0 0% 0 0%;
+    object-fit: contain;
+    overflow: hidden;
+    margin: 0 auto;}
+
+.btn_archi {position: absolute;
+    top: 85%;
+    left: 32%;
+    width: 38%;
+    height: 7%;
+    border: solid 2px #468bc4;
+    border-radius: 12px;
+    color: #468bc4;
+    display: block;
+    font-size: 1.7em;}
+
+.btn_archi::before {content: 'Adjuntar foto';
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    position: relative;
+    top: 26%;}
+
+.arch_btn {opacity: 0;
+    width: 100%;
+    height: 100%;}
+
+.btn_f {position: absolute;
+    padding: 3% 14%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 25%;
+    top: 81%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
 
 .btn1 {position: absolute;
     padding: 3% 5%;
@@ -870,12 +1568,12 @@ main section.vista4 p.vist4_1 { width: 63%;
     color: #468bc4;}
 
 .btn2 {position: absolute;
-    padding: 3% 10%;
+    padding: 2.7% 11%;
     margin: 0 auto;
-    font-size: 2em;
+    font-size: 1.7em;
     border-radius: 12px;
-    left: 55%;
-    top: 88%;
+    left: 32%;
+    top: 85%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -938,12 +1636,12 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-weight: 600;
     margin: 0px auto 0% auto}
 
-.btn_muni {position: fixed;
-    padding: 0.5% 5%;
+.btn_muni {position: absolute;
+    padding: 3% 13%;
     margin: 0 auto;
-    font-size: 1.5em;
+    font-size: 2em;
     border-radius: 12px;
-    left: 41%;
+    left: 29%;
     top: 88%;
     background: #ffffff;
     border-color: #468bc4;
@@ -1011,9 +1709,9 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
 .p_vist8 {position: relative;
     width: 64%;
     height: 10vh;
-    text-align: left;
+    text-align: center;
     font-size: 1.3em;
-    font-weight: 600;
+    font-weight: 400;
     margin: 0 auto 0;}
 
 
@@ -1041,14 +1739,14 @@ main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 .p_vist9 {position: relative;
     width: 64%;
-    text-align: left;
+    text-align: center;
     font-size: 1.2em;
-    font-weight: 600;
+    font-weight: 400;
     margin: 0% auto;}
 
 .vist9_t {position: relative; width: 81%;
     text-align: center;
-    margin: 17% auto 0%;
+    margin: 7% auto 0%;
     font-size: 2.4em;
     font-weight: 300;}
 
@@ -1057,7 +1755,7 @@ main section.vista9 p.vist9_t {position: relative;
     width: 84%;
     text-align: center;
     font-size: 1.2em;
-    font-weight: 600;
+    font-weight: 400;
     margin: 0% auto;}
 
 .load{position: fixed;
@@ -1167,14 +1865,16 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 
 .label_vist {position: relative;
     font-size: 1.2em;
-    color: #333;}
+    color: #333;
+    text-align: center;
+    display: inherit;}
 
 .select_opt {position: relative;
     padding: 2.5%;
     color: #0572ce;
     border-color: #0572ce;
     font-size: 1em;
-    width: 190px;}
+    width: 100%;}
 
 .btn {position: absolute;
     padding: 3% 14%;
@@ -1245,13 +1945,13 @@ main section.vista2 nav.vist2 { width: 100%;
     float: none;}
 
 main section.vista2 nav.vist2 div.img { width: 100%;
-    height: 13vh;}
+    height: 14vh;}
 
 main section.vista2 nav.vist2 div.img img.vist2 { position: absolute;
-    padding: 0% 0% 0% 7%; width: 18%;}
+    padding: 0% 0% 0% 5%; width: 14%; height: 13%;}
 
-main section.vista2 nav.vist2 div.img p.vist2 {padding: 0px 2% 0 29%;
-    font-size: 0.9em;}
+main section.vista2 nav.vist2 div.img p.vist2 {padding: 0px 2% 0 22%;
+    font-size: 1em;}
 
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
@@ -1338,20 +2038,27 @@ main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
 main section.vista3 p.vist3_t { position: relative;
     text-align: center;
     margin: 1%;
-    font-size: 0.8em;}
+    font-size: 0.8em;
+width: 100%;}
 
 main section.vista3 div.vist3_img {position: relative;
-    width: 100%;
-    height: 30vh;}
+    width: 87%;
+    height: 31vh;
+    top: 0;
+    right: 0;
+    margin: 6% auto 1%;
+    filter: drop-shadow(0px 1px 2px black);}
 
 main section#vista3 div.vist3_img img.vist3 {width: 90%;
     padding: 5%}
 
 main section.vista3 p.vist3_t2 {padding: 6% 6% 1% 6%;
     font-size: 1em;
-    text-align: center;}
+    text-align: center;
+    width: 88%;
+    margin: 0;}
 
-main section.vista3 div.tet {margin: 2% 0 5% 0px; }
+main section.vista3 div.tet {margin: 2% 0 5% 0px; width: 100%;}
 
 main section.vista3 div.tet a.vist3 {left: 34%;
     position: relative; font-size: 1.3em;}
@@ -1425,34 +2132,44 @@ main section.vista4 p.vist4_1 { width: 80%;
     color: red;}
 
 
-#video {position: relative;
+.video {position: relative;
     width: 95%;
     height: 39vh;
     padding: 0 2% 0 2.5%;
     margin: 0;}
 
+.conten_foto {position: relative;
+    width: 100%;
+    height: 285px;
+    padding: 0%;
+    margin: 0 auto;
+    overflow: hidden;}
+
 .img_fot {position: relative;
-    width: 93%;
-    height: 39vh;
-    padding: 0 2% 0 3%;}
+    width: 100%;
+    height: 100%;
+    padding: 0 0% 0 0%;
+    object-fit: contain;
+    overflow: hidden;
+    margin: 0 auto;}
 
 .btn_archi {position: absolute;
-    top: 90%;
-    left: 25%;
-    width: 52%;
-    height: 7%;
+    top: 85%;
+    left: 28%;
+    width: 40%;
+    height: 7.5%;
     border: solid 2px #468bc4;
     border-radius: 12px;
+    display: block;
     color: #468bc4;
     font-size: 1.1em;}
 
 .btn_archi::before {content: 'Adjuntar foto';
     justify-content: center;
     align-items: center;
-    position: absolute;
     display: flex;
-    left: 25%;
-    top: 24%;}
+    position: relative;
+    top: 26%;}
 
 .arch_btn {opacity: 0;
     width: 200px;
@@ -1474,19 +2191,19 @@ main section.vista4 p.vist4_1 { width: 80%;
     margin: 0 auto;
     font-size: 1.1em;
     border-radius: 12px;
-    left: 3%;
+    left: 28%;
     top: 88%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
 
 .btn2 {position: absolute;
-    padding: 3% 10%;
+    padding: 3.5% 10%;
     margin: 0 auto;
     font-size: 1.1em;
     border-radius: 12px;
-    left: 53%;
-    top: 88%;
+    left: 28%;
+    top: 85%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -1548,13 +2265,13 @@ main section.vista6 {width: 100%; height: 90vh; position: relative; margin: 0 au
     font-weight: 600;
     margin: 0px auto 5% auto;}
 
-.btn_muni {position: fixed;
+.btn_muni {position: absolute;
     padding: 3% 14%;
     margin: 0 auto;
     font-size: 1.1em;
     border-radius: 12px;
     left: 25%;
-    top: 88%;
+    top: 90%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -1623,9 +2340,9 @@ main section.vista8 {width: 100%; height: 90vh; position: relative; margin: 0 au
 
 .p_vist8 {position: relative;
     width: 64%;
-    text-align: left;
+    text-align: center;
     font-size: 0.8em;
-    font-weight: 600;
+    font-weight: 400;
     margin: 0 auto;
     height: 6vh;}
 
@@ -1654,9 +2371,9 @@ main section.vista9 {width: 100%; height: 90vh; position: relative; margin: 0 au
 
 .p_vist9 {position: relative;
     width: 64%;
-    text-align: left;
+    text-align: center;
     font-size: 0.8em;
-    font-weight: 600;
+    font-weight: 400;
     margin: 0% auto;}
 
 .vist9_t {position: relative; width: 81%;
@@ -1678,7 +2395,7 @@ main section.vista9 p.vist9_t {position: relative;
     width: 84%;
     text-align: center;
     font-size: 0.8em;
-    font-weight: 600;
+    font-weight: 400;
     margin: 0% auto;}
 
 .load{position: fixed;
@@ -1803,7 +2520,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     margin: 0 auto;
     font-size: 1.1em;
     border-radius: 12px;
-    left: 25%;
+    left: 20%;
     top: 88%;
     background: #ffffff;
     border-color: #468bc4;
@@ -1848,31 +2565,32 @@ main section.vista1 article.vist1 p.vist1 {position: relative;
 main section.vista2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section#vista2 div#vist2_text { position: relative;
+main section.vista2 div.vist2_text { position: relative;
     margin: 0 auto;
     width: 100%;
     height: 15vh;
     font-weight: 500;}
 
-main section#vista2 div#vist2_text h1 { font-size: 1.5em;
+main section.vista2 div.vist2_text h1 { font-size: 1.5em;
     padding: 0 0 0 2%;}
 
-main section#vista2 div#vist2_text p {font-size: 1em;
+main section.vista2 div.vist2_text p {font-size: 1em;
     padding: 2% 0 0 4%;}
 
-main section#vista2 nav#vist2 { width: 100%;
+main section.vista2 nav#vist2 { width: 100%;
     height: auto;
     position: relative;
     margin: 1vh 0% 0% 0%;
     float: none;}
 
-main section#vista2 nav#vist2 div#img { width: 100%;
+main section.vista2 nav.vist2 div.img { width: 100%;
     height: 15vh;}
 
-main section#vista2 nav#vist2 div#img img#vist2 { position: absolute;
-    padding: 0% 0% 0% 5%; width: 20%;}
+main section.vista2 nav.vist2 div.img img.vist2 { position: absolute;
+    padding: 2% 0% 0% 5%; width: 14%; height: 9%;}
 
-main section#vista2 nav#vist2 div#img p#vist2 {padding: 0px 2% 0 29%;}
+main section.vista2 nav.vist2 div.img p.vist2 {padding: 0px 2% 0 26%;
+font-size: 0.8em;}
 
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
@@ -1958,20 +2676,30 @@ main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
 
 main section.vista3 p.vist3_t { position: relative;
     text-align: center;
-    margin: 1%;}
+    margin: 4% 0;
+    font-size: 0.8em;
+    width: 100%}
 
 main section.vista3 div.vist3_img {position: relative;
-    width: 100%;
-    height: 30vh;}
+    width: 90%;
+    height: 33vh;
+    top: 0;
+    right: 0;
+    margin: 6% auto 1%;
+    filter: drop-shadow(0px 1px 2px black)}
 
-main section.vista3 div.vist3_img img.vist3 {width: 90%;
-    padding: 5%}
+main section.vista3 div.vist3_img img.vist3 {width: 100%;
+    height: 100%;
+    padding: 0%}
 
-main section.vista3 p.vist3_t2 {padding: 6% 6% 1% 6%}
+main section.vista3 p.vist3_t2 {padding: 6% 6% 1% 6%; font-size: 1em;
+    text-align: center;
+    width: 88%;
+    margin: 0}
 
-main section.vista3 div.tet {margin: 2% 0 5% 0px; }
+main section.vista3 div.tet {margin: 2% 0 5% 0px; width: 100%; }
 
-main section.vista3 div.tet a.vist3 {left: 34%;
+main section.vista3 div.tet a.vist3 {left: 23%;
     position: relative; font-size: 1.3em;}
 
 main section.vista3 button.btn_vist3 {position: absolute;
@@ -2023,24 +2751,6 @@ main section.vista3 button.btn_vist3 {position: absolute;
 
 main section.vista4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-main section.vista4 button.btn_4 {margin: 2% 0% 0% 3%;
-    position: relative;
-    border: 0px;
-    background: #ffff;}
-
-main section.vista4 button.btn_4 p.btn {position: relative;
-    font-size: 1.2em;
-    color: #468bc4;}
-
-main section.vista4 div.vist4 {position: relative;
-    margin: 0 auto;
-    width: 100%;
-    padding: 0;}
-
-main section.vista4 div.vist4 img.img1 { position: relative;
-    margin: 0% auto;
-    width: 50%;
-    padding: 2% 25%;}
 
 main section.vista4 h1.vist4 {width: 75%;
     text-align: center;
@@ -2048,10 +2758,6 @@ main section.vista4 h1.vist4 {width: 75%;
     font-size: 1.4em;
     font-weight: 400;}
 
-main section.vista4 p.vist4 {    width: 75%;
-    text-align: center;
-    margin: 5% auto;
-    font-size: 0.9em}
 
 main section.vista4 p.vist4_1 { width: 63%;
     text-align: center;
@@ -2065,11 +2771,53 @@ main section.vista4 p.vist4_1 { width: 63%;
     height: 39vh;
     padding: 0 2% 0 2.5%;}
 
-.img_fot {position: relative;
-    width: 93%;
-    height: 39vh;
-    padding: 0 2% 0 3%;}
+.conten_foto {position: relative;
+    width: 100%;
+    height: 285px;
+    padding: 0%;
+    margin: 0 auto;
+    overflow: hidden;}
 
+.img_fot {position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0 0% 0 0%;
+    object-fit: contain;
+    overflow: hidden;
+    margin: 0 auto;}
+
+.btn_archi {position: absolute;
+    top: 85%;
+    left: 28%;
+    width: 40%;
+    height: 6%;
+    border: solid 2px #468bc4;
+    border-radius: 12px;
+    display: block;
+    color: #468bc4;
+    font-size: 1em;}
+
+.btn_archi::before {content: 'Adjuntar foto';
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    position: relative;
+    top: 26%;}
+
+.arch_btn {opacity: 0;
+    width: 100%;
+    height: 100%;}
+
+.btn_f {position: absolute;
+    padding: 3% 14%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 25%;
+    top: 81%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
 
 .btn1 {position: absolute;
     padding: 3% 5%;
@@ -2083,12 +2831,12 @@ main section.vista4 p.vist4_1 { width: 63%;
     color: #468bc4;}
 
 .btn2 {position: absolute;
-    padding: 3% 10%;
+    padding: 3.8% 7.5%;
     margin: 0 auto;
-    font-size: 1.1em;
+    font-size: 1em;
     border-radius: 12px;
-    left: 53%;
-    top: 88%;
+    left: 28%;
+    top: 85%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -2216,9 +2964,9 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 .p_vist8 {position: relative;
     width: 64%;
-    text-align: left;
+    text-align: center;
     font-size: 0.8em;
-    font-weight: 600;
+    font-weight: 400;
     margin: 0 auto;}
 
 
@@ -2244,11 +2992,11 @@ main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 a
     width: 70%;}
 
 
-#p_vist9 {position: relative;
+.p_vist9 {position: relative;
     width: 64%;
-    text-align: left;
+    text-align: center;
     font-size: 0.8em;
-    font-weight: 600;
+    font-weight: 400;
     margin: 0% auto;}
 
 .vist9_t {position: relative; width: 81%;
@@ -2270,7 +3018,7 @@ main section.vista9 p.vist9_t {position: relative;
     width: 84%;
     text-align: center;
     font-size: 0.8em;
-    font-weight: 600;
+    font-weight: 400;
     margin: 0% auto;}
 
 .load{position: fixed;

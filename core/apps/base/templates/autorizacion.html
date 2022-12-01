@@ -40,16 +40,16 @@
                     {{ form.as_table }}
                 {% endfor %}
         {% else %}
-            <input required type="number" placeholder="Ingresa el número.." class="inp_vist3"
+            <input required type="number" inputmode="numeric" placeholder="Ingresa el número.." class="inp_vist3"
                name="autorizacionServicio-num_autorizacion"
                min="100000" id="id_autorizacionServicio-num_autorizacion">
         {% endif %}
         <p class="vist3_t">
-            Validemos que la autorización este activa <br>
-            imagen de referencia
+            Validaremos que la autorización este activa <br>
+        
         </p>
         <div class="vist3_img">
-            <img class="vist3" src="{% static 'img/ImgAutorizacion.jpg' %}" alt="">
+            <img class="vist3" src="{% static 'img/img_autorizacion.gif' %}" alt="">
         </div>
 
         <p class="vist3_t2">
