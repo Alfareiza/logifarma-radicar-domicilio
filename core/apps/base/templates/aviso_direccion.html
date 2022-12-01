@@ -5,7 +5,7 @@
 
 {% block content %}
 <section class="vista5">
-     <form action="" method="post">
+     <form id="form-id" action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
         {% include "base/logo.html" %}
@@ -21,7 +21,7 @@
             <img class="img3" src="{% static 'img/Imagen1.png' %}" alt="">
         </div>
 
-        <button class="btn" type="submit">Entiendo</button>
+        <button class="btn" id="btn_conti" type="submit">Entiendo</button>
     </form>
 </section>
 {% endblock %}

@@ -5,7 +5,7 @@
 
 {% block content %}
 <section class="vista6">
-     <form action="" method="post">
+     <form id="form-id" action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
         {% include "base/logo.html" %}
@@ -24,7 +24,7 @@
                 {{ wizard.form }}
             </div>
         {% endif %}
-        <button class="btn_muni" type="submit">Continuar</button>
+        <button class="btn_muni" id="btn_conti" type="submit">Continuar</button>
     </form>
 </section>
 {% endblock %}

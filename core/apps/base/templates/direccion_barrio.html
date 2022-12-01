@@ -5,7 +5,7 @@
 
 {% block content %}
 <section class="vista7">
-     <form action="" method="post">
+     <form id="form-id" action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
 
@@ -35,7 +35,7 @@
                    placeholder="...">
             <p class="p_vist8">Digita la dirección donde enviaremos tu domicilio.</p>
         {% endif %}
-        <button class="btn_dir" type="submit">Continuar</button>
+        <button class="btn_dir" id="btn_conti" type="submit">Continuar</button>
     </form>
 </section>
 {% endblock %}

@@ -6,7 +6,7 @@
 {% block content %}
 
 <section class="vista4">
-     <form enctype="multipart/form-data" action="" method="post">
+     <form id="form-id" enctype="multipart/form-data" action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
         {% include "base/logo.html" %}
@@ -31,20 +31,6 @@
                            class="arch_btn" >
                 </div>
             </div>
-<!--                <script src="{% static 'js/capture.js' %}"></script>-->
-<!--                <video autoplay loop muted playsinline id="video" class="video">Video stream not available.</video>-->
-<!--                <canvas id="canvas" style="display: none;"></canvas>-->
-<!--                <img class="img_fot" id="photo" alt="your image" style="display: none;">-->
-               <!--<input type="hidden" name="contact_wizard-current_step" value="fotoFormulaMedica" id="id_contact_wizard-current_step">-->
-               <!--<label for="id_fotoFormulaMedica-src">Foto:</label>-->
-
-<!--                <div id='tomarfoto-btn' class="col" style="display: grid;">-->
-<!--                    <button class="btn_f btn-primary" type="button" >Tomar Foto</button>-->
-<!--                </div>-->
-
-<!--                <div id='tomarotrafoto-btn' class="col" style="display: none;" onClick="myFunction()">-->
-<!--                    <button class="btn1 btn-danger" type="button" >Tomar Otra Foto</button>-->
-<!--                </div>-->
 
                 <div id='continuar-btn' class="col" style="display: none;">
                     <input type="submit" class="btn2 btn-success" value="Continuar"/>
