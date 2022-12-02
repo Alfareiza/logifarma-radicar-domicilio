@@ -63,11 +63,12 @@ class AutorizacionServicio(forms.Form):
 
         if resp_mcar.get('autorizacion'):
             raise forms.ValidationError(f"Este domicilio se encuentra radicado en "
-                                        f"{resp_mcar.get('nombre_centro_factura')[:-5].strip()}")
+                                        f"{resp_mcar.get('nombre_centro_factura')[:-5].strip()}\n"
+                                        f"con el número de acta: {resp_mcar.get('ssc')}\n\n"
+                                        f"Para mayor información te puedes comunicar \n"
+                                        f"con nosotros al: 333 033 3124")
 
         resp_eps['NUMERO_AUTORIZACION'] = num_aut
-        resp_eps['CORREO_TEST'] = config('EMAIL_TEST', cast=Csv())
-
         return resp_eps
 
 

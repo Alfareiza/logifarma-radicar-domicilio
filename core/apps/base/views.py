@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 from django.shortcuts import render
@@ -9,7 +11,7 @@ from formtools.wizard.views import SessionWizardView
 from core import settings
 from core.apps.base.forms import *
 from core.apps.base.models import Barrio
-from core.apps.base.resources.tools import convert_bytes, del_folder
+from core.apps.base.resources.tools import convert_bytes, del_file
 from core.settings import logger, BASE_DIR
 
 FORMS = [
@@ -79,7 +81,7 @@ class ContactWizard(SessionWizardView):
                     }
                 >
         """
-        logger.info(self.get_form_step_data(form))
+        # logger.info(self.get_form_step_data(form))
         return self.get_form_step_data(form)
 
     def render_goto_step(self, *args, **kwargs):
@@ -131,8 +133,7 @@ class ContactWizard(SessionWizardView):
         """
         form_data = [form.cleaned_data for form in form_list]
 
-        # Crea y guarda imagen en settings.MEDIA_ROOT
-        self.contentfile_to_img(contentfile_obj=form_data[3]['src'])
+        self.foto_fmedica = form_data[3]['src']
 
         # Construye las variables que serán enviadas al template
         info_email = {
@@ -143,6 +144,7 @@ class ContactWizard(SessionWizardView):
         }
 
         logger.info('E-mail será enviado con la siguiente información : ')
+
         for log in info_email:
             logger.info(f'\t\t== {log} ==> {info_email[log]}')
 
@@ -152,8 +154,7 @@ class ContactWizard(SessionWizardView):
         self.send_mail(
             subject=f"{info_email['NUMERO_AUTORIZACION']} - Este es el "
                     "número de radicación de tu domicilio en Logifarma",
-            destinatary=info_email['CORREO_TEST'] + [info_email['email']],
-            # destinatary=info_email['email'],  # Producción
+            destinatary=[info_email['email']],
             html_content=body
         )
 
@@ -166,32 +167,59 @@ class ContactWizard(SessionWizardView):
         """
         email = EmailMessage(
             subject, html_content, from_email=settings.EMAIL_HOST_USER,
-            to=destinatary, bcc=['radicacion.domicilios@logifarma.co']
+            to=destinatary,
+            bcc=['radicacion.domicilios@logifarma.co'] + config('EMAIL_TEST', cast=Csv())
         )
         email.content_subtype = "html"
         try:
-            email.attach_file(self.foto_fmedica)
+            email.attach_file(self.foto_fmedica.file.file.name)
             email.send(fail_silently=False)
             logger.info(f'Correo enviado a {destinatary} con imagen '
-                        f'adjunta de {convert_bytes(self.foto_fmedica.stat().st_size)}')
+                        f'adjunta de {convert_bytes(self.foto_fmedica.DEFAULT_CHUNK_SIZE)}')
         except Exception as e:
             logger.error('Error al enviar el correo ', e)
             # Si hubo error se puede implementar el envío de otro
             # email avisando de este error.
         finally:
-            del_folder(settings.MEDIA_ROOT)
+            del_file(self.foto_fmedica.file.file.name)
 
-    def contentfile_to_img(self, contentfile_obj):
+    # def contentfile_to_img(self, contentfile_obj):
+    #     """
+    #     Convierte la imagem de ContentFile a una imagen como tal
+    #     y la guarda en la carpeta MEDIA_ROOT.
+    #     :param contentfile_obj: <ContentFile: Raw content>
+    #             type(contentfile_obj) -> django.core.files.base.ContentFile
+    #             contentfile_obj.__dict__ -> {'file': <_io.BytesIO at 0x7fd2750425e0>,
+    #                                          'name': 'formula_medica.png', 'size': 139049}
+    #     :return: None
+    #     """
+    #     foto_fmedica = ContactWizard.file_storage.save(
+    #         contentfile_obj.name, contentfile_obj.file
+    #     )
+    #     self.foto_fmedica = settings.MEDIA_ROOT / foto_fmedica
+
+    def render_done(self, form, **kwargs):
         """
-        Convierte la imagem de ContentFile a una imagen como tal
-        y la guarda en la carpeta MEDIA_ROOT.
-        :param contentfile_obj: <ContentFile: Raw content>
-                type(contentfile_obj) -> django.core.files.base.ContentFile
-                contentfile_obj.__dict__ -> {'file': <_io.BytesIO at 0x7fd2750425e0>,
-                                             'name': 'formula_medica.png', 'size': 139049}
-        :return: None
+        | Función sobrescrita y comentando la linea de self.storage.reset() |
+        This method gets called when all forms passed. The method should also
+        re-validate all steps to prevent manipulation. If any form fails to
+        validate, `render_revalidation_failure` should get called.
+        If everything is fine call `done`.
         """
-        foto_fmedica = ContactWizard.file_storage.save(
-            contentfile_obj.name, contentfile_obj.file
-        )
-        self.foto_fmedica = settings.MEDIA_ROOT / foto_fmedica
+        final_forms = OrderedDict()
+        # walk through the form list and try to validate the data again.
+        for form_key in self.get_form_list():
+            form_obj = self.get_form(
+                step=form_key,
+                data=self.storage.get_step_data(form_key),
+                files=self.storage.get_step_files(form_key)
+            )
+            if not form_obj.is_valid():
+                return self.render_revalidation_failure(form_key, form_obj, **kwargs)
+            final_forms[form_key] = form_obj
+
+        # render the done view and reset the wizard before returning the
+        # response. This is needed to prevent from rendering done with the
+        # same data twice.
+        # self.storage.reset()
+        return self.done(list(final_forms.values()), form_dict=final_forms, **kwargs)

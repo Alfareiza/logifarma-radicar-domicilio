@@ -1,5 +1,3 @@
-import shutil
-
 from core.settings import BASE_DIR, logger
 
 
@@ -14,7 +12,6 @@ def convert_bytes(size):
 def read_json(pathfile):
     """Read a json and return a dict"""
     import json
-    from pathlib import Path
     fp = BASE_DIR / f'core/apps/base/{pathfile}'
     with open(fp) as file:
         data = json.load(file)
@@ -22,14 +19,15 @@ def read_json(pathfile):
     return data
 
 
-def del_folder(MEDIA_ROOT):
+def del_file(filepath):
     """
-    Elimina la carpeta donde se guardó la imagen y
-    lo que en ella se encuentre.
-    :param MEDIA_ROOT: 'tmp_logifrm/formula_medica.png'
+    Elimina el archivo indicado.
+    :param filepath: 'tmp_logifrm/formula_medica.png'
     :return: None
     """
     try:
-        shutil.rmtree(MEDIA_ROOT)
+        import os
+        os.remove(filepath)
+        logger.info(f"Imagen ==> {filepath} <== eliminada")
     except FileNotFoundError as e:
-        logger.error('Error al borrar la carpeta: ', e)
+        logger.error('Error al borrar el archivo: ', e)
