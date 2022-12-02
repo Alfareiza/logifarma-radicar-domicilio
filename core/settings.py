@@ -62,7 +62,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'staticfiles'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -138,8 +138,8 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'tmp'
 
+STATICFILES_DIRS = [BASE_DIR / "build/static", BASE_DIR / "build"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
-# STATICFILES_DIRS = BASE_DIR / "static"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 logger = logging.getLogger('django')
