@@ -133,3 +133,10 @@ class DigitaCelular(forms.Form):
         if str(cel)[0] != "3" or len(str(cel)) != 10:
             raise forms.ValidationError("Número de celular incorrecto")
         return cel
+
+
+class DigitaCorreo(forms.Form):
+    """
+    Vista 9:
+    """
+    email = forms.EmailField(required=False)

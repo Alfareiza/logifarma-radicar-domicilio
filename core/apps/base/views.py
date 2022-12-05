@@ -22,7 +22,8 @@ FORMS = [
     ("avisoDireccion", AvisoDireccion),
     ("eligeMunicipio", EligeMunicipio),
     ("digitaDireccionBarrio", DireccionBarrio),
-    ("digitaCelular", DigitaCelular)
+    ("digitaCelular", DigitaCelular),
+    ("digitaCorreo", DigitaCorreo)
 ]
 
 TEMPLATES = {
@@ -33,7 +34,8 @@ TEMPLATES = {
     "avisoDireccion": "aviso_direccion.html",
     "eligeMunicipio": "elige_municipio.html",
     "digitaDireccionBarrio": "direccion_barrio.html",
-    "digitaCelular": "digita_celular.html"}
+    "digitaCelular": "digita_celular.html",
+    "digitaCorreo": "digita_correo.html"}
 
 htmly = get_template(BASE_DIR / "core/apps/base/templates/correo.html")
 
