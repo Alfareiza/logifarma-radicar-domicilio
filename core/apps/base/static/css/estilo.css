@@ -6,10 +6,20 @@ h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea,
         
         h1, h2, h3, h4, h5, h6, p {margin: 0; }
         
-        body { margin: 0 !important;}
+        body { margin: 0 !important;
+        background: #ffffff;}
     
     html {scroll-behavior: smooth;}
 
+@media (prefers-color-scheme: dark) {
+
+    body {
+        --color-bg: rgb(53,53,53);
+        --color-text: wheat;
+        
+        --color-bg: #DDDDDD;
+        --color-text: #EE6352;}
+    }
 
 main { width: 100%; height: auto; position: relative; margin: 0 auto; float: none;}
 
@@ -80,25 +90,52 @@ main section.vista1 div.vist1 img.img1 { position: relative;
 
 main section.vista1 div.vist1_1 {position: relative;
     margin: 0 auto;
-    width: 100%;
+    width: 10%;
     padding: 0;
-    height: 20vh;}
+    height: 17vh;}
 
 main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
-    width: 19%;
-    padding: 2% 40.5%;}
+    width: 100%;
+    height: 100%;
+    padding: 0%}
 
 main section.vista1 article.vist1 { position: relative;
     margin: 0px auto 0%;
-    padding: 8% 10% 4% 11%;}
+    padding: 6% 10% 4% 11%;}
 
 main section.vista1 article.vist1 p.vist1 {position: relative;
     font-weight: 500;
     font-size: 1.3em;
     text-align: center;}
 
+.cont-adv {position: relative;
+    width: 31%;
+    height: 5vh;
+    margin: 3% auto 0;}
 
+.cont-icon {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.adv-icon {position: relative;
+    width: 9%;
+    height: 100%;}
+
+.icon-img {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex-img {position: relative;
+    width: 100%;
+    height: 50%;
+    margin: auto 0 auto 2%;}
+
+.p-adv {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 1.2em}
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
 main section.vista2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
@@ -209,6 +246,12 @@ main section.vista3 input.inp_vist3 {margin: 1% 28%;
     border-bottom: solid 1px;
     font-size: 1em;
     width: 44%;}
+
+main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
+main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
@@ -224,7 +267,7 @@ main section.vista3 div.vist3_img {position: absolute;
     right: 7%;
     height: 50vh;
     margin: 0 auto;
-    filter: drop-shadow(0px 1px 2px black);}
+    filter: drop-shadow(0px 1px 2px #e4dddd);}
 
 main section.vista3 div.vist3_img img.vist3 {width: 100%;
 height: 100%;
@@ -525,6 +568,11 @@ main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1em;
     width: 40%;}
 
+.inp_vist9::-webkit-inner-spin-button,
+.inp_vist9::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 
 .p_vist9 {position: relative;
     width: 64%;
@@ -678,19 +726,50 @@ main section.vista1 div.vist1 img.img1 { position: relative;
     padding: 1% 41.5%;}
 
 main section.vista1 div.vist1_1 {position: relative;
-    margin: 0 auto;
-    width: 100%;
+    margin: 2% auto 0;
+    width: 10%;
     padding: 0;
     height: 20vh;}
 
 main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
-    width: 19%;
-    padding: 2% 40.5%;}
+    width: 100%;
+    height: 100%;
+    padding: 0;}
+
+
+.cont-adv {position: relative;
+    width: 45%;
+    height: 8vh;
+    margin: 0 auto;}
+
+.cont-icon {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.adv-icon {position: relative;
+    width: 9%;
+    height: 100%;}
+
+.icon-img {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex-img {position: relative;
+    width: 100%;
+    height: 50%;
+    margin: auto 0 auto 2%;}
+
+.p-adv {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 1.2em}
+
 
 main section.vista1 article.vist1 { position: relative;
     margin: 0px auto 0%;
-    padding: 8% 10% 4% 11%;}
+    padding: 6% 10% 4% 11%;}
 
 main section.vista1 article.vist1 p.vist1 {position: relative;
     font-weight: 500;
@@ -808,6 +887,13 @@ main section.vista3 input.inp_vist3 {margin: 1% 28%;
     border-bottom: solid 1px;
     font-size: 1em;
     width: 44%;}
+
+main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
+main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
+
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
@@ -823,7 +909,7 @@ main section.vista3 div.vist3_img {position: absolute;
     right: 7%;
     height: 50vh;
     margin: 0 auto;
-    filter: drop-shadow(0px 1px 2px black);}
+    filter: drop-shadow(0px 1px 2px #e4dddd);}
 
 main section.vista3 div.vist3_img img.vist3 {width: 100%;
 height: 100%;
@@ -1124,6 +1210,11 @@ main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1em;
     width: 40%;}
 
+.inp_vist9::-webkit-inner-spin-button,
+.inp_vist9::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 
 .p_vist9 {position: relative;
     width: 64%;
@@ -1289,18 +1380,47 @@ main section.vista1 div.vist1 img.img1 { position: relative;
     padding: 6% 25%;}
 
 main section.vista1 div.vist1_1 {position: relative;
-    margin: 0 auto;
-    width: 100%;
+    margin: 5% auto 0%;
+    width: 21%;
     padding: 0;
-    height: 20vh;}
+    height: 15vh;}
 
 main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
-    width: 50%;
-    padding: 5% 25%;}
+    width: 100%;
+    height: 100%;
+    padding: 0%;}
+
+.cont-adv {position: relative;
+    width: 81%;
+    height: 6vh;
+    margin: 0 auto;}
+
+.cont-icon {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.adv-icon {position: relative;
+    width: 10%;
+    height: 100%;}
+
+.icon-img {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex-img {position: relative;
+    width: 91%;
+    height: 39%;
+    margin: auto 0 auto 2%;}
+
+.p-adv {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 1.3em}
 
 main section.vista1 article.vist1 { position: relative;
-    margin: 0px auto 30%;
+    margin: 0px auto 0%;
     padding: 12% 10% 9% 11%;}
 
 main section.vista1 article.vist1 p.vist1 {position: relative;
@@ -1419,6 +1539,12 @@ main section.vista3 input.inp_vist3 {margin: 5% 14%;
     border-bottom: solid 1px;
     font-size: 1.9em;
     width: 70%;}
+
+main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
+main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
@@ -1434,7 +1560,7 @@ main section.vista3 div.vist3_img {position: relative;
     top: 0;
     right: 0;
     margin: 6% auto 1%;
-    filter: drop-shadow(0px 1px 2px black);}
+    filter: drop-shadow(0px 1px 2px #e4dddd);}
 
 main section.ist3 div.vist3_img img.vist3 {position: relative;
     width: 100%;
@@ -1739,6 +1865,11 @@ main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 2.2em;
     width: 70%;}
 
+.inp_vist9::-webkit-inner-spin-button,
+.inp_vist9::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 
 .p_vist9 {position: relative;
     width: 64%;
@@ -1904,15 +2035,16 @@ main section.vista1 div.vist1 img.img1 { position: relative;
     padding: 6% 25%;}
 
 main section.vista1 div.vist1_1 {position: relative;
-    margin: 0 auto;
-    width: 100%;
+    margin: 5% auto 0;
+    width: 27%;
     padding: 0;
-    height: 20vh;}
+    height: 14vh;}
 
 main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
-    width: 50%;
-    padding: 5% 25%;}
+    width: 100%;
+    height: 100%;
+    padding: 0%;}
 
 main section.vista1 article.vist1 { position: relative;
     margin: 0px auto 0%;
@@ -1923,6 +2055,34 @@ main section.vista1 article.vist1 p.vist1 {position: relative;
     font-size: 1.3em;
     text-align: center;}
 
+.cont-adv {position: relative;
+    width: 71%;
+    height: 6vh;
+    margin: 5% auto 0;}
+
+.cont-icon {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.adv-icon {position: relative;
+    width: 13%;
+    height: 85%;
+    margin: auto;}
+
+.icon-img {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex-img {position: relative;
+    width: 88%;
+    height: 90%;
+    margin: auto 0 auto 2%;}
+
+.p-adv {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 1em}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -2035,6 +2195,12 @@ main section.vista3 input.inp_vist3 {margin: 5% 14%;
     border-bottom: solid 1px;
     font-size: 1em;
     width: 70%;}
+
+main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
+main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
@@ -2050,7 +2216,7 @@ main section.vista3 div.vist3_img {position: relative;
     top: 0;
     right: 0;
     margin: 6% auto 1%;
-    filter: drop-shadow(0px 1px 2px black);}
+    filter: drop-shadow(0px 1px 2px #e4dddd);}
 
 main section#vista3 div.vist3_img img.vist3 {width: 90%;
     padding: 5%}
@@ -2372,6 +2538,11 @@ main section.vista9 {width: 100%; height: 90vh; position: relative; margin: 0 au
     font-size: 1em;
     width: 70%;}
 
+.inp_vist9::-webkit-inner-spin-button,
+.inp_vist9::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 
 .p_vist9 {position: relative;
     width: 64%;
@@ -2545,14 +2716,15 @@ main section.vista1 div.vist1 img.img1 { position: relative;
 
 main section.vista1 div.vist1_1 {position: relative;
     margin: 0 auto;
-    width: 100%;
+    width: 36%;
     padding: 0;
-    height: 20vh;}
+    height: 14vh}
 
-main section.vista1 div.vist1_1 img.img2 {position: relative;
+main section.vista1 div.vist1_1 img.img2 {    position: relative;
     margin: 0% auto;
-    width: 50%;
-    padding: 5% 25%;}
+    width: 100%;
+    height: 100%;
+    padding: 0%}
 
 main section.vista1 article.vist1 { position: relative;
     margin: 0px auto 0%;
@@ -2563,7 +2735,33 @@ main section.vista1 article.vist1 p.vist1 {position: relative;
     font-size: 1.3em;
     text-align: center;}
 
+.cont-adv {position: relative;
+    width: 83%;
+    height: 7vh;
+    margin: 4% auto 0;}
 
+.cont-icon {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.adv-icon {position: relative;
+    width: 13%;
+    height: 78%;}
+
+.icon-img {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex-img {position: relative;
+    width: 88%;
+    height: 90%;
+    margin: auto 0 auto 2%;}
+
+.p-adv {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 0.9em}
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
 main section.vista2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
@@ -2675,6 +2873,12 @@ main section.vista3 input.inp_vist3 {margin: 5% 14%;
     border-bottom: solid 1px;
     font-size: 1em;
     width: 70%;}
+
+main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
+main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
@@ -2690,7 +2894,7 @@ main section.vista3 div.vist3_img {position: relative;
     top: 0;
     right: 0;
     margin: 6% auto 1%;
-    filter: drop-shadow(0px 1px 2px black)}
+    filter: drop-shadow(0px 1px 2px #e4dddd)}
 
 main section.vista3 div.vist3_img img.vist3 {width: 100%;
     height: 100%;
@@ -2996,6 +3200,11 @@ main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1em;
     width: 70%;}
 
+.inp_vist9::-webkit-inner-spin-button,
+.inp_vist9::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 
 .p_vist9 {position: relative;
     width: 64%;
