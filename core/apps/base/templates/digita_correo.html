@@ -20,14 +20,12 @@
                     </div>
                     <div class="contenido">
                         <p class="texto">
-                           {{ form.errors.celular.as_text|cut:"* "|linebreaksbr }}
+                           {{ form.errors.correo.as_text|cut:"* "|linebreaksbr }}
                         </p>
                     </div>
                 </div>
             </div>
         {% endif %}
-
-        <h1 class="ti_vist9">¿Cual es su número de celular?</h1>
 
         {% if wizard.form.forms %}
             <!--NOTHING-->
@@ -36,10 +34,11 @@
                 {{ form.as_table }}
             {% endfor %}
         {% else %}
-            <input class="inp_vist9" type="number" inputmode="numeric" name="digitaCelular-celular" required=""
-                   id="id_digitaCelular-celular" placeholder="Ingresar el número..">
-            <p class="p_vist9">Te informaremos por este medio cuando el domicilio este en camino.</p>
+            <h1 class="vist9_t">¿Cual es tu Correo electrónico?</h1>
+            <input class="inp_vist9" type="email" name="digitaCorreo-email" id="id_digitaCorreo-email"
+                   placeholder="Ingresar el correo..">
 
+            <p class="vist9_t">(Este campo no es obligatorio).</p>
         {% endif %}
 
         <div class="load" id="load_a">
@@ -47,7 +46,7 @@
         </div>
 
 
-        <button class="btn" id="btn_final" type="submit">Continuar</button>
+        <button class="btn" id="btn_final" type="submit">Finalizar</button>
 
     </form>
 
