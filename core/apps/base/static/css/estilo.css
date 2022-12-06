@@ -1342,7 +1342,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 .elec {position: relative;
     width: 80%;
     height: 15vh;
-    margin: 8% auto 0 auto;}
+    margin: 5% auto 0 auto;}
 
 .label_vist {position: relative;
     font-size: 2.2em;
@@ -1823,12 +1823,12 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
 .vist8 {width: 81%;
     height: 10vh;
     text-align: center;
-    margin: 6% auto 0;
+    margin: 5% auto 0;
     font-size: 2.4em;
     font-weight: 300;}
 
-.inp_vist8 {margin: 5% 14%;
-    padding: 3% 0;
+.inp_vist8 {margin: 3% 15%;
+    padding: 2% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 2.5em;
@@ -1837,7 +1837,7 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 .p_vist8 {position: relative;
     width: 64%;
-    height: 10vh;
+    height: 6vh;
     text-align: center;
     font-size: 1.3em;
     font-weight: 400;
@@ -1853,7 +1853,7 @@ main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 a
 .ti_vist9 {position: relative;
     width: 81%;
     text-align: center;
-    margin: 6% auto;
+    margin: 6% auto 0;
     font-size: 2.4em;
     font-weight: 300;}
 
