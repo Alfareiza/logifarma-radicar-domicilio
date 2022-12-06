@@ -1,16 +1,15 @@
 
-const carga = document.getElementById("btn_carga") ;
-
 document.getElementById("btn_conti").addEventListener("click", cargar);
 
 function cargar() {
-
-    let campo = document.getElementById("id_autorizacionServicio-num_autorizacion");
-    if (campo < 8) {
-        carga.style.display = "none"; 
-    } else {
-        carga.style.display = "block";
-    }
+    let carga = document.getElementById("btn_carga") ;
+    let camp = document.getElementById("id_autorizacionServicio-num_autorizacion").value;
     
-};
+    if (camp > 100000) {
 
+        carga.style.display = "block";
+    }else{
+
+        carga.style.display = "none";
+    };
+};
