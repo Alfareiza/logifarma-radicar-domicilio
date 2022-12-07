@@ -130,7 +130,7 @@ class DigitaCelular(forms.Form):
     def clean_celular(self):
         cel = self.cleaned_data.get('celular')
         if str(cel)[0] != "3" or len(str(cel)) != 10:
-            raise forms.ValidationError("Número de celular incorrecto")
+            raise forms.ValidationError(f"Número de celular incorrecto:\n{cel}")
         return cel
 
 
