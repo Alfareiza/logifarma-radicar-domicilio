@@ -126,7 +126,6 @@ class DigitaCelular(forms.Form):
     Vista 8:
     """
     celular = forms.IntegerField()
-    email = forms.EmailField(required=False)
 
     def clean_celular(self):
         cel = self.cleaned_data.get('celular')
