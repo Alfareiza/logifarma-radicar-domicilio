@@ -64,7 +64,7 @@ class ContactWizard(SessionWizardView):
                 parse_agent(self.request.META.get('HTTP_USER_AGENT')),
                 # self.request.META.get('HTTP_ORIGIN'),
                 self.steps.current,
-        ))
+            ))
         return super().post(*args, **kwargs)
 
     def get_template_names(self):
@@ -162,14 +162,19 @@ class ContactWizard(SessionWizardView):
         logger.info('E-mail será enviado con la siguiente información : ')
 
         for log in info_email:
-            logger.info(f'\t== {log} ==> {info_email[log]}')
+            logger.info(f'== {log} ==> {info_email[log]}')
 
         body = htmly.render(info_email)
 
+        asunto = f"{info_email['NUMERO_AUTORIZACION']} - Este es el " \
+                 f"número de radicación de tu domicilio en Logifarma"
+
+        if info_email['NUMERO_AUTORIZACION'] == 99_999_999:
+            asunto = '[OMITIR] CORREO DE PRUEBA'
+
         # Envía e-mail
         self.send_mail(
-            subject=f"{info_email['NUMERO_AUTORIZACION']} - Este es el "
-                    "número de radicación de tu domicilio en Logifarma",
+            subject=asunto,
             destinatary=[info_email['email']],
             html_content=body
         )
@@ -182,9 +187,10 @@ class ContactWizard(SessionWizardView):
         :return: None
         """
         email = EmailMessage(
-            subject, html_content, from_email=settings.EMAIL_HOST_USER,
+            subject, html_content,
+            from_email=f"Radica Tu Domicilio <{settings.EMAIL_HOST_USER}>",
             to=destinatary,
-            bcc=['radicacion.domicilios@logifarma.co'] + config('EMAIL_TEST', cast=Csv())
+            bcc=config('EMAIL_BCC', cast=Csv())
         )
         email.content_subtype = "html"
         try:
