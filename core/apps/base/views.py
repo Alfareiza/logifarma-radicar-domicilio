@@ -11,7 +11,7 @@ from formtools.wizard.views import SessionWizardView
 from core import settings
 from core.apps.base.forms import *
 from core.apps.base.models import Barrio
-from core.apps.base.resources.tools import convert_bytes, del_file
+from core.apps.base.resources.tools import convert_bytes, del_file, parse_agent
 from core.settings import logger, BASE_DIR
 
 FORMS = [
@@ -49,10 +49,22 @@ class ContactWizard(SessionWizardView):
 
     @csrf_protected_method
     def get(self, request, *args, **kwargs):
+        logger.info(f"IP={self.request.META.get('REMOTE_ADDR')} "
+                    f"entró en vista={self.request.resolver_match.url_name}")
         return super().get(request, *args, **kwargs)
 
     @csrf_protected_method
     def post(self, *args, **kwargs):
+        method = self.request.method
+        logger.info(
+            "IP={} [{}.{}] agent={}  saliendo de={}; ".format(
+                # self.request.COOKIES.get('sessionid'),
+                self.request.META.get('REMOTE_ADDR'),
+                method, self.response_class.status_code,
+                parse_agent(self.request.META.get('HTTP_USER_AGENT')),
+                # self.request.META.get('HTTP_ORIGIN'),
+                self.steps.current,
+        ))
         return super().post(*args, **kwargs)
 
     def get_template_names(self):
@@ -83,7 +95,8 @@ class ContactWizard(SessionWizardView):
                     }
                 >
         """
-        # logger.info(self.get_form_step_data(form))
+        idx_view = list(self.form_list).index(self.steps.current)
+        logger.info(f"vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
         return self.get_form_step_data(form)
 
     def render_goto_step(self, *args, **kwargs):
@@ -142,13 +155,14 @@ class ContactWizard(SessionWizardView):
             **form_data[2]['num_autorizacion'],
             **form_data[5],  # Ciudad
             **form_data[6],  # Barrio y dirección
-            **form_data[7],  # Celular e e-mail
+            **form_data[7],  # Celular
+            **form_data[8],  # e-mail
         }
 
         logger.info('E-mail será enviado con la siguiente información : ')
 
         for log in info_email:
-            logger.info(f'\t\t== {log} ==> {info_email[log]}')
+            logger.info(f'\t== {log} ==> {info_email[log]}')
 
         body = htmly.render(info_email)
 
@@ -175,9 +189,10 @@ class ContactWizard(SessionWizardView):
         email.content_subtype = "html"
         try:
             email.attach_file(self.foto_fmedica.file.file.name)
-            email.send(fail_silently=False)
+            r = email.send(fail_silently=False)
+            print(r)
             logger.info(f'Correo enviado a {destinatary} con imagen '
-                        f'adjunta de {convert_bytes(self.foto_fmedica.DEFAULT_CHUNK_SIZE)}')
+                        f'adjunta de {convert_bytes(self.foto_fmedica.file.size)}')
         except Exception as e:
             logger.error('Error al enviar el correo ', e)
             # Si hubo error se puede implementar el envío de otro

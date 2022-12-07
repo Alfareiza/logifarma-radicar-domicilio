@@ -126,6 +126,9 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Admins | Error Reporting https://docs.djangoproject.com/en/4.1/howto/error-reporting/
+ADMINS = [('Alfonso AG', 'alfareiza@gmail.com')]
+
 # Email Configuration
 
 EMAIL_BACKEND = config('EMAIL_BACKEND')
@@ -142,4 +145,23 @@ MEDIA_ROOT = BASE_DIR / 'tmp'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-logger = logging.getLogger('django')
+# logger = logging.getLogger('django')
+# logging.basicConfig(format='%(asctime)s - %(message)s')
+
+# create logger
+logger = logging.getLogger("logging_tryout2")
+logger.setLevel(logging.DEBUG)
+
+# create console handler and set level to debug
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+
+# create formatter
+formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s",
+                              "[%d/%b/%Y %H:%M:%S]")
+
+# add formatter to ch
+ch.setFormatter(formatter)
+
+# add ch to logger
+logger.addHandler(ch)
