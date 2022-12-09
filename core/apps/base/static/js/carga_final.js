@@ -19,3 +19,9 @@ let regExp = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(
     
 
 };
+
+
+let imgLogoElement = document.getElementById("logo-loader");
+Loadgo.init(imgLogoElement);
+
+Loadgo.loop(document.getElementById('logo-loader'), 10);

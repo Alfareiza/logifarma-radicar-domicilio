@@ -361,10 +361,10 @@ main section.vista4 p.vist4_1 { width: 44%;
     margin: 0 auto;}
 
 .btn_archi {position: absolute;
-    top: 90%;
-    left: 43%;
-    width: 14%;
-    height: 7%;
+    top: 88%;
+    left: 42%;
+    width: 13.2%;
+    height: 6.3%;
     border: solid 2px #468bc4;
     border-radius: 12px;
     color: #468bc4;
@@ -377,7 +377,7 @@ main section.vista4 p.vist4_1 { width: 44%;
     display: flex;
     position: absolute;
     top: 26%;
-    left: 23%;}
+    left: 22%;}
 
 .arch_btn {opacity: 0;
     width: 200px;
@@ -487,7 +487,7 @@ main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 a
 .vist7 {width: 81%;
     height: 10vh;
     text-align: center;
-    margin: 4% auto;
+    margin: 2% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
@@ -527,11 +527,11 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
 .vist8 {width: 81%;
     height: 8vh;
     text-align: center;
-    margin: 2% auto 0;
+    margin: 1% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
-.inp_vist8 {margin: 1% 30%;
+.inp_vist8 {margin: 0.5% 30%;
     padding: 1% 0;
     border: 0px;
     border-bottom: solid 1px;
@@ -541,10 +541,10 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 .p_vist8 {position: relative;
     width: 64%;
-    height: 10vh;
+    height: 3vh;
     font-size: 1em;
     font-weight: 400;
-    margin: 3% auto 0;
+    margin: 1% auto 0;
     text-align: center;}
 
 
@@ -599,7 +599,7 @@ main section.vista9 p.vist9_t {position: relative;
 .load{position: fixed;
     top: 0;
     left: 0;
-    background: rgb(0, 0, 0, 0.5);
+    background: rgb(255, 255, 255);
     transition: all 500ms ease;
     z-index: 99;
     width: 100%;
@@ -611,14 +611,14 @@ main section.vista9 p.vist9_t {position: relative;
     visibility: hidden;
 }
 
-.cargac {width: 95%;
-    height: 70%;
-    margin: auto;
-    box-shadow: 1px 7px 25px rgb(0 0 0 / 1%);
-    transition: all 500ms ease;
-    position: relative;
-    transform: translateY(0%);
-}
+.carga_animacion {position: relative;
+    margin: auto auto;
+    width: 23%;
+    height: 9vh;}
+
+.cargac {position: relative;
+width: 100%;
+height: 100%;}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -687,7 +687,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 
 .elec {position: relative;
     width: 80%;
-    height: 13vh;
+    height: 10vh;
     margin: 0% auto 0 auto;}
 
 .label_vist {position: relative;
@@ -1003,15 +1003,16 @@ main section.vista4 p.vist4_1 { width: 44%;
     margin: 0 auto;}
 
 .btn_archi {position: absolute;
-    top: 86%;
-    left: 43%;
-    width: 14%;
-    height: 7%;
-    border: solid 2px #468bc4;
+    top: 88%;
+    left: 42%;
+    width: 17%;
+    height: 8.5%;
+    border: solid 2px;
     border-radius: 12px;
+    border-color: #468bc4;
     color: #468bc4;
     display: block;
-    font-size: 1.1em;}
+    font-size: 1.4em;}
 
 .btn_archi::before {content: 'Adjuntar foto';
     justify-content: center;
@@ -1019,7 +1020,7 @@ main section.vista4 p.vist4_1 { width: 44%;
     display: flex;
     position: absolute;
     top: 26%;
-    left: 22%;}
+    left: 20%;}
 
 .arch_btn {opacity: 0;
     width: 100%;
@@ -1129,7 +1130,7 @@ main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 a
 .vist7 {width: 81%;
     height: 10vh;
     text-align: center;
-    margin: 4% auto;
+    margin: 2% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
@@ -1169,11 +1170,11 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
 .vist8 {width: 81%;
     height: 8vh;
     text-align: center;
-    margin: 2% auto 0;
+    margin: 0.5% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
-.inp_vist8 {margin: 1% 30%;
+.inp_vist8 {margin: 0.5% 30%;
     padding: 1% 0;
     border: 0px;
     border-bottom: solid 1px;
@@ -1186,7 +1187,7 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     height: 10vh;
     font-size: 1em;
     font-weight: 400;
-    margin: 3% auto 0;
+    margin: 2% auto 0;
     text-align: center;}
 
 
@@ -1241,7 +1242,7 @@ main section.vista9 p.vist9_t {position: relative;
 .load{position: fixed;
     top: 0;
     left: 0;
-    background: rgb(0, 0, 0, 0.5);
+    background: rgb(255, 255, 255);
     transition: all 500ms ease;
     z-index: 99;
     width: 100%;
@@ -1253,14 +1254,14 @@ main section.vista9 p.vist9_t {position: relative;
     visibility: hidden;
 }
 
-.cargac {width: 95%;
-    height: 70%;
-    margin: auto;
-    box-shadow: 1px 7px 25px rgb(0 0 0 / 1%);
-    transition: all 500ms ease;
-    position: relative;
-    transform: translateY(0%);
-}
+.carga_animacion {position: relative;
+    margin: auto auto;
+    width: 27%;
+    height: 11vh;}
+
+.cargac {position: relative;
+width: 100%;
+height: 100%;}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -1456,7 +1457,7 @@ main section.vista2 nav#vist2 div.img { width: 100%;
     height: 15vh;}
 
 main section.vista2 nav.vist2 div.img img.vist2 { position: absolute;
-    padding: 0% 0% 0% 5%; width: 20%;}
+    padding: 1% 0% 0% 10%; width: 14%; height: 13%;}
 
 main section.vista2 nav.vist2 div.img p.vist2 {padding: 0px 2% 0 29%; font-size: 1.8em;}
 
@@ -1572,9 +1573,9 @@ main section.vista3 p.vist3_t2 {padding: 6% 6% 1% 6%;
     width: 88%;
     margin: 0;}
 
-main section.vist3 div.tet {margin: 2% 0 5% 0px; }
+main section.vista3 div.tet {margin: 4% auto 4% auto; width: 24%; }
 
-main section.vista3 div.tet a.vist3 {left: 89%;
+main section.vista3 div.tet a.vist3 {left: 0%;
     position: relative; font-size: 1.7em;}
 
 
@@ -1649,26 +1650,27 @@ main section.vista4 p.vist4_1 { width: 63%;
     padding: 0 0% 0 0%;
     object-fit: contain;
     overflow: hidden;
-    margin: 0 auto;}
+    margin: 0 auto;
+    border: 0;}
 
 .btn_archi {position: absolute;
-    top: 85%;
-    left: 32%;
-    width: 38%;
-    height: 7%;
+    top: 88%;
+    left: 29%;
+    width: 46%;
+    height: 8%;
     border: solid 2px #468bc4;
     border-radius: 12px;
     color: #468bc4;
     display: block;
-    font-size: 1.7em;}
+    font-size: 1.9em;}
 
 .btn_archi::before {content: 'Adjuntar foto';
     justify-content: center;
     align-items: center;
     display: flex;
     position: absolute;
-    top: 26%;
-    left: 23%;}
+    top: 29%;
+    left: 25%;}
 
 .arch_btn {opacity: 0;
     width: 100%;
@@ -1895,7 +1897,7 @@ main section.vista9 p.vist9_t {position: relative;
 .load{position: fixed;
     top: 0;
     left: 0;
-    background: rgb(0, 0, 0, 0.5);
+    background: rgb(255, 255, 255);
     transition: all 500ms ease;
     z-index: 99;
     width: 100%;
@@ -1907,14 +1909,14 @@ main section.vista9 p.vist9_t {position: relative;
     visibility: hidden;
 }
 
-.cargac {width: 95%;
-    height: 70%;
-    margin: auto;
-    box-shadow: 1px 7px 25px rgb(0 0 0 / 1%);
-    transition: all 500ms ease;
-    position: relative;
-    transform: translateY(0%);
-}
+.carga_animacion {position: relative;
+    margin: auto auto;
+    width: 50%;
+    height: 11vh;}
+
+.cargac {position: relative;
+width: 100%;
+height: 100%;}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -1995,7 +1997,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 
 .elec {position: relative;
     width: 80%;
-    margin: 11% auto 0 auto;}
+    margin: 5% auto 5% auto;}
 
 .label_vist {position: relative;
     font-size: 1.2em;
@@ -2020,6 +2022,42 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
+
+.conten_carga { background: #ffffff;
+    height: 100%;
+    width: 100%;
+    left: -1%;
+    top: -5%;
+    position: absolute;
+    -webkit-animation: all 1s ease;
+    -o-ani-webkit-animation: all 1s ease;
+    animation: all 1s ease;
+    z-index: 99;
+    display: none;
+    border: solid #3333;
+    border-radius: 12px;}
+
+.carga {border: solid 7px #ccc;
+    border-top-color: #f4266a;
+    border-top-style: groove;
+    height: 24px;
+    width: 24px;
+    border-radius: 100%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: girar 1.5s linear infinite;
+    -o-animation: girar 1.5s linear infinite ;
+    animation: girar 1.5s linear infinite;}
+
+@keyframes girar {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
 
 main section.vista1 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
@@ -2243,44 +2281,6 @@ main section.vista3 button.btn_vist3 {position: absolute;
     border-color: #468bc4;
     color: #468bc4;}
 
-.conten_carga { background: #ffffff;
-    height: 100%;
-    width: 100%;
-    left: -1%;
-    top: -5%;
-    position: absolute;
-    -webkit-animation: all 1s ease;
-    -o-ani-webkit-animation: all 1s ease;
-    animation: all 1s ease;
-    z-index: 99;
-    display: none;
-    border: solid #3333;
-    border-radius: 12px;
-}
-
-.carga {border: solid 7px #ccc;
-    border-top-color: #f4266a;
-    border-top-style: groove;
-    height: 24px;
-    width: 24px;
-    border-radius: 100%;
-
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    -webkit-animation: girar 1.5s linear infinite;
-    -o-animation: girar 1.5s linear infinite ;
-    animation: girar 1.5s linear infinite;
-}
-
-@keyframes girar {
-    0% { transform: rotate(0deg);}
-    100% { transform: rotate(360deg);}
-}
-
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -2323,10 +2323,10 @@ main section.vista4 p.vist4_1 { width: 80%;
     margin: 0 auto;}
 
 .btn_archi {position: absolute;
-    top: 85%;
-    left: 28%;
-    width: 40%;
-    height: 7.5%;
+    top: 90%;
+    left: 25%;
+    width: 48.3%;
+    height: 7.2%;
     border: solid 2px #468bc4;
     border-radius: 12px;
     display: block;
@@ -2339,7 +2339,7 @@ main section.vista4 p.vist4_1 { width: 80%;
     display: flex;
     position: absolute;
     top: 26%;
-    left: 16%;}
+    left: 22%;}
 
 .arch_btn {opacity: 0;
     width: 100%;
@@ -2453,7 +2453,7 @@ main section.vista7 {width: 100%; height: 90vh; position: relative; margin: 0 au
 .vist7 {width: 81%;
     height: 8vh;
     text-align: center;
-    margin: 4% auto;
+    margin: 10% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
@@ -2463,10 +2463,6 @@ main section.vista7 input.inp_vist7 {margin: 5% 14%;
     border-bottom: solid 1px;
     font-size: 1em;
     width: 70%;}
-
-.elec {position: relative;
-    width: 80%;
-    margin: 11% auto 15% auto;}
 
 option {
   background-color: white;
@@ -2576,7 +2572,7 @@ main section.vista9 p.vist9_t {position: relative;
 .load{position: fixed;
     top: 0;
     left: 0;
-    background: rgb(0, 0, 0, 0.5);
+    background: rgb(255, 255, 255);
     transition: all 500ms ease;
     z-index: 99;
     width: 100%;
@@ -2588,14 +2584,14 @@ main section.vista9 p.vist9_t {position: relative;
     visibility: hidden;
 }
 
-.cargac {width: 95%;
-    height: 70%;
-    margin: auto;
-    box-shadow: 1px 7px 25px rgb(0 0 0 / 1%);
-    transition: all 500ms ease;
-    position: relative;
-    transform: translateY(0%);
-}
+.carga_animacion {position: relative;
+    margin: auto auto;
+    width: 70%;
+    height: 11vh;}
+
+.cargac {position: relative;
+width: 100%;
+height: 100%;}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -2678,7 +2674,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 
 .elec {position: relative;
     width: 80%;
-    margin: 11% auto 0 auto;}
+    margin: 5% auto 0 auto;}
 
 .label_vist {position: relative;
     font-size: 1.2em;
@@ -2995,23 +2991,23 @@ main section.vista4 p.vist4_1 { width: 63%;
     margin: 0 auto;}
 
 .btn_archi {position: absolute;
-    top: 85%;
-    left: 28%;
-    width: 40%;
-    height: 6%;
+    top: 88%;
+    left: 20%;
+    width: 55.1%;
+    height: 5.8%;
     border: solid 2px #468bc4;
     border-radius: 12px;
     display: block;
     color: #468bc4;
-    font-size: 0.8em;}
+    font-size: 1em;}
 
 .btn_archi::before {content: 'Adjuntar foto';
     justify-content: center;
     align-items: center;
     display: flex;
     position: absolute;
-    top: 33%;
-    left: 18%;}
+    top: 28%;
+    left: 21%;}
 
 .arch_btn {opacity: 0;
     width: 100%;
@@ -3119,8 +3115,9 @@ main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 
 .vist7 {width: 81%;
+    height: 12vh;
     text-align: center;
-    margin: 5% auto;
+    margin: 11% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
@@ -3238,7 +3235,7 @@ main section.vista9 p.vist9_t {position: relative;
 .load{position: fixed;
     top: 0;
     left: 0;
-    background: rgb(0, 0, 0, 0.5);
+    background: rgb(255, 255, 255);
     transition: all 500ms ease;
     z-index: 99;
     width: 100%;
@@ -3250,14 +3247,14 @@ main section.vista9 p.vist9_t {position: relative;
     visibility: hidden;
 }
 
-.cargac {width: 95%;
-    height: 70%;
-    margin: auto;
-    box-shadow: 1px 7px 25px rgb(0 0 0 / 1%);
-    transition: all 500ms ease;
-    position: relative;
-    transform: translateY(0%);
-}
+.carga_animacion {position: relative;
+    margin: auto auto;
+    width: 70%;
+    height: 11vh;}
+
+.cargac {position: relative;
+width: 100%;
+height: 100%;}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
