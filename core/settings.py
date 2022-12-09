@@ -31,7 +31,7 @@ CSRF_TRUSTED_ORIGINS = ["https://*.sa.ngrok.io", "https://*.ngrok.io"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", cast=bool)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['logifarma.com.co', 'domicilios.logifarma.com.co', '*']
 
 # Application definition
 
