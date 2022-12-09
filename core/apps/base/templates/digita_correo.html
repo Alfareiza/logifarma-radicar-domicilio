@@ -42,14 +42,17 @@
         {% endif %}
 
         <div class="load" id="load_a">
-                <img class="cargac" src="{% static 'img/Loading.gif' %}" alt="">
-        </div>
+            <div class="carga_animacion">
+                <img class="cargac" id="logo-loader" src="{% static 'img/LogLogifarma.png' %}" alt="">
+            </div>
+            </div>
 
 
         <button class="btn" id="btn_final" type="submit">Finalizar</button>
 
     </form>
 
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/LoadGo/2.1/loadgo-nojquery.min.js"></script>
     <script src="{% static 'js/carga_final.js' %}"></script>
 </section>
 {% endblock %}

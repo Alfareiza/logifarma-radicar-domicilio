@@ -21,7 +21,12 @@
             <img class="img3" src="{% static 'img/Imagen1.png' %}" alt="">
         </div>
 
-        <button class="btn" id="btn_conti" type="submit">Entiendo</button>
+        <button class="btn" id="btn_conti" type="submit" onclick="cargar()">
+            Entiendo
+            <div id="btn_carga" class="conten_carga">
+                <div class="carga"></div>
+            </div>
+        </button>
     </form>
 </section>
 {% endblock %}

@@ -32,14 +32,18 @@
                 </div>
             </div>
 
-                <div id='continuar-btn' class="col" style="display: none;">
-                    <input type="submit" class="btn2 btn-success" value="Continuar"/>
+            <button class="btn" id="btn_conti" type="submit" style="display: none;" onclick="cargar()">
+                Continuar
+                <div id="btn_carga" class="conten_carga">
+                    <div class="carga"></div>
                 </div>
+            </button>
+            
         {% endif %}
     </form>
 </section>
 <script>
-    const continuarbtn = document.getElementById("continuar-btn");
+    const continuarbtn = document.getElementById("btn_conti");
     const uploadButton = document.getElementById('id_fotoFormulaMedica-src');
     uploadButton.addEventListener('change', (e)=>{
     const currFiles = e.target.files

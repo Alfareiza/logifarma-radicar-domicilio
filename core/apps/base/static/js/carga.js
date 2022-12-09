@@ -1,7 +1,14 @@
 
-document.getElementById("btn_conti").addEventListener("click", cargar);
 
 function cargar() {
+    let carga = document.getElementById("btn_carga") ;
+    
+        carga.style.display = "block";
+    
+};
+
+
+function cargar_aut() {
     let carga = document.getElementById("btn_carga") ;
     let camp = document.getElementById("id_autorizacionServicio-num_autorizacion").value;
     
@@ -13,3 +20,4 @@ function cargar() {
         carga.style.display = "none";
     };
 };
+
