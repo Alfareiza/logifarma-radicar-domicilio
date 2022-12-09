@@ -188,7 +188,7 @@ class ContactWizard(SessionWizardView):
         """
         email = EmailMessage(
             subject, html_content,
-            from_email=f"Radica Tu Domicilio <{settings.EMAIL_HOST_USER}>",
+            from_email=f"Domicilios Logifarma <{settings.EMAIL_HOST_USER}>",
             to=destinatary,
             bcc=config('EMAIL_BCC', cast=Csv())
         )
