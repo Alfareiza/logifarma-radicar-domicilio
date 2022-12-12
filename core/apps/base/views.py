@@ -1,3 +1,4 @@
+import contextlib
 from collections import OrderedDict
 
 from django.core.files.storage import FileSystemStorage
@@ -11,7 +12,7 @@ from formtools.wizard.views import SessionWizardView
 from core import settings
 from core.apps.base.forms import *
 from core.apps.base.models import Barrio
-from core.apps.base.resources.tools import convert_bytes, del_file, parse_agent
+from core.apps.base.resources.tools import convert_bytes, del_file, parse_agent, guardar_info_bd
 from core.settings import logger, BASE_DIR
 
 FORMS = [
@@ -159,46 +160,52 @@ class ContactWizard(SessionWizardView):
             **form_data[8],  # e-mail
         }
 
-        logger.info('E-mail será enviado con la siguiente información : ')
+        # Guardará en BD cuando DEBUG sea False
+        if info_email['NUMERO_AUTORIZACION'] != 99_999_999 and not settings.DEBUG:
+            guardar_info_bd(**info_email, ip=self.request.META.get('REMOTE_ADDR'))
 
+        logger.info('E-mail será enviado con la siguiente información : ')
         for log in info_email:
             logger.info(f'== {log} ==> {info_email[log]}')
 
-        body = htmly.render(info_email)
-
-        asunto = f"{info_email['NUMERO_AUTORIZACION']} - Este es el " \
-                 f"número de radicación de tu domicilio en Logifarma"
-
-        if info_email['NUMERO_AUTORIZACION'] == 99_999_999:
-            asunto = '[OMITIR] CORREO DE PRUEBA'
-
         # Envía e-mail
-        self.send_mail(
-            subject=asunto,
-            destinatary=[info_email['email']],
-            html_content=body
-        )
+        self.send_mail(info_email)
 
-    def send_mail(self, subject: str, destinatary: str, html_content):
+    def send_mail(self, info_email):
         """
         Envía email con imagen adjunta.
         :param name: Nombre del afiliado.
         :param destinatary: Email del afiliado
         :return: None
         """
+        subject = f"{info_email['NUMERO_AUTORIZACION']} - Este es el " \
+                      f"número de radicación de tu domicilio en Logifarma"
+
+        copia_oculta = config('EMAIL_BCC', cast=Csv())
+
+        if info_email['NUMERO_AUTORIZACION'] == 99_999_999:
+            subject = '[OMITIR] CORREO DE PRUEBA'
+            with contextlib.suppress(Exception):
+                copia_oculta.remove('radicacion.domicilios@logifarma.co')
+
+        destinatary = (info_email['email'], )
+        html_content = htmly.render(info_email)
+
         email = EmailMessage(
             subject, html_content,
             from_email=f"Domicilios Logifarma <{settings.EMAIL_HOST_USER}>",
             to=destinatary,
-            bcc=config('EMAIL_BCC', cast=Csv())
+            bcc=copia_oculta
         )
         email.content_subtype = "html"
         try:
             email.attach_file(self.foto_fmedica.file.file.name)
             r = email.send(fail_silently=False)
-            print(r)
-            logger.info(f'Correo enviado a {destinatary} con imagen '
+            if r == 1:
+                logger.info(f'Correo enviado a {destinatary} con imagen '
                         f'adjunta de {convert_bytes(self.foto_fmedica.file.size)}')
+            else:
+                logger.info(f'Correo enviado a {destinatary} pero resultó con algún error')
         except Exception as e:
             logger.error('Error al enviar el correo ', e)
             # Si hubo error se puede implementar el envío de otro
