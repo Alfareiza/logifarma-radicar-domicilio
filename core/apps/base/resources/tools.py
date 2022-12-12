@@ -1,3 +1,7 @@
+from django.core.mail import EmailMessage
+
+from core import settings
+from core.apps.base.models import Radicacion, Municipio, Barrio
 from core.settings import BASE_DIR, logger
 
 
@@ -59,3 +63,77 @@ def parse_agent(agent: str) -> str:
         logger.warning("Parsear el agent=", agent, "ERROR=", e)
         return agent
     return f'{os_device}({brw_device})'
+
+
+def guardar_info_bd(**kwargs):
+    """
+
+    :param kwargs: Información final del wizard + ip:
+            Ejemplo:
+            {
+              "TIPO_IDENTIFICACION": "CC",
+              "DOCUMENTO_ID": "12340316",
+              "AFILIADO": "GUTIERREZ TEIXEIRA JACKSON WOH",
+              "ESTADO_AFILIADO": "ACTIVO",
+              "SEDE_AFILIADO": "BARRANCABERMEJA",
+              "REGIMEN": "SUBSIDIADO",
+              "DIRECCION": "CL 123  45 678",
+              "CORREO": "jackson.gutierrez.teixeira123456789@gmail.com",
+              "TELEFONO": "4019255",
+              "CELULAR": "4014652512",
+              "ESTADO_AUTORIZACION": "PROCESADA",
+              "FECHA_AUTORIZACION": "15/11/2022",
+              "MEDICO_TRATANTE": "FRANK LAMPARD",
+              "MIPRES": "0",
+              "DIAGNOSTICO": "D571-ANEMIA FALCIFORME SIN CRISIS",
+              "DETALLE_AUTORIZACION": [
+                {
+                  "CUMS": "20158642-1",
+                  "NOMBRE_PRODUCTO": "RIVAROXABAN 20MG TABLETA RECUBIERTA",
+                  "CANTIDAD": "30"
+                },
+                {
+                  "CUMS": "42034-1",
+                  "NOMBRE_PRODUCTO": "HIDROXIUREA 500MG CAPSULA",
+                  "CANTIDAD": "60"
+                }
+              ],
+              "municipio": "objeto",
+              "barrio": "Porvenir",
+              "direccion": "Am 1234568",
+              "celular": 3212125236,
+              "email": "alfareiza@gmail.com",
+              "NUMERO_AUTORIZACION": 99999999
+            }
+    :return:
+    """
+    rad = kwargs.get('NUMERO_AUTORIZACION')
+    kwargs['municipio'] = kwargs.get('municipio').name.lower()
+    logger.info(f"Guardando radicación # {rad}")
+    try:
+        Radicacion.objects.create(numero=rad,
+                                  municipio=Municipio.objects.get(
+                                      name__iexact=kwargs.get('municipio')
+                                  ),
+                                  barrio=Barrio.objects.filter(
+                                      municipio__name__iexact=kwargs.get('municipio')
+                                  ).get(name=kwargs.get('barrio').lower()),
+                                  celular_uno=kwargs.get('celular'),
+                                  celular_dos=kwargs.get('celular'),
+                                  email=kwargs.get('email'),
+                                  direccion=kwargs.get('direccion'),
+                                  ip=kwargs.get('ip'),
+                                  paciente_nombre=kwargs.get('AFILIADO'),
+                                  paciente_cedula=kwargs.get('DOCUMENTO_ID'),
+                                  paciente_data=kwargs)
+        logger.info("Radicación guardada con éxito!")
+    except Exception as e:
+        logger.error(f"Error guardando radicación"
+                     f" ({kwargs.get('NUMERO_AUTORIZACION')}): ", e)
+        email = EmailMessage(
+            subject=f'ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS',
+            body=e,
+            from_email=f"Domicilios Logifarma <{settings.EMAIL_HOST_USER}>",
+            to=['alfareiza@gmail.com']
+        )
+        email.send(fail_silently=False)
