@@ -161,7 +161,7 @@ class ContactWizard(SessionWizardView):
         }
 
         # Guardará en BD cuando DEBUG sea False
-        if info_email['NUMERO_AUTORIZACION'] != 99_999_999 and not settings.DEBUG:
+        if info_email['NUMERO_AUTORIZACION'] != 99_999_999:
             guardar_info_bd(**info_email, ip=self.request.META.get('REMOTE_ADDR'))
 
         logger.info('E-mail será enviado con la siguiente información : ')
