@@ -1,7 +1,7 @@
 from decouple import config, Csv
 from django import forms
 
-from core.apps.base.models import Municipio, Barrio
+from core.apps.base.models import Municipio, Barrio, Radicacion
 from core.apps.base.resources.api_calls import call_api_eps, call_api_medicar
 from core.apps.base.resources.tools import read_json
 
@@ -37,6 +37,8 @@ class AutorizacionServicio(forms.Form):
         # ====== # Validaciones API EPS ======
         if num_aut == 99_999_999:
             resp_eps = read_json('resources/fake.json')
+        elif Radicacion.objects.filter(numero=num_aut):
+            raise forms.ValidationError(f"Numero de autorización {num_aut} se encuentra radicado")
         else:
             resp_eps = call_api_eps(num_aut)
 
