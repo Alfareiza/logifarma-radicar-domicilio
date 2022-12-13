@@ -42,7 +42,7 @@ class Barrio(Model):
 
 class Radicacion(Model):
     datetime = DateTimeField(auto_now_add=True)
-    numero = PositiveIntegerField(unique=True)
+    numero = PositiveBigIntegerField(unique=True)
     municipio = ForeignKey(Municipio, on_delete=CASCADE)
     barrio = ForeignKey(Barrio, on_delete=CASCADE)
     celular_uno = PositiveBigIntegerField(blank=True, null=True)
