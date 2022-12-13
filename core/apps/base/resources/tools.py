@@ -119,7 +119,7 @@ def guardar_info_bd(**kwargs):
                                       municipio__name__iexact=kwargs.get('municipio')
                                   ).get(name=kwargs.get('barrio').lower()),
                                   celular_uno=kwargs.get('celular'),
-                                  celular_dos=kwargs.get('celular'),
+                                  celular_dos=None,
                                   email=kwargs.get('email'),
                                   direccion=kwargs.get('direccion'),
                                   ip=kwargs.get('ip'),
