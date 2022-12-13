@@ -36,8 +36,9 @@
                 {{ form.as_table }}
             {% endfor %}
         {% else %}
-            <input class="inp_vist9" type="number" inputmode="numeric" name="digitaCelular-celular" required=""
-                   id="id_digitaCelular-celular" placeholder="Ingresar el número..">
+
+            <input class="inp_vist8" type="number" inputmode="numeric" name="digitaCelular-celular" required=""
+                   id="id_digitaCelular-celular" placeholder="Ingresar su número.">
             <p class="p_vist9">Te informaremos por este medio cuando el domicilio este en camino.</p>
 
         {% endif %}
@@ -45,8 +46,8 @@
 
         <button class="btn" id="btn_conti" type="submit" onclick="cargar()">
             Continuar
-            <div id="btn_carga" class="conten_carga">
-                <div class="carga"></div>
+            <!-- <div id="btn_carga" class="conten_carga">
+                <div class="carga"></div> -->
             </div>
         </button>
 
