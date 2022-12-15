@@ -9,3 +9,9 @@ $("#form-id").on("keypress", function (event) {
     }
 });
 });
+
+$(document).ready(function () {
+    $('select').selectize({
+        sortField: 'text'
+    });
+});
