@@ -45,15 +45,15 @@ class Radicacion(Model):
     numero_radicado = CharField(unique=True, max_length=24)
     municipio = ForeignKey(Municipio, on_delete=CASCADE)
     barrio = ForeignKey(Barrio, on_delete=CASCADE)
-    cel_uno = CharField(max_length=16, blank=True, null=True)
-    cel_dos = CharField(max_length=16, blank=True, null=True)
+    cel_uno = CharField(max_length=24, blank=True, null=True)
+    cel_dos = CharField(max_length=24, blank=True, null=True)
     email = EmailField(max_length=254)
     direccion = CharField(max_length=150)
     ip = GenericIPAddressField(protocol='both')
 
     # Campos de Paciente
     paciente_nombre = CharField(max_length=150)
-    paciente_cc = CharField(max_length=12)
+    paciente_cc = CharField(max_length=32)
     paciente_data = JSONField()
 
     # Campos de Domiciliario
