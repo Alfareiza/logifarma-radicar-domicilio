@@ -4,6 +4,15 @@ on: [pull_request]
 env: # Or as an environment variable
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       DEBUG: ${{ secrets.DEBUG }}
+      EMAIL_BACKEND: ${{ secrets.EMAIL_BACKEND }}
+      EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+      EMAIL_USE_TLS: ${{ secrets.EMAIL_USE_TLS }}
+      EMAIL_BCC: ${{ secrets.EMAIL_BCC }}
+      EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+      EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
+      EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
+      EMAIL_API_MEDICAR: ${{ secrets.EMAIL_API_MEDICAR }}
+      PWD_API_MEDICAR: ${{ secrets.PWD_API_MEDICAR }}
 jobs:
   build:
     runs-on: ubuntu-latest
