@@ -1,0 +1,31 @@
+name: Python application
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ 3.8, 3.9 ]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Unitests
+      run: |
+        python manage.py test core.apps.base.tests.test_wizards
+        python manage.py test core.apps.base.tests.test_autorizacionServicio
+        python manage.py test core.apps.base.tests.test_fotoFormulaMedica
+        python manage.py test core.apps.base.tests.test_avisoDireccion
+        python manage.py test core.apps.base.tests.test_eligeMunicipio
+        python manage.py test core.apps.base.tests.test_digitaDireccionBarrio
+        python manage.py test core.apps.base.tests.test_digitaCelular
+        python manage.py test core.apps.base.tests.test_digitaCorreo
