@@ -1,13 +1,14 @@
 name: Python application
 
 on: [pull_request]
-
+env: # Or as an environment variable
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ 3.8, 3.9 ]
+        python-version: "3.8"
 
     steps:
     - uses: actions/checkout@v2
