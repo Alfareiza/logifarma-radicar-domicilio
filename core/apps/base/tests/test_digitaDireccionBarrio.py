@@ -1,4 +1,4 @@
-from django.test import TransactionTestCase
+from django.test import TestCase
 from django.utils.datastructures import MultiValueDict
 
 from core import settings
@@ -8,7 +8,7 @@ from core.apps.base.tests.test_wizards import TestWizard, get_request
 from core.apps.base.views import FORMS
 
 
-class DigitaDireccionBarrioWizardTests(TransactionTestCase):
+class DigitaDireccionBarrioWizardTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.mun = Municipio.objects.create(name='barranquilla', departamento='atlantico')
