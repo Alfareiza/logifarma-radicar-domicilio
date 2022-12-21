@@ -29,7 +29,7 @@ class AutorizacionServicio(forms.Form):
     a la vista 4, sino  responderá con un mensaje de
     error.
     """
-    num_autorizacion = forms.IntegerField(min_value=100_000)
+    num_autorizacion = forms.IntegerField(min_value=100_000, )
 
     def clean_num_autorizacion(self):
         num_aut = self.cleaned_data.get('num_autorizacion')
@@ -101,7 +101,7 @@ class EligeMunicipio(forms.ModelForm):
 
     municipio = forms.ModelChoiceField(queryset=Municipio.objects.all(),
                                        empty_label="Seleccione un municipio",
-                                       widget=forms.Select(
+                                       widget=forms.RadioSelect(
                                            attrs={'class': 'select_opt'}
                                        ),
                                        label=False
@@ -112,7 +112,7 @@ class DireccionBarrio(forms.Form):
     """
     Vista 7:
     """
-    barrio = forms.ChoiceField(widget=forms.Select(attrs={'class': 'select_opt'}))
+    barrio = forms.ChoiceField(widget=forms.RadioSelect(attrs={'class': 'select_opt'}))
     direccion = forms.CharField(max_length=40)
 
     def clean_barrio(self):

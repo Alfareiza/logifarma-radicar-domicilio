@@ -48,11 +48,6 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     width: 17%;
     padding: 1% 41.5%;}
 
-.elec {position: relative;
-    width: 80%;
-    height: 13vh;
-    margin: 0% auto 0 auto;}
-
 .label_vist {position: relative;
     font-size: 1.5em;
     color: #333;}
@@ -468,6 +463,65 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1.5em;
     font-weight: 600;
     margin: 0px auto 0% auto}
+
+.filt {position: relative;
+    margin: 5px auto;
+    width: 30%;
+    height: 6vh;
+    display: flex;}
+
+.inpfilt {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    outline: none;
+    border: 0;
+    border-bottom: solid 1px black ;
+    border-radius: 0;
+    text-align: left;
+    font-size: 1em;}
+.inpfilt:hover { text-decoration: none;}
+
+.icon {position: absolute;
+    height: 100%;
+    width: 10%;
+    margin: 0;
+    right: 3px;
+    display: flex;
+}
+
+.foricon {position: relative;
+    margin: auto auto;
+    width:  43%;
+    height: 43%;
+    right: 10px;
+    top: 0%;
+    left: 0%;
+    color: #a3a3a3;}
+
+.fa-solid {font-weight: 900;
+    position: relative;
+    font-size: 23px;}
+
+.elec {position: relative;
+    width: 30%;
+    height: 31vh;
+    margin: 2% auto 0 auto;
+    overflow: auto;}
+
+.con {display: flex;
+    margin: 5px 0px;
+    height: 29px;}
+
+.con:hover {background: #d4cfcf;}
+
+.radio { margin: auto 5px auto 0px;}
+
+.labelfil {width: 91%;
+    margin: auto auto;
+    padding: 0%;
+    font-size: 1.1em;}
     
 .btn_muni {position: fixed;
     padding: 0.5% 5%;
@@ -485,9 +539,9 @@ main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 
 .vist7 {width: 81%;
-    height: 10vh;
+    height: 4vh;
     text-align: center;
-    margin: 2% auto 0;
+    margin: 3% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
@@ -525,18 +579,19 @@ option {
 main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 .vist8 {width: 81%;
-    height: 8vh;
+    height: 4vh;
     text-align: center;
     margin: 1% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
-.inp_vist8 {margin: 0.5% 30%;
-    padding: 1% 0;
+.inp_vist8 {margin: 0% 35%;
+    padding: 0% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 40%;}
+    width: 30%;
+    height: 5vh;}
 
 
 .p_vist8 {position: relative;
@@ -684,11 +739,6 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     margin: 0% auto;
     width: 17%;
     padding: 1% 41.5%;}
-
-.elec {position: relative;
-    width: 80%;
-    height: 10vh;
-    margin: 0% auto 0 auto;}
 
 .label_vist {position: relative;
     font-size: 1.5em;
@@ -1097,20 +1147,78 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 
 .vist6 {width: 81%;
-    height: 11vh;
+    height: 5vh;
     text-align: center;
-    margin: 3% auto 0;
+    margin: 2% auto 13px;
     font-size: 1.4em;
     font-weight: 300;}
 
 
 .p_vist6 {position: relative;
     width: 93%;
-    height: 3vh;
+    height: 6vh;
     text-align: center;
     font-size: 1.5em;
     font-weight: 600;
-    margin: 0px auto 0% auto}
+    margin: 0px auto 2% auto}
+
+.filt {position: relative;
+    margin: 5px auto;
+    width: 30%;
+    height: 6vh;
+    display: flex;}
+
+.inpfilt {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    outline: none;
+    border: 0;
+    border-bottom: solid 1px black ;
+    border-radius: 0;
+    text-align: left;}
+.inpfilt:hover { text-decoration: none;}
+
+.icon {position: absolute;
+    height: 100%;
+    width: 10%;
+    margin: 0;
+    right: 3px;
+    display: flex;
+}
+
+.foricon {position: relative;
+    margin: auto auto;
+    width: 50%;
+    height: 50%;
+    right: 10px;
+    top: 0%;
+    left: 0%;
+    color: #a3a3a3;}
+
+.fa-solid {font-weight: 900;
+    position: relative;
+    font-size: 15px;}
+
+.elec {position: relative;
+    width: 30%;
+    height: 31vh;
+    margin: 2% auto 0 auto;
+    overflow: auto;}
+
+.con {display: flex;
+    margin: 5px 0px;
+    height: 29px;}
+
+.con:hover {background: #d4cfcf;}
+
+.radio { margin: auto 5px auto 0px;}
+
+.labelfil {width: 91%;
+    margin: auto auto;
+    padding: 0%;
+    font-size: 1em;}
     
 .btn_muni {position: fixed;
     padding: 0.5% 5%;
@@ -1128,10 +1236,10 @@ main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 
 .vist7 {width: 81%;
-    height: 10vh;
+    height: 5vh;
     text-align: center;
     margin: 2% auto 0;
-    font-size: 1.4em;
+    font-size: 1.3em;
     font-weight: 300;}
 
 main section.vista7 input.inp_vist7 {margin: 5% 14%;
@@ -1141,6 +1249,14 @@ main section.vista7 input.inp_vist7 {margin: 5% 14%;
     font-size: 1em;
     width: 70%;}
 
+.errorlist {
+    color:#cc0033;
+    float:left;
+    clear:both;
+    padding-left: 0;
+    margin: 0 auto;
+    text-align: center;
+}
 
 option {
   background-color: white;
@@ -1168,26 +1284,27 @@ option {
 main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 .vist8 {width: 81%;
-    height: 8vh;
+    height: 5vh;
     text-align: center;
     margin: 0.5% auto 0;
-    font-size: 1.4em;
+    font-size: 1.3em;
     font-weight: 300;}
 
-.inp_vist8 {margin: 0.5% 30%;
-    padding: 1% 0;
+.inp_vist8 {margin: 0.5% 35% 0;
+    padding: 0% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 40%;}
+    width: 30%;
+    height: 5vh;}
 
 
 .p_vist8 {position: relative;
     width: 64%;
-    height: 10vh;
-    font-size: 1em;
+    height: 7vh;
+    font-size: 0.8em;
     font-weight: 400;
-    margin: 2% auto 0;
+    margin: 6px auto 0;
     text-align: center;}
 
 
@@ -1339,11 +1456,6 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     margin: 0% auto;
     width: 36%;
     padding: 3% 32%;}
-
-.elec {position: relative;
-    width: 80%;
-    height: 15vh;
-    margin: 5% auto 0 auto;}
 
 .label_vist {position: relative;
     font-size: 2.2em;
@@ -1757,15 +1869,73 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1.4em;
     font-weight: 300;}
 
-
-
 .p_vist6 {position: relative;
     width: 93%;
     height: 3vh;
     text-align: center;
     font-size: 1em;
     font-weight: 600;
-    margin: 0px auto 0% auto}
+    margin: 0px auto 5% auto}
+
+.filt {position: relative;
+    margin: 5px auto;
+    width: 70%;
+    height: 6vh;
+    display: flex;}
+
+.inpfilt {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    outline: none;
+    border: 0;
+    border-bottom: solid 1px black ;
+    border-radius: 0;
+    text-align: left;
+    font-size: 1.3em;}
+
+.inpfilt:hover { text-decoration: none;}
+
+.icon {position: absolute;
+    height: 100%;
+    width: 10%;
+    margin: 0;
+    right: 3px;
+    display: flex;
+}
+
+.foricon {position: relative;
+    margin: auto auto;
+    width: 50%;
+    height: 50%;
+    right: 10px;
+    top: 0%;
+    left: 0%;
+    color: #a3a3a3;}
+
+.fa-solid {font-weight: 900;
+    position: relative;
+    font-size: 25px;}
+
+.elec {position: relative;
+    width: 70%;
+    height: 21vh;
+    margin: 5% auto 0 auto;
+    overflow: auto;}
+
+.con {display: flex;
+    margin: 5px 0px;
+    height: 29px;}
+
+.con:hover {background: #d4cfcf;}
+
+.radio { margin: auto 5px auto 0px;}
+
+.labelfil {width: 91%;
+    margin: auto auto;
+    padding: 0%;
+    font-size: 1.6em;}
 
 .btn_muni {position: absolute;
     padding: 3% 13%;
@@ -1785,8 +1955,8 @@ main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 a
 .vist7 {width: 81%;
     height: 10vh;
     text-align: center;
-    margin: 5% auto;
-    font-size: 2.4em;
+    margin: 4% auto 0;
+    font-size: 2em;
     font-weight: 300;}
 
 main section.vista7 input.inp_vist7 {margin: 5% 14%;
@@ -1823,10 +1993,10 @@ option {
 main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 .vist8 {width: 81%;
-    height: 10vh;
+    height: 5vh;
     text-align: center;
     margin: 5% auto 0;
-    font-size: 2.4em;
+    font-size: 2em;
     font-weight: 300;}
 
 .inp_vist8 {margin: 3% 15%;
@@ -1994,10 +2164,6 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     margin: 0% auto;
     width: 36%;
     padding: 3% 32%;}
-
-.elec {position: relative;
-    width: 80%;
-    margin: 5% auto 5% auto;}
 
 .label_vist {position: relative;
     font-size: 1.2em;
@@ -2435,6 +2601,66 @@ main section.vista6 {width: 100%; height: 90vh; position: relative; margin: 0 au
     font-weight: 600;
     margin: 0px auto 5% auto;}
 
+.filt {position: relative;
+    margin: 15px auto;
+    width: 85%;
+    height: 6vh;
+    display: flex;}
+
+.inpfilt {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    outline: none;
+    border: 0;
+    border-bottom: solid 1px black ;
+    border-radius: 0;
+    text-align: left;
+    font-size: 1em;}
+
+.inpfilt:hover { text-decoration: none;}
+
+.icon {position: absolute;
+    height: 100%;
+    width: 10%;
+    margin: 0;
+    right: 3px;
+    display: flex;
+}
+
+.foricon {position: relative;
+    margin: auto auto;
+    width: 50%;
+    height: 50%;
+    right: 10px;
+    top: 0%;
+    left: 0%;
+    color: #a3a3a3;}
+
+.fa-solid {font-weight: 900;
+    position: relative;
+    font-size: 15px;}
+
+.elec {position: relative;
+    width: 85%;
+    height: 21vh;
+    margin: 5% auto 0 auto;
+    overflow: auto;}
+
+.con {display: flex;
+    margin: 5px 0px;
+    height: 29px;}
+
+.con:hover {background: #d4cfcf;}
+
+.radio { margin: auto 5px auto 0px;}
+
+.labelfil {width: 91%;
+    margin: auto auto;
+    padding: 0%;
+    font-size: 1em;}
+
 .btn_muni {position: absolute;
     padding: 3% 14%;
     margin: 0 auto;
@@ -2451,9 +2677,9 @@ main section.vista7 {width: 100%; height: 90vh; position: relative; margin: 0 au
 
 
 .vist7 {width: 81%;
-    height: 8vh;
+    height: 7vh;
     text-align: center;
-    margin: 10% auto 0;
+    margin: 10% auto 8px;
     font-size: 1.4em;
     font-weight: 300;}
 
@@ -2490,18 +2716,20 @@ option {
 main section.vista8 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 .vist8 {width: 81%;
-    height: 10vh;
+    height: 8vh;
     text-align: center;
     margin: 5% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
-.inp_vist8 {margin: 3% 14%;
-    padding: 3% 0;
+.inp_vist8 {margin: 2% 14%;
+    padding: 0% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 70%;}
+    width: 70%;
+    height: 5vh;
+}
 
 
 .p_vist8 {position: relative;
@@ -2510,7 +2738,7 @@ main section.vista8 {width: 100%; height: 90vh; position: relative; margin: 0 au
     font-size: 0.8em;
     font-weight: 400;
     margin: 0 auto;
-    height: 6vh;}
+    height: 5vh;}
 
 
 
@@ -2671,10 +2899,6 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     margin: 0% auto;
     width: 36%;
     padding: 3% 32%;}
-
-.elec {position: relative;
-    width: 80%;
-    margin: 5% auto 0 auto;}
 
 .label_vist {position: relative;
     font-size: 1.2em;
@@ -3098,6 +3322,66 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 0.7em;
     font-weight: 600;
     margin: 0px auto 9% auto;}
+
+.filt {position: relative;
+    margin: 15px auto;
+    width: 85%;
+    height: 6vh;
+    display: flex;}
+
+.inpfilt {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    outline: none;
+    border: 0;
+    border-bottom: solid 1px black ;
+    border-radius: 0;
+    text-align: left;
+    font-size: 1em;}
+
+.inpfilt:hover { text-decoration: none;}
+
+.icon {position: absolute;
+    height: 100%;
+    width: 10%;
+    margin: 0;
+    right: 3px;
+    display: flex;
+}
+
+.foricon {position: relative;
+    margin: auto auto;
+    width: 50%;
+    height: 50%;
+    right: 10px;
+    top: 0%;
+    left: 0%;
+    color: #a3a3a3;}
+
+.fa-solid {font-weight: 900;
+    position: relative;
+    font-size: 15px;}
+
+.elec {position: relative;
+    width: 85%;
+    height: 21vh;
+    margin: 5% auto 0 auto;
+    overflow: auto;}
+
+.con {display: flex;
+    margin: 5px 0px;
+    height: 29px;}
+
+.con:hover {background: #d4cfcf;}
+
+.radio {margin: auto 5px auto 0px;}
+
+.labelfil {width: 91%;
+    margin: auto auto;
+    padding: 0%;
+    font-size: 1em;}
 
 .btn_muni {position: fixed;
     padding: 3% 14%;
