@@ -3,6 +3,7 @@ name: Python application
 on: [pull_request]
 env: # Or as an environment variable
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      DEBUG: ${{ secrets.DEBUG }}
 jobs:
   build:
     runs-on: ubuntu-latest
