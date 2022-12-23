@@ -131,7 +131,6 @@ class ContactWizard(SessionWizardView):
                     municipio__id=form1_cleaned_data['municipio'].id
                 ).order_by('name')
                 form.fields['barrio'].choices = [(str(b.id), b.name.title()) for b in barrios_mun]
-                form.fields['barrio'].choices.insert(0, ('X', 'Seleccione el barrio'))
         return form
 
     def process_from_data(self, form_list):
