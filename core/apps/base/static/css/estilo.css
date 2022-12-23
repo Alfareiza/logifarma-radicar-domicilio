@@ -70,6 +70,44 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     border-color: #468bc4;
     color: #468bc4;}
 
+.conten_carga { background: #ffffff;
+    height: 100%;
+    width: 100%;
+    left: -1%;
+    top: -5%;
+    position: absolute;
+    -webkit-animation: all 1s ease;
+    -o-ani-webkit-animation: all 1s ease;
+    animation: all 1s ease;
+    z-index: 99;
+    display: none;
+    border: solid #3333;
+    border-radius: 12px;
+}
+
+.carga {border: solid 7px #ccc;
+    border-top-color: #2180f7;
+    border-top-style: groove;
+    height: 24px;
+    width: 24px;
+    border-radius: 100%;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: girar 1.5s linear infinite;
+    -o-animation: girar 1.5s linear infinite ;
+    animation: girar 1.5s linear infinite;
+}
+
+@keyframes girar {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
+
 main section.vista1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 main section.vista1 div.vist1 {position: relative;
@@ -240,7 +278,8 @@ main section.vista3 input.inp_vist3 {margin: 1% 28%;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 44%;}
+    width: 44%;
+    outline: none;}
 
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
@@ -279,41 +318,6 @@ main section.vista3 div.tet {margin: 4% 0 4% 58px;
 
 main section.vista3 div.tet a.vist3 {left: 43%;
     position: relative; font-size: 1.7em;}
-
-
-.conten_carga { background: #ffffff;
-    height: 100%;
-    width: 100%;
-    left: -1%;
-    top: -5%;
-    position: absolute;
-    -webkit-animation: all 1s ease;
-    -o-ani-webkit-animation: all 1s ease;
-    animation: all 1s ease;
-    z-index: 99;
-    display: none;
-    border: solid #3333;
-    border-radius: 12px;
-}
-
-.carga {border: solid 7px #ccc;
-    border-top-color: #f4266a;
-    border-top-style: groove;
-    height: 24px;
-    width: 24px;
-    border-radius: 100%;
-    
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    -webkit-animation: girar 1.5s linear infinite;
-    -o-animation: girar 1.5s linear infinite ;
-    animation: girar 1.5s linear infinite;
-}
-
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -579,19 +583,32 @@ option {
 main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 .vist8 {width: 81%;
-    height: 4vh;
+    height: 8vh;
     text-align: center;
     margin: 1% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
-.inp_vist8 {margin: 0% 35%;
-    padding: 0% 0;
+.ti_vist8 {width: 81%;
+    height: 8vh;
+    text-align: center;
+    margin: 2% auto 0;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+.inp_vist8 {margin: 0.5% 30%;
+    padding: 1% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 30%;
-    height: 5vh;}
+    width: 40%;
+    outline: none;}
+
+.inp_vist8::-webkit-inner-spin-button,
+.inp_vist8::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 
 
 .p_vist8 {position: relative;
@@ -616,18 +633,17 @@ main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1.4em;
     font-weight: 300;}
 
-.inp_vist9 {margin: 1% 30%;
-    padding: 1% 0;
+.inp_vist9 {position: relative;
+    margin: 0% auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 40%;}
-
-.inp_vist9::-webkit-inner-spin-button,
-.inp_vist9::-webkit-inner-spin-button{
--webkit-appearance: none;
-margin: 0;
-}
+    width: 100%;
+    height: 100%;
+    outline: none;
+    background: none;
+    color: #333;}
 
 .p_vist9 {position: relative;
     width: 64%;
@@ -650,6 +666,28 @@ main section.vista9 p.vist9_t {position: relative;
     font-size: 0.8em;
     font-weight: 400;
     margin: 0% auto;}
+
+.valid {position: relative;
+    margin: 3% auto 7% auto;
+    width: 40%;
+    height: 7vh;
+    display: flex;}
+
+.icons {position: absolute;
+    right: 5%;
+    top: 30%;
+    z-index: 9;}
+
+.icons span{ display: none;}
+
+.icon1 { color: #e74c3c; border-color: #e74c3c; position: relative; border: 1px solid; border-radius: 70px; width: 0px; height: 16px; padding: 0px 10px 0 7px;}
+
+.icon2 { color: #27ae60; border-color: #27ae60; position: relative; border: 1px solid; border-radius: 70px; width: 10px; height: 16px; padding: 0px 6px 0 1px;}
+
+.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 1rem; padding: 0px; border-radius: 2px; user-select: none; left: 30%; top: 107%; width: 39%; height: 32%; text-align: center; display: none;} 
+
+.text-error:before{ position: absolute; content: "";         top: -7px; width: 160px; height: 14px; text-align: center; right: 20px; transform: rotate(45deg);
+}
 
 .load{position: fixed;
     top: 0;
@@ -761,6 +799,44 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
+
+.conten_carga { background: #ffffff;
+    height: 100%;
+    width: 100%;
+    left: -1%;
+    top: -5%;
+    position: absolute;
+    -webkit-animation: all 1s ease;
+    -o-ani-webkit-animation: all 1s ease;
+    animation: all 1s ease;
+    z-index: 99;
+    display: none;
+    border: solid #3333;
+    border-radius: 12px;
+}
+
+.carga {border: solid 7px #ccc;
+    border-top-color: #2180f7;
+    border-top-style: groove;
+    height: 24px;
+    width: 24px;
+    border-radius: 100%;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: girar 1.5s linear infinite;
+    -o-animation: girar 1.5s linear infinite ;
+    animation: girar 1.5s linear infinite;
+}
+
+@keyframes girar {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
 
 main section.vista1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
@@ -936,7 +1012,8 @@ main section.vista3 input.inp_vist3 {margin: 1% 28%;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 44%;}
+    width: 44%;
+    outline: none;}
 
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
@@ -977,39 +1054,6 @@ main section.vista3 div.tet {margin: 4% 0 4% 0px;
 main section.vista3 div.tet a.vist3 {left: 43%;
     position: relative; font-size: 1.7em;}
 
-
-.conten_carga { background: #ffffff;
-    height: 100%;
-    width: 100%;
-    left: -1%;
-    top: -5%;
-    position: absolute;
-    -webkit-animation: all 1s ease;
-    -o-ani-webkit-animation: all 1s ease;
-    animation: all 1s ease;
-    z-index: 99;
-    display: none;
-    border: solid #3333;
-    border-radius: 12px;
-}
-
-.carga {border: solid 7px #ccc;
-    border-top-color: #f4266a;
-    border-top-style: groove;
-    height: 24px;
-    width: 24px;
-    border-radius: 100%;
-    
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    -webkit-animation: girar 1.5s linear infinite;
-    -o-animation: girar 1.5s linear infinite ;
-    animation: girar 1.5s linear infinite;
-}
 
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
@@ -1203,7 +1247,7 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 .elec {position: relative;
     width: 30%;
-    height: 31vh;
+    height: 21vh;
     margin: 2% auto 0 auto;
     overflow: auto;}
 
@@ -1284,27 +1328,39 @@ option {
 main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 .vist8 {width: 81%;
-    height: 5vh;
+    height: 8vh;
     text-align: center;
     margin: 0.5% auto 0;
-    font-size: 1.3em;
+    font-size: 1.4em;
     font-weight: 300;}
 
-.inp_vist8 {margin: 0.5% 35% 0;
-    padding: 0% 0;
+.ti_vist8 {width: 81%;
+    height: 8vh;
+    text-align: center;
+    margin: 2% auto 0;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+.inp_vist8 {margin: 0.5% 35%;
+    padding: 1% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
     width: 30%;
-    height: 5vh;}
+    outline: none;}
 
+.inp_vist8::-webkit-inner-spin-button,
+.inp_vist8::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 
 .p_vist8 {position: relative;
     width: 64%;
-    height: 7vh;
+    height: 10vh;
     font-size: 0.8em;
     font-weight: 400;
-    margin: 6px auto 0;
+    margin: 2% auto 0;
     text-align: center;}
 
 
@@ -1321,18 +1377,18 @@ main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1.4em;
     font-weight: 300;}
 
-.inp_vist9 {margin: 1% 30%;
-    padding: 1% 0;
+.inp_vist9 {position: relative;
+    margin: 0% auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 40%;}
+    width: 100%;
+    height: 100%;
+    outline: none;
+    background: none;
+    color: #333;}
 
-.inp_vist9::-webkit-inner-spin-button,
-.inp_vist9::-webkit-inner-spin-button{
--webkit-appearance: none;
-margin: 0;
-}
 
 .p_vist9 {position: relative;
     width: 64%;
@@ -1355,6 +1411,28 @@ main section.vista9 p.vist9_t {position: relative;
     font-size: 0.8em;
     font-weight: 400;
     margin: 0% auto;}
+
+.valid {position: relative;
+    margin: 3% auto 7% auto;
+    width: 40%;
+    height: 7vh;
+    display: flex;}
+
+.icons {position: absolute;
+    right: 5%;
+    top: 30%;
+    z-index: 9;}
+
+.icons span{ display: none;}
+
+.icon1 { color: #e74c3c; border-color: #e74c3c; position: relative; border: 1px solid; border-radius: 70px; width: 0px; height: 16px; padding: 0px 10px 0 7px;}
+
+.icon2 { color: #27ae60; border-color: #27ae60; position: relative; border: 1px solid; border-radius: 70px; width: 10px; height: 16px; padding: 0px 6px 0 1px;}
+
+.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 0.7rem; padding: 0px; border-radius: 2px; user-select: none; left: 30%; top: 107%; width: 39%; height: 32%; text-align: center; display: none;} 
+
+.text-error:before{ position: absolute; content: "";         top: -7px; width: 160px; height: 14px; text-align: center; right: 20px; transform: rotate(45deg);
+}
 
 .load{position: fixed;
     top: 0;
@@ -1478,6 +1556,44 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
+
+.conten_carga { background: #ffffff;
+    height: 100%;
+    width: 100%;
+    left: -1%;
+    top: -5%;
+    position: absolute;
+    -webkit-animation: all 1s ease;
+    -o-ani-webkit-animation: all 1s ease;
+    animation: all 1s ease;
+    z-index: 99;
+    display: none;
+    border: solid #3333;
+    border-radius: 12px;
+}
+
+.carga {border: solid 7px #ccc;
+    border-top-color: #2180f7;
+    border-top-style: groove;
+    height: 24px;
+    width: 24px;
+    border-radius: 100%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: girar 1.5s linear infinite;
+    -o-animation: girar 1.5s linear infinite ;
+    animation: girar 1.5s linear infinite;
+}
+
+@keyframes girar {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
 
 main section.vista1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
@@ -1651,7 +1767,8 @@ main section.vista3 input.inp_vist3 {margin: 5% 14%;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1.9em;
-    width: 70%;}
+    width: 70%;
+    outline: none;}
 
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
@@ -1689,41 +1806,6 @@ main section.vista3 div.tet {margin: 4% auto 4% auto; width: 24%; }
 
 main section.vista3 div.tet a.vist3 {left: 0%;
     position: relative; font-size: 1.7em;}
-
-
-.conten_carga { background: #ffffff;
-    height: 100%;
-    width: 100%;
-    left: -1%;
-    top: -5%;
-    position: absolute;
-    -webkit-animation: all 1s ease;
-    -o-ani-webkit-animation: all 1s ease;
-    animation: all 1s ease;
-    z-index: 99;
-    display: none;
-    border: solid #3333;
-    border-radius: 12px;
-}
-
-.carga {border: solid 7px #ccc;
-    border-top-color: #f4266a;
-    border-top-style: groove;
-    height: 24px;
-    width: 24px;
-    border-radius: 100%;
-
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    -webkit-animation: girar 1.5s linear infinite;
-    -o-animation: girar 1.5s linear infinite ;
-    animation: girar 1.5s linear infinite;
-}
-
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -1993,10 +2075,17 @@ option {
 main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 .vist8 {width: 81%;
-    height: 5vh;
+    height: 10vh;
     text-align: center;
     margin: 5% auto 0;
-    font-size: 2em;
+    font-size: 2.4em;
+    font-weight: 300;}
+
+.ti_vist8 {position: relative;
+    width: 81%;
+    text-align: center;
+    margin: 6% auto 0;
+    font-size: 2.4em;
     font-weight: 300;}
 
 .inp_vist8 {margin: 3% 15%;
@@ -2004,7 +2093,8 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     border: 0px;
     border-bottom: solid 1px;
     font-size: 2.5em;
-    width: 70%;}
+    width: 70%;
+    outline: none;}
 
 
 .p_vist8 {position: relative;
@@ -2014,6 +2104,12 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1.3em;
     font-weight: 400;
     margin: 0 auto 0;}
+
+.inp_vist8::-webkit-inner-spin-button,
+.inp_vist8::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 
 
 
@@ -2030,18 +2126,17 @@ main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-weight: 300;}
 
 .inp_vist9 {position: relative;
-    margin: 5% 14%;
-    padding: 3% 0;
+    margin: 0% auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
-    font-size: 2.2em;
-    width: 70%;}
+    font-size: 1.8em;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    background: none;
+    color: #333;}
 
-.inp_vist9::-webkit-inner-spin-button,
-.inp_vist9::-webkit-inner-spin-button{
--webkit-appearance: none;
-margin: 0;
-}
 
 .p_vist9 {position: relative;
     width: 64%;
@@ -2063,6 +2158,28 @@ main section.vista9 p.vist9_t {position: relative;
     font-size: 1.2em;
     font-weight: 400;
     margin: 0% auto;}
+
+.valid {position: relative;
+    margin: 3% auto 7% auto;
+    width: 85%;
+    height: 7vh;
+    display: flex;}
+
+.icons {position: absolute;
+    right: 5%;
+    top: 30%;
+    z-index: 9;}
+
+.icons span{ display: none;}
+
+.icon1 { color: #e74c3c; border-color: #e74c3c; position: relative; border: 1px solid; border-radius: 70px; width: 0px; height: 16px; padding: 0px 10px 0 7px;}
+
+.icon2 { color: #27ae60; border-color: #27ae60; position: relative; border: 1px solid; border-radius: 70px; width: 10px; height: 16px; padding: 0px 6px 0 1px;}
+
+.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 1.1rem; padding: 0px; border-radius: 2px; user-select: none; left: 30%; top: 107%; width: 39%; height: 32%; text-align: center; display: none;} 
+
+.text-error:before{ position: absolute; content: "";         top: -7px; width: 160px; height: 14px; text-align: center; right: 20px; transform: rotate(45deg);
+}
 
 .load{position: fixed;
     top: 0;
@@ -2204,7 +2321,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     border-radius: 12px;}
 
 .carga {border: solid 7px #ccc;
-    border-top-color: #f4266a;
+    border-top-color: #2180f7;
     border-top-style: groove;
     height: 24px;
     width: 24px;
@@ -2398,7 +2515,8 @@ main section.vista3 input.inp_vist3 {margin: 5% 14%;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 70%;}
+    width: 70%;
+    outline: none;}
 
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
@@ -2716,21 +2834,32 @@ option {
 main section.vista8 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 .vist8 {width: 81%;
-    height: 8vh;
+    height: 10vh;
     text-align: center;
     margin: 5% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
-.inp_vist8 {margin: 2% 14%;
-    padding: 0% 0;
+.ti_vist8 {position: relative;
+    width: 81%;
+    text-align: center;
+    margin: 6% auto 0;
+    font-size: 1.4em;
+    font-weight: 300;}
+
+.inp_vist8 {margin: 3% 14%;
+    padding: 3% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
     width: 70%;
-    height: 5vh;
-}
+    outline: none;}
 
+.inp_vist8::-webkit-inner-spin-button,
+.inp_vist8::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}  
 
 .p_vist8 {position: relative;
     width: 64%;
@@ -2738,7 +2867,7 @@ main section.vista8 {width: 100%; height: 90vh; position: relative; margin: 0 au
     font-size: 0.8em;
     font-weight: 400;
     margin: 0 auto;
-    height: 5vh;}
+    height: 6vh;}
 
 
 
@@ -2755,18 +2884,17 @@ main section.vista9 {width: 100%; height: 90vh; position: relative; margin: 0 au
     font-weight: 300;}
 
 .inp_vist9 {position: relative;
-    margin: 5% 14%;
-    padding: 3% 0;
+    margin: 0% auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 70%;}
+    width: 100%;
+    height: 100%;
+    outline: none;
+    background: none;
+    color: #333;}
 
-.inp_vist9::-webkit-inner-spin-button,
-.inp_vist9::-webkit-inner-spin-button{
--webkit-appearance: none;
-margin: 0;
-}
 
 .p_vist9 {position: relative;
     width: 64%;
@@ -2777,14 +2905,14 @@ margin: 0;
 
 .vist9_t {position: relative; width: 81%;
     text-align: center;
-    margin: 17% auto 0%;
+    margin: 10% auto 8%;
     font-size: 1.4em;
     font-weight: 300;}
 
 main section.vista9 input.inp_vist9_t {margin: 5% 14%;
     padding: 3% 0;
     border: 0px;
-    border-bottom: solid 1px;
+    border-bottom: none;
     font-size: 1em;
     width: 70%;}
 main section.vista9 input.aut :focus {border-bottom: 1px solid #0572ce;
@@ -2796,6 +2924,28 @@ main section.vista9 p.vist9_t {position: relative;
     font-size: 0.8em;
     font-weight: 400;
     margin: 0% auto;}
+
+.valid {position: relative;
+    margin: 3% auto 7% auto;
+    width: 95%;
+    height: 7vh;
+    display: flex;}
+
+.icons {position: absolute;
+    right: 5%;
+    top: 30%;
+    z-index: 9;}
+
+.icons span{ display: none;}
+
+.icon1 { color: #e74c3c; border-color: #e74c3c; position: relative; border: 1px solid; border-radius: 70px; width: 0px; height: 16px; padding: 0px 10px 0 7px;}
+
+.icon2 { color: #27ae60; border-color: #27ae60; position: relative; border: 1px solid; border-radius: 70px; width: 10px; height: 16px; padding: 0px 6px 0 1px;}
+
+.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 0.7rem; padding: 0px; border-radius: 2px; user-select: none; left: 30%; top: 107%; width: 39%; height: 32%; text-align: center; display: none;} 
+
+.text-error:before{ position: absolute; content: "";         top: -7px; width: 160px; height: 14px; text-align: center; right: 20px; transform: rotate(45deg);
+}
 
 .load{position: fixed;
     top: 0;
@@ -2920,6 +3070,44 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
+
+    .conten_carga { background: #ffffff;
+    height: 100%;
+    width: 100%;
+    left: -1%;
+    top: -5%;
+    position: absolute;
+    -webkit-animation: all 1s ease;
+    -o-ani-webkit-animation: all 1s ease;
+    animation: all 1s ease;
+    z-index: 99;
+    display: none;
+    border: solid #3333;
+    border-radius: 12px;
+}
+    
+.carga {border: solid 7px #ccc;
+    border-top-color: #2180f7;
+    border-top-style: groove;
+    height: 24px;
+    width: 24px;
+    border-radius: 100%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: girar 1.5s linear infinite;
+    -o-animation: girar 1.5s linear infinite ;
+    animation: girar 1.5s linear infinite;
+}
+
+@keyframes girar {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
 
 main section.vista1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
@@ -3092,7 +3280,8 @@ main section.vista3 input.inp_vist3 {margin: 5% 14%;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 70%;}
+    width: 70%;
+    outline: none;}
 
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
@@ -3444,13 +3633,26 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1.4em;
     font-weight: 300;}
 
+.ti_vist8 {position: relative;
+    width: 81%;
+    text-align: center;
+    margin: 6% auto;
+    font-size: 1.4em;
+    font-weight: 300;}
+
 .inp_vist8 {margin: 5% 14%;
     padding: 3% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 70%;}
+    width: 70%;
+    outline: none;}
 
+.inp_vist8::-webkit-inner-spin-button,
+.inp_vist8::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 
 .p_vist8 {position: relative;
     width: 64%;
@@ -3474,18 +3676,16 @@ main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-weight: 300;}
 
 .inp_vist9 {position: relative;
-    margin: 5% 14%;
-    padding: 3% 0;
+    margin: 0% auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 70%;}
-
-.inp_vist9::-webkit-inner-spin-button,
-.inp_vist9::-webkit-inner-spin-button{
--webkit-appearance: none;
-margin: 0;
-}
+    width: 100%;
+    height: 100%;
+    outline: none;
+    background: none;
+    color: #333;}
 
 .p_vist9 {position: relative;
     width: 64%;
@@ -3515,6 +3715,28 @@ main section.vista9 p.vist9_t {position: relative;
     font-size: 0.8em;
     font-weight: 400;
     margin: 0% auto;}
+
+.valid {position: relative;
+    margin: 3% auto 7% auto;
+    width: 95%;
+    height: 7vh;
+    display: flex;}
+
+.icons {position: absolute;
+    right: 5%;
+    top: 30%;
+    z-index: 9;}
+
+.icons span{ display: none;}
+
+.icon1 { color: #e74c3c; border-color: #e74c3c; position: relative; border: 1px solid; border-radius: 70px; width: 0px; height: 16px; padding: 0px 10px 0 7px;}
+
+.icon2 { color: #27ae60; border-color: #27ae60; position: relative; border: 1px solid; border-radius: 70px; width: 10px; height: 16px; padding: 0px 6px 0 1px;}
+
+.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 0.5rem; padding: 0px; border-radius: 2px; user-select: none; left: 30%; top: 107%; width: 39%; height: 32%; text-align: center; display: none;} 
+
+.text-error:before{ position: absolute; content: "";         top: -7px; width: 160px; height: 14px; text-align: center; right: 20px; transform: rotate(45deg);
+}
 
 .load{position: fixed;
     top: 0;

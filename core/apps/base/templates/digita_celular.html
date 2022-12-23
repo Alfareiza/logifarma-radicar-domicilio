@@ -4,7 +4,7 @@
 {% block title %}Digite celular{% endblock %}
 
 {% block content %}
-<section class="vista9">
+<section class="vista8">
     <form id="form-id" action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
@@ -27,7 +27,7 @@
             </div>
         {% endif %}
 
-        <h1 class="ti_vist9">¿Cual es su número de celular?</h1>
+        <h1 class="ti_vist8">¿Cual es su número de celular?</h1>
 
         {% if wizard.form.forms %}
             <!--NOTHING-->
@@ -36,14 +36,14 @@
                 {{ form.as_table }}
             {% endfor %}
         {% else %}
-            <input class="inp_vist9" type="number" inputmode="numeric" name="digitaCelular-celular" required=""
+            <input class="inp_vist8" type="number" inputmode="numeric" name="digitaCelular-celular" required=""
                    id="id_digitaCelular-celular" placeholder="Ingresar el número..">
-            <p class="p_vist9">Te informaremos por este medio cuando el domicilio este en camino.</p>
+            <p class="p_vist8">Te informaremos por este medio cuando el domicilio este en camino.</p>
 
         {% endif %}
 
 
-        <button class="btn" id="btn_conti" type="submit" onclick="cargar()">
+        <button class="btn" id="btn_conti" type="submit" onclick="cargar3()">
             Continuar
             <div id="btn_carga" class="conten_carga">
                 <div class="carga"></div>

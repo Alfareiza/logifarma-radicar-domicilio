@@ -5,7 +5,7 @@
 
 {% block content %}
 <section class="vista9">
-    <form id="form-id" action="" method="post">
+    <form id="form-id" class="form" action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
         {% include "base/logo.html" %}
@@ -35,10 +35,22 @@
             {% endfor %}
         {% else %}
             <h1 class="vist9_t">¿Cual es tu Correo electrónico?</h1>
-            <input class="inp_vist9" type="email" name="digitaCorreo-email" id="id_digitaCorreo-email"
-                   placeholder="Ingresar el correo..">
 
-            <p class="vist9_t">(Este campo no es obligatorio).</p>
+            <div class="valid">
+                <div class="icons">
+                    <span class="icon1 fas fa-exclamation"></span>
+                    <span class="icon2 fas fa-check"></span>
+                </div>
+                <input class="inp_vist9" type="email" placeholder="Ingresa tu correo (Opcional)." name="digitaCorreo-email" id="id_digitaCorreo-email"  onkeyup="corrvali()">
+               <!--  <label class="lbl-nombre">
+                    <span class="text-nomb">Ingresa tu correo (Opcional).</span>
+                </label> -->
+                
+               <div class="text-error">Introdusca un correo válido</div>
+            </div>
+            <script src="{% static 'js/validar_correo.js' %}"></script>
+
+            <!-- <p class="vist9_t">(Este campo no es obligatorio).</p> -->
         {% endif %}
 
         <div class="load" id="load_a">
@@ -48,7 +60,7 @@
             </div>
 
 
-        <button class="btn" id="btn_final" type="submit">Finalizar</button>
+        <button class="btn" id="btn_final" type="submit" >Finalizar</button>
 
     </form>
 
