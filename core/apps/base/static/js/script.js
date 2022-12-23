@@ -14,7 +14,9 @@ box_o = document.getElementById("elecci");
 escri = document.getElementById("escri");
 cover = document.getElementById("cover-ctn-search");
 
-document.getElementById("escri").addEventListener("keyup", buscador_interno);
+try {
+
+    document.getElementById("escri").addEventListener("keyup", buscador_interno);
 
 $('.labelfil').click(function() {
     var esteLi = $(this).text();
@@ -48,3 +50,7 @@ function buscador_interno(){
         }
     };
 };
+    
+} catch (error) {
+    
+}
