@@ -75,7 +75,7 @@ inpu[type=submit] {
     color:#cc0033;
     float:left;
     clear:both;
-    padding-left:10px;
+    margin: 0;
 }
 
 /* comments */

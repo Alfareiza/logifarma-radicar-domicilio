@@ -25,16 +25,22 @@
 
             <h1 class="vist7">Elige el barrio donde enviaremos tu domicilio.</h1>
 
-            <div class="elec">
-                <input type="hidden" name="contact_wizard-current_step"
-                       value="digitaDireccionBarrio"
-                       id="id_contact_wizard-current_step">
-                <label class="label_vist"></label> <br>
-                {{ wizard.form.barrio }}
+            <div class="filt"> 
+                <input class="inpfilt" id="escri" type="text" placeholder="Buscar...">
+                <div class="icon"> <span class="foricon"><i class="fa-solid fa-magnifying-glass"></i></span></div>
+            </div>
+            
+            <div id="elecci" class="elec">
+                {% for barrio in wizard.form.barrio %}
+                <div class="con">
+                <span class="radio">{{ barrio.tag }}</span>
+            <label class="labelfil" for="{{ barrio.id_for_label }}">{{ barrio.choice_label }}</label>
+            </div>
+            {% endfor %}
             </div>
 
         {% endif %}
-        <button class="btn" id="btn_conti" type="submit" onclick="cargar()">
+        <button class="btn" id="btn_conti" type="submit" onclick="cargar2()">
             Continuar
             <!-- <div id="btn_carga" class="conten_carga">
                 <div class="carga"></div> -->
