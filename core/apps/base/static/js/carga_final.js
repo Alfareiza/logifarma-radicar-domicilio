@@ -50,14 +50,9 @@ function letra(e) {
 
 function cargad() {
 
-    if (correo.value.match(regExp)) {
- 
         carga_ds.style.opacity = "1";
         carga_ds.style.visibility = "visible";
-    } else {
-        carga_ds.style.opacity = "0";
-    carga_ds.style.visibility = "hidden";
-    }
+    
     
 
 };
