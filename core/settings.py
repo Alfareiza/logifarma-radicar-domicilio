@@ -78,6 +78,13 @@ TEMPLATES = [
     },
 ]
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'TIMEOUT': 60
+    }
+}
+
 WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database

@@ -37,7 +37,7 @@ class AutorizacionServicio(forms.Form):
         # ====== # Validaciones API EPS ======
         if num_aut == 99_999_999:
             resp_eps = read_json('resources/fake.json')
-        elif Radicacion.objects.filter(numero=num_aut):
+        elif Radicacion.objects.filter(numero_radicado=num_aut):
             raise forms.ValidationError(f"Numero de autorización {num_aut} se encuentra radicado")
         else:
             resp_eps = call_api_eps(num_aut)
@@ -47,6 +47,18 @@ class AutorizacionServicio(forms.Form):
                                         "Por favor verifique\n\n"
                                         "Si el número está correcto, comuníquese con cajacopi EPS\n"
                                         "al 01 8000 111 446")
+        inconsistencia = False
+        for k, v in resp_eps.items():
+            if k == 'DOCUMENTO_ID' and len(v) > 32:
+                inconsistencia = True
+            if k == 'AFILIADO' and len(v) > 150:
+                inconsistencia = True
+            if k == 'num_aut' and len(v) > 24:
+                inconsistencia = True
+
+        if inconsistencia:
+            raise forms.ValidationError(f"Detectamos un problema interno con este número de autorización\n\n"
+                                        "Comuníquese con Logifarma al 3330333124")
 
         if resp_eps.get('ESTADO_AFILIADO') != 'ACTIVO':
             raise forms.ValidationError("Afiliado no se encuentra activo")

@@ -42,23 +42,23 @@ class Barrio(Model):
 
 class Radicacion(Model):
     datetime = DateTimeField(auto_now_add=True)
-    numero = PositiveBigIntegerField(unique=True)
+    numero_radicado = CharField(unique=True, max_length=24)
     municipio = ForeignKey(Municipio, on_delete=CASCADE)
     barrio = ForeignKey(Barrio, on_delete=CASCADE)
-    celular_uno = PositiveBigIntegerField(blank=True, null=True)
-    celular_dos = PositiveBigIntegerField(blank=True, null=True)
+    cel_uno = CharField(max_length=24, blank=True, null=True)
+    cel_dos = CharField(max_length=24, blank=True, null=True)
     email = EmailField(max_length=254)
     direccion = CharField(max_length=150)
     ip = GenericIPAddressField(protocol='both')
 
     # Campos de Paciente
     paciente_nombre = CharField(max_length=150)
-    paciente_cedula = PositiveIntegerField()
+    paciente_cc = CharField(max_length=32)
     paciente_data = JSONField()
 
     # Campos de Domiciliario
     domiciliario_nombre = CharField(max_length=150, blank=True, null=True)
-    domiciliario_identificacion = PositiveIntegerField(blank=True, null=True)
+    domiciliario_ide = CharField(max_length=25, blank=True, null=True)
     domiciliario_empresa = CharField(max_length=150, blank=True, null=True)
 
     # Campos adicionales
@@ -70,4 +70,4 @@ class Radicacion(Model):
     factura = CharField(max_length=150, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.numero}"
+        return f"{self.numero_radicado}"

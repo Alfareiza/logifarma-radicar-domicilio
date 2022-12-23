@@ -107,24 +107,24 @@ def guardar_info_bd(**kwargs):
             }
     :return:
     """
-    rad = kwargs.get('NUMERO_AUTORIZACION')
-    kwargs['municipio'] = kwargs.get('municipio').name.lower()
+    rad = kwargs.pop('NUMERO_AUTORIZACION', None)
+    municipio = kwargs.pop('municipio').name.lower()
     logger.info(f"Guardando radicación # {rad}")
     try:
-        Radicacion.objects.create(numero=rad,
+        Radicacion.objects.create(numero_radicado=str(rad),
                                   municipio=Municipio.objects.get(
-                                      name__iexact=kwargs.get('municipio')
+                                      name__iexact=municipio
                                   ),
                                   barrio=Barrio.objects.filter(
-                                      municipio__name__iexact=kwargs.get('municipio')
-                                  ).get(name=kwargs.get('barrio').lower()),
-                                  celular_uno=kwargs.get('celular'),
-                                  celular_dos=None,
-                                  email=kwargs.get('email'),
-                                  direccion=kwargs.get('direccion'),
-                                  ip=kwargs.get('ip'),
-                                  paciente_nombre=kwargs.get('AFILIADO'),
-                                  paciente_cedula=kwargs.get('DOCUMENTO_ID'),
+                                      municipio__name__iexact=municipio
+                                  ).get(name=kwargs.pop('barrio', None).lower()),
+                                  cel_uno=kwargs.pop('celular', None),
+                                  cel_dos=None,
+                                  email=kwargs.pop('email', None),
+                                  direccion=kwargs.pop('direccion', None),
+                                  ip=kwargs.pop('ip', None),
+                                  paciente_nombre=kwargs.pop('AFILIADO', None),
+                                  paciente_cc=kwargs.pop('DOCUMENTO_ID', None),
                                   paciente_data=kwargs)
         logger.info("Radicación guardada con éxito!")
     except Exception as e:
