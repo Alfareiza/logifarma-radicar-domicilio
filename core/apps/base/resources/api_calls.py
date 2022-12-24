@@ -170,9 +170,7 @@ def call_api_eps(num_aut: int) -> dict:
                "serial": str(num_aut),
                "nit": "900073223"}
     headers = {'Content-Type': 'text/plain'}
-    data = json.dumps(payload, indent=2)
-    response = requests.request("POST", url, headers=headers, data=data)
-    return json.loads(response.text.encode('utf8'))
+    return request_api(url, headers, payload)
 
 
 def auth_api_medicar():
@@ -201,6 +199,12 @@ def auth_api_medicar():
         logger.error('Error llamando API de medicar: ', e)
 
 
+
+def request_api(url, headers, payload, method='POST'):
+    payload = json.dumps(payload)
+    response = requests.request(method, url, headers=headers, data=payload)
+    return json.loads(response.text.encode('utf8'))
+
 def call_api_medicar(num_aut: int) -> dict:
     """
     Recibe el número de autorización que aparece en los pedidos de los usuarios.
@@ -210,6 +214,10 @@ def call_api_medicar(num_aut: int) -> dict:
             Ej: En caso de no haber encontrado registros
                 {
                     "error": "No se han encontrado registros."
+                }
+            Ej: En caso de no haber encontrado registros
+                {
+                    "error": "El Nit ingresado no corresponde a ningun convenio."
                 }
             Ej: En caso de haber encontrado registros
                 {
@@ -259,22 +267,20 @@ def call_api_medicar(num_aut: int) -> dict:
                     ]
                 }
     """
-
     call_auth = should_i_call_auth()
     token = auth_api_medicar() if call_auth is True else call_auth
     url = "https://medicarws.sis-colombia.com/api/logifarma/obtenerDatosFormula"
-
-    payload = json.dumps({"nit_eps": "890102044", "autorizacion": f"{num_aut}"})
-    headers = {
-        'Authorization': f'Bearer {token}',
-        'Content-Type': 'application/json'
-    }
-    response = requests.request("POST", url, headers=headers, data=payload)
-    result = json.loads(response.text.encode('utf8'))
+    headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}
+    payload = {"nit_eps": "901543211", "autorizacion": f"{num_aut}"}
+    resp = request_api(url, headers, payload)
     try:
-        return result[0]
+        if resp == {'error': 'El Nit ingresado no corresponde a ningun convenio.'}:
+            payload['nit_eps'] = '890102044'
+            resp = request_api(url, headers, payload)
+        return resp[0]
     except KeyError:
-        return result
+        logger.error('Al consultarse hubo una respuesta inesperada: ', resp)
+        return {}
 
 
 def should_i_call_auth():
@@ -292,3 +298,6 @@ def should_i_call_auth():
             return True
         else:
             return token
+
+if __name__ == '__main__':
+    print(call_api_medicar(800102183461))
