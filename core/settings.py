@@ -152,7 +152,7 @@ MEDIA_ROOT = BASE_DIR / 'tmp'
 
 # STATICFILES_DIRS = [BASE_DIR / "build/static", BASE_DIR / "build"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 # logger = logging.getLogger('django')
 # logging.basicConfig(format='%(asctime)s - %(message)s')
