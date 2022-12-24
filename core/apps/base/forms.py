@@ -48,13 +48,19 @@ class AutorizacionServicio(forms.Form):
                                         "Si el número está correcto, comuníquese con cajacopi EPS\n"
                                         "al 01 8000 111 446")
         inconsistencia = False
-        for k, v in resp_eps.items():
-            if k == 'DOCUMENTO_ID' and len(v) > 32:
-                inconsistencia = True
-            if k == 'AFILIADO' and len(v) > 150:
-                inconsistencia = True
-            if k == 'num_aut' and len(v) > 24:
-                inconsistencia = True
+        if len(str(num_aut)) > 20:
+            inconsistencia = True
+        else:
+            for k, v in resp_eps.items():
+                if k == 'DOCUMENTO_ID' and len(v) > 32:
+                    inconsistencia = True
+                    break
+                if k == 'AFILIADO' and len(v) > 150:
+                    inconsistencia = True
+                    break
+                if k == 'num_aut' and len(v) > 24:
+                    inconsistencia = True
+                    break
 
         if inconsistencia:
             raise forms.ValidationError(f"Detectamos un problema interno con este número de autorización\n\n"
@@ -74,6 +80,11 @@ class AutorizacionServicio(forms.Form):
             resp_mcar = {"error": "No se han encontrado registros."}
         else:
             resp_mcar = call_api_medicar(num_aut)
+
+        if not resp_mcar:
+            raise forms.ValidationError("Pedimos disculpas, pero no pudimos obtener información\n"
+                                        f"con este número de autorización.\n{num_aut}\n"
+                                        "Comunícate con nosotros al 333 033 3124")
 
         if resp_mcar.get('autorizacion'):
             raise forms.ValidationError(f"Este domicilio se encuentra radicado en "
