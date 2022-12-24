@@ -125,4 +125,5 @@ class MySeleniumTests(StaticLiveServerTestCase):
         title = self.selenium.title
         self.assertEqual(title, 'Foto de la fórmula')
 
+# Probar en la vista de done.html que no pueda el usuario devolverse
 # window.history.go(-1);
