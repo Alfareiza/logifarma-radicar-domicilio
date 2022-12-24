@@ -199,11 +199,11 @@ def auth_api_medicar():
         logger.error('Error llamando API de medicar: ', e)
 
 
-
 def request_api(url, headers, payload, method='POST'):
     payload = json.dumps(payload)
     response = requests.request(method, url, headers=headers, data=payload)
     return json.loads(response.text.encode('utf8'))
+
 
 def call_api_medicar(num_aut: int) -> dict:
     """
@@ -298,6 +298,3 @@ def should_i_call_auth():
             return True
         else:
             return token
-
-if __name__ == '__main__':
-    print(call_api_medicar(800102183461))
