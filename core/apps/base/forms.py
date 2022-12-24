@@ -10,7 +10,7 @@ class Home(forms.Form):
     """
     Vista 1: Página inicial de la aplicación
     """
-    ...
+    ... 
 
 
 class Instrucciones(forms.Form):
