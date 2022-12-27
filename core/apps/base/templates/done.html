@@ -5,6 +5,8 @@
 
 {% block content %}
 <section class="vista10">
+
+    
     <div class="vist1">
         <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
     </div>
@@ -16,5 +18,9 @@
         documentos, si todo esta correcto un agente le
         notificara la radicación exitosa de su solicitud.
     </p>
+
+    <button class="btn" id="btn_conti" type="button" onclick="cargar4()">
+        <a class="home" href="{% url 'base:home' %}"> Finalizar</a>
+    </button>
 </section>
 {% endblock %}
