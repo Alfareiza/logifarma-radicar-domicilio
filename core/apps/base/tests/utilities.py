@@ -7,7 +7,7 @@ from django.core.files.storage import DefaultStorage
 from django.shortcuts import render
 from formtools.wizard.views import WizardView
 from selenium import webdriver
-from selenium.webdriver import Keys
+from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -38,6 +38,7 @@ class VisualWizardTests(StaticLiveServerTestCase):
             service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),
             options=options
         )
+        cls.selenium.maximize_window()
         cls.selenium.implicitly_wait(10)
 
     @classmethod
@@ -106,8 +107,12 @@ class VisualWizardTests(StaticLiveServerTestCase):
 
     def process_direccion_barrio(self):
         self.insert_data(value="digitaDireccionBarrio-direccion", data='CUALQUIER DIRECCIÓN')
-        self.selenium.find_element(by=By.ID, value='id_digitaDireccionBarrio-barrio_0').click()
-        self.get_boton_continuar().click()
+        ActionChains(self.selenium).send_keys(Keys.TAB).perform()
+        ActionChains(self.selenium).send_keys(Keys.TAB).perform()
+        ActionChains(self.selenium).send_keys(Keys.SPACE).perform()
+        ActionChains(self.selenium).send_keys(Keys.TAB).perform()
+        ActionChains(self.selenium).send_keys(Keys.SPACE).perform()
+        # self.get_boton_continuar().click()
         if self.selenium.title != 'Digite celular':
             self.take_me_to_the_step('digitaCelular')
 
