@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from core.apps.base.forms import AutorizacionServicio
 from core.apps.base.models import Radicacion, Municipio, Barrio
-from core.apps.base.tests.test_wizards import TestWizard, get_request
+from core.apps.base.tests.utilities import get_request, TestWizard
 from core.apps.base.views import FORMS
 
 
