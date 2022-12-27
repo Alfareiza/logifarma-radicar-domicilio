@@ -39,4 +39,4 @@ jobs:
     - name: Django commands
       run: python manage.py collectstatic
     - name: Tests
-      run: python manage.py test core.apps.base.tests.test_selenium
+      run: python manage.py test core.apps.base.tests.test_basic_flow
