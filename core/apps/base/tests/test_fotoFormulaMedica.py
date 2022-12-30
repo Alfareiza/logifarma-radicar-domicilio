@@ -6,7 +6,7 @@ from django.utils.datastructures import MultiValueDict
 
 from core import settings
 from core.apps.base.forms import FotoFormulaMedica
-from core.apps.base.tests.test_wizards import TestWizard, get_request
+from core.apps.base.tests.utilities import get_request, TestWizard
 from core.apps.base.views import FORMS
 from core.settings import BASE_DIR
 

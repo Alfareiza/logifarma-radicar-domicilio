@@ -5,7 +5,7 @@ from core import settings
 from core.apps.base.forms import AvisoDireccion
 from core.apps.base.models import Municipio, Barrio
 from core.apps.base.tests.test_fotoFormulaMedica import upload_foto
-from core.apps.base.tests.test_wizards import TestWizard, get_request
+from core.apps.base.tests.utilities import get_request, TestWizard
 from core.apps.base.views import FORMS
 
 

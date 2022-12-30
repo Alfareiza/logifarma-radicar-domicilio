@@ -279,7 +279,8 @@ main section.vista3 input.inp_vist3 {margin: 1% 28%;
     border-bottom: solid 1px;
     font-size: 1em;
     width: 44%;
-    outline: none;}
+    outline: none;
+    border-radius: 0px;}
 
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
@@ -520,12 +521,14 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 .con:hover {background: #d4cfcf;}
 
-.radio { margin: auto 5px auto 0px;}
+.radio { margin: 0.5% auto;
+    position: absolute;}
 
 .labelfil {width: 91%;
-    margin: auto auto;
-    padding: 0%;
-    font-size: 1.1em;}
+    margin: auto 0% auto 0%;
+    font-size: 1.1em;
+    padding: 0px 1px 0px 7%;
+    z-index: 99; }
     
 .btn_muni {position: fixed;
     padding: 0.5% 5%;
@@ -602,7 +605,8 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     border-bottom: solid 1px;
     font-size: 1em;
     width: 40%;
-    outline: none;}
+    outline: none;
+    border-radius: 0px;}
 
 .inp_vist8::-webkit-inner-spin-button,
 .inp_vist8::-webkit-inner-spin-button{
@@ -733,6 +737,9 @@ main section.vista10 p.vist10 {position: relative;
     font-weight: 200;
     margin: 0% auto;}
 
+.home {text-decoration: none;
+    color: #468bc4;
+}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
@@ -1013,7 +1020,8 @@ main section.vista3 input.inp_vist3 {margin: 1% 28%;
     border-bottom: solid 1px;
     font-size: 1em;
     width: 44%;
-    outline: none;}
+    outline: none;
+    border-radius: 0px;}
 
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
@@ -1257,12 +1265,14 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 .con:hover {background: #d4cfcf;}
 
-.radio { margin: auto 5px auto 0px;}
+.radio { margin: 1% auto;
+    position: absolute;}
 
 .labelfil {width: 91%;
-    margin: auto auto;
-    padding: 0%;
-    font-size: 1em;}
+    margin: auto 0% auto 0%;
+    font-size: 1em;
+    padding: 0px 1px 0px 8%;
+    z-index: 99; }
     
 .btn_muni {position: fixed;
     padding: 0.5% 5%;
@@ -1347,7 +1357,8 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     border-bottom: solid 1px;
     font-size: 1em;
     width: 30%;
-    outline: none;}
+    outline: none;
+    border-radius: 0px;}
 
 .inp_vist8::-webkit-inner-spin-button,
 .inp_vist8::-webkit-inner-spin-button{
@@ -1480,6 +1491,10 @@ main section.vista10 p.vist10 {position: relative;
 
 }
 
+.home {text-decoration: none;
+    color: #468bc4;
+}
+
 /* .
 .
 .
@@ -1540,11 +1555,13 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     color: #333;}
 
 .select_opt {position: relative;
-    padding: 2.5%;
+    padding: 0%;
     color: #0572ce;
     border-color: #0572ce;
     font-size: 2em;
-    width: 100%;}
+    width: 100%;
+    height: 100%;
+    margin: 0;}
 
 .btn {position: absolute;
     padding: 3% 14%;
@@ -1768,7 +1785,8 @@ main section.vista3 input.inp_vist3 {margin: 5% 14%;
     border-bottom: solid 1px;
     font-size: 1.9em;
     width: 70%;
-    outline: none;}
+    outline: none;
+    border-radius: 0px;}
 
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
@@ -2012,12 +2030,19 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 .con:hover {background: #d4cfcf;}
 
-.radio { margin: auto 5px auto 0px;}
+.radio {
+    margin: 0.5% auto;
+    position: absolute;
+    width: 23px;
+    height: 23px;
+    padding: 0;
+}
 
 .labelfil {width: 91%;
-    margin: auto auto;
-    padding: 0%;
-    font-size: 1.6em;}
+    margin: auto 0% auto 0%;
+    font-size: 1.6em;
+    padding: 0px 1px 0px 7%;
+    z-index: 99; }
 
 .btn_muni {position: absolute;
     padding: 3% 13%;
@@ -2103,7 +2128,8 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     text-align: center;
     font-size: 1.3em;
     font-weight: 400;
-    margin: 0 auto 0;}
+    margin: 0 auto 0;
+    border-radius: 0px;}
 
 .inp_vist8::-webkit-inner-spin-button,
 .inp_vist8::-webkit-inner-spin-button{
@@ -2225,7 +2251,12 @@ main section.vista10 p.vist10 {position: relative;
     font-weight: 200;
     margin: 0% auto;}
 
+.home {text-decoration: none;
+    color: #468bc4;
 }
+
+}
+
 
 /* .
 .
@@ -2521,6 +2552,7 @@ main section.vista3 input.inp_vist3 {margin: 5% 7%;
     width: 86%;
     outline: none;}
 
+
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
 -webkit-appearance: none;
@@ -2777,10 +2809,14 @@ main section.vista6 {width: 100%; height: 90vh; position: relative; margin: 0 au
 
 .radio { margin: auto 5px auto 0px;}
 
+.radio { margin: 1% auto;
+    position: absolute;}
+
 .labelfil {width: 91%;
-    margin: auto auto;
-    padding: 0%;
-    font-size: 1em;}
+    margin: auto 0% auto 0%;
+    font-size: 1em;
+    padding: 0px 1px 0px 9%;
+    z-index: 99; }
 
 .btn_muni {position: absolute;
     padding: 3% 14%;
@@ -2857,6 +2893,7 @@ main section.vista8 {width: 100%; height: 90vh; position: relative; margin: 0 au
     font-size: 1em;
     width: 86%;
     outline: none;}
+
 
 .inp_vist8::-webkit-inner-spin-button,
 .inp_vist8::-webkit-inner-spin-button{
@@ -2996,9 +3033,12 @@ main section.vista10 p.vist10 {position: relative;
     font-weight: 200;
     margin: 0% auto;}
 
-
+.home {text-decoration: none;
+    color: #468bc4;
+    }
 
 }
+
 
 /*
 .
@@ -3286,7 +3326,8 @@ main section.vista3 input.inp_vist3 {margin: 5% 14%;
     border-bottom: solid 1px;
     font-size: 1em;
     width: 70%;
-    outline: none;}
+    outline: none;
+    border-radius: 0px;}
 
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
@@ -3334,39 +3375,6 @@ main section.vista3 button.btn_vist3 {position: absolute;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
-
-.conten_carga { background: #ffffff;
-    height: 100%;
-    width: 100%;
-    left: -1%;
-    top: -5%;
-    position: absolute;
-    -webkit-animation: all 1s ease;
-    -o-ani-webkit-animation: all 1s ease;
-    animation: all 1s ease;
-    z-index: 99;
-    display: none;
-    border: solid #3333;
-    border-radius: 12px;
-}
-
-.carga {border: solid 7px #ccc;
-    border-top-color: #f4266a;
-    border-top-style: groove;
-    height: 24px;
-    width: 24px;
-    border-radius: 100%;
-
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    -webkit-animation: girar 1.5s linear infinite;
-    -o-animation: girar 1.5s linear infinite ;
-    animation: girar 1.5s linear infinite;
-}
 
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
@@ -3570,12 +3578,14 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 .con:hover {background: #d4cfcf;}
 
-.radio {margin: auto 5px auto 0px;}
+.radio { margin: 1.8% auto;
+    position: absolute;}
 
 .labelfil {width: 91%;
-    margin: auto auto;
-    padding: 0%;
-    font-size: 1em;}
+    margin: auto 0% auto 0%;
+    font-size: 1em;
+    padding: 0px 1px 0px 11%;
+    z-index: 99; }
 
 .btn_muni {position: fixed;
     padding: 3% 14%;
@@ -3651,7 +3661,8 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     border-bottom: solid 1px;
     font-size: 1em;
     width: 70%;
-    outline: none;}
+    outline: none;
+    border-radius: 0px;}
 
 .inp_vist8::-webkit-inner-spin-button,
 .inp_vist8::-webkit-inner-spin-button{
@@ -3787,7 +3798,9 @@ main section.vista10 p.vist10 {position: relative;
     font-weight: 200;
     margin: 0% auto;}
 
-
+.home {text-decoration: none;
+    color: #468bc4;
+}
 
 }
 

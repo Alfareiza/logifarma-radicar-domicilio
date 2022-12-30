@@ -1,10 +1,15 @@
 {% extends "base/base.html" %}
 {% load static %}
 
-{% block title %}Digite celular{% endblock %}
+{% block title %}Digite un correo electrónico{% endblock %}
 
 {% block content %}
 <section class="vista9">
+
+    <SCRIPT LANGUAGE="JavaScript">
+        history.forward()
+        </SCRIPT>
+        
     <form id="form-id" class="form" action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
@@ -42,14 +47,10 @@
                     <span class="icon2 fas fa-check"></span>
                 </div>
                 <input class="inp_vist9" type="email" placeholder="Ingresa tu correo (Opcional)." name="digitaCorreo-email" id="id_digitaCorreo-email"  onkeyup="corrvali()">
-               <!--  <label class="lbl-nombre">
-                    <span class="text-nomb">Ingresa tu correo (Opcional).</span>
-                </label> -->
-                
+                             
                <div class="text-error">Digite un correo válido</div>
             </div>
 
-            <!-- <p class="vist9_t">(Este campo no es obligatorio).</p> -->
         {% endif %}
 
         <div class="load" id="load_a">
@@ -59,7 +60,7 @@
             </div>
 
 
-        <button class="btn" id="btn_final" type="submit" >Finalizar</button>
+        <button class="btn" id="btn_final" type="submit" >Continuar</button>
 
     </form>
 

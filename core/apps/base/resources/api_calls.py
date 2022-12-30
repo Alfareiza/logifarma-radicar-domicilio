@@ -274,7 +274,9 @@ def call_api_medicar(num_aut: int) -> dict:
     payload = {"nit_eps": "901543211", "autorizacion": f"{num_aut}"}
     resp = request_api(url, headers, payload)
     try:
-        if resp == {'error': 'El Nit ingresado no corresponde a ningun convenio.'}:
+        if resp == {'error': 'No se han encontrado registros.'}:
+            return resp
+        elif resp == {'error': 'El Nit ingresado no corresponde a ningun convenio.'}:
             payload['nit_eps'] = '890102044'
             resp = request_api(url, headers, payload)
         return resp[0]
