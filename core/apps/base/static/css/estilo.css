@@ -2244,8 +2244,11 @@ main section.vista10 p.vist10 {position: relative;
 /*mobile*/
 @media only screen and (max-width: 499px){
 
-h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
+h1, h2, h3, h4, h5, h6{
     font-family: 'Montserrat', sans-serif; }
+
+p, a, span, strong, div, form, select, option, textarea, button {
+        font-family: 'Montserrat', sans-serif; }
 
         header, main, footer, aside, nav, figure, figcaption, article { display: block;}
 
@@ -2263,7 +2266,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     position: absolute;
     border: 0px;
     background: #ffff;
-    top: 3%;
+    top: 2.1%;
     z-index: 9;}
 
 .b_atras {
@@ -2510,12 +2513,12 @@ main section.vista3 p.vist3 { font-size: 1em;}
 
 main section.vista3 h1.vist3 { font-size: 1.4em; font-weight: 500;}
 
-main section.vista3 input.inp_vist3 {margin: 5% 14%;
+main section.vista3 input.inp_vist3 {margin: 5% 7%;
     padding: 1% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 70%;
+    width: 86%;
     outline: none;}
 
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
@@ -2762,7 +2765,7 @@ main section.vista6 {width: 100%; height: 90vh; position: relative; margin: 0 au
 
 .elec {position: relative;
     width: 85%;
-    height: 21vh;
+    height: 24vh;
     margin: 5% auto 0 auto;
     overflow: auto;}
 
@@ -2797,7 +2800,7 @@ main section.vista7 {width: 100%; height: 90vh; position: relative; margin: 0 au
 .vist7 {width: 81%;
     height: 7vh;
     text-align: center;
-    margin: 10% auto 8px;
+    margin: 13% auto 8px;
     font-size: 1.4em;
     font-weight: 300;}
 
@@ -2847,12 +2850,12 @@ main section.vista8 {width: 100%; height: 90vh; position: relative; margin: 0 au
     font-size: 1.4em;
     font-weight: 300;}
 
-.inp_vist8 {margin: 3% 14%;
+.inp_vist8 {margin: 2% 7%;
     padding: 3% 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 70%;
+    width: 86%;
     outline: none;}
 
 .inp_vist8::-webkit-inner-spin-button,
@@ -2893,7 +2896,9 @@ main section.vista9 {width: 100%; height: 90vh; position: relative; margin: 0 au
     height: 100%;
     outline: none;
     background: none;
-    color: #333;}
+    color: #333;
+    border-radius: 0%;
+}
 
 
 .p_vist9 {position: relative;
@@ -2927,7 +2932,7 @@ main section.vista9 p.vist9_t {position: relative;
 
 .valid {position: relative;
     margin: 3% auto 7% auto;
-    width: 95%;
+    width: 90%;
     height: 7vh;
     display: flex;}
 
