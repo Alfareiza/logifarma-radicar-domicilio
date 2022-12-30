@@ -1,6 +1,6 @@
 const carga = document.getElementById("btn_carga") ;
 
-function cargar2() {
+function animabotoncarga_direccion() {
 
     /* let inp = document.getElementById('id_digitaDireccionBarrio-direccion').addEventListener("keyup"); */
 
@@ -17,7 +17,7 @@ function cargar2() {
 
 };
 
-function cargar3() {
+function animabotoncarga_celular() {
     let numvali = document.getElementById("id_digitaCelular-celular");
 
     if (numvali.value < 1000000000) {
@@ -28,13 +28,13 @@ function cargar3() {
     }
 };
 
-function cargar4() {
+function animabotoncarga_general() {
     
     carga.style.display = "block";
 
 };
 
-function cargar5() {
+function animabotoncarga_municipio() {
     /* let selecheck = document.getElementsByClassName("select_opt"); */
 
     if ($('.select_opt').is(':checked') ) {
@@ -46,7 +46,7 @@ function cargar5() {
 };
 
 
-function cargar_aut() {
+function animabotoncarga_autorizacion() {
     let carga = document.getElementById("btn_carga") ;
     let camp = document.getElementById("id_autorizacionServicio-num_autorizacion").value;
     
