@@ -3,8 +3,10 @@ from collections import OrderedDict
 
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.template.loader import get_template
+from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect
 from formtools.wizard.views import SessionWizardView
@@ -108,10 +110,8 @@ class ContactWizard(SessionWizardView):
 
     def done(self, form_list, **kwargs):
         form_data = self.process_from_data(form_list)
-        return render(self.request,
-                      'done.html',
-                      context={'form_data': form_data}
-                      )
+        self.request.session['temp_data'] = form_data
+        return HttpResponseRedirect(reverse('base:done'))
 
     def get_form(self, step=None, data=None, files=None):
         """
@@ -170,6 +170,8 @@ class ContactWizard(SessionWizardView):
         # Envía e-mail
         self.send_mail(info_email)
 
+        return form_data[2]['num_autorizacion']
+
     def send_mail(self, info_email):
         """
         Envía email con imagen adjunta.
@@ -178,7 +180,7 @@ class ContactWizard(SessionWizardView):
         :return: None
         """
         subject = f"{info_email['NUMERO_AUTORIZACION']} - Este es el " \
-                      f"número de radicación de tu domicilio en Logifarma"
+                  f"número de radicación de tu domicilio en Logifarma"
 
         copia_oculta = config('EMAIL_BCC', cast=Csv())
 
@@ -187,7 +189,7 @@ class ContactWizard(SessionWizardView):
             with contextlib.suppress(Exception):
                 copia_oculta.remove('radicacion.domicilios@logifarma.co')
 
-        destinatary = (info_email['email'], )
+        destinatary = (info_email['email'],)
         html_content = htmly.render(info_email)
 
         email = EmailMessage(
@@ -252,3 +254,10 @@ class ContactWizard(SessionWizardView):
         # same data twice.
         # self.storage.reset()
         return self.done(list(final_forms.values()), form_dict=final_forms, **kwargs)
+
+
+def finalizado(request):
+    if ctx := request.session.get('temp_data', {}):
+        return render(request, 'done.html', ctx)
+    else:
+        return HttpResponseRedirect('/')
