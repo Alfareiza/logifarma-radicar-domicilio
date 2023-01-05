@@ -202,7 +202,11 @@ def auth_api_medicar():
 def request_api(url, headers, payload, method='POST'):
     payload = json.dumps(payload)
     response = requests.request(method, url, headers=headers, data=payload)
-    return json.loads(response.text.encode('utf8'))
+    try:
+        return json.loads(response.text.encode('utf8'))
+    except Exception as e:
+        logger.error("Error en request: ", response.text)
+        return {}
 
 
 def call_api_medicar(num_aut: int) -> dict:
