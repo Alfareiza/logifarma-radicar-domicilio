@@ -4,7 +4,7 @@
 {% block title %}Listo{% endblock %}
 
 {% block content %}
-<section class="vista10">
+<section class="vista10" id="vista10">
 
     <div class="vist1">
         <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
@@ -24,16 +24,16 @@
                     <p class="inf_radic">MIPRES:</p>
                     <p class="inf_radic1">Medico tratante:</p>
                     <p class="inf_radic">Diagnóstico:</p>
-                    <p class="inf_radic1">nombre del afiliado</p>
+                    <p class="inf_radic1">Nombre del afiliado</p>
                 </div>
                 <div class="section2">
-                    <p class="inf_radic1">800102039231</p>
-                    <p class="inf_radic">28/06/2022</p>
-                    <p class="inf_radic1">PROCESADA</p>
-                    <p class="inf_radic">0</p>
-                    <p class="inf_radic1">LUZ VARGAS</p>
-                    <p class="inf_radic">K635-POLIPO DEL COLON</p>
-                    <p class="inf_radic1">nombre del afiliado</p>
+                    <p class="inf_radic1">{{ NUMERO_AUTORIZACION }}</p>
+                    <p class="inf_radic">{{ FECHA_AUTORIZACION }}</p>
+                    <p class="inf_radic1">{{ ESTADO_AUTORIZACION }}</p>
+                    <p class="inf_radic">{{ MIPRES }}</p>
+                    <p class="inf_radic1">{{ MEDICO_TRATANTE|upper }}</p>
+                    <p class="inf_radic">{{ DIAGNOSTICO }}</p>
+                    <p class="inf_radic1">{{ AFILIADO }}</p>
                 </div>
             </div>
         </div>
@@ -47,25 +47,29 @@
                     <p class="inf_entreg">Barrio:</p>
                     <p class="inf_entreg1">Direccion:</p>
                     <p class="inf_entreg">Celular:</p>
-                    <p class="inf_entreg1">Email;</p>
+                    <p class="inf_entreg1">Email:</p>
                     
                 </div>
                 <div class="section2">
-                    <p class="inf_entreg1">Barranquilla, Atlantico</p>
-                    <p class="inf_entreg">El Valle, Atlantico</p>
-                    <p class="inf_entreg1">calle 13 #32-33</p>
-                    <p class="inf_entreg">0383738183</p>
-                    <p class="inf_entreg1">    </p>
+                    <p class="inf_entreg1">{{ municipio }}</p>
+                    <p class="inf_entreg">{{ barrio }}</p>
+                    <p class="inf_entreg1">{{ direccion }}</p>
+                    <p class="inf_entreg">{{ celular }}</p>
+                    <p class="inf_entreg1">{{ email }}</p>
                 </div>
             </div>
         </div>
         <div class="conten_text3">
             <div class="conten_titu">
-                <p class="inf_tit"><strong>Articulos</S></strong></p>
+                <p class="inf_tit"><strong>Tienes {{DETALLE_AUTORIZACION|length}} artículo{{DETALLE_AUTORIZACION|length|pluralize}}:</S></strong></p>
             </div>
-            <p class="inf">1</p>
-            <p class="inf">1</p>
-            <p class="inf">1</p>
+            {% for articulo in DETALLE_AUTORIZACION %}
+            <ul>
+                <li>
+                <p class="inf">{{articulo.NOMBRE_PRODUCTO}} (CUM: {{articulo.CUMS}}) Cantidad: {{articulo.CANTIDAD}}</p>
+                </li>
+            </ul>
+            {% endfor %}
         </div>
 
         <div class="cont_butt">
@@ -78,4 +82,5 @@
         <a class="home" href="{% url 'base:home' %}"> Finalizar</a>
     </button>
 </section>
+{% include 'download.html' %}
 {% endblock %}
