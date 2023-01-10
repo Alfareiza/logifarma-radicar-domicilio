@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // click del botón
     const $boton = document.querySelector("#btnCrearPdf");
     $boton.addEventListener("click", () => {
-        const $elementoParaConvertir = document.querySelector("#vista11"); // elemento del DOM
+        const elementoParaConvertir = document.getElementById("template_downloadable"); // elemento del DOM
         html2pdf()
             .set({
                 margin: 0,
