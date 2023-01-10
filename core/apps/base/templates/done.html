@@ -4,23 +4,83 @@
 {% block title %}Listo{% endblock %}
 
 {% block content %}
-<section class="vista10">
+<section class="vista10" id="vista10">
 
-    
     <div class="vist1">
         <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
     </div>
+    
+    <div class="conte_glo">
+        <h1 class="h1">Proceso terminado</h1>
+        <div class="conten_text">
+            <div class="conten_titu">
+                <p class="inf_tit"> <strong>Información de radicación</strong></p>
+            </div>
+            <div class="cont_section">
+                <div class="section1">
+                    <p class="inf_radic1">Número de autorización:</p>
+                    <p class="inf_radic">Fecha de autorización:</p>
+                    <p class="inf_radic1">Estado de autorización:</p>
+                    <p class="inf_radic">MIPRES:</p>
+                    <p class="inf_radic1">Medico tratante:</p>
+                    <p class="inf_radic">Diagnóstico:</p>
+                    <p class="inf_radic1">Nombre del afiliado</p>
+                </div>
+                <div class="section2">
+                    <p class="inf_radic1">{{ NUMERO_AUTORIZACION }}</p>
+                    <p class="inf_radic">{{ FECHA_AUTORIZACION }}</p>
+                    <p class="inf_radic1">{{ ESTADO_AUTORIZACION }}</p>
+                    <p class="inf_radic">{{ MIPRES }}</p>
+                    <p class="inf_radic1">{{ MEDICO_TRATANTE|upper }}</p>
+                    <p class="inf_radic">{{ DIAGNOSTICO }}</p>
+                    <p class="inf_radic1">{{ AFILIADO }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="conten_text2">
+            <div class="conten_titu">
+                <p class="inf_tit"> <strong>Información de entrega</strong></p>
+            </div>            
+            <div class="cont_section">
+                <div class="section1">
+                    <p class="inf_entreg1">Ciudad:</p>
+                    <p class="inf_entreg">Barrio:</p>
+                    <p class="inf_entreg1">Direccion:</p>
+                    <p class="inf_entreg">Celular:</p>
+                    <p class="inf_entreg1">Email:</p>
+                    
+                </div>
+                <div class="section2">
+                    <p class="inf_entreg1">{{ municipio }}</p>
+                    <p class="inf_entreg">{{ barrio }}</p>
+                    <p class="inf_entreg1">{{ direccion }}</p>
+                    <p class="inf_entreg">{{ celular }}</p>
+                    <p class="inf_entreg1">{{ email }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="conten_text3">
+            <div class="conten_titu">
+                <p class="inf_tit"><strong>Tienes {{DETALLE_AUTORIZACION|length}} artículo{{DETALLE_AUTORIZACION|length|pluralize}}:</S></strong></p>
+            </div>
+            {% for articulo in DETALLE_AUTORIZACION %}
+            <ul>
+                <li>
+                <p class="inf">{{articulo.NOMBRE_PRODUCTO}} (CUM: {{articulo.CUMS}}) Cantidad: {{articulo.CANTIDAD}}</p>
+                </li>
+            </ul>
+            {% endfor %}
+        </div>
 
-    <h1 class="vist10">¡Proceso terminado!</h1>
+        <div class="cont_butt">
+            <input id="btnCrearPdf" class="inp_descar" type="button" value="descargar">
+        </div>
 
-    <p class="vist10">
-        Nos encontramos haciendo validación de tus
-        documentos, si todo esta correcto un agente le
-        notificara la radicación exitosa de su solicitud.
-    </p>
+    </div> 
 
     <button class="btn" id="btn_conti" type="button" onclick="cargar4()">
         <a class="home" href="{% url 'base:home' %}"> Finalizar</a>
     </button>
 </section>
+{% include 'download.html' %}
 {% endblock %}

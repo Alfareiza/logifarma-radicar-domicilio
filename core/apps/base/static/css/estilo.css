@@ -64,7 +64,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     margin: 0 auto;
     font-size: 2em;
     border-radius: 12px;
-    left: 42%;
+    left: 43.7%;
     top: 88%;
     background: #ffffff;
     border-color: #468bc4;
@@ -724,18 +724,131 @@ height: 100%;}
 main section.vista10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section.vista10 h1.vist10 {width: 61%;
+.h1{position: relative;
+    margin: 0% auto 1%;
+    width: 70%;
+    height: 4vh;
     text-align: center;
-    margin: 7% auto 7%;
     font-size: 1.4em;
-    font-weight: 600;}
+}
 
-main section.vista10 p.vist10 {position: relative;
-    width: 65%;
-    text-align: center;
-    font-size: 1.5em;
-    font-weight: 200;
-    margin: 0% auto;}
+.conte_glo{ position: relative;
+    width: 35%;
+    height: 73vh;
+    margin: auto auto;
+    background: #ffff;
+}
+
+.conten_text{position: relative;
+    width: 100%;
+    height: 40%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+}
+.conten_titu{    position: relative;
+    margin: 0% auto;
+    width: 100%;
+    height: 19%;
+    text-align: left;
+    display: flex;
+}
+
+.inf_tit{position: relative;
+    margin: auto 0;
+    text-align: left;
+    font-size: 1em;
+}
+
+.cont_section{
+    width: 100%;
+    height: 80%;
+    display: flex;
+}
+
+.section1{
+    position: relative;
+    width: 50%;
+}
+
+.section2{
+    position: relative;
+    width: 50%;
+}
+
+.inf_radic {position: relative;
+    width: 97%;
+    height: 7%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.8em;
+}
+.inf_radic1{position: relative;
+    width: 97%;
+    height: 7%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.8em;
+    background: #438cb69c;
+}
+
+.conten_text2{position: relative;
+    width: 100%;
+    height: 25%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+    margin: 1.5% 0 0 0;
+}
+
+.inf_entreg{position: relative;
+    width: 97%;
+    height: 9%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.8em;
+}
+.inf_entreg1{position: relative;
+    width: 97%;
+    height: 8%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.8em;
+    background: #438cb69c;
+}
+.conten_text3{position: relative;
+    width: 100%;
+    height: 18%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+    margin: 1.5% 0 0 0;
+}
+
+.inf{position: relative;
+    width: 97%;
+    height: 10%;
+    margin: 0;
+    padding: 1.6% 0% 1.6% 3%;
+    text-align: left;
+    font-size: 0.8em;
+}
+
+.cont_butt{position: relative;
+    width: 100%;
+    height: 5vh;
+    margin: 1% auto;
+    display: flex;
+    border: solid 0px black;
+}
+
+.inp_descar {position: relative;
+    width: 30%;
+    height: 100%;
+    margin: 0 auto;
+    border: solid 1px black;
+}
 
 .home {text-decoration: none;
     color: #468bc4;
@@ -783,7 +896,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 .img1 {position: relative;
     margin: 0% auto;
     width: 17%;
-    padding: 1% 41.5%;}
+    padding: 0% 41.5%;}
 
 .label_vist {position: relative;
     font-size: 1.5em;
@@ -799,9 +912,9 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 .btn {position: absolute;
     padding: 0.6% 3%;
     margin: 0 auto;
-    font-size: 2em;
+    font-size: 1.5em;
     border-radius: 12px;
-    left: 42%;
+    left: 43.1%;
     top: 88%;
     background: #ffffff;
     border-color: #468bc4;
@@ -1475,19 +1588,131 @@ height: 100%;}
 
 main section.vista10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-
-main section.vista10 h1.vist10 {width: 61%;
+.h1{position: relative;
+    margin: 0% auto 1%;
+    width: 70%;
+    height: 4vh;
     text-align: center;
-    margin: 7% auto 7%;
     font-size: 1.4em;
-    font-weight: 600;}
+}
 
-main section.vista10 p.vist10 {position: relative;
-    width: 65%;
-    text-align: center;
-    font-size: 1.5em;
-    font-weight: 200;
-    margin: 0% auto;}
+.conte_glo{ position: relative;
+    width: 35%;
+    height: 76vh;
+    margin: auto auto;
+    background: #ffff;
+}
+
+.conten_text{position: relative;
+    width: 100%;
+    height: 40%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+}
+.conten_titu{    position: relative;
+    margin: 0% auto;
+    width: 100%;
+    height: 19%;
+    text-align: left;
+    display: flex;
+}
+
+.inf_tit{position: relative;
+    margin: auto 0;
+    text-align: left;
+    font-size: 1em;
+}
+
+.cont_section{
+    width: 100%;
+    height: 80%;
+    display: flex;
+}
+
+.section1{
+    position: relative;
+    width: 50%;
+}
+
+.section2{
+    position: relative;
+    width: 50%;
+}
+
+.inf_radic {position: relative;
+    width: 97%;
+    height: 7%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.8em;
+}
+.inf_radic1{position: relative;
+    width: 97%;
+    height: 7%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.8em;
+    background: #438cb69c;
+}
+
+.conten_text2{position: relative;
+    width: 100%;
+    height: 25%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+    margin: 1.5% 0 0 0;
+}
+
+.inf_entreg{position: relative;
+    width: 97%;
+    height: 9%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.8em;
+}
+.inf_entreg1{position: relative;
+    width: 97%;
+    height: 8%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.8em;
+    background: #438cb69c;
+}
+.conten_text3{position: relative;
+    width: 100%;
+    height: 18%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+    margin: 1.5% 0 0 0;
+}
+
+.inf{position: relative;
+    width: 97%;
+    height: 10%;
+    margin: 0;
+    padding: 1.6% 0% 1.6% 3%;
+    text-align: left;
+    font-size: 0.8em;
+}
+
+.cont_butt{position: relative;
+    width: 100%;
+    height: 5vh;
+    margin: 1% auto;
+    display: flex;
+    border: solid 0px black;
+}
+
+.inp_descar {position: relative;
+    width: 30%;
+    height: 100%;
+    margin: 0 auto;
+    border: solid 1px black;
+}
 
 }
 
@@ -2238,18 +2463,131 @@ height: 100%;}
 main section.vista10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section.vista10 h1.vist10 {width: 61%;
-    text-align: left;
-    margin: 20% auto 15%;
+.h1{position: relative;
+    margin: 0% auto 1%;
+    width: 70%;
+    height: 4vh;
+    text-align: center;
     font-size: 1.4em;
-    font-weight: 600;}
+}
 
-main section.vista10 p.vist10 {position: relative;
-    width: 65%;
+.conte_glo{ position: relative;
+    width: 70%;
+    height: 76vh;
+    margin: auto auto;
+    background: #ffff;
+}
+
+.conten_text{position: relative;
+    width: 100%;
+    height: 40%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+}
+.conten_titu{    position: relative;
+    margin: 0% auto;
+    width: 100%;
+    height: 19%;
     text-align: left;
-    font-size: 1.5em;
-    font-weight: 200;
-    margin: 0% auto;}
+    display: flex;
+}
+
+.inf_tit{position: relative;
+    margin: auto 0;
+    text-align: left;
+    font-size: 1.4em;
+}
+
+.cont_section{
+    width: 100%;
+    height: 80%;
+    display: flex;
+}
+
+.section1{
+    position: relative;
+    width: 50%;
+}
+
+.section2{
+    position: relative;
+    width: 50%;
+}
+
+.inf_radic {position: relative;
+    width: 97%;
+    height: 9%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 1.2em;
+}
+.inf_radic1{position: relative;
+    width: 97%;
+    height:9%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 1.2em;
+    background: #438cb69c;
+}
+
+.conten_text2{position: relative;
+    width: 100%;
+    height: 25%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+    margin: 1.5% 0 0 0;
+}
+
+.inf_entreg{position: relative;
+    width: 97%;
+    height: 12%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 1.2em;
+}
+.inf_entreg1{position: relative;
+    width: 97%;
+    height: 11%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 1.2em;
+    background: #438cb69c;
+}
+.conten_text3{position: relative;
+    width: 100%;
+    height: 18%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+    margin: 1.5% 0 0 0;
+}
+
+.inf{position: relative;
+    width: 97%;
+    height: 10%;
+    margin: 0;
+    padding: 1.6% 0% 1.6% 3%;
+    text-align: left;
+    font-size: 1.2em;
+}
+
+.cont_butt{position: relative;
+    width: 100%;
+    height: 4.5vh;
+    margin: 1% auto;
+    display: flex;
+    border: solid 0px black;
+}
+
+.inp_descar {position: relative;
+    width: 30%;
+    height: 100%;
+    margin: 0 auto;
+    border: solid 1px black;
+}
 
 .home {text-decoration: none;
     color: #468bc4;
@@ -3020,18 +3358,131 @@ height: 100%;}
 main section.vista10 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section.vista10 h1.vist10 {width: 61%;
-    text-align: left;
-    margin: 20% auto 15%;
+.h1{position: relative;
+    margin: 0% auto 1%;
+    width: 70%;
+    height: 4vh;
+    text-align: center;
     font-size: 1.4em;
-    font-weight: 600;}
+}
 
-main section.vista10 p.vist10 {position: relative;
-    width: 65%;
+.conte_glo{ position: relative;
+    width: 90%;
+    height: 71vh;
+    margin: auto auto;
+    background: #ffff;
+}
+
+.conten_text{position: relative;
+    width: 100%;
+    height: 40%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+}
+.conten_titu{    position: relative;
+    margin: 0% auto;
+    width: 100%;
+    height: 19%;
     text-align: left;
-    font-size: 1.5em;
-    font-weight: 200;
-    margin: 0% auto;}
+    display: flex;
+}
+
+.inf_tit{position: relative;
+    margin: auto 0;
+    text-align: left;
+    font-size: 1em;
+}
+
+.cont_section{
+    width: 100%;
+    height: 80%;
+    display: flex;
+}
+
+.section1{
+    position: relative;
+    width: 50%;
+}
+
+.section2{
+    position: relative;
+    width: 50%;
+}
+
+.inf_radic {position: relative;
+    width: 97%;
+    height: 8.9%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.7em;
+}
+.inf_radic1{position: relative;
+    width: 97%;
+    height: 8.9%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.7em;
+    background: #438cb69c;
+}
+
+.conten_text2{position: relative;
+    width: 100%;
+    height: 25%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+    margin: 1.5% 0 0 0;
+}
+
+.inf_entreg{position: relative;
+    width: 97%;
+    height: 11.3%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.7em;
+}
+.inf_entreg1{position: relative;
+    width: 97%;
+    height: 11.3%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.7em;
+    background: #438cb69c;
+}
+.conten_text3{position: relative;
+    width: 100%;
+    height: 18%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+    margin: 1.5% 0 0 0;
+}
+
+.inf{position: relative;
+    width: 97%;
+    height: 10%;
+    margin: 0;
+    padding: 1.6% 0% 1.6% 3%;
+    text-align: left;
+    font-size: 0.8em;
+}
+
+.cont_butt{position: relative;
+    width: 100%;
+    height: 4vh;
+    margin: 1% auto;
+    display: flex;
+    border: solid 0px black;
+}
+
+.inp_descar {position: relative;
+    width: 30%;
+    height: 100%;
+    margin: 0 auto;
+    border: solid 1px black;
+}
 
 .home {text-decoration: none;
     color: #468bc4;
@@ -3785,18 +4236,130 @@ height: 100%;}
 main section.vista10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section.vista10 h1.vist10 {width: 61%;
-    text-align: left;
-    margin: 20% auto 15%;
-    font-size: 1.4em;
-    font-weight: 600;}
+.h1{position: relative;
+    margin: 0% auto 1%;
+    width: 70%;
+    height: 4vh;
+    text-align: center;
+    font-size: 1.1em;
+}
 
-main section.vista10 p.vist10 {position: relative;
-    width: 65%;
+.conte_glo{ position: relative;
+    width: 90%;
+    height: 71vh;
+    margin: auto auto;
+    background: #ffff;
+}
+
+.conten_text{position: relative;
+    width: 100%;
+    height: 40%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+}
+.conten_titu{    position: relative;
+    margin: 0% auto;
+    width: 100%;
+    height: 19%;
     text-align: left;
-    font-size: 1.5em;
-    font-weight: 200;
-    margin: 0% auto;}
+    display: flex;
+}
+
+.inf_tit{position: relative;
+    margin: auto 0;
+    text-align: left;
+    font-size: 1em;
+}
+
+.cont_section{
+    width: 100%;
+    height: 80%;
+    display: flex;
+}
+
+.section1{
+    position: relative;
+    width: 50%;
+}
+
+.section2{
+    position: relative;
+    width: 50%;
+}
+
+.inf_radic {position: relative;
+    width: 97%;
+    height: 10.3%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.6em;
+}
+.inf_radic1{position: relative;
+    width: 97%;
+    height: 10.3%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.6em;
+    background: #438cb69c;
+}
+
+.conten_text2{position: relative;
+    width: 100%;
+    height: 25%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+    margin: 1.5% 0 0 0;
+}
+
+.inf_entreg{position: relative;
+    width: 97%;
+    height: 13.5%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.6em;
+}
+.inf_entreg1{position: relative;
+    width: 97%;
+    height: 13.5%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.6em;
+    background: #438cb69c;
+}
+.conten_text3{position: relative;
+    width: 100%;
+    height: 18%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+    margin: 1.5% 0 0 0;
+}
+
+.inf{position: relative;
+    width: 97%;
+    height: 10%;
+    margin: 0;
+    padding: 1.6% 0% 1.6% 3%;
+    text-align: left;
+    font-size: 0.8em;
+}
+
+.cont_butt{position: relative;
+    width: 100%;
+    height: 4vh;
+    margin: 1% auto;
+    display: flex;
+    border: solid 0px black;
+}
+
+.inp_descar {position: relative;
+    width: 30%;
+    height: 100%;
+    margin: 0 auto;
+}
 
 .home {text-decoration: none;
     color: #468bc4;
@@ -3809,4 +4372,133 @@ main section.vista10 p.vist10 {position: relative;
 @media only screen and (max-width: 342px){
 
 main section#vist2 nav#vist2 div#img p#vist2 {font-size: 0.8em;}
+}
+
+
+.vista11 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+.h1_Q{position: relative;
+    margin: 0% auto 1%;
+    width: 70%;
+    height: 4vh;
+    text-align: center;
+    font-size: 1.4em;
+}
+
+.conte_glo_Q{ position: relative;
+    width: 35%;
+    height: 76vh;
+    margin: auto auto;
+    background: #ffff;
+}
+
+.conten_text_Q{position: relative;
+    width: 100%;
+    height: 40%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+}
+.conten_titu_Q{    position: relative;
+    margin: 0% auto;
+    width: 100%;
+    height: 19%;
+    text-align: left;
+    display: flex;
+}
+
+.inf_tit_Q{position: relative;
+    margin: auto 0;
+    text-align: left;
+    font-size: 1em;
+}
+
+.cont_section_Q{
+    width: 100%;
+    height: 80%;
+    display: flex;
+}
+
+.section1_Q{
+    position: relative;
+    width: 50%;
+}
+
+.section2_Q{
+    position: relative;
+    width: 50%;
+}
+
+.inf_radic_Q {position: relative;
+    width: 97%;
+    height: 7%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.8em;
+}
+.inf_radic1_Q{position: relative;
+    width: 97%;
+    height: 7%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.8em;
+    background: #438cb69c;
+}
+
+.conten_text2_Q{position: relative;
+    width: 100%;
+    height: 25%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+    margin: 1.5% 0 0 0;
+}
+
+.inf_entreg_Q{position: relative;
+    width: 97%;
+    height: 9%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.8em;
+}
+.inf_entreg1_Q{position: relative;
+    width: 97%;
+    height: 8%;
+    margin: 0;
+    padding: 2.5% 0% 2.5% 3%;
+    text-align: left;
+    font-size: 0.8em;
+    background: #438cb69c;
+}
+.conten_text3_Q{position: relative;
+    width: 100%;
+    height: 18%;
+    border: solid 1.5px #a1a1a1d0;
+    padding: 0 0 0 0%;
+    margin: 1.5% 0 0 0;
+}
+
+.inf_Q{position: relative;
+    width: 97%;
+    height: 10%;
+    margin: 0;
+    padding: 1.6% 0% 1.6% 3%;
+    text-align: left;
+    font-size: 0.8em;
+}
+
+.cont_butt_Q{position: relative;
+    width: 100%;
+    height: 5vh;
+    margin: 1% auto;
+    display: flex;
+    border: solid 0px black;
+}
+
+.inp_descar_Q {position: relative;
+    width: 30%;
+    height: 100%;
+    margin: 0 auto;
+    border: solid 1px black;
 }
