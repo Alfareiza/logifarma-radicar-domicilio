@@ -4,7 +4,7 @@
 {% block title %}Listo{% endblock %}
 
 {% block content %}
-<section class="vista11" id="vista11">
+<section style="display:none" class="vista11" id="template_downloadable">
 
     <div class="vist1">
         <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
@@ -68,14 +68,12 @@
             <p class="inf_Q">0</p>
         </div>
 
+        <!--
         <div class="cont_butt_Q">
             <input id="btnCrearPdf" class="inp_descar_Q" type="button" value="descargar">
         </div>
+        -->
 
-    </div> 
-    <script src="{% static 'js/dowload.js' %}"></script>
-    <!-- <button class="btn" id="btn_conti" type="button" onclick="cargar4()">
-        <a class="home" href="{% url 'base:home' %}"> Finalizar</a>
-    </button> -->
+    </div>
 </section>
 {% endblock %}
