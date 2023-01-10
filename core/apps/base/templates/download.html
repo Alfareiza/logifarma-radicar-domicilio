@@ -1,0 +1,81 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Listo{% endblock %}
+
+{% block content %}
+<section class="vista11" id="vista11">
+
+    <div class="vist1">
+        <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
+    </div>
+    
+    <div class="conte_glo_Q" id="conte_glo_Q">
+        <h1 class="h1_Q">Proceso terminado</h1>
+        <div class="conten_text_Q">
+            <div class="conten_titu_Q">
+                <p class="inf_tit_Q"> <strong>Información de radicación</strong></p>
+            </div>
+            <div class="cont_section_Q">
+                <div class="section1_Q">
+                    <p class="inf_radic1_Q">Número de autorización:</p>
+                    <p class="inf_radic_Q">Fecha de autorización:</p>
+                    <p class="inf_radic1_Q">Estado de autorización:</p>
+                    <p class="inf_radic_Q">MIPRES:</p>
+                    <p class="inf_radic1_Q">Medico tratante:</p>
+                    <p class="inf_radic_Q">Diagnóstico:</p>
+                    <p class="inf_radic1_Q">nombre del afiliado</p>
+                </div>
+                <div class="section2_Q">
+                    <p class="inf_radic1_Q">800102039231</p>
+                    <p class="inf_radic_Q">28/06/2022</p>
+                    <p class="inf_radic1_Q">PROCESADA</p>
+                    <p class="inf_radic_Q">0</p>
+                    <p class="inf_radic1_Q">LUZ VARGAS</p>
+                    <p class="inf_radic_Q">K635-POLIPO DEL COLON</p>
+                    <p class="inf_radic1_Q">nombre del afiliado</p>
+                </div>
+            </div>
+        </div>
+        <div class="conten_text2_Q">
+            <div class="conten_titu_Q">
+                <p class="inf_tit_Q"> <strong>Información de entrega</strong></p>
+            </div>            
+            <div class="cont_section_Q">
+                <div class="section1_Q">
+                    <p class="inf_entreg1_Q">Ciudad:</p>
+                    <p class="inf_entreg_Q">Barrio:</p>
+                    <p class="inf_entreg1_Q">Direccion:</p>
+                    <p class="inf_entreg_Q">Celular:</p>
+                    <p class="inf_entreg1_Q">Email;</p>
+                    
+                </div>
+                <div class="section2_Q">
+                    <p class="inf_entreg1_Q">Barranquilla, Atlantico</p>
+                    <p class="inf_entreg_Q">El Valle, Atlantico</p>
+                    <p class="inf_entreg1_Q">calle 13 #32-33</p>
+                    <p class="inf_entreg_Q">0383738183</p>
+                    <p class="inf_entreg1_Q">    </p>
+                </div>
+            </div>
+        </div>
+        <div class="conten_text3_Q">
+            <div class="conten_titu_Q">
+                <p class="inf_tit_Q"><strong>Articulos</S></strong></p>
+            </div>
+            <p class="inf_Q">1</p>
+            <p class="inf_Q">1</p>
+            <p class="inf_Q">0</p>
+        </div>
+
+        <div class="cont_butt_Q">
+            <input id="btnCrearPdf" class="inp_descar_Q" type="button" value="descargar">
+        </div>
+
+    </div> 
+    <script src="{% static 'js/dowload.js' %}"></script>
+    <!-- <button class="btn" id="btn_conti" type="button" onclick="cargar4()">
+        <a class="home" href="{% url 'base:home' %}"> Finalizar</a>
+    </button> -->
+</section>
+{% endblock %}

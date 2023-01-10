@@ -6,18 +6,73 @@
 {% block content %}
 <section class="vista10">
 
-    
     <div class="vist1">
         <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
     </div>
+    
+    <div class="conte_glo">
+        <h1 class="h1">Proceso terminado</h1>
+        <div class="conten_text">
+            <div class="conten_titu">
+                <p class="inf_tit"> <strong>Información de radicación</strong></p>
+            </div>
+            <div class="cont_section">
+                <div class="section1">
+                    <p class="inf_radic1">Número de autorización:</p>
+                    <p class="inf_radic">Fecha de autorización:</p>
+                    <p class="inf_radic1">Estado de autorización:</p>
+                    <p class="inf_radic">MIPRES:</p>
+                    <p class="inf_radic1">Medico tratante:</p>
+                    <p class="inf_radic">Diagnóstico:</p>
+                    <p class="inf_radic1">nombre del afiliado</p>
+                </div>
+                <div class="section2">
+                    <p class="inf_radic1">800102039231</p>
+                    <p class="inf_radic">28/06/2022</p>
+                    <p class="inf_radic1">PROCESADA</p>
+                    <p class="inf_radic">0</p>
+                    <p class="inf_radic1">LUZ VARGAS</p>
+                    <p class="inf_radic">K635-POLIPO DEL COLON</p>
+                    <p class="inf_radic1">nombre del afiliado</p>
+                </div>
+            </div>
+        </div>
+        <div class="conten_text2">
+            <div class="conten_titu">
+                <p class="inf_tit"> <strong>Información de entrega</strong></p>
+            </div>            
+            <div class="cont_section">
+                <div class="section1">
+                    <p class="inf_entreg1">Ciudad:</p>
+                    <p class="inf_entreg">Barrio:</p>
+                    <p class="inf_entreg1">Direccion:</p>
+                    <p class="inf_entreg">Celular:</p>
+                    <p class="inf_entreg1">Email;</p>
+                    
+                </div>
+                <div class="section2">
+                    <p class="inf_entreg1">Barranquilla, Atlantico</p>
+                    <p class="inf_entreg">El Valle, Atlantico</p>
+                    <p class="inf_entreg1">calle 13 #32-33</p>
+                    <p class="inf_entreg">0383738183</p>
+                    <p class="inf_entreg1">    </p>
+                </div>
+            </div>
+        </div>
+        <div class="conten_text3">
+            <div class="conten_titu">
+                <p class="inf_tit"><strong>Articulos</S></strong></p>
+            </div>
+            <p class="inf">1</p>
+            <p class="inf">1</p>
+            <p class="inf">1</p>
+        </div>
 
-    <h1 class="vist10">¡Proceso terminado!</h1>
+        <div class="cont_butt">
+            <input id="btnCrearPdf" class="inp_descar" type="button" value="descargar">
+        </div>
 
-    <p class="vist10">
-        Nos encontramos haciendo validación de tus
-        documentos, si todo esta correcto un agente le
-        notificara la radicación exitosa de su solicitud.
-    </p>
+    </div> 
 
     <button class="btn" id="btn_conti" type="button" onclick="cargar4()">
         <a class="home" href="{% url 'base:home' %}"> Finalizar</a>

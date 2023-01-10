@@ -54,3 +54,33 @@ function buscador_interno(){
 } catch (error) {
     
 }
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    // click del botón
+    const $boton = document.querySelector("#btnCrearPdf");
+    $boton.addEventListener("click", () => {
+        const $elementoParaConvertir = document.querySelector("#vista11"); // elemento del DOM
+        html2pdf()
+            .set({
+                margin: 0,
+                filename: 'Radicado.pdf',
+                image: {
+                    type: 'jpeg',
+                    quality: 0.98
+                },
+                html2canvas: {
+                    scale: 3, // resolucion
+                    letterRendering: true,
+                },
+                jsPDF: {
+                    unit: "in",
+                    format: "a3",
+                    orientation: 'portrait' // landscape o portrait
+                }
+            })
+            .from($elementoParaConvertir)
+            .save()
+            .catch(err => console.log(err));
+    });
+});
