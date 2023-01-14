@@ -52,22 +52,18 @@ class ContactWizard(SessionWizardView):
 
     @csrf_protected_method
     def get(self, request, *args, **kwargs):
-        logger.info(f"IP={self.request.META.get('REMOTE_ADDR')} "
+        logger.info(f"IP={self.request.META.get('HTTP_X_FORWARDED_FOR', 'NO_IP_DETECTED')} "
                     f"entró en vista={self.request.resolver_match.url_name}")
         return super().get(request, *args, **kwargs)
 
     @csrf_protected_method
     def post(self, *args, **kwargs):
         method = self.request.method
-        logger.info(
-            "IP={} [{}.{}] agent={}  saliendo de={}; ".format(
-                # self.request.COOKIES.get('sessionid'),
-                self.request.META.get('REMOTE_ADDR'),
-                method, self.response_class.status_code,
-                parse_agent(self.request.META.get('HTTP_USER_AGENT')),
-                # self.request.META.get('HTTP_ORIGIN'),
-                self.steps.current,
-            ))
+        logger.info(f"IP={self.request.META.get('HTTP_X_FORWARDED_FOR', 'NO_IP_DETECTED')} "
+                    f"[{method}.{self.response_class.status_code}] "
+                    f"agent={parse_agent(self.request.META.get('HTTP_USER_AGENT'))}  "
+                    f"saliendo_de={self.steps.current}")
+
         return super().post(*args, **kwargs)
 
     def get_template_names(self):
@@ -99,7 +95,10 @@ class ContactWizard(SessionWizardView):
                 >
         """
         idx_view = list(self.form_list).index(self.steps.current)
-        logger.info(f"vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
+        if not form.cleaned_data:
+            logger.info(f"No fue capturado nada en vista{idx_view}={self.steps.current}")
+        else:
+            logger.info(f"vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
         return self.get_form_step_data(form)
 
     def render_goto_step(self, *args, **kwargs):
@@ -161,7 +160,7 @@ class ContactWizard(SessionWizardView):
 
         # Guardará en BD cuando DEBUG sea False
         if info_email['NUMERO_AUTORIZACION'] != 99_999_999:
-            guardar_info_bd(**info_email, ip=self.request.META.get('REMOTE_ADDR'))
+            guardar_info_bd(**info_email, ip=self.request.META.get('HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR'))
 
         logger.info('E-mail será enviado con la siguiente información : ')
         for log in info_email:
