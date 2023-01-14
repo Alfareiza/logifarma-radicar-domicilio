@@ -108,6 +108,9 @@ def guardar_info_bd(**kwargs):
     :return:
     """
     rad = kwargs.pop('NUMERO_AUTORIZACION', None)
+    if Radicacion.objects.filter(numero_radicado=str(rad)).exists():
+        logger.info(f"Número de radicación {rad} ya existe!.")
+        return
     municipio = kwargs.pop('municipio').name.lower()
     logger.info(f"Guardando radicación # {rad}")
     try:

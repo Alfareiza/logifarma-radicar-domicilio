@@ -37,7 +37,7 @@ class AutorizacionServicio(forms.Form):
         # ====== # Validaciones API EPS ======
         if num_aut == 99_999_999:
             resp_eps = read_json('resources/fake.json')
-        elif Radicacion.objects.filter(numero_radicado=num_aut):
+        elif Radicacion.objects.filter(numero_radicado=num_aut).exists():
             raise forms.ValidationError(f"Numero de autorización {num_aut} se encuentra radicado")
         else:
             resp_eps = call_api_eps(num_aut)
