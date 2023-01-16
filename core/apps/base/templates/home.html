@@ -9,37 +9,80 @@
         {% csrf_token %}
         {{ wizard.management_form }}
         <div class="vist1">
-            <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
+            <img class="img1" src="{% static 'img/logifarma-cajacopi.png' %}" alt="">
         </div>
         <div class="vist1_1">
-            <img class="img2" src="{% static 'img/advertencia.png' %}" alt="">
+            <img class="img2" src="{% static 'img/Imagendomicilio.png' %}" alt="">
         </div>
 
-        <article class="vist1">
-            <p class="vist1">
-                Estas por radicar tu domicilio.<br><br>
-                Una vez finalices con tu solicitud, iniciaremos la
-                gestión para que el domicilio sea enviado lo más
-                pronto posible.
-            </p>
-        </article>
-
-    <div class="cont-adv">
-        <div class="cont-icon">
-            <div class="adv-icon">
-                <img class="icon-img" src="{% static 'img/restriccion.png' %}" alt="">
+    <div class="cont_adv">
+        <div class="cont_icon">
+            <div class="adv_icon">
+                <img class="icon_img" src="{% static 'img/iconorestriccion.png' %}" alt="">
             </div>
-            <div class="tex-img">
-                <p class="p-adv">No realizamos domicilios para medicamentos controlados.</p>
+            <div class="tex_img">
+                <p class="p_adv">No aplica para medicamentos controlados.</p>
             </div>
         </div>
     </div>
-        <button class="btn" id="btn_conti" type="submit" onclick="animabotoncarga_general()">
+    <div class="cont_mensaje">
+        <div class="cont_icono_mensaje">
+            <div class="icon_mensaje">
+                <img class="icon_img_mensaje" src="{% static 'img/iconadvertencia.png' %}" alt="">
+            </div>
+            <div class="tex_img_mensaje">
+                <p class="p_mensaje">Al finalizar tu solicitud, te enviaremos tus medicamentos lo más pronto posible.</p>
+            </div>
+        </div>
+    </div>
+    
+
+    <article class="piedepagina">
+
+        <div class="cont_piedepagina">
+            <h1 class="text_piedepagina"> Debes contar con:</h1>
+        </div>
+
+        <div class="cont_pie">
+            <div class="cont_icon_pie">
+                <div class="icon_pie">
+                    <img class="icon_img_pie" src="{% static 'img/oconoformula.png' %}" alt="">
+                </div>
+                <div class="tex_img_pie">
+                    <p class="p_pie">Número de autorización.</p>
+                </div>
+            </div>
+        </div>
+        <div class="cont_pie">
+            <div class="cont_icon_pie">
+                <div class="icon_pie">
+                    <img class="icon_img_pie" src="{% static 'img/iconoautorizacion.png' %}" alt="">
+                </div>
+                <div class="tex_img_pie">
+                    <p class="p_pie">Fórmula médica.</p>
+                </div>
+            </div>
+        </div>
+        <div class="cont_pie">
+            <div class="cont_icon_pie">
+                <div class="icon_pie">
+                    <img class="icon_img_pie" src="{% static 'img/iconoubicacion.png' %}" alt="">
+                </div>
+                <div class="tex_img_pie">
+                    <p class="p_pie">Dirección y número celular.</p>
+                </div>
+            </div>
+        </div>
+        
+        <button class="btn_inicio" id="btn_conti" type="submit" onclick="animabotoncarga_general()">
             Continuar
             <div id="btn_carga" class="conten_carga">
                 <div class="carga"></div>
             </div>
         </button>
+
+    </article>
+
     </form>
 </section>
 {% endblock %}

@@ -114,61 +114,152 @@ main section.vista1 div.vist1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;
-    height: 14vh;}
+    height: 12vh;}
 
-main section.vista1 div.vist1 img.img1 { position: relative;
+main section.vista1 div.vist1 img.img1 {position: relative;
     margin: 0% auto;
-    width: 17%;
-    padding: 1% 41.5%;}
+    width: 27%;
+    height: 60%;
+    padding: 1% 36.5%;}
 
 main section.vista1 div.vist1_1 {position: relative;
-    margin: 0 auto;
-    width: 10%;
+    margin: 20px auto 0;
+    width: 30%;
     padding: 0;
-    height: 17vh;}
+    height: 40vh;}
 
 main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
     width: 100%;
     height: 100%;
-    padding: 0%}
+    padding: 0;}
 
-main section.vista1 article.vist1 { position: relative;
-    margin: 0px auto 0%;
-    padding: 6% 10% 4% 11%;}
 
-main section.vista1 article.vist1 p.vist1 {position: relative;
-    font-weight: 500;
-    font-size: 1.3em;
-    text-align: center;}
-
-.cont-adv {position: relative;
-    width: 31%;
+.cont_adv {position: relative;
+    width: 27%;
     height: 5vh;
-    margin: 3% auto 0;}
+    margin: 20px auto 0;}
 
-.cont-icon {position: relative;
+.cont_icon {position: relative;
     width: 100%;
     height: 100%;
     display: flex;}
 
-.adv-icon {position: relative;
+.adv_icon {position: relative;
     width: 9%;
-    height: 100%;}
+    height: 100%;
+    margin: auto;}
 
-.icon-img {position: relative;
+.icon_img {position: relative;
     width: 100%;
     height: 100%;}
 
-.tex-img {position: relative;
+.tex_img {position: relative;
     width: 100%;
     height: 50%;
     margin: auto 0 auto 2%;}
 
-.p-adv {position: relative;
+.p_adv {position: relative;
     width: 100%;
     height: 100%;
-    font-size: 1.2em}
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #3c468f}
+
+
+.cont_mensaje {position: relative;
+    width: 27%;
+    height: 6vh;
+    margin: 5px auto 20px;}
+
+.cont_icono_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.icon_mensaje {position: relative;
+    width: 9%;
+    height: 80%;
+    margin: auto;}
+
+.icon_img_mensaje {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex_img_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    margin: auto 0 auto 2%;}
+
+.p_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #3c468f;}
+
+.piedepagina{position: relative;
+    width: 100%;
+    height: 40vh;
+    margin: 0px auto 0%;
+    padding: 0;
+    background: #3c468f;
+}
+
+.cont_piedepagina{position: relative;
+    width: 16%;
+    height: 20%;
+    margin: 0 auto;
+    color: #ffff;
+    display: flex;
+}
+
+.text_piedepagina{font-size: 1.1em;
+    margin: auto;
+}
+
+.cont_pie {position: relative;
+    width: 27%;
+    height: 6vh;
+    margin: 5px auto 10px;}
+
+.cont_icon_pie {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.icon_pie {position: relative;
+    width: 9%;
+    height: 80%;
+    margin: auto;}
+
+.icon_img_pie {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex_img_pie {position: relative;
+    width: 100%;
+    height: 50%;
+    margin: auto 0 auto 2%;}
+
+.p_pie {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 0.9em;
+    color: #ffff;
+    font-weight: 600;
+}
+.btn_inicio {position: relative;
+    padding: 0.6% 5%;
+    margin: 5px auto 0;
+    font-size: 1em;
+    border-radius: 0px;
+    border: solid 2px white;
+    left: 42%;
+    top: 0;
+    background: #3c468f;
+    color: #ffff;
+    font-weight: 100;}
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
 main section.vista2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
@@ -851,18 +942,19 @@ main section.vista1 div.vist1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;
-    height: 14vh;}
+    height: 12vh;}
 
-main section.vista1 div.vist1 img.img1 { position: relative;
+main section.vista1 div.vist1 img.img1 {position: relative;
     margin: 0% auto;
-    width: 17%;
-    padding: 1% 41.5%;}
+    width: 27%;
+    height: 60%;
+    padding: 1% 36.5%;}
 
 main section.vista1 div.vist1_1 {position: relative;
-    margin: 2% auto 0;
-    width: 10%;
+    margin: 20px auto 0;
+    width: 30%;
     padding: 0;
-    height: 20vh;}
+    height: 40vh;}
 
 main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
@@ -871,44 +963,130 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
     padding: 0;}
 
 
-.cont-adv {position: relative;
-    width: 45%;
-    height: 8vh;
-    margin: 0 auto;}
+.cont_adv {position: relative;
+    width: 27%;
+    height: 5vh;
+    margin: 20px auto 0;}
 
-.cont-icon {position: relative;
+.cont_icon {position: relative;
     width: 100%;
     height: 100%;
     display: flex;}
 
-.adv-icon {position: relative;
+.adv_icon {position: relative;
     width: 9%;
     height: 100%;}
 
-.icon-img {position: relative;
+.icon_img {position: relative;
     width: 100%;
     height: 100%;}
 
-.tex-img {position: relative;
+.tex_img {position: relative;
     width: 100%;
     height: 50%;
     margin: auto 0 auto 2%;}
 
-.p-adv {position: relative;
+.p_adv {position: relative;
     width: 100%;
     height: 100%;
-    font-size: 1.2em}
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #3c468f}
 
 
-main section.vista1 article.vist1 { position: relative;
+.cont_mensaje {position: relative;
+    width: 27%;
+    height: 6vh;
+    margin: 5px auto 20px;}
+
+.cont_icono_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.icon_mensaje {position: relative;
+    width: 9%;
+    height: 80%;
+    margin: auto;}
+
+.icon_img_mensaje {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex_img_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    margin: auto 0 auto 2%;}
+
+.p_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #3c468f;}
+
+.piedepagina{position: relative;
+    width: 100%;
+    height: 40vh;
     margin: 0px auto 0%;
-    padding: 6% 10% 4% 11%;}
+    padding: 0;
+    background: #3c468f;
+}
 
-main section.vista1 article.vist1 p.vist1 {position: relative;
-    font-weight: 500;
-    font-size: 1.3em;
-    text-align: center;}
+.cont_piedepagina{position: relative;
+    width: 16%;
+    height: 20%;
+    margin: 0 auto;
+    color: #ffff;
+    display: flex;
+}
 
+.text_piedepagina{font-size: 1.1em;
+    margin: auto;
+}
+
+.cont_pie {position: relative;
+    width: 27%;
+    height: 6vh;
+    margin: 5px auto 10px;}
+
+.cont_icon_pie {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.icon_pie {position: relative;
+    width: 9%;
+    height: 80%;
+    margin: auto;}
+
+.icon_img_pie {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex_img_pie {position: relative;
+    width: 100%;
+    height: 50%;
+    margin: auto 0 auto 2%;}
+
+.p_pie {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 0.9em;
+    color: #ffff;
+    font-weight: 600;
+}
+.btn_inicio {position: relative;
+    padding: 0.6% 5%;
+    margin: 5px auto 0;
+    font-size: 1em;
+    border-radius: 0px;
+    border: solid 2px white;
+    left: 42%;
+    top: 0;
+    background: #3c468f;
+    color: #ffff;
+    font-weight: 100;}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -1618,61 +1796,153 @@ main section.vista1 div.vist1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;
-    height: 14vh;}
+    height: 8vh;}
 
-main section.vista1 div.vist1 img.img1 { position: relative;
+main section.vista1 div.vist1 img.img1 {position: relative;
     margin: 0% auto;
     width: 50%;
-    padding: 6% 25%;}
+    height: 80%;
+    padding: 1% 25.5%;}
 
 main section.vista1 div.vist1_1 {position: relative;
-    margin: 5% auto 0%;
-    width: 21%;
+    margin: 40px auto 0;
+    width: 60%;
     padding: 0;
-    height: 15vh;}
+    height: 35vh;}
 
 main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
     width: 100%;
     height: 100%;
-    padding: 0%;}
+    padding: 0;}
 
-.cont-adv {position: relative;
-    width: 81%;
-    height: 6vh;
-    margin: 0 auto;}
 
-.cont-icon {position: relative;
+.cont_adv {position: relative;
+    width: 63%;
+    height: 5vh;
+    margin: 30px auto 0;}
+
+.cont_icon {position: relative;
     width: 100%;
     height: 100%;
     display: flex;}
 
-.adv-icon {position: relative;
-    width: 10%;
-    height: 100%;}
+.adv_icon {position: relative;
+    width: 9%;
+    height: 80%;
+    margin: auto;
+}
 
-.icon-img {position: relative;
+.icon_img {position: relative;
     width: 100%;
     height: 100%;}
 
-.tex-img {position: relative;
-    width: 91%;
-    height: 39%;
+.tex_img {position: relative;
+    width: 100%;
+    height: 50%;
     margin: auto 0 auto 2%;}
 
-.p-adv {position: relative;
+.p_adv {position: relative;
     width: 100%;
     height: 100%;
-    font-size: 1.3em}
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #3c468f}
 
-main section.vista1 article.vist1 { position: relative;
+
+.cont_mensaje {position: relative;
+    width: 63%;
+    height: 4vh;
+    margin: 10px auto 30px;}
+
+.cont_icono_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.icon_mensaje {position: relative;
+    width: 8%;
+    height: 80%;
+    margin: auto;}
+
+.icon_img_mensaje {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex_img_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    margin: auto 0 auto 2%;}
+
+.p_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #3c468f;}
+
+.piedepagina{position: relative;
+    width: 100%;
+    height: 38vh;
     margin: 0px auto 0%;
-    padding: 12% 10% 9% 11%;}
+    padding: 0;
+    background: #3c468f;
+}
 
-main section.vista1 article.vist1 p.vist1 {position: relative;
-    font-weight: 500;
-    font-size: 1.3em;
-    text-align: center;}
+.cont_piedepagina{position: relative;
+    width: 36%;
+    height: 20%;
+    margin: 0 auto;
+    color: #ffff;
+    display: flex;
+}
+
+.text_piedepagina{font-size: 1.5em;
+    margin: auto;
+}
+
+.cont_pie {position: relative;
+    width: 63%;
+    height: 6vh;
+    margin: 5px auto 10px;}
+
+.cont_icon_pie {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.icon_pie {position: relative;
+    width: 9%;
+    height: 80%;
+    margin: auto;}
+
+.icon_img_pie {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex_img_pie {position: relative;
+    width: 100%;
+    height: 40%;
+    margin: auto 0 auto 2%;}
+
+.p_pie {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 1.2em;
+    color: #ffff;
+    font-weight: 600;
+}
+.btn_inicio {position: relative;
+    padding: 1.5% 10%;
+    margin: 10px auto 0;
+    font-size: 1.4em;
+    border-radius: 0px;
+    border: solid 2px white;
+    left: 34%;
+    top: 0;
+    background: #3c468f;
+    color: #ffff;
+    font-weight: 100;}
 
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
@@ -2335,7 +2605,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     font-size: 1.1em;
     border-radius: 12px;
     left: 25%;
-    top: 90%;
+    top: 92%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -2376,68 +2646,159 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     100% { transform: rotate(360deg);}
 }
 
-main section.vista1 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista1 {width: 100%; height: 92vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 main section.vista1 div.vist1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;
-    height: 13vh;}
+    height: 7vh;}
 
-main section.vista1 div.vist1 img.img1 { position: relative;
+main section.vista1 div.vist1 img.img1 {position: relative;
     margin: 0% auto;
-    width: 50%;
-    padding: 6% 25%;}
+    width: 80%;
+    height: 70%;
+    padding: 2% 10%}
 
 main section.vista1 div.vist1_1 {position: relative;
-    margin: 5% auto 0;
-    width: 27%;
+    margin: 30px auto 0;
+    width: 80%;
     padding: 0;
-    height: 14vh;}
+    height: 30vh;}
 
 main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
     width: 100%;
     height: 100%;
-    padding: 0%;}
+    padding: 0;}
 
-main section.vista1 article.vist1 { position: relative;
-    margin: 0px auto 0%;
-    padding: 12% 10% 9% 11%;}
 
-main section.vista1 article.vist1 p.vist1 {position: relative;
-    font-weight: 500;
-    font-size: 1.3em;
-    text-align: center;}
+.cont_adv {position: relative;
+    width: 82%;
+    height: 5vh;
+    margin: 24px auto 0;}
 
-.cont-adv {position: relative;
-    width: 71%;
-    height: 6vh;
-    margin: 5% auto 0;}
-
-.cont-icon {position: relative;
+.cont_icon {position: relative;
     width: 100%;
     height: 100%;
     display: flex;}
 
-.adv-icon {position: relative;
-    width: 13%;
-    height: 85%;
-    margin: auto;}
+.adv_icon {position: relative;
+    width: 9%;
+    height: 80%;
+    margin: auto;
+}
 
-.icon-img {position: relative;
+.icon_img {position: relative;
     width: 100%;
     height: 100%;}
 
-.tex-img {position: relative;
-    width: 88%;
-    height: 90%;
+.tex_img {position: relative;
+    width: 100%;
+    height: 50%;
     margin: auto 0 auto 2%;}
 
-.p-adv {position: relative;
+.p_adv {position: relative;
     width: 100%;
     height: 100%;
-    font-size: 1em}
+    font-size: 0.8em;
+    font-weight: 600;
+    color: #3c468f}
+
+
+.cont_mensaje {position: relative;
+    width: 82%;
+    height: 4vh;
+    margin: 5px auto 25px;}
+
+.cont_icono_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.icon_mensaje {position: relative;
+    width: 8%;
+    height: 80%;
+    margin: auto;}
+
+.icon_img_mensaje {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex_img_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    margin: auto 0 auto 2%;}
+
+.p_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 0.8em;
+    font-weight: 600;
+    color: #3c468f;}
+
+.piedepagina{position: relative;
+    width: 100%;
+    height: 33.3vh;
+    margin: 0px auto 0%;
+    padding: 0;
+    background: #3c468f;
+}
+
+.cont_piedepagina{position: relative;
+    width: 48%;
+    height: 20%;
+    margin: 0 auto;
+    color: #ffff;
+    display: flex;
+}
+
+.text_piedepagina{font-size: 1em;
+    margin: auto;
+}
+
+.cont_pie {position: relative;
+    width: 82%;
+    height: 4vh;
+    margin: 5px auto 10px;}
+
+.cont_icon_pie {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.icon_pie {position: relative;
+    width: 9%;
+    height: 80%;
+    margin: auto;}
+
+.icon_img_pie {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex_img_pie {position: relative;
+    width: 100%;
+    height: 50%;
+    margin: auto 0 auto 2%;}
+
+.p_pie {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 0.8em;
+    color: #ffff;
+    font-weight: 600;
+}
+.btn_inicio {position: relative;
+    padding: 3% 14%;
+    margin: 5px auto 0;
+    font-size: 1em;
+    border-radius: 0px;
+    border: solid 1px white;
+    left: 27%;
+    top: 0;
+    background: #3c468f;
+    color: #ffff;
+    font-weight: 300}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -3160,61 +3521,154 @@ main section.vista1 div.vist1 {position: relative;
     margin: 0 auto;
     width: 100%;
     padding: 0;
-    height: 14vh;}
+    height: 7vh;}
 
-main section.vista1 div.vist1 img.img1 { position: relative;
+main section.vista1 div.vist1 img.img1 {position: relative;
     margin: 0% auto;
-    width: 50%;
-    padding: 6% 25%;}
+    width: 65%;
+    height: 81%;
+    padding: 1% 18%}
 
 main section.vista1 div.vist1_1 {position: relative;
-    margin: 0 auto;
-    width: 36%;
+    margin: 38px auto 0;
+    width: 85%;
     padding: 0;
-    height: 14vh}
+    height: 35vh;}
 
-main section.vista1 div.vist1_1 img.img2 {    position: relative;
+main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
     width: 100%;
     height: 100%;
-    padding: 0%}
+    padding: 0;}
 
-main section.vista1 article.vist1 { position: relative;
-    margin: 0px auto 0%;
-    padding: 12% 10% 9% 11%;}
 
-main section.vista1 article.vist1 p.vist1 {position: relative;
-    font-weight: 500;
-    font-size: 1.3em;
-    text-align: center;}
+.cont_adv {position: relative;
+    width: 91%;
+    height: 5vh;
+    margin: 20px auto 0;}
 
-.cont-adv {position: relative;
-    width: 83%;
-    height: 7vh;
-    margin: 4% auto 0;}
-
-.cont-icon {position: relative;
+.cont_icon {position: relative;
     width: 100%;
     height: 100%;
     display: flex;}
 
-.adv-icon {position: relative;
-    width: 13%;
-    height: 78%;}
+.adv_icon {position: relative;
+    width: 9%;
+    height: 80%;
+    margin: auto;
+}
 
-.icon-img {position: relative;
+.icon_img {position: relative;
     width: 100%;
     height: 100%;}
 
-.tex-img {position: relative;
-    width: 88%;
-    height: 90%;
+.tex_img {position: relative;
+    width: 100%;
+    height: 43%;
     margin: auto 0 auto 2%;}
 
-.p-adv {position: relative;
+.p_adv {position: relative;
     width: 100%;
     height: 100%;
-    font-size: 0.9em}
+    font-size: 0.7em;
+    font-weight: 600;
+    color: #3c468f}
+
+
+.cont_mensaje {position: relative;
+    width: 91%;
+    height: 4vh;
+    margin: 5px auto 20px;}
+
+.cont_icono_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.icon_mensaje {position: relative;
+    width: 8%;
+    height: 80%;
+    margin: auto;}
+
+.icon_img_mensaje {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex_img_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    margin: auto 0 auto 2%;}
+
+.p_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 0.7em;
+    font-weight: 600;
+    color: #3c468f;}
+
+
+.piedepagina{position: relative;
+    width: 100%;
+    height: 36.2vh;
+    margin: 0px auto 0%;
+    padding: 0;
+    background: #3c468f;
+}
+
+.cont_piedepagina{position: relative;
+    width: 61%;
+    height: 20%;
+    margin: 0 auto;
+    color: #ffff;
+    display: flex;
+}
+
+.text_piedepagina{font-size: 0.9em;
+    margin: auto;
+}
+
+.cont_pie {position: relative;
+    width: 82%;
+    height: 4vh;
+    margin: 5px auto 10px;}
+
+.cont_icon_pie {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.icon_pie {position: relative;
+    width: 9%;
+    height: 80%;
+    margin: auto;}
+
+.icon_img_pie {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex_img_pie {position: relative;
+    width: 100%;
+    height: 50%;
+    margin: auto 0 auto 2%;}
+
+.p_pie {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 0.8em;
+    color: #ffff;
+    font-weight: 600;
+}
+.btn_inicio {position: relative;
+    padding: 1.5% 10%;
+    margin: 15px auto 0;
+    font-size: 1em;
+    border-radius: 0px;
+    border: solid 1px white;
+    left: 28%;
+    top: 0;
+    background: #3c468f;
+    color: #ffff;
+    font-weight: 100}
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
 main section.vista2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
