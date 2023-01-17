@@ -1,16 +1,12 @@
-import mimetypes
-
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.datastructures import MultiValueDict
 
 from core import settings
-from core.apps.base.forms import AvisoDireccion, EligeMunicipio
-from core.apps.base.models import Municipio, Barrio
+from core.apps.base.forms import EligeMunicipio
+from core.apps.base.models import Municipio
 from core.apps.base.tests.test_fotoFormulaMedica import upload_foto
 from core.apps.base.tests.utilities import get_request, TestWizard
 from core.apps.base.views import FORMS
-from core.settings import BASE_DIR
 
 
 class EligeMunicipioWizardTests(TestCase):
@@ -23,16 +19,12 @@ class EligeMunicipioWizardTests(TestCase):
         self.testform = TestWizard.as_view(FORMS)
         self.request = get_request({'test_wizard-current_step': 'home'})
         self.response, self.instance = self.testform(self.request)
-        self.request.POST = {'test_wizard-current_step': 'instrucciones'}
-        self.response, self.instance = self.testform(self.request)
         self.request.POST = {'test_wizard-current_step': 'autorizacionServicio',
                              'autorizacionServicio-num_autorizacion': 99_999_999}
         self.response, self.instance = self.testform(self.request)
         image = upload_foto()
         self.request.POST = {'test_wizard-current_step': 'fotoFormulaMedica'}
         self.request.FILES = MultiValueDict({'fotoFormulaMedica-src': [image['src']]})
-        self.response, self.instance = self.testform(self.request)
-        self.request.POST = {'test_wizard-current_step': 'avisoDireccion'}
         self.response, self.instance = self.testform(self.request)
 
     @classmethod

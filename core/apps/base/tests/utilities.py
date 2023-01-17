@@ -1,3 +1,4 @@
+import os
 from importlib import import_module
 
 from django import http
@@ -14,11 +15,13 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.utils import ChromeType
 
-from core.apps.base.forms import Home, Instrucciones, AutorizacionServicio, FotoFormulaMedica, AvisoDireccion, \
+from core.apps.base.forms import Home, AutorizacionServicio, FotoFormulaMedica, \
     EligeMunicipio, DireccionBarrio, DigitaCelular, DigitaCorreo
 from core.apps.base.models import Municipio, Barrio
 from core.apps.base.views import FORMS, TEMPLATES
 from core.settings import BASE_DIR
+
+os.environ["PATH"] += f'{os.pathsep}/usr/local/bin'
 
 
 class VisualWizardTests(StaticLiveServerTestCase):
@@ -29,13 +32,14 @@ class VisualWizardTests(StaticLiveServerTestCase):
         super().setUpClass()
         options = Options()
         options.add_argument('--headless')
+        options.add_argument("--window-size=1920,1200")
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-gpu')
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('disable-infobars')
         options.add_argument('--disable-extensions')
         cls.selenium = webdriver.Chrome(
-            service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),
+            # service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),
             options=options
         )
         cls.selenium.maximize_window()
@@ -46,17 +50,27 @@ class VisualWizardTests(StaticLiveServerTestCase):
         cls.selenium.quit()
         super().tearDownClass()
 
-    def get_boton_continuar(self):
-        return self.selenium.find_element(by=By.CLASS_NAME, value='btn')
+    def get_btn(self, type, value):
+        btn = None
+        if type == 'class':
+            btn = self.selenium.find_element(by=By.CLASS_NAME, value=value)
+        elif type == 'id':
+            btn = self.selenium.find_element(by=By.ID, value=value)
+        elif type == 'name':
+            btn = self.selenium.find_element(by=By.NAME, value=value)
+        return btn
 
-    def get_animacion(self):
-        return self.selenium.find_element(by=By.ID, value='btn_carga')
+    def get_boton_continuar(self, value='btn'):
+        return self.get_btn('class', value)
 
-    def get_boton_atras(self):
-        return self.selenium.find_element(by=By.CLASS_NAME, value='atras')
+    def get_animacion(self, value='btn_carga'):
+        return self.get_btn('id', value)
+
+    def get_boton_atras(self, value='atras'):
+        return self.get_btn('class', value)
 
     def insert_data(self, **kwargs):
-        num_aut_box = self.selenium.find_element(by=By.NAME, value=kwargs.get('value'))
+        num_aut_box = self.get_btn('name', kwargs.get('value'))
         num_aut_box.send_keys(kwargs.get('data'))
         return num_aut_box
 
@@ -67,7 +81,7 @@ class VisualWizardTests(StaticLiveServerTestCase):
         return works
 
     def process_home(self):
-        self.get_boton_continuar().click()
+        self.get_boton_continuar('btn_inicio').click()
 
     def process_instrucciones(self):
         self.get_boton_continuar().click()
@@ -83,11 +97,6 @@ class VisualWizardTests(StaticLiveServerTestCase):
     def process_foto(self):
         img = BASE_DIR / 'core/apps/base/tests/resources/image_1.jpg'
         self.selenium.find_element(by=By.ID, value='id_fotoFormulaMedica-src').send_keys(str(img))
-        self.get_boton_continuar().click()
-        if self.selenium.title != 'Dirección':
-            self.take_me_to_the_step('avisoDireccion')
-
-    def process_aviso_direccion(self):
         mun, _ = Municipio.objects.get_or_create(name='barranquilla', departamento='atlántico')
         Barrio.objects.get_or_create(name='el recreo', municipio=mun, zona='norte',
                                      cod_zona=109, status=1)
@@ -132,10 +141,8 @@ class VisualWizardTests(StaticLiveServerTestCase):
     def take_me_to_the_step(self, to_step):
         map_vistas = [
             {'Inicio': 'self.process_home()'},
-            {'Instrucciones': 'self.process_instrucciones()'},
             {'Autorización de servicio': 'self.process_autorizacion()'},
             {'Foto de la fórmula': 'self.process_foto()'},
-            {'Dirección': 'self.process_aviso_direccion()'},
             {'Elige Municipio': 'self.process_elige_municipio()'},
             {'Elige el barrio': 'self.process_direccion_barrio()'},
             {'Digite celular': 'self.process_celular()'},
@@ -204,8 +211,8 @@ class TestWizard(WizardView):
         return render(self.request)
 
 
-vistas = [Home, Instrucciones, AutorizacionServicio, FotoFormulaMedica,
-          AvisoDireccion, EligeMunicipio, DireccionBarrio, DigitaCelular,
+vistas = [Home, AutorizacionServicio, FotoFormulaMedica,
+          EligeMunicipio, DireccionBarrio, DigitaCelular,
           DigitaCorreo]
 
 

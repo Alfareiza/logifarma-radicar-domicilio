@@ -20,16 +20,12 @@ class DigitaDireccionBarrioWizardTests(TestCase):
         self.testform = TestWizard.as_view(FORMS)
         self.request = get_request({'test_wizard-current_step': 'home'})
         self.response, self.instance = self.testform(self.request)
-        self.request.POST = {'test_wizard-current_step': 'instrucciones'}
-        self.response, self.instance = self.testform(self.request)
         self.request.POST = {'test_wizard-current_step': 'autorizacionServicio',
                              'autorizacionServicio-num_autorizacion': 99_999_999}
         self.response, self.instance = self.testform(self.request)
         image = upload_foto()
         self.request.POST = {'test_wizard-current_step': 'fotoFormulaMedica'}
         self.request.FILES = MultiValueDict({'fotoFormulaMedica-src': [image['src']]})
-        self.response, self.instance = self.testform(self.request)
-        self.request.POST = {'test_wizard-current_step': 'avisoDireccion'}
         self.response, self.instance = self.testform(self.request)
         self.request.POST = {'test_wizard-current_step': 'eligeMunicipio',
                              'eligeMunicipio-municipio': '1'}
