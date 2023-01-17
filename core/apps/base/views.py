@@ -19,10 +19,10 @@ from core.settings import logger, BASE_DIR
 
 FORMS = [
     ("home", Home),
-    ("instrucciones", Instrucciones),
+    # ("instrucciones", Instrucciones),
     ("autorizacionServicio", AutorizacionServicio),
     ("fotoFormulaMedica", FotoFormulaMedica),
-    ("avisoDireccion", AvisoDireccion),
+    # ("avisoDireccion", AvisoDireccion),
     ("eligeMunicipio", EligeMunicipio),
     ("digitaDireccionBarrio", DireccionBarrio),
     ("digitaCelular", DigitaCelular),
@@ -31,10 +31,10 @@ FORMS = [
 
 TEMPLATES = {
     "home": "home.html",
-    "instrucciones": "instrucciones.html",
+    # "instrucciones": "instrucciones.html",
     "autorizacionServicio": "autorizacion.html",
     "fotoFormulaMedica": "foto.html",
-    "avisoDireccion": "aviso_direccion.html",
+    # "avisoDireccion": "aviso_direccion.html",
     "eligeMunicipio": "elige_municipio.html",
     "digitaDireccionBarrio": "direccion_barrio.html",
     "digitaCelular": "digita_celular.html",
@@ -147,15 +147,15 @@ class ContactWizard(SessionWizardView):
         """
         form_data = [form.cleaned_data for form in form_list]
 
-        self.foto_fmedica = form_data[3]['src']
+        self.foto_fmedica = form_data[2]['src']
 
         # Construye las variables que serán enviadas al template
         info_email = {
-            **form_data[2]['num_autorizacion'],
-            **form_data[5],  # Ciudad
-            **form_data[6],  # Barrio y dirección
-            **form_data[7],  # Celular
-            **form_data[8],  # e-mail
+            **form_data[1]['num_autorizacion'],
+            **form_data[3],  # Ciudad
+            **form_data[4],  # Barrio y dirección
+            **form_data[5],  # Celular
+            **form_data[6],  # e-mail
         }
 
         # Guardará en BD cuando DEBUG sea False
@@ -169,7 +169,7 @@ class ContactWizard(SessionWizardView):
         # Envía e-mail
         self.send_mail(info_email)
 
-        return form_data[2]['num_autorizacion']
+        return form_data[1]['num_autorizacion']
 
     def send_mail(self, info_email):
         """

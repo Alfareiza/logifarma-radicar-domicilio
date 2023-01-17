@@ -13,13 +13,6 @@ class Home(forms.Form):
     ...
 
 
-class Instrucciones(forms.Form):
-    """
-    Vista 2: Página que indica los pasos
-    """
-    ...
-
-
 class AutorizacionServicio(forms.Form):
     """
     Vista 3:
@@ -104,13 +97,6 @@ class FotoFormulaMedica(forms.Form):
     de su celular.
     """
     src = forms.ImageField(label=False)
-
-
-class AvisoDireccion(forms.Form):
-    """
-    Vista 5:
-    """
-    ...
 
 
 class EligeMunicipio(forms.ModelForm):
