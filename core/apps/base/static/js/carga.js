@@ -1,4 +1,5 @@
 const carga = document.getElementById("btn_carga") ;
+const cargahome = document.getElementById("btn_carga_home") ;
 
 function animabotoncarga_direccion() {
 
@@ -26,6 +27,12 @@ function animabotoncarga_celular() {
     }else{
         carga.style.display = "block";
     }
+};
+
+function animabotoncarga_home() {
+    
+    cargahome.style.display = "block";
+
 };
 
 function animabotoncarga_general() {
