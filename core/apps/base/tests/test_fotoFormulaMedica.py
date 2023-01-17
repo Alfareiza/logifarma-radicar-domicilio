@@ -28,8 +28,6 @@ class FotoWizardTests(TestCase):
         cls.testform = TestWizard.as_view(FORMS)
         cls.request = get_request({'test_wizard-current_step': 'home'})
         cls.response, cls.instance = cls.testform(cls.request)
-        cls.request.POST = {'test_wizard-current_step': 'instrucciones'}
-        cls.response, cls.instance = cls.testform(cls.request)
         cls.request.POST = {'test_wizard-current_step': 'autorizacionServicio',
                              'autorizacionServicio-num_autorizacion': 99_999_999}
         cls.response, cls.instance = cls.testform(cls.request)
@@ -45,8 +43,8 @@ class FotoWizardTests(TestCase):
     def test_template_name_is_foto_html(self):
         self.assertEqual(self.instance.get_template_names()[0], 'foto.html')
 
-    def test_nextstep_is_avisoDireccion(self):
-        self.assertEqual(self.instance.get_next_step(), 'avisoDireccion')
+    def test_nextstep_is_eligeMunicipio(self):
+        self.assertEqual(self.instance.get_next_step(), 'eligeMunicipio')
 
     def test_uploading_image_is_ok(self):
         image = upload_foto()
@@ -55,7 +53,7 @@ class FotoWizardTests(TestCase):
         response, instance = self.testform(self.request)
 
         # Al ser realizado el POST con la foto, deberá entrar en la siguiente vista
-        self.assertEqual(instance.steps.current, 'avisoDireccion')
+        self.assertEqual(instance.steps.current, 'eligeMunicipio')
         self.assertIn('fotoFormulaMedica', instance.storage.data['step_data'])
 
 

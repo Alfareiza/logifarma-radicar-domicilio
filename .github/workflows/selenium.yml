@@ -34,8 +34,12 @@ jobs:
       run: sudo apt purge google-chrome-stable
     - name: Remove default Chromium
       run: sudo apt purge chromium-browser
-    - name: Install a new Chromium
-      run: sudo apt install -y chromium-browser
+    - name: Install chromedriver manually
+      run: |
+        wget https://chromedriver.storage.googleapis.com/108.0.5359.22/chromedriver_linux64.zip
+        unzip chromedriver_linux64.zip
+        sudo mv chromedriver /usr/local/bin
+        sudo chmod +x /usr/local/bin/chromedriver
     - name: Django commands
       run: python manage.py collectstatic
     - name: Tests

@@ -28,8 +28,6 @@ class AutorizacionWizardTests(TestCase):
         self.testform = TestWizard.as_view(FORMS)
         self.request = get_request({'test_wizard-current_step': 'home'})
         self.response, self.instance = self.testform(self.request)
-        self.request.POST = {'test_wizard-current_step': 'instrucciones'}
-        self.response, self.instance = self.testform(self.request)
 
     def test_step_name_is_autorizacionServicio(self):
         self.assertEqual(self.instance.steps.current, 'autorizacionServicio')
