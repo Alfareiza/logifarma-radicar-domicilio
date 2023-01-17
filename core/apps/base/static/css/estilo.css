@@ -156,7 +156,9 @@ main section.vista1 div.vist1 img.img1 {position: relative;
     margin: 0% auto;
     width: 27%;
     height: 60%;
-    padding: 1% 36.5%;}
+    padding: 1% 36.5%;
+    object-fit: contain;
+    overflow: hidden;}
 
 main section.vista1 div.vist1_1 {position: relative;
     margin: 20px auto 0;
@@ -168,7 +170,9 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
     width: 100%;
     height: 100%;
-    padding: 0;}
+    padding: 0;
+    object-fit: contain;
+    overflow: hidden;}
 
 
 .cont_adv {position: relative;
@@ -188,7 +192,9 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .icon_img {position: relative;
     width: 100%;
-    height: 100%;}
+    height: 100%;
+    object-fit: contain;
+    overflow: hidden;}
 
 .tex_img {position: relative;
     width: 100%;
@@ -220,7 +226,9 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .icon_img_mensaje {position: relative;
     width: 100%;
-    height: 100%;}
+    height: 100%;
+    object-fit: contain;
+    overflow: hidden;}
 
 .tex_img_mensaje {position: relative;
     width: 100%;
@@ -271,7 +279,9 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .icon_img_pie {position: relative;
     width: 100%;
-    height: 100%;}
+    height: 100%;
+    object-fit: contain;
+    overflow: hidden;}
 
 .tex_img_pie {position: relative;
     width: 100%;
@@ -1020,7 +1030,9 @@ main section.vista1 div.vist1 img.img1 {position: relative;
     margin: 0% auto;
     width: 27%;
     height: 60%;
-    padding: 1% 36.5%;}
+    padding: 1% 36.5%;
+    object-fit: contain;
+    overflow: hidden;}
 
 main section.vista1 div.vist1_1 {position: relative;
     margin: 20px auto 0;
@@ -1032,7 +1044,9 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
     width: 100%;
     height: 100%;
-    padding: 0;}
+    padding: 0;
+    object-fit: contain;
+    overflow: hidden;}
 
 
 .cont_adv {position: relative;
@@ -1051,7 +1065,9 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .icon_img {position: relative;
     width: 100%;
-    height: 100%;}
+    height: 100%;
+    object-fit: contain;
+    overflow: hidden;}
 
 .tex_img {position: relative;
     width: 100%;
@@ -1083,7 +1099,9 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .icon_img_mensaje {position: relative;
     width: 100%;
-    height: 100%;}
+    height: 100%;
+    object-fit: contain;
+    overflow: hidden;}
 
 .tex_img_mensaje {position: relative;
     width: 100%;
@@ -1134,7 +1152,9 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .icon_img_pie {position: relative;
     width: 100%;
-    height: 100%;}
+    height: 100%;
+    object-fit: contain;
+    overflow: hidden;}
 
 .tex_img_pie {position: relative;
     width: 100%;
@@ -1910,7 +1930,9 @@ main section.vista1 div.vist1 img.img1 {position: relative;
     margin: 0% auto;
     width: 50%;
     height: 80%;
-    padding: 1% 25.5%;}
+    padding: 1% 25.5%;
+    object-fit: contain;
+    overflow: hidden;}
 
 main section.vista1 div.vist1_1 {position: relative;
     margin: 40px auto 0;
@@ -1922,7 +1944,9 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
     width: 100%;
     height: 100%;
-    padding: 0;}
+    padding: 0;
+    object-fit: contain;
+    overflow: hidden;}
 
 
 .cont_adv {position: relative;
@@ -1943,7 +1967,9 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .icon_img {position: relative;
     width: 100%;
-    height: 100%;}
+    height: 100%;
+    object-fit: contain;
+    overflow: hidden;}
 
 .tex_img {position: relative;
     width: 100%;
@@ -1975,7 +2001,9 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .icon_img_mensaje {position: relative;
     width: 100%;
-    height: 100%;}
+    height: 100%;
+    object-fit: contain;
+    overflow: hidden;}
 
 .tex_img_mensaje {position: relative;
     width: 100%;
@@ -2026,7 +2054,9 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .icon_img_pie {position: relative;
     width: 100%;
-    height: 100%;}
+    height: 100%;
+    object-fit: contain;
+    overflow: hidden;}
 
 .tex_img_pie {position: relative;
     width: 100%;
@@ -2802,7 +2832,10 @@ main section.vista1 div.vist1 img.img1 {position: relative;
     margin: 0% auto;
     width: 80%;
     height: 70%;
-    padding: 2% 10%}
+    padding: 2% 10%;
+    object-fit: contain;
+    overflow: hidden;
+}
 
 main section.vista1 div.vist1_1 {position: relative;
     margin: 24px auto 0;
@@ -2814,7 +2847,10 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
     width: 100%;
     height: 100%;
-    padding: 0;}
+    padding: 0;
+    object-fit: contain;
+    overflow: hidden;
+}
 
 
 .cont_adv {position: relative;
@@ -2825,7 +2861,10 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 .cont_icon {position: relative;
     width: 100%;
     height: 100%;
-    display: flex;}
+    display: flex;
+    object-fit: contain;
+    overflow: hidden;
+}
 
 .adv_icon {position: relative;
     width: 9%;
@@ -2867,7 +2906,10 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .icon_img_mensaje {position: relative;
     width: 100%;
-    height: 100%;}
+    height: 100%;
+    object-fit: contain;
+    overflow: hidden;
+}
 
 .tex_img_mensaje {position: relative;
     width: 100%;
@@ -2918,7 +2960,10 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .icon_img_pie {position: relative;
     width: 100%;
-    height: 100%;}
+    height: 100%;
+    object-fit: contain;
+    overflow: hidden;
+}
 
 .tex_img_pie {position: relative;
     width: 100%;
@@ -3708,7 +3753,10 @@ main section.vista1 div.vist1 img.img1 {position: relative;
     margin: 0% auto;
     width: 65%;
     height: 81%;
-    padding: 1% 18%}
+    padding: 1% 18%;
+    object-fit: contain;
+    overflow: hidden;
+}
 
 main section.vista1 div.vist1_1 {position: relative;
     margin: 38px auto 0;
@@ -3720,6 +3768,8 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
     width: 100%;
     height: 100%;
+    object-fit: contain;
+    overflow: hidden;
     padding: 0;}
 
 
@@ -3731,6 +3781,8 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 .cont_icon {position: relative;
     width: 100%;
     height: 100%;
+    object-fit: contain;
+    overflow: hidden;
     display: flex;}
 
 .adv_icon {position: relative;
@@ -3773,7 +3825,9 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .icon_img_mensaje {position: relative;
     width: 100%;
-    height: 100%;}
+    height: 100%;
+    object-fit: contain;
+    overflow: hidden;}
 
 .tex_img_mensaje {position: relative;
     width: 100%;
@@ -3825,7 +3879,9 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .icon_img_pie {position: relative;
     width: 100%;
-    height: 100%;}
+    height: 100%;
+    object-fit: contain;
+    overflow: hidden;}
 
 .tex_img_pie {position: relative;
     width: 100%;
