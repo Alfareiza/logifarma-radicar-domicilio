@@ -11,7 +11,7 @@
         {{ wizard.management_form }}
         {% include "base/logo.html" %}
 
-        <h1 class="vist4">¡Envia fotografía de la formula medica!</h1>
+        <h1 class="vist4">Envíanos una foto de la fórmula médica que te entrego el médico tratante</h1>
         <p class="vist4_1"> Recuerda, los medicamentos de la autorización deben coincidir con los de la formula</p>
         {% for field in form %}
             {{ field.error }}
@@ -19,26 +19,22 @@
         {% if wizard.form.forms %}
             {{ wizard.form.management_form }}
         {% else %}
-
             <div class="container">
                 <div class="conten_foto" style="object-fit: contain;">
                     <img id="file-preview" class="img_fot">
                 </div>
                 <div class="btn_archi" id="id_btn_archi">
-<!--                    <label for="file" id="fotoFormulaMedica-src">Select an Image</label>-->
+<!--                <label for="file" id="fotoFormulaMedica-src">Select an Image</label>-->
                     <input required type="file" name="fotoFormulaMedica-src" accept="image/*"
-                       id="id_fotoFormulaMedica-src"
-                           class="arch_btn" >
+                       id="id_fotoFormulaMedica-src" class="arch_btn" >
                 </div>
             </div>
-
             <button class="btn" id="btn_conti" type="submit" style="display: none;" onclick="animabotoncarga_general()">
                 Continuar
                 <div id="btn_carga" class="conten_carga">
                     <div class="carga"></div>
                 </div>
             </button>
-            
         {% endif %}
     </form>
 </section>
@@ -53,7 +49,6 @@
           let oul = document.getElementById('id_btn_archi')
           imagePreview.src = src
           imagePreview.style.display = "block"
-
           continuarbtn.style.display = "block";
           oul.style.display = "none";
         }
