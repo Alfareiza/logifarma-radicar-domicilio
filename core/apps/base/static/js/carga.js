@@ -3,7 +3,6 @@ const cargahome = document.getElementById("btn_carga_home") ;
 
 function animabotoncarga_direccion() {
 
-    /* let inp = document.getElementById('id_digitaDireccionBarrio-direccion').addEventListener("keyup"); */
 
     if ($('.select_opt').is(':checked')) {
         
@@ -42,7 +41,6 @@ function animabotoncarga_general() {
 };
 
 function animabotoncarga_municipio() {
-    /* let selecheck = document.getElementsByClassName("select_opt"); */
 
     if ($('.select_opt').is(':checked') ) {
         
