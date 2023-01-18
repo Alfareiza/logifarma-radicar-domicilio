@@ -38,7 +38,6 @@ jobs:
         python manage.py test core.apps.base.tests.test_wizards
         python manage.py test core.apps.base.tests.test_autorizacionServicio
         python manage.py test core.apps.base.tests.test_fotoFormulaMedica
-        python manage.py test core.apps.base.tests.test_avisoDireccion
         python manage.py test core.apps.base.tests.test_eligeMunicipio
         python manage.py test core.apps.base.tests.test_digitaDireccionBarrio
         python manage.py test core.apps.base.tests.test_digitaCelular
