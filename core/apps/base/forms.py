@@ -4,6 +4,7 @@ from django import forms
 from core.apps.base.models import Municipio, Barrio, Radicacion
 from core.apps.base.resources.api_calls import call_api_eps, call_api_medicar
 from core.apps.base.resources.tools import read_json
+from core.settings import logger
 
 
 class Home(forms.Form):
@@ -31,11 +32,13 @@ class AutorizacionServicio(forms.Form):
         if num_aut == 99_999_999:
             resp_eps = read_json('resources/fake.json')
         elif Radicacion.objects.filter(numero_radicado=num_aut).exists():
+            logger.info(f"Número de autorización {num_aut} radicado anteriormente")
             raise forms.ValidationError(f"Numero de autorización {num_aut} se encuentra radicado")
         else:
             resp_eps = call_api_eps(num_aut)
 
         if resp_eps.get('codigo') == "1":
+            logger.info(f"Número de autorización {num_aut} no encontrado")
             raise forms.ValidationError(f"Número de autorización {num_aut} no encontrado\n\n"
                                         "Por favor verifique\n\n"
                                         "Si el número está correcto, comuníquese con cajacopi EPS\n"
@@ -56,13 +59,16 @@ class AutorizacionServicio(forms.Form):
                     break
 
         if inconsistencia:
+            logger.info(f"Incosistencia en número de autorización {num_aut}")
             raise forms.ValidationError(f"Detectamos un problema interno con este número de autorización\n\n"
                                         "Comuníquese con Logifarma al 3330333124")
 
         if resp_eps.get('ESTADO_AFILIADO') != 'ACTIVO':
+            logger.info("Afiliado no se encuentra activo")
             raise forms.ValidationError("Afiliado no se encuentra activo")
 
         if resp_eps.get('ESTADO_AUTORIZACION') != 'PROCESADA':
+            logger.info("El estado de la autorización no está activa.")
             raise forms.ValidationError("El estado de la autorización no está activa.")
 
         # if (datetime.now() - resp_eps.get('FECHA_AUTORIZACION')).days > 30:
@@ -75,11 +81,13 @@ class AutorizacionServicio(forms.Form):
             resp_mcar = call_api_medicar(num_aut)
 
         if not resp_mcar:
+            logger.info(f"No se pudo obtener información del número de autorización {num_aut}")
             raise forms.ValidationError("Pedimos disculpas, pero no pudimos obtener información\n"
                                         f"con este número de autorización.\n{num_aut}\n"
                                         "Comunícate con nosotros al 333 033 3124")
 
         if resp_mcar.get('autorizacion'):
+            logger.info(f"Número de autorización {num_aut} se encuentra radicado.")
             raise forms.ValidationError(f"Este domicilio se encuentra radicado en "
                                         f"{resp_mcar.get('nombre_centro_factura')[:-5].strip()}\n"
                                         f"con el número de acta: {resp_mcar.get('ssc')}\n\n"
@@ -87,6 +95,7 @@ class AutorizacionServicio(forms.Form):
                                         f"con nosotros al: 333 033 3124")
 
         resp_eps['NUMERO_AUTORIZACION'] = num_aut
+        logger.info(f"Número de autorización {num_aut} válido.")
         return resp_eps
 
 
@@ -141,6 +150,7 @@ class DigitaCelular(forms.Form):
     def clean_celular(self):
         cel = self.cleaned_data.get('celular')
         if str(cel)[0] != "3" or len(str(cel)) != 10:
+            logger.info(f"Número de celular {cel} incorrecto.")
             raise forms.ValidationError(f"Número de celular incorrecto:\n{cel}")
         return cel
 

@@ -61,7 +61,7 @@ class ContactWizard(SessionWizardView):
         method = self.request.method
         logger.info(f"IP={self.request.META.get('HTTP_X_FORWARDED_FOR', 'NO_IP_DETECTED')} "
                     f"[{method}.{self.response_class.status_code}] "
-                    f"agent={parse_agent(self.request.META.get('HTTP_USER_AGENT'))}  "
+                    f"agent={parse_agent(self.request.META.get('HTTP_USER_AGENT'))} "
                     f"saliendo_de={self.steps.current}")
 
         return super().post(*args, **kwargs)
@@ -162,9 +162,9 @@ class ContactWizard(SessionWizardView):
         if info_email['NUMERO_AUTORIZACION'] != 99_999_999:
             guardar_info_bd(**info_email, ip=self.request.META.get('HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR'))
 
-        logger.info('E-mail será enviado con la siguiente información : ')
-        for log in info_email:
-            logger.info(f'== {log} ==> {info_email[log]}')
+        logger.info(f'Radicación finalizada. E-mail de confirmación será enviado a {form_data[6]}')
+        # for log in info_email:
+        #     logger.info(f'== {log} ==> {info_email[log]}')
 
         # Envía e-mail
         self.send_mail(info_email)
@@ -257,6 +257,8 @@ class ContactWizard(SessionWizardView):
 
 def finalizado(request):
     if ctx := request.session.get('temp_data', {}):
+        logger.info(f'Acessando a vista /finalizado al haber terminado el wizard')
         return render(request, 'done.html', ctx)
     else:
+        logger.info(f'Se ha intentado acceder a vista /finalizado directamente')
         return HttpResponseRedirect('/')
