@@ -28,10 +28,10 @@
             </div>
         {% endif %}
 
-        <div class="vist3_text">
+        <!-- <div class="vist3_text">
             <p class="vist3">Ingresa el número de</p>
             <h1 class="vist3">Autorización de servicio</h1>
-        </div>
+        </div> -->
 
         {% if wizard.form.forms %}
             <!--NOTHING-->
@@ -40,9 +40,13 @@
                     {{ form.as_table }}
                 {% endfor %}
         {% else %}
-            <input required type="number" inputmode="numeric" placeholder="Ingresa el número.." class="inp_vist3"
+        <div class="cont_inpu_auto">
+            <input required type="number" inputmode="numeric" class="inp_vist3"
                name="autorizacionServicio-num_autorizacion"
-               min="100000" id="id_autorizacionServicio-num_autorizacion">
+               min="" id="id_autorizacionServicio-num_autorizacion">
+
+               <p class="inputext_auto">Ingrese el número de Autorización</p>
+            </div>
         {% endif %}
         <p class="vist3_t">
             Validaremos que la autorización este activa <br>
