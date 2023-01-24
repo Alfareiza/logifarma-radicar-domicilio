@@ -5,10 +5,12 @@ from datetime import datetime, timedelta
 import requests
 from decouple import config
 
+from core.apps.base.resources.tools import notify
 from core.settings import BASE_DIR
 from core.settings import logger
 
 pickle_path = BASE_DIR / "core/apps/base/resources/stored.pickle"
+
 
 
 # def call_api_eps(num_aut: int) -> dict:
@@ -200,14 +202,22 @@ def auth_api_medicar():
 
 
 def request_api(url, headers, payload, method='POST'):
+    num_aut = payload.get('autorizacion')
     payload = json.dumps(payload)
-    logger.info(f'Llamando [{method}]: {url}')
-    logger.info(f'Header: {headers}')
-    logger.info(f'Payload: {payload}')
+    logger.info(f'API Llamando [{method}]: {url}')
+    # logger.info(f'API Header: {headers}')
+    # logger.info(f'API Payload: {payload}')
     try:
         response = requests.request(method, url, headers=headers, data=payload)
-        logger.info(f'Response: {response.text}')
-        return json.loads(response.text.encode('utf8'))
+        # logger.info(f'API Response [{response.status_code}]: {response.text}')
+        if response.status_code != 200:
+            notify('error-api', f'ERROR EN API - Radicado #{num_aut}',
+                   f"STATUS CODE: {response.status_code}\n\n"
+                   f"URL: {url}\n\nHeader: {headers}\n\n"
+                   f"Payload: {payload}\n\n{response.text}")
+            return {'error': 'No se han encontrado registros.', 'codigo': '1'}
+        else:
+            return json.loads(response.text.encode('utf8'))
     except Exception as e:
         logger.error("Error en request: ", response.text)
         return {}
@@ -282,13 +292,16 @@ def call_api_medicar(num_aut: int) -> dict:
     payload = {"nit_eps": "901543211", "autorizacion": f"{num_aut}"}
     resp = request_api(url, headers, payload)
     try:
-        if resp == {'error': 'No se han encontrado registros.'}:
-            return resp
-        elif resp == {'error': 'El Nit ingresado no corresponde a ningun convenio.'}:
-            payload['nit_eps'] = '890102044'
-            resp = request_api(url, headers, payload)
+        if 'error' in resp.keys():
+            if resp.get('error') == 'No se han encontrado registros.':
+                return resp
+            elif resp.get('error') == 'El Nit ingresado no corresponde a ningun convenio.':
+                payload['nit_eps'] = '890102044'
+                resp = request_api(url, headers, payload)
         return resp[0]
     except KeyError:
+        # Envío de correo
+
         logger.error('Al consultarse hubo una respuesta inesperada: ', resp)
         return {}
 
@@ -311,4 +324,4 @@ def should_i_call_auth():
 
 if __name__ == '__main__':
     ...
-    # print(call_api_medicar(1))
+    # print(call_api_eps(1))
