@@ -84,7 +84,8 @@ class AutorizacionServicio(forms.Form):
             logger.info(f"No se pudo obtener información del número de autorización {num_aut}")
             raise forms.ValidationError("Pedimos disculpas, pero no pudimos obtener información\n"
                                         f"con este número de autorización.\n{num_aut}\n"
-                                        "Comunícate con nosotros al 333 033 3124")
+                                        "Puedes esperar unos minutos e intentar de nuevo\n"
+                                        "o comunícarte con nosotros al \n333 033 3124")
 
         if resp_mcar.get('autorizacion'):
             logger.info(f"Número de autorización {num_aut} se encuentra radicado.")
@@ -95,7 +96,7 @@ class AutorizacionServicio(forms.Form):
                                         f"con nosotros al: 333 033 3124")
 
         resp_eps['NUMERO_AUTORIZACION'] = num_aut
-        logger.info(f"Número de autorización {num_aut} válido.")
+        logger.info(f"Número de autorización {num_aut} válido")
         return resp_eps
 
 

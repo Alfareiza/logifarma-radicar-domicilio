@@ -67,7 +67,7 @@ def parse_agent(agent: str) -> str:
 
 def guardar_info_bd(**kwargs):
     """
-
+    Guarda radicado en base de datos
     :param kwargs: Información final del wizard + ip:
             Ejemplo:
             {
@@ -131,12 +131,30 @@ def guardar_info_bd(**kwargs):
                                   paciente_data=kwargs)
         logger.info("Radicación guardada con éxito!")
     except Exception as e:
+        notify('error-bd', f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", e)
         logger.error(f"Error guardando radicación"
                      f" ({kwargs.get('NUMERO_AUTORIZACION')}): ", e)
-        email = EmailMessage(
-            subject=f'ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS',
-            body=e,
-            from_email=f"Domicilios Logifarma <{settings.EMAIL_HOST_USER}>",
-            to=['alfareiza@gmail.com']
-        )
-        email.send(fail_silently=False)
+
+
+def notify(reason: str, subject: str, body: str):
+    """
+    Función que envía un correo notificando algo
+    :param reason: Puede ser error-bd o error-api
+    :param subject: Asunto del correo
+    :param body: Cuerpo del Correo
+    :return: Nada
+    """
+    if reason == 'error-bd':
+        msg = 'Correo enviado notificando problema con API'
+    elif reason == 'error-api':
+        msg = 'Correo enviado notificando problema al guardar en BD'
+
+    email = EmailMessage(
+        subject=subject,
+        body=body,
+        from_email=f"Logs Domicilios Logifarma <{settings.EMAIL_HOST_USER}>",
+        to=['alfareiza@gmail.com', 'logistica@logifarma.co']
+    )
+
+    if sent := email.send(fail_silently=False):
+        logger.error(msg)
