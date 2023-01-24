@@ -291,8 +291,9 @@ def call_api_medicar(num_aut: int) -> dict:
     headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}
     payload = {"nit_eps": "901543211", "autorizacion": f"{num_aut}"}
     resp = request_api(url, headers, payload)
+    breakpoint()
     try:
-        if isinstance(resp, type(dict)) and 'error' in resp.keys():
+        if isinstance(resp, dict) and 'error' in resp.keys():
             if resp.get('error') == 'No se han encontrado registros.':
                 return resp
             elif resp.get('error') == 'El Nit ingresado no corresponde a ningun convenio.':
@@ -300,7 +301,9 @@ def call_api_medicar(num_aut: int) -> dict:
                 resp = request_api(url, headers, payload)
         return resp[0]
     except KeyError:
-        logger.error('Al consultarse hubo una respuesta inesperada: ', resp)
+        breakpoint()
+        # msg = f"{resp}"
+        logger.error('Al consultarse hubo una respuesta inesperada: ', str(resp))
         return {}
 
 
