@@ -201,8 +201,12 @@ def auth_api_medicar():
 
 def request_api(url, headers, payload, method='POST'):
     payload = json.dumps(payload)
+    logger.info(f'Llamando [{method}]: {url}')
+    logger.info(f'Header: {headers}')
+    logger.info(f'Payload: {payload}')
     try:
         response = requests.request(method, url, headers=headers, data=payload)
+        logger.info(f'Response: {response.text}')
         return json.loads(response.text.encode('utf8'))
     except Exception as e:
         logger.error("Error en request: ", response.text)
@@ -306,4 +310,5 @@ def should_i_call_auth():
             return token
 
 if __name__ == '__main__':
-    print(call_api_eps(12012023128530011))
+    ...
+    # print(call_api_medicar(1))
