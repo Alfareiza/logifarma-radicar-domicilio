@@ -106,3 +106,12 @@ class AllFLow(VisualWizardTests):
     def test_6_correo_0_connect_to_done(self):
         self.process_correo()
         self.assertEqual(self.selenium.title, 'Listo')
+
+    def test_7_finalizado(self):
+        print(f'===== TESTING ===== > {self.selenium.title}')
+        title = self.selenium.title
+        self.assertEqual(title, 'Listo')
+
+    def test_7_finalizado_0_connect_to_home(self):
+        self.process_finalizado()
+        self.assertEqual(self.selenium.title, 'Inicio')
