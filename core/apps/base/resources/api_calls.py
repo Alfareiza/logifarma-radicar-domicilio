@@ -211,8 +211,11 @@ def request_api(url, headers, payload, method='POST'):
         response = requests.request(method, url, headers=headers, data=payload)
         # logger.info(f'API Response [{response.status_code}]: {response.text}')
         if response.status_code != 200:
+            res = requests.request('GET', 'https://httpbin.org/ip')
+            ip = json.loads(res.text.encode('utf8'))
             notify('error-api', f'ERROR EN API - Radicado #{num_aut}',
                    f"STATUS CODE: {response.status_code}\n\n"
+                   f"IP: {ip.get('origin')}\n\n"
                    f"URL: {url}\n\nHeader: {headers}\n\n"
                    f"Payload: {payload}\n\n{response.text}")
             return {'error': 'No se han encontrado registros.', 'codigo': '1'}
@@ -292,7 +295,7 @@ def call_api_medicar(num_aut: int) -> dict:
     payload = {"nit_eps": "901543211", "autorizacion": f"{num_aut}"}
     resp = request_api(url, headers, payload)
     try:
-        if 'error' in resp.keys():
+        if isinstance(resp, dict) and 'error' in resp.keys():
             if resp.get('error') == 'No se han encontrado registros.':
                 return resp
             elif resp.get('error') == 'El Nit ingresado no corresponde a ningun convenio.':
@@ -300,9 +303,8 @@ def call_api_medicar(num_aut: int) -> dict:
                 resp = request_api(url, headers, payload)
         return resp[0]
     except KeyError:
-        # Envío de correo
-
-        logger.error('Al consultarse hubo una respuesta inesperada: ', resp)
+        # msg = f"{resp}"
+        logger.error('Al consultarse hubo una respuesta inesperada: ', str(resp))
         return {}
 
 

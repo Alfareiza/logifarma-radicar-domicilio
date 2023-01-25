@@ -145,9 +145,9 @@ def notify(reason: str, subject: str, body: str):
     :return: Nada
     """
     if reason == 'error-bd':
-        msg = 'Correo enviado notificando problema con API'
-    elif reason == 'error-api':
         msg = 'Correo enviado notificando problema al guardar en BD'
+    elif reason == 'error-api':
+        msg = 'Correo enviado notificando problema con API'
 
     email = EmailMessage(
         subject=subject,
