@@ -81,6 +81,7 @@ class VisualWizardTests(StaticLiveServerTestCase):
         return works
 
     def process_home(self):
+        self.selenium.execute_script("window.scrollTo(0,document.body.scrollHeight)")
         self.get_boton_continuar('btn_inicio').click()
 
     def process_instrucciones(self):
@@ -138,6 +139,13 @@ class VisualWizardTests(StaticLiveServerTestCase):
             self.take_me_to_the_step('digitaCorreo')
             self.get_boton_continuar().click()
 
+    def process_finalizado(self):
+        self.get_boton_continuar().click()
+        if self.selenium.title != 'Home':
+            self.take_me_to_the_step('digitaCorreo')
+            self.get_boton_continuar().click()
+            self.get_boton_continuar().click()
+
     def take_me_to_the_step(self, to_step):
         map_vistas = [
             {'Inicio': 'self.process_home()'},
@@ -147,6 +155,7 @@ class VisualWizardTests(StaticLiveServerTestCase):
             {'Elige el barrio': 'self.process_direccion_barrio()'},
             {'Digite celular': 'self.process_celular()'},
             {'Digite un correo electrónico': 'self.process_correo()'},
+            {'Listo': 'self.process_correo()'},
         ]
         current = [i for i, v in enumerate(map_vistas) if list(v.keys()) == [self.selenium.title]]
         desde = current[0]
