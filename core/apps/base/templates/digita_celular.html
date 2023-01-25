@@ -27,7 +27,6 @@
             </div>
         {% endif %}
 
-        <h1 class="ti_vist8">¿Cual es su número de celular?</h1>
 
         {% if wizard.form.forms %}
             <!--NOTHING-->
@@ -36,8 +35,14 @@
                 {{ form.as_table }}
             {% endfor %}
         {% else %}
+            
+        <div class="cont_inpu_direccion">
             <input class="inp_vist8" type="number" inputmode="numeric" name="digitaCelular-celular" required=""
-                   id="id_digitaCelular-celular" placeholder="Ingresar el número..">
+            id="id_digitaCelular-celular" autofocus>
+
+           <p class="inputext_direccion">Ingrese el número de Celular</p>
+        </div>
+        
             <p class="p_vist8">Te informaremos por este medio cuando el domicilio este en camino.</p>
 
 

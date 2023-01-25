@@ -62,15 +62,17 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     color: #0572ce;
     border-color: #0572ce;
     font-size: 1.5em;
-    width: 100%;}
+    width: 80%;
+    height: 80%;
+}
 
 .btn {position: absolute;
-    padding: 0.6% 3%;
+    padding: 0.6% 4%;
     margin: 0 auto;
     font-size: 2em;
-    border-radius: 12px;
-    left: 42%;
-    top: 88%;
+    border-radius: 0px;
+    left: 40%;
+    top: 90%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -87,7 +89,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     z-index: 99;
     display: none;
     border: solid #3333;
-    border-radius: 12px;
+    border-radius: 0px;
 }
 
 .carga {border: solid 7px #ccc;
@@ -290,17 +292,18 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
     color: #ffff;
     font-weight: 600;
 }
-.btn_inicio {position: relative;
-    padding: 0.6% 5%;
-    margin: 5px auto 0;
-    font-size: 1em;
+.btn_inicio {position: absolute;
+    padding: 0.6% 4%;
+    margin: 0px auto 0;
+    font-size: 2em;
     border-radius: 0px;
     border: solid 2px white;
-    left: 42%;
-    top: 0;
+    left: 40.3%;
+    top: 100%;
     background: #3c468f;
     color: #ffff;
-    font-weight: 100;}
+    font-weight: 100;
+}
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
 main section.vista2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
@@ -405,20 +408,47 @@ main section.vista3 p.vist3 { font-size: 1.1em; }
 
 main section.vista3 h1.vist3 { font-size: 1.5em; font-weight: 500;}
 
-main section.vista3 input.inp_vist3 {margin: 1% 28%;
-    padding: 1% 0;
+.cont_inpu_auto {position: relative;
+    margin: 3% auto;
+    width: 40%;
+    height: 5vh;
+    display: flex;}
+
+main section.vista3 input.inp_vist3 {position: relative;
+    margin: 0 auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 44%;
+    width: 100%;
+    height: 100%;
     outline: none;
-    border-radius: 0px;}
+border-radius: 0px;}
+
+
+.inp_vist8:valid ~ .inputext_direccion, .inp_vist8:focus ~ .inputext_direccion {
+color: #0572ce;
+transform: translateX(10px) translateY(-30px);
+font-size: 1em;
+transition: 0.5S;
+}
 
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
 -webkit-appearance: none;
 margin: 0;
 }
+
+.inputext_auto {position: absolute;
+    width: 100%;
+    height: 46%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 2% 0;
+    pointer-events: none;
+    font-size: 1.1em;
+    }
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
@@ -493,12 +523,12 @@ main section.vista4 p.vist4_1 { width: 44%;
     margin: 0 auto;}
 
 .btn_archi {position: absolute;
-    top: 88%;
-    left: 42%;
-    width: 13.2%;
-    height: 6.3%;
+    top: 90%;
+    left: 40%;
+    width: 15.2%;
+    height: 6.2%;
     border: solid 2px #468bc4;
-    border-radius: 12px;
+    border-radius: 0px;
     color: #468bc4;
     display: block;
     font-size: 1.5em;}
@@ -509,7 +539,7 @@ main section.vista4 p.vist4_1 { width: 44%;
     display: flex;
     position: absolute;
     top: 26%;
-    left: 22%;}
+    left: 25%;}
 
 .arch_btn {opacity: 0;
     width: 200px;
@@ -586,7 +616,7 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 
 .vist6 {width: 81%;
-    height: 11vh;
+    height: 7vh;
     text-align: center;
     margin: 3% auto 0;
     font-size: 1.4em;
@@ -602,7 +632,7 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     margin: 0px auto 0% auto}
 
 .filt {position: relative;
-    margin: 5px auto;
+    margin: 0px auto 5px;
     width: 30%;
     height: 6vh;
     display: flex;}
@@ -641,11 +671,49 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     position: relative;
     font-size: 23px;}
 
+.select_opt[type='radio']:after {
+    width: 75%;
+    height: 75%;
+    border-radius: 15px;
+    top: 0px;
+    left: 0px;
+    position: relative;
+    background-color: #ffffff;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 3px solid #0572ce
+}
+
+.select_opt[type='radio']:checked:after {
+    width: 90%;
+    height: 90%;
+    border-radius: 15px;
+    top: 0px;
+    left: 0px;
+    position: relative;
+    background-color: #0572ce;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 1px solid #0572ce;
+}
+
 .elec {position: relative;
     width: 30%;
     height: 31vh;
     margin: 2% auto 0 auto;
     overflow: auto;}
+
+.elec::-webkit-scrollbar{
+   width: 10px;
+   background: #ffff;
+}
+
+.elec::-webkit-scrollbar-thumb{
+    background: #0572ce;
+    border-radius: 8px;
+}
 
 .con {display: flex;
     margin: 5px 0px;
@@ -653,8 +721,12 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 .con:hover {background: #d4cfcf;}
 
-.radio { margin: 0.5% auto;
-    position: absolute;}
+.radio {margin: 1px auto 0% 2%;
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+}
 
 .labelfil {width: 91%;
     margin: auto 0% auto 0%;
@@ -677,10 +749,10 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
 main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-.vist7 {width: 81%;
+.vist7 {width: 30%;
     height: 4vh;
-    text-align: center;
-    margin: 3% auto 0;
+    text-align: left;
+    margin: 4% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
@@ -731,20 +803,47 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1.4em;
     font-weight: 300;}
 
-.inp_vist8 {margin: 0.5% 30%;
-    padding: 1% 0;
+.cont_inpu_direccion {position: relative;
+    margin: 3% auto;
+    width: 30%;
+    height: 5vh;
+    display: flex;}
+
+.inp_vist8 {position: relative;
+    margin: 0 auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 40%;
+    width: 100%;
+    height: 100%;
     outline: none;
     border-radius: 0px;}
+
+.inp_vist8:valid ~ .inputext_direccion, .inp_vist8:focus ~ .inputext_direccion {
+    color: #0572ce;
+    transform: translateX(10px) translateY(-30px);
+    font-size: 1em;
+    transition: 0.5S;
+}
 
 .inp_vist8::-webkit-inner-spin-button,
 .inp_vist8::-webkit-inner-spin-button{
 -webkit-appearance: none;
 margin: 0;
 }
+
+.inputext_direccion {position: absolute;
+    width: 100%;
+    height: 46%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 2% 0;
+    pointer-events: none;
+    font-size: 1.1em;
+    color: #606060;
+    }
 
 
 .p_vist8 {position: relative;
@@ -803,8 +902,9 @@ main section.vista9 p.vist9_t {position: relative;
     font-weight: 400;
     margin: 0% auto;}
 
+
 .valid {position: relative;
-    margin: 3% auto 7% auto;
+    margin: 1% auto 7% auto;
     width: 40%;
     height: 7vh;
     display: flex;}
@@ -926,15 +1026,17 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     color: #0572ce;
     border-color: #0572ce;
     font-size: 1.5em;
-    width: 100%;}
+    width: 100%;
+    height: 100%;
+}
 
 .btn {position: absolute;
-    padding: 0.6% 3%;
+    padding: 0.4% 5%;
     margin: 0 auto;
-    font-size: 2em;
-    border-radius: 12px;
-    left: 42%;
-    top: 88%;
+    font-size: 1.8em;
+    border-radius: 0px;
+    left: 40%;
+    top: 89%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -951,7 +1053,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     z-index: 99;
     display: none;
     border: solid #3333;
-    border-radius: 12px;
+    border-radius: 0px;
 }
 
 .carga {border: solid 7px #ccc;
@@ -1031,7 +1133,7 @@ main section.vista1 div.vist1_1 {position: relative;
     margin: 20px auto 0;
     width: 30%;
     padding: 0;
-    height: 40vh;}
+    height: 38vh;}
 
 main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
@@ -1041,7 +1143,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 
 .cont_adv {position: relative;
-    width: 27%;
+    width: 28%;
     height: 5vh;
     margin: 20px auto 0;}
 
@@ -1066,13 +1168,13 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 .p_adv {position: relative;
     width: 100%;
     height: 100%;
-    font-size: 0.9em;
+    font-size: 0.9em;   
     font-weight: 600;
     color: #3c468f}
 
 
 .cont_mensaje {position: relative;
-    width: 27%;
+    width: 28%;
     height: 6vh;
     margin: 5px auto 20px;}
 
@@ -1111,7 +1213,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 }
 
 .cont_piedepagina{position: relative;
-    width: 16%;
+    width: 27%;
     height: 20%;
     margin: 0 auto;
     color: #ffff;
@@ -1120,6 +1222,8 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .text_piedepagina{font-size: 1.1em;
     margin: auto;
+    text-align: left;
+    width: 100%;
 }
 
 .cont_pie {position: relative;
@@ -1153,17 +1257,18 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
     color: #ffff;
     font-weight: 600;
 }
-.btn_inicio {position: relative;
-    padding: 0.6% 5%;
+.btn_inicio {position: absolute;
+    padding: 0.4% 5%;
     margin: 5px auto 0;
-    font-size: 1em;
+    font-size: 1.8em;
     border-radius: 0px;
     border: solid 2px white;
-    left: 42%;
-    top: 0;
+    left: 40.6%;
+    top: 100%;
     background: #3c468f;
     color: #ffff;
-    font-weight: 100;}
+    font-weight: 100;
+}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -1265,24 +1370,46 @@ main section.vista3 {width: 100%; height: 100vh; position: relative; margin: 0 a
 main section.vista3 div.vist3_text {position: relative;
     padding: 0% 0% 0% 9%;}
 
-main section.vista3 p.vist3 { font-size: 1.1em; }
-
-main section.vista3 h1.vist3 { font-size: 1.5em; font-weight: 500;}
-
-main section.vista3 input.inp_vist3 {margin: 1% 28%;
-    padding: 1% 0;
-    border: 0px;
-    border-bottom: solid 1px;
-    font-size: 1em;
-    width: 44%;
-    outline: none;
+    .cont_inpu_auto {position: relative;
+        margin: 2% auto;
+        width: 40%;
+        height: 7vh;
+        display: flex;}
+    
+    main section.vista3 input.inp_vist3 {position: relative;
+        margin: 0 auto;
+        padding: 0;
+        border: 0px;
+        border-bottom: solid 1px;
+        font-size: 1em;
+        width: 100%;
+        height: 100%;
+        outline: none;
     border-radius: 0px;}
-
-main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
-main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
--webkit-appearance: none;
-margin: 0;
+    
+.inp_vist8:valid ~ .inputext_direccion, .inp_vist8:focus ~ .inputext_direccion {
+color: #0572ce;
+transform: translateX(10px) translateY(-20px);
+font-size: 0.8em;
+transition: 0.5S;
 }
+    
+    main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
+    main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+    }
+    
+    .inputext_auto {position: absolute;
+        width: 100%;
+        height: 46%;
+        top: 0;
+        left: 0;
+        text-align: left;
+        padding: 2% 0;
+        pointer-events: none;
+        font-size: 1em;
+        }
 
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
@@ -1360,24 +1487,24 @@ main section.vista4 p.vist4_1 { width: 44%;
     margin: 0 auto;}
 
 .btn_archi {position: absolute;
-    top: 88%;
-    left: 42%;
-    width: 17%;
-    height: 8.5%;
+    top: 89%;
+    left: 40%;
+    width: 19.7%;
+    height: 7%;
     border: solid 2px;
-    border-radius: 12px;
+    border-radius: 0px;
     border-color: #468bc4;
     color: #468bc4;
-    display: block;
-    font-size: 1.4em;}
+    display: block;}
 
 .btn_archi::before {content: 'Adjuntar foto';
     justify-content: center;
     align-items: center;
     display: flex;
+    font-size: 1em;
     position: absolute;
-    top: 26%;
-    left: 20%;}
+    top: 18%;
+    left: 24%;}
 
 .arch_btn {opacity: 0;
     width: 100%;
@@ -1508,11 +1635,41 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     position: relative;
     font-size: 15px;}
 
+.select_opt[type='radio']:after {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    top: -4px;
+    left: -2px;
+    position: relative;
+    background-color: #ffffff;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 3px solid #0572ce
+}
+
+.select_opt[type='radio']:checked:after {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    top: -7px;
+    left: 0px;
+    position: relative;
+    background-color: #0572ce;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 1px solid #0572ce;
+}
+
 .elec {position: relative;
     width: 30%;
     height: 21vh;
     margin: 2% auto 0 auto;
     overflow: auto;}
+
+
 
 .con {display: flex;
     margin: 5px 0px;
@@ -1521,7 +1678,10 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
 .con:hover {background: #d4cfcf;}
 
 .radio { margin: 1% auto;
-    position: absolute;}
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    padding: 0;}
 
 .labelfil {width: 91%;
     margin: auto 0% auto 0%;
@@ -1606,12 +1766,20 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1.4em;
     font-weight: 300;}
 
-.inp_vist8 {margin: 0.5% 35%;
-    padding: 1% 0;
+.cont_inpu_direccion {position: relative;
+    margin: 3% auto;
+    width: 30%;
+    height: 7vh;
+    display: flex;}
+
+.inp_vist8 {position: relative;
+    margin: 0 auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 30%;
+    width: 100%;
+    height: 100%;
     outline: none;
     border-radius: 0px;}
 
@@ -1620,6 +1788,24 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
 -webkit-appearance: none;
 margin: 0;
 }
+
+.inp_vist8:valid ~ .inputext_direccion, .inp_vist8:focus ~ .inputext_direccion {
+color: #0572ce;
+transform: translateX(10px) translateY(-20px);
+font-size: 0.8em;
+transition: 0.5S;
+}
+
+.inputext_direccion {position: absolute;
+    width: 100%;
+    height: 46%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 2% 0;
+    pointer-events: none;
+    font-size: 1em;
+    }
 
 .p_vist8 {position: relative;
     width: 64%;
@@ -1822,9 +2008,9 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     padding: 3% 14%;
     margin: 0 auto;
     font-size: 2em;
-    border-radius: 12px;
+    border-radius: 0px;
     left: 29%;
-    top: 88%;
+    top: 89%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -2003,8 +2189,8 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 }
 
 .cont_piedepagina{position: relative;
-    width: 36%;
-    height: 20%;
+    width: 63%;
+    height: 17%;
     margin: 0 auto;
     color: #ffff;
     display: flex;
@@ -2017,7 +2203,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 .cont_pie {position: relative;
     width: 63%;
     height: 6vh;
-    margin: 5px auto 10px;}
+    margin: 5px auto 5px;}
 
 .cont_icon_pie {position: relative;
     width: 100%;
@@ -2045,14 +2231,14 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
     color: #ffff;
     font-weight: 600;
 }
-.btn_inicio {position: relative;
-    padding: 1.5% 10%;
-    margin: 10px auto 0;
-    font-size: 1.4em;
+.btn_inicio {position: absolute;
+    padding: 3% 14%;
+    margin: 0px auto 0;
+    font-size: 2em;
     border-radius: 0px;
     border: solid 2px white;
-    left: 34%;
-    top: 0;
+    left: 29%;
+    top: 89%;
     background: #3c468f;
     color: #ffff;
     font-weight: 100;}
@@ -2162,20 +2348,48 @@ main section#vist3 p.vist3 { font-size: 1.9em; }
 
 main section.vista3 h1.vist3 { font-size: 2.4em; font-weight: 500;}
 
-main section.vista3 input.inp_vist3 {margin: 5% 14%;
-    padding: 1% 0;
+.cont_inpu_auto {position: relative;
+    margin: 4% auto 3%;
+    width: 80%;
+    height: 6vh;
+    display: flex;}
+
+main section.vista3 input.inp_vist3 {position: relative;
+    margin: 0 auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
-    font-size: 1.9em;
-    width: 70%;
+    font-size: 2em;
+    width: 100%;
+    height: 100%;
     outline: none;
-    border-radius: 0px;}
+    border-radius: 0px;
+}
+
+.inp_vist8:valid ~ .inputext_direccion, .inp_vist8:focus ~ .inputext_direccion {
+color: #0572ce;
+transform: translateX(10px) translateY(-35px);
+font-size: 1.4em;
+transition: 0.5S;
+}
 
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
 -webkit-appearance: none;
 margin: 0;
 }
+
+.inputext_auto {position: absolute;
+    width: 100%;
+    height: 46%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 2% 0;
+    pointer-events: none;
+    font-size: 2em;
+    }
+    
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
@@ -2190,7 +2404,7 @@ main section.vista3 div.vist3_img {position: relative;
     height: 30vh;
     top: 0;
     right: 0;
-    margin: 6% auto 1%;
+    margin: 10% auto 1%;
     filter: drop-shadow(0px 1px 2px #e4dddd);}
 
 main section.ist3 div.vist3_img img.vist3 {position: relative;
@@ -2203,7 +2417,7 @@ main section.vista3 p.vist3_t2 {padding: 6% 6% 1% 6%;
     width: 88%;
     margin: 0;}
 
-main section.vista3 div.tet {margin: 4% auto 4% auto; width: 24%; }
+main section.vista3 div.tet {margin: 4% auto 4% auto; width: 27%; }
 
 main section.vista3 div.tet a.vist3 {left: 0%;
     position: relative; font-size: 1.7em;}
@@ -2254,7 +2468,7 @@ main section.vista4 p.vist4_1 { width: 63%;
     width: 46%;
     height: 8%;
     border: solid 2px #468bc4;
-    border-radius: 12px;
+    border-radius: 0px;
     color: #468bc4;
     display: block;
     font-size: 1.9em;}
@@ -2346,10 +2560,10 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 
 .vist6 {width: 81%;
-    height: 11vh;
+    height: 9vh;
     text-align: center;
     margin: 3% auto 0;
-    font-size: 1.4em;
+    font-size: 2em;
     font-weight: 300;}
 
 .p_vist6 {position: relative;
@@ -2376,7 +2590,7 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     border-bottom: solid 1px black ;
     border-radius: 0;
     text-align: left;
-    font-size: 1.3em;}
+    font-size: 1.9em;}
 
 .inpfilt:hover { text-decoration: none;}
 
@@ -2401,11 +2615,49 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     position: relative;
     font-size: 25px;}
 
+.select_opt[type='radio']:after {
+    width: 90%;
+    height: 90%;
+    border-radius: 15px;
+    top: -1px;
+    left: -1px;
+    position: relative;
+    background-color: #ffffff;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 3px solid #0572ce
+}
+
+.select_opt[type='radio']:checked:after {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    top: -1px;
+    left: -1px;
+    position: relative;
+    background-color: #0572ce;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 1px solid #0572ce;
+}
+
 .elec {position: relative;
     width: 70%;
-    height: 21vh;
+    height: 26vh;
     margin: 5% auto 0 auto;
     overflow: auto;}
+
+.elec::-webkit-scrollbar{
+   width: 10px;
+   background: #ffff;
+}
+
+.elec::-webkit-scrollbar-thumb{
+    background: #0572ce;
+    border-radius: 8px;
+}
 
 .con {display: flex;
     margin: 5px 0px;
@@ -2413,18 +2665,17 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 .con:hover {background: #d4cfcf;}
 
-.radio {
-    margin: 0.5% auto;
+.radio {margin: 1px auto 0% 2%;
     position: absolute;
-    width: 23px;
-    height: 23px;
+    width: 28px;
+    height: 28px;
     padding: 0;
 }
 
-.labelfil {width: 91%;
+.labelfil {width: 90%;
     margin: auto 0% auto 0%;
-    font-size: 1.6em;
-    padding: 0px 1px 0px 7%;
+    font-size: 1.9em;
+    padding: 0px 1px 0px 9%;
     z-index: 99; }
 
 .btn_muni {position: absolute;
@@ -2442,10 +2693,10 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
 main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-.vist7 {width: 81%;
-    height: 10vh;
-    text-align: center;
-    margin: 4% auto 0;
+.vist7 {width: 70%;
+    height: 4vh;
+    text-align: left;
+    margin: 12% auto 0;
     font-size: 2em;
     font-weight: 300;}
 
@@ -2496,14 +2747,41 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 2.4em;
     font-weight: 300;}
 
-.inp_vist8 {margin: 3% 15%;
-    padding: 2% 0;
+.cont_inpu_direccion {position: relative;
+margin: 4% auto 7%;
+width: 70%;
+height: 6vh;
+display: flex;}
+
+.inp_vist8 {position: relative;
+    margin: 0 auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
-    font-size: 2.5em;
-    width: 70%;
-    outline: none;}
+    font-size: 2em;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border-radius: 0px;}
 
+.inp_vist8:valid ~ .inputext_direccion, .inp_vist8:focus ~ .inputext_direccion {
+color: #0572ce;
+transform: translateX(10px) translateY(-45px);
+font-size: 1.5em;
+transition: 0.5S;
+}
+
+.inputext_direccion {position: absolute;
+    width: 100%;
+    height: 40%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 4% 0;
+    pointer-events: none;
+    font-size: 2em;
+    color: #8f8f8f;
+    }
 
 .p_vist8 {position: relative;
     width: 64%;
@@ -2710,7 +2988,9 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     color: #0572ce;
     border-color: #0572ce;
     font-size: 1em;
-    width: 100%;}
+    width: 85%;
+    height: 85%;
+}
 
 .btn {position: absolute;
     padding: 3% 30%;
@@ -2718,7 +2998,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     font-size: 1.1em;
     border-radius: 0px;
     left: 9%;
-    top: 92%;
+    top: 91%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -2795,7 +3075,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     100% { transform: rotate(360deg);}
 }
 
-main section.vista1 {width: 100%; height: 92vh; position: relative; margin: 0 auto; float: none; display: block;}
+main section.vista1 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 main section.vista1 div.vist1 {position: relative;
     margin: 0 auto;
@@ -2897,7 +3177,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .cont_piedepagina{position: relative;
     width: 80%;
-    height: 18%;
+    height: 17%;
     margin: 0 auto;
     color: #ffff;
     display: flex;
@@ -2945,10 +3225,11 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
     border-radius: 0px;
     border: solid 1px white;
     left: 9%;
-    top: 90%;
+    top: 91%;
     background: #3c468f;
     color: #ffff;
     font-weight: 300;
+
 }
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
@@ -3073,8 +3354,8 @@ main section.vista3 input.inp_vist3 {margin: 0;
 
 .inp_vist3:valid + .inputext_auto, .inp_vist3:focus + .inputext_auto {
 color: #0572ce;
-transform: translateX(10px) translateY(-15px);
-font-size: 0.8em;
+transform: translateX(10px) translateY(-26px);
+font-size: 1em;
 transition: 0.5S;
 }
 
@@ -3093,7 +3374,7 @@ margin: 0;
     padding: 3% 0;
     pointer-events: none;
     font-size: 1.2em;
-    color: #808080;
+    color: #333;
     }
 
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
@@ -3103,29 +3384,36 @@ main section.vista3 p.vist3_t { position: relative;
     text-align: left;
     margin: 1% auto;
     font-size: 0.8em;
-    width: 85%;}
+    width: 85%;
+    color: #808080;
+}
 
 main section.vista3 div.vist3_img {position: relative;
     width: 87%;
     height: 31vh;
     top: 0;
     right: 0;
-    margin: 6% auto 1%;
+    margin: 10% auto 2%;
     filter: drop-shadow(0px 1px 2px #e4dddd);}
 
 main section#vista3 div.vist3_img img.vist3 {width: 90%;
     padding: 5%}
 
-main section.vista3 p.vist3_t2 {padding: 6% 6% 1% 6%;
+main section.vista3 p.vist3_t2 {padding: 8% 6% 1% 6%;
     font-size: 1em;
     text-align: center;
     width: 88%;
     margin: 0;}
 
-main section.vista3 div.tet {margin: 2% 0 5% 0px; width: 100%;}
+main section.vista3 div.tet {
+    margin: 7% auto 5% auto; 
+    width: 43%;
+}
 
-main section.vista3 div.tet a.vist3 {left: 34%;
-    position: relative; font-size: 1.3em;}
+main section.vista3 div.tet a.vist3 {left: 0%;
+    position: relative; font-size: 1.3em;
+    color: #2a57a9;
+}
 
 main section.vista3 button.btn_vist3 {position: absolute;
     padding: 3% 14%;
@@ -3144,19 +3432,20 @@ main section.vista3 button.btn_vist3 {position: absolute;
 main section.vista4 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section.vista4 h1.vist4 {width: 75%;
-    text-align: center;
-    margin: 0 auto;
-    font-size: 1.4em;
-    font-weight: 400;}
+main section.vista4 h1.vist4 {width: 91%;
+    text-align: left;
+    margin: 15px auto 0;
+    font-size: 1.3em;
+    font-weight: 300;}
 
 
-main section.vista4 p.vist4_1 { width: 80%;
-    text-align: center;
-    margin: 4% auto;
-    font-size: 1em;
-    color: red;}
-
+main section.vista4 p.vist4_1 { width: 89%;
+    text-align: left;
+    margin: 4% auto 5%;
+    font-size: 0.9em;
+    color: #ff0000;
+    
+}
 
 .video {position: relative;
     width: 95%;
@@ -3168,7 +3457,7 @@ main section.vista4 p.vist4_1 { width: 80%;
     width: 100%;
     height: 285px;
     padding: 0%;
-    margin: 0 auto;
+    margin: 15% auto 0;
     overflow: hidden;}
 
 .img_fot {position: relative;
@@ -3180,15 +3469,16 @@ main section.vista4 p.vist4_1 { width: 80%;
     margin: 0 auto;}
 
 .btn_archi {position: absolute;
-    top: 90%;
-    left: 25%;
-    width: 48.3%;
-    height: 7.2%;
+    top: 91%;
+    left: 9%;
+    width: 81%;
+    height: 7%;
     border: solid 2px #468bc4;
-    border-radius: 12px;
+    border-radius: 0px;
     display: block;
     color: #468bc4;
-    font-size: 1.1em;}
+    font-size: 1.1em;
+}
 
 .btn_archi::before {content: 'Adjuntar foto';
     justify-content: center;
@@ -3196,7 +3486,7 @@ main section.vista4 p.vist4_1 { width: 80%;
     display: flex;
     position: absolute;
     top: 26%;
-    left: 22%;}
+    left: 32%;}
 
 .arch_btn {opacity: 0;
     width: 100%;
@@ -3276,24 +3566,24 @@ main section.vista5 div.vist5_1 img.img3 { position: relative;
 main section.vista6 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-.vist6 {width: 81%;
-    height: 10vh;
-    text-align: center;
+.vist6 {width: 84%;
+    height: 8vh;
+    text-align: left;
     margin: 2% auto;
     font-size: 1.4em;
     font-weight: 300;}
 
 
 .p_vist6 {position: relative;
-    width: 93%;
-    height: 5vh;
-    text-align: center;
+    width: 84%;
+    height: 3vh;
+    text-align: left;
     font-size: 0.7em;
     font-weight: 600;
-    margin: 0px auto 5% auto;}
+    margin: 0px auto 2% auto;}
 
 .filt {position: relative;
-    margin: 15px auto;
+    margin: 5px auto 15px;
     width: 85%;
     height: 6vh;
     display: flex;}
@@ -3333,11 +3623,51 @@ main section.vista6 {width: 100%; height: 90vh; position: relative; margin: 0 au
     position: relative;
     font-size: 15px;}
 
+.select_opt[type='radio']:after {
+    width: 90%;
+    height: 90%;
+    border-radius: 15px;
+    top: -1px;
+    left: -1px;
+    position: relative;
+    background-color: #ffffff;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 3px solid #0572ce
+}
+
+.select_opt[type='radio']:checked:after {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    top: -1px;
+    left: -1px;
+    position: relative;
+    background-color: #0572ce;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 1px solid #0572ce;
+}
+
 .elec {position: relative;
     width: 85%;
-    height: 24vh;
+    height: 28vh;
     margin: 5% auto 0 auto;
-    overflow: auto;}
+    overflow-y: scroll;
+    border: solid 1px #e7e7e7;
+}
+
+.elec::-webkit-scrollbar{
+   width: 10px;
+   background: #ffff;
+}
+
+.elec::-webkit-scrollbar-thumb{
+    background: #0572ce;
+    border-radius: 8px;
+}
 
 .con {display: flex;
     margin: 5px 0px;
@@ -3345,15 +3675,17 @@ main section.vista6 {width: 100%; height: 90vh; position: relative; margin: 0 au
 
 .con:hover {background: #d4cfcf;}
 
-.radio { margin: auto 5px auto 0px;}
+.radio { margin: 5px auto 0% 2%;
+    position: absolute;
+    width: 23px;
+    height: 23px;
+    padding: 0;
+}
 
-.radio { margin: 1% auto;
-    position: absolute;}
-
-.labelfil {width: 91%;
+.labelfil {width: 85%;
     margin: auto 0% auto 0%;
     font-size: 1em;
-    padding: 0px 1px 0px 9%;
+    padding: 0px 1px 0px 11%;
     z-index: 99; }
 
 .btn_muni {position: absolute;
@@ -3371,11 +3703,11 @@ main section.vista6 {width: 100%; height: 90vh; position: relative; margin: 0 au
 main section.vista7 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-.vist7 {width: 81%;
-    height: 7vh;
-    text-align: center;
-    margin: 13% auto 8px;
-    font-size: 1.4em;
+.vist7 {width: 84%;
+    height: 4vh;
+    text-align: left;
+    margin: 13% auto 0px;
+    font-size: 1.2em;
     font-weight: 300;}
 
 main section.vista7 input.inp_vist7 {margin: 5% 14%;
@@ -3411,26 +3743,55 @@ option {
 main section.vista8 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 .vist8 {width: 81%;
-    height: 10vh;
+    height: 8vh;
     text-align: center;
     margin: 5% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
 .ti_vist8 {position: relative;
-    width: 81%;
-    text-align: center;
+    width: 84%;
+    text-align: left;
     margin: 6% auto 0;
     font-size: 1.4em;
     font-weight: 300;}
 
-.inp_vist8 {margin: 2% 7%;
-    padding: 3% 0;
+.cont_inpu_direccion {position: relative;
+margin: 3% auto;
+width: 85%;
+height: 6vh;
+display: flex;}
+
+.inp_vist8 {position: relative;
+    margin: 0 auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
-    font-size: 1em;
-    width: 86%;
-    outline: none;}
+    font-size: 1.1em;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border-radius: 0px;}
+
+.inp_vist8:valid ~ .inputext_direccion, .inp_vist8:focus ~ .inputext_direccion {
+color: #0572ce;
+transform: translateX(10px) translateY(-25px);
+font-size: 1em;
+transition: 0.5S;
+}
+
+.inputext_direccion {position: absolute;
+    width: 100%;
+    height: 40%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 4% 0;
+    pointer-events: none;
+    font-size: 1.1em;
+    color: #9c9c9c;
+    font-weight: 300;
+    }
 
 
 .inp_vist8::-webkit-inner-spin-button,
@@ -3440,8 +3801,8 @@ margin: 0;
 }  
 
 .p_vist8 {position: relative;
-    width: 64%;
-    text-align: center;
+    width: 84%;
+    text-align: left;
     font-size: 0.8em;
     font-weight: 400;
     margin: 0 auto;
@@ -3483,9 +3844,9 @@ main section.vista9 {width: 100%; height: 90vh; position: relative; margin: 0 au
     font-weight: 400;
     margin: 0% auto;}
 
-.vist9_t {position: relative; width: 81%;
-    text-align: center;
-    margin: 10% auto 8%;
+.vist9_t {position: relative; width: 84%;
+    text-align: left;
+    margin: 10% auto 4%;
     font-size: 1.4em;
     font-weight: 300;}
 
@@ -3641,15 +4002,18 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     padding: 2.5%;
     color: #0572ce;
     border-color: #0572ce;
-    font-size: 1em;}
+    font-size: 1em;
+    width: 81%;
+    height: 80%;
+}
 
 .btn {position: absolute;
     padding: 3% 14%;
     margin: 0 auto;
     font-size: 1.1em;
-    border-radius: 12px;
+    border-radius: 0px;
     left: 20%;
-    top: 88%;
+    top: 85%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -3666,7 +4030,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     z-index: 99;
     display: none;
     border: solid #3333;
-    border-radius: 12px;
+    border-radius: 0px;
 }
     
 .carga {border: solid 7px #ccc;
@@ -3689,8 +4053,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 
 
 .conten_carga_home { background: #ffffff;
-    height: 100%;
-    width: 100%;
+    height: 93%;
+    width: 98%;
     left: -1%;
     top: -5%;
     position: absolute;
@@ -3744,10 +4108,10 @@ main section.vista1 div.vist1 img.img1 {position: relative;
     padding: 1% 18%}
 
 main section.vista1 div.vist1_1 {position: relative;
-    margin: 38px auto 0;
+    margin: 20px auto 0;
     width: 85%;
     padding: 0;
-    height: 35vh;}
+    height: 30vh;}
 
 main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: 0% auto;
@@ -3872,14 +4236,14 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
     color: #ffff;
     font-weight: 600;
 }
-.btn_inicio {position: relative;
-    padding: 1.5% 10%;
+.btn_inicio {position: absolute;
+    padding: 3% 14.8%;
     margin: 15px auto 0;
     font-size: 1em;
     border-radius: 0px;
-    border: solid 1px white;
-    left: 28%;
-    top: 0;
+    border: solid 2px white;
+    left: 21%;
+    top: 83%;
     background: #3c468f;
     color: #ffff;
     font-weight: 100}
@@ -3988,20 +4352,43 @@ main section.vista3 p.vist3 { font-size: 1em;}
 
 main section.vista3 h1.vist3 { font-size: 1.4em; font-weight: 500;}
 
-main section.vista3 input.inp_vist3 {margin: 5% 14%;
-    padding: 1% 0;
+.cont_inpu_auto {position: relative;
+    margin: 3% auto;
+    width: 85%;
+    height: 6vh;
+    display: flex;}
+
+main section.vista3 input.inp_vist3 {margin: 0;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
-    font-size: 1em;
-    width: 70%;
-    outline: none;
-    border-radius: 0px;}
+    font-size: 0.9em;
+    width: 100%;
+    outline: none;}
+
+main section.vista3 input.inp_vist3:valid ~ .inputext_auto, main section.vista3 input.inp_vist3:focus ~ .inputext_auto {
+color: #0572ce;
+transform: translateX(10px) translateY(-15px);
+font-size: 0.8em;
+transition: 0.5S;
+}
 
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
 main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
 -webkit-appearance: none;
 margin: 0;
 }
+
+.inputext_auto {position: absolute;
+    width: 100%;
+    height: 46%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 4% 0;
+    pointer-events: none;
+    font-size: 1em;
+    }
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
@@ -4085,15 +4472,16 @@ main section.vista4 p.vist4_1 { width: 63%;
     margin: 0 auto;}
 
 .btn_archi {position: absolute;
-    top: 88%;
+    top: 85%;
     left: 20%;
     width: 55.1%;
     height: 5.8%;
     border: solid 2px #468bc4;
-    border-radius: 12px;
+    border-radius: 0px;
     display: block;
     color: #468bc4;
-    font-size: 1em;}
+    font-size: 1em;
+}
 
 .btn_archi::before {content: 'Adjuntar foto';
     justify-content: center;
@@ -4182,7 +4570,7 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
 .vist6 {width: 81%;
     text-align: center;
     margin: 5% auto;
-    font-size: 1.4em;
+    font-size: 1em;
     font-weight: 300;}
 
 
@@ -4194,7 +4582,7 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     margin: 0px auto 9% auto;}
 
 .filt {position: relative;
-    margin: 15px auto;
+    margin: 5px auto 15px;
     width: 85%;
     height: 6vh;
     display: flex;}
@@ -4234,6 +4622,34 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     position: relative;
     font-size: 15px;}
 
+.select_opt[type='radio']:after {
+    width: 66%;
+    height: 66%;
+    border-radius: 15px;
+    top: 0px;
+    left: 0px;
+    position: relative;
+    background-color: #ffffff;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 3px solid #0572ce
+}
+
+.select_opt[type='radio']:checked:after {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    top: -1px;
+    left: -1px;
+    position: relative;
+    background-color: #0572ce;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 1px solid #0572ce;
+}
+
 .elec {position: relative;
     width: 85%;
     height: 21vh;
@@ -4246,13 +4662,27 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 .con:hover {background: #d4cfcf;}
 
-.radio { margin: 1.8% auto;
-    position: absolute;}
+.radio { margin: 5px auto 0% 2%;
+    position: absolute;
+    width: 23px;
+    height: 23px;
+    padding: 0;
+}
+
+.elec::-webkit-scrollbar{
+   width: 10px;
+   background: #ffff;
+}
+
+.elec::-webkit-scrollbar-thumb{
+    background: #0572ce;
+    border-radius: 8px;
+}
 
 .labelfil {width: 91%;
     margin: auto 0% auto 0%;
-    font-size: 1em;
-    padding: 0px 1px 0px 11%;
+    font-size: 0.9em;
+    padding: 0px 1px 0px 13%;
     z-index: 99; }
 
 .btn_muni {position: fixed;
@@ -4271,10 +4701,10 @@ main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 a
 
 
 .vist7 {width: 81%;
-    height: 12vh;
-    text-align: center;
-    margin: 11% auto 0;
-    font-size: 1.4em;
+    height: 3vh;
+    text-align: left;
+    margin: 15% auto 0;
+    font-size: 1em;
     font-weight: 300;}
 
 main section.vista7 input.inp_vist7 {margin: 5% 14%;
@@ -4323,14 +4753,40 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1.4em;
     font-weight: 300;}
 
-.inp_vist8 {margin: 5% 14%;
-    padding: 3% 0;
+.cont_inpu_direccion {position: relative;
+margin: 3% auto;
+width: 85%;
+height: 6vh;
+display: flex;}
+
+.inp_vist8 {position: relative;
+    margin: 0 auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 70%;
+    width: 100%;
+    height: 100%;
     outline: none;
     border-radius: 0px;}
+
+.inp_vist8:valid ~ .inputext_direccion, .inp_vist8:focus ~ .inputext_direccion {
+color: #0572ce;
+transform: translateX(10px) translateY(-15px);
+font-size: 0.8em;
+transition: 0.5S;
+}
+
+.inputext_direccion {position: absolute;
+    width: 100%;
+    height: 40%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 4% 0;
+    pointer-events: none;
+    font-size: 1em;
+    }
 
 .inp_vist8::-webkit-inner-spin-button,
 .inp_vist8::-webkit-inner-spin-button{
