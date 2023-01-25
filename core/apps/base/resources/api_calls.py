@@ -211,8 +211,11 @@ def request_api(url, headers, payload, method='POST'):
         response = requests.request(method, url, headers=headers, data=payload)
         # logger.info(f'API Response [{response.status_code}]: {response.text}')
         if response.status_code != 200:
+            res = requests.request('GET', 'https://httpbin.org/ip')
+            ip = json.loads(res.text.encode('utf8'))
             notify('error-api', f'ERROR EN API - Radicado #{num_aut}',
                    f"STATUS CODE: {response.status_code}\n\n"
+                   f"IP: {ip.get('origin')}\n\n"
                    f"URL: {url}\n\nHeader: {headers}\n\n"
                    f"Payload: {payload}\n\n{response.text}")
             return {'error': 'No se han encontrado registros.', 'codigo': '1'}
