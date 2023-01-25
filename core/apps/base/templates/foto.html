@@ -11,8 +11,10 @@
         {{ wizard.management_form }}
         {% include "base/logo.html" %}
 
-        <h1 class="vist4">Envíanos una foto de la fórmula médica que te entrego el médico tratante</h1>
-        <p class="vist4_1"> Recuerda, los medicamentos de la autorización deben coincidir con los de la formula</p>
+        <h1 class="vist4">Envíanos una foto de la <br> <strong>FORMULA MEDICA</strong> <br> que te entregó el médico tratante</h1>
+
+
+        <p class="vist4_1"> Nota: No de la autorización de Cajacopi EPS.</p>
         {% for field in form %}
             {{ field.error }}
         {% endfor %}
