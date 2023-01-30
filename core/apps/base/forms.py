@@ -44,7 +44,7 @@ class AutorizacionServicio(forms.Form):
                                         "Si el número está correcto, comuníquese con cajacopi EPS\n"
                                         "al 01 8000 111 446")
         inconsistencia = False
-        if len(str(num_aut)) > 20:
+        if len(list(resp_eps.keys())) == 0 or len(str(num_aut)) > 20:
             inconsistencia = True
         else:
             for k, v in resp_eps.items():
@@ -60,7 +60,8 @@ class AutorizacionServicio(forms.Form):
 
         if inconsistencia:
             logger.info(f"Incosistencia en número de autorización {num_aut}")
-            raise forms.ValidationError(f"Detectamos un problema interno con este número de autorización\n\n"
+            raise forms.ValidationError(f"Detectamos un problema interno con este número de autorización\n"
+                                        f"{num_aut}\n\n"
                                         "Comuníquese con Logifarma al 3330333124")
 
         if resp_eps.get('ESTADO_AFILIADO') != 'ACTIVO':
