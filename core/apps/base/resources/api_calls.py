@@ -220,7 +220,7 @@ def request_api(url, headers, payload, method='POST'):
                    f"Payload: {payload}\n\n{response.text}")
             return {'error': 'No se han encontrado registros.', 'codigo': '1'}
         else:
-            return json.loads(response.text.encode('utf8'))
+            return json.loads(response.text.encode('utf-8'), strict=False)
     except Exception as e:
         logger.error("Error en request: ", response.text)
         return {}
