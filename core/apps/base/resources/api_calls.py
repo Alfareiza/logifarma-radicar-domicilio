@@ -141,6 +141,8 @@ def call_api_eps(num_aut: int) -> dict:
                 "TIPO_IDENTIFICACION": "CC",
                 "DOCUMENTO_ID": "14988099",
                 "AFILIADO": "COLLAZOS ROJAS GUILLERMO ",
+                "P_NOMBRE":"PEDRO","S_NOMBRE":"MANUEL",
+                "P_APELLIDO":"PACHECO","S_APELLIDO":"EFROS",
                 "ESTADO_AFILIADO": "ACTIVO",
                 "SEDE_AFILIADO": "SOLEDAD",
                 "REGIMEN": "SUBSIDIADO",
