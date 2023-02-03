@@ -29,6 +29,21 @@ h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea,
 main { width: 100%; height: auto; position: relative; margin: 0 auto; float: none;}
 
 
+.continuar {margin: 0% 0% 0% 2%;
+    position: absolute;
+    border: 0px;
+    background: #ffff;
+    top: 2%;
+    z-index: 9;
+    right: 5px;
+}
+    
+.text_continuar {
+    position: relative;
+    font-size: 1.4em;
+    color: #468bc4;
+}
+
 .atras {margin: 0% 0% 0% 2%;
     position: absolute;
     border: 0px;
@@ -150,6 +165,138 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     0% { transform: rotate(0deg);}
     100% { transform: rotate(360deg);}
 }
+
+:root{
+    --linea--borde-relleno:#3498db;
+    --linea--borde-vacio:#e0e0e0;
+}
+body {
+    margin: 0;
+}
+.conten-progreso-global {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 5vh;
+    width: 77%;
+    overflow: hidden;
+    position: absolute;
+    top: 50%;
+    transform: rotate(90deg);
+    left: -36%;
+}
+.contenedor{
+    text-align: center;
+    width: 50%;
+    height: 100%;
+}
+.progreso-contenedor{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 0px;
+    max-width: 100%;
+    width: 100%;
+}
+.progreso-contenedor::before {
+    content: '';
+    background-color: var(--linea--borde-vacio);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 100%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 0%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso2 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 22%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso3 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 42%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso4 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 62%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso5 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 80%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso6 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 100%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.circulo{
+    background-color: #fff;
+    color: #999;
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;    
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--linea--borde-vacio);
+    transition: 0.4s ease;
+    box-sizing: border-box;
+    transform: rotate(-90deg);
+}
+.circulo.active{
+    border-color: var(--linea--borde-relleno);
+}
+
+
 
 main section.vista1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
@@ -1005,6 +1152,18 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     font-size: 1.5em;
     color: #468bc4;
 }
+.continuar {margin: 0% 0% 0% 2%;
+    position: absolute;
+    border: 0px;
+    background: #ffff;
+    top: 2%;
+    z-index: 9;}
+    
+.text_continuar {
+    position: relative;
+    font-size: 1.5em;
+    color: #468bc4;
+}
 
 #vist{position: relative;
     margin: 0 auto;
@@ -1114,6 +1273,138 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     0% { transform: rotate(0deg);}
     100% { transform: rotate(360deg);}
 }
+
+:root{
+    --linea--borde-relleno:#3498db;
+    --linea--borde-vacio:#e0e0e0;
+}
+body {
+    margin: 0;
+}
+.conten-progreso-global {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 5vh;
+    width: 77%;
+    overflow: hidden;
+    position: absolute;
+    top: 50%;
+    transform: rotate(90deg);
+    left: -37%;
+}
+.contenedor{
+    text-align: center;
+    width: 50%;
+    height: 100%;
+}
+.progreso-contenedor{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 0px;
+    max-width: 100%;
+    width: 100%;
+}
+.progreso-contenedor::before {
+    content: '';
+    background-color: var(--linea--borde-vacio);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 100%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 0%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso2 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 22%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso3 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 42%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso4 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 62%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso5 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 80%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso6 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 100%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.circulo{
+    background-color: #fff;
+    color: #999;
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;    
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--linea--borde-vacio);
+    transition: 0.4s ease;
+    box-sizing: border-box;
+    transform: rotate(-90deg);
+}
+.circulo.active{
+    border-color: var(--linea--borde-relleno);
+}
+
+
 
 main section.vista1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
@@ -1980,6 +2271,18 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     font-size: 2.5em;
     color: #468bc4;
 }
+.continuar {margin: 0% 0% 0% 2%;
+    position: absolute;
+    border: 0px;
+    background: #ffff;
+    top: 2%;
+    z-index: 9;}
+
+.text_continuar {
+    position: relative;
+    font-size: 2.5em;
+    color: #468bc4;
+}
 
 #vist{position: relative;
     margin: 0 auto;
@@ -2009,8 +2312,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     margin: 0 auto;
     font-size: 2em;
     border-radius: 0px;
-    left: 29%;
-    top: 89%;
+    left: 27%;
+    top: 86%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -2088,6 +2391,130 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     0% { transform: rotate(0deg);}
     100% { transform: rotate(360deg);}
 }
+
+.conten-progreso-global {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 5vh;
+    width: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 94.5%;
+    transform: rotate(0deg);
+    left: 0%;
+}
+.contenedor{
+    text-align: center;
+    width: 70%;
+    height: 100%;
+}
+.progreso-contenedor{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 0px;
+    max-width: 100%;
+    width: 100%;
+}
+.progreso-contenedor::before {
+    content: '';
+    background-color: var(--linea--borde-vacio);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 100%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 0%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso2 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 22%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso3 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 42%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso4 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 62%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso5 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 80%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso6 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 100%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.circulo{
+    background-color: #fff;
+    color: #999;
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;    
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--linea--borde-vacio);
+    transition: 0.4s ease;
+    box-sizing: border-box;
+    transform: rotate(0deg);
+}
+.circulo.active{
+    border-color: var(--linea--borde-relleno);
+}
+
 
 main section.vista1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
@@ -2463,8 +2890,8 @@ main section.vista4 p.vist4_1 { width: 63%;
     border: 0;}
 
 .btn_archi {position: absolute;
-    top: 88%;
-    left: 29%;
+    top: 86%;
+    left: 27%;
     width: 46%;
     height: 8%;
     border: solid 2px #468bc4;
@@ -2967,6 +3394,19 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     color: #468bc4;
 }
 
+.continuar {margin: 0% 0% 0% 2%;
+    position: absolute;
+    border: 0px;
+    background: #ffff;
+    top: 2.1%;
+    z-index: 9;}
+
+.text_continuar {
+    position: relative;
+    font-size: 1.4em;
+    color: #468bc4;
+}
+
 #vist{position: relative;
     margin: 0 auto;
     width: 100%;
@@ -2998,7 +3438,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     font-size: 1.1em;
     border-radius: 0px;
     left: 9%;
-    top: 91%;
+    top: 90%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -3074,6 +3514,130 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     0% { transform: rotate(0deg);}
     100% { transform: rotate(360deg);}
 }
+
+.conten-progreso-global {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 3vh;
+    width: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 98%;
+    transform: rotate(0deg);
+    left: 0%;
+}
+.contenedor{
+    text-align: center;
+    width: 80%;
+    height: 100%;
+}
+.progreso-contenedor{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 0px;
+    max-width: 100%;
+    width: 100%;
+}
+.progreso-contenedor::before {
+    content: '';
+    background-color: var(--linea--borde-vacio);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 100%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 0%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso2 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 22%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso3 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 42%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso4 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 62%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso5 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 80%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso6 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 100%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.circulo{
+    background-color: #fff;
+    color: #999;
+    border-radius: 10%;
+    height: 5px;
+    width: 25px;    
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid var(--linea--borde-vacio);
+    transition: 0.4s ease;
+    box-sizing: border-box;
+    transform: rotate(0deg);
+}
+.circulo.active{
+    border-color: var(--linea--borde-relleno);
+}
+
 
 main section.vista1 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
@@ -3469,7 +4033,7 @@ main section.vista4 p.vist4_1 { width: 89%;
     margin: 0 auto;}
 
 .btn_archi {position: absolute;
-    top: 91%;
+    top: 90%;
     left: 9%;
     width: 81%;
     height: 7%;
@@ -3984,6 +4548,19 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     color: #468bc4;
 }
 
+.continuar {margin: 0% 0% 0% 2%;
+    position: absolute;
+    border: 0px;
+    background: #ffff;
+    top: 2%;
+    z-index: 9;}
+
+.text_continuar {
+    position: relative;
+    font-size: 1.4em;
+    color: #468bc4;
+}
+
 #vist{position: relative;
     margin: 0 auto;
     width: 100%;
@@ -4092,6 +4669,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     0% { transform: rotate(0deg);}
     100% { transform: rotate(360deg);}
 }
+
 
 main section.vista1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
