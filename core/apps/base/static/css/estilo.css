@@ -188,15 +188,16 @@ body {
 .pagina {
     position: absolute;
     font-size: 0.9em;
-    width: 9%;
-    height: 67%;
+    width: 100%;
+    height: 100%;
     padding: 10px 0 0 5px;
+    word-spacing: -1px;
 }
 .contenedor{
     text-align: center;
     width: 50%;
     height: 100%;
-    margin: auto 7%;
+    margin: auto 10%;
     position: relative;
     display: flex;
 }
@@ -1314,16 +1315,17 @@ body {
 .pagina {
     position: absolute;
     font-size: 0.8em;
-    width: 9%;
-    height: 67%;
+    width: 100%;
+    height: 100%;
     padding: 5px 0 0 5px;
+    word-spacing: -1px;
 }
 
 .contenedor{
     text-align: center;
-    width: 56%;
+    width: 50%;
     height: 100%;
-    margin: auto 10%;
+    margin: auto 13%;
     position: relative;
     display: flex;
 }
@@ -2444,17 +2446,18 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 
 .pagina {
     position: absolute;
-    font-size: 1.2em;
-    width: 15%;
-    height: 67%;
+    font-size: 1em;
+    width: 100%;
+    height: 100%;
     padding: 0 0 0 30px;
+    word-spacing: -1px;
 }
 
 .contenedor{
     text-align: center;
-    width: 80%;
+    width: 70%;
     height: 100%;
-    margin: auto 15%;
+    margin: auto 20%;
     position: relative;
     display: flex;
 }
@@ -3579,24 +3582,25 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     width: 100%;
     overflow: hidden;
     position: absolute;
-    top: 97.5%;
+    top: 98%;
     transform: rotate(0deg);
     left: 0%;
 }
 
 .pagina {
     position: absolute;
-    font-size: 0.8em;
-    width: 15%;
-    height: 67%;
-    padding: 0 0 0 5px;
+    font-size: 0.7em;
+    width: 100%;
+    height: 100%;
+    padding: 2px 0 0 5px;
+    word-spacing: -1px;
 }
 
 .contenedor{
     text-align: center;
-    width: 80%;
+    width: 70%;
     height: 100%;
-    margin: auto 15%;
+    margin: auto 20%;
     position: relative;
     display: flex;
 }
@@ -4761,16 +4765,17 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 .pagina{
     position: absolute;
     font-size: 0.7em;
-    width: 15%;
-    height: 67%;
-    padding: 0 0 0 5px;
+    width: 100%;
+    height: 100%;
+    padding: 0px 0 0 5px;
+    word-spacing: -1px;
 }
 
 .contenedor{
     text-align: center;
-    width: 80%;
+    width: 70%;
     height: 100%;
-    margin: auto 15%;
+    margin: auto 22%;
     position: relative;
     display: flex;
 }
