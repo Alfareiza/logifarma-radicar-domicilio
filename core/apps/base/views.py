@@ -106,8 +106,11 @@ class ContactWizard(CustomSessionWizard):
         """
         form_data = [form.cleaned_data for form in form_list]
 
-        if form_data[2].get('src'):
-            self.foto_fmedica = form_data[2]['src']
+        try:
+            if form_data[2].get('src'):
+                self.foto_fmedica = form_data[2]['src']
+        except Exception as e:
+            logger.error(f"No se pudo acceder a form_data[2]. {form_data=}", e)
 
         keys = list(self.new_form_list.keys())
         # Construye las variables que serán enviadas al template
