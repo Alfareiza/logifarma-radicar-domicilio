@@ -117,6 +117,7 @@ class AutorizacionFormTests(TestCase):
                                                                       'MEDICO_TRATANTE': 'FRANK LAMPARD',
                                                                       'MIPRES': '0',
                                                                       'DIAGNOSTICO': 'D571-ANEMIA FALCIFORME SIN CRISIS',
+                                                                      "ARCHIVO": "",
                                                                       'DETALLE_AUTORIZACION': [{'CUMS': '20158642-1',
                                                                                                 'NOMBRE_PRODUCTO': 'RIVAROXABAN 20MG TABLETA RECUBIERTA',
                                                                                                 'CANTIDAD': '30'},

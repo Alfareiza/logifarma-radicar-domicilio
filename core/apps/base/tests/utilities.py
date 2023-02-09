@@ -10,10 +10,7 @@ from formtools.wizard.views import WizardView
 from selenium import webdriver
 from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.utils import ChromeType
 
 from core.apps.base.forms import Home, AutorizacionServicio, FotoFormulaMedica, \
     EligeMunicipio, DireccionBarrio, DigitaCelular, DigitaCorreo
@@ -26,6 +23,16 @@ os.environ["PATH"] += f'{os.pathsep}/usr/local/bin'
 
 class VisualWizardTests(StaticLiveServerTestCase):
     vistas = [ele[0] for ele in FORMS]
+    map_vistas = [
+        {'Inicio': 'self.process_home()'},
+        {'Autorización de servicio': "self.process_autorizacion()"},
+        {'Foto de la fórmula': 'self.process_foto()'},
+        {'Elige Municipio': 'self.process_elige_municipio()'},
+        {'Elige el barrio': 'self.process_direccion_barrio()'},
+        {'Digite celular': 'self.process_celular()'},
+        {'Digite un correo electrónico': 'self.process_correo()'},
+        {'Listo': 'self.process_correo()'},
+    ]
 
     @classmethod
     def setUpClass(cls):
@@ -89,15 +96,7 @@ class VisualWizardTests(StaticLiveServerTestCase):
         if self.selenium.title != 'Autorización de servicio':
             self.take_me_to_the_step('autorizacionServicio')
 
-    def process_autorizacion(self):
-        num_aut_box = self.insert_data(value="autorizacionServicio-num_autorizacion", data='99999999')
-        num_aut_box.send_keys(Keys.ENTER)
-        if self.selenium.title != 'Foto de la fórmula':
-            self.take_me_to_the_step('fotoFormulaMedica')
-
-    def process_foto(self):
-        img = BASE_DIR / 'core/apps/base/tests/resources/image_1.jpg'
-        self.selenium.find_element(by=By.ID, value='id_fotoFormulaMedica-src').send_keys(str(img))
+    def process_autorizacion(self, number='99999999', expected_step=('Foto de la fórmula', 'fotoFormulaMedica')):
         mun, _ = Municipio.objects.get_or_create(name='barranquilla', departamento='atlántico')
         Barrio.objects.get_or_create(name='el recreo', municipio=mun, zona='norte',
                                      cod_zona=109, status=1)
@@ -105,6 +104,15 @@ class VisualWizardTests(StaticLiveServerTestCase):
                                      cod_zona=109, status=1)
         Barrio.objects.get_or_create(name='adelita de char', municipio=mun, zona='norte',
                                      cod_zona=109, status=1)
+        num_aut_box = self.insert_data(value="autorizacionServicio-num_autorizacion", data=number)
+        num_aut_box.send_keys(Keys.ENTER)
+        if self.selenium.title != expected_step[0]:
+            self.take_me_to_the_step(expected_step[1])
+
+    def process_foto(self):
+        img = BASE_DIR / 'core/apps/base/tests/resources/image_1.jpg'
+        self.selenium.find_element(by=By.ID, value='id_fotoFormulaMedica-src').send_keys(str(img))
+
         self.get_boton_continuar().click()
         if self.selenium.title != 'Elige Municipio':
             self.take_me_to_the_step('eligeMunicipio')
@@ -147,25 +155,15 @@ class VisualWizardTests(StaticLiveServerTestCase):
             self.get_boton_continuar().click()
 
     def take_me_to_the_step(self, to_step):
-        map_vistas = [
-            {'Inicio': 'self.process_home()'},
-            {'Autorización de servicio': 'self.process_autorizacion()'},
-            {'Foto de la fórmula': 'self.process_foto()'},
-            {'Elige Municipio': 'self.process_elige_municipio()'},
-            {'Elige el barrio': 'self.process_direccion_barrio()'},
-            {'Digite celular': 'self.process_celular()'},
-            {'Digite un correo electrónico': 'self.process_correo()'},
-            {'Listo': 'self.process_correo()'},
-        ]
-        current = [i for i, v in enumerate(map_vistas) if list(v.keys()) == [self.selenium.title]]
+        current = [i for i, v in enumerate(self.map_vistas) if list(v.keys()) == [self.selenium.title]]
         desde = current[0]
         hasta = self.vistas.index(to_step)
         # print(f"Al querer avanzar a {to_step}, fue llevado a {self.selenium.title}")
         if hasta - desde == 1:
-            eval(list(map_vistas[desde].values())[0])
+            eval(list(self.map_vistas[desde].values())[0])
         else:
             # print(f'Voy a ir de {self.vistas[desde]} a {to_step}')
-            for vista in map_vistas[desde:hasta]:
+            for vista in self.map_vistas[desde:hasta]:
                 print('Exec ->', list(vista.values())[0])
                 eval(list(vista.values())[0])
 

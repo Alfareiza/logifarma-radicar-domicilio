@@ -1,3 +1,6 @@
+import urllib.request
+from pathlib import Path
+
 from django.core.mail import EmailMessage
 
 from core import settings
@@ -63,6 +66,48 @@ def parse_agent(agent: str) -> str:
         logger.warning("Parsear el agent=", agent, "ERROR=", e)
         return agent
     return f'{os_device}({brw_device})'
+
+
+def is_file_valid(url: str, rad: str) -> bool:
+    """
+    Validate if the file is valid.
+    When a file is valid?
+        - THe url is reachable.
+        - His size is more than 0 KB.
+        - His pages have content.
+    :param name: Number of radicado
+                 Ex.: 855800017788
+    :param url: Url of the file.
+                Ex.: "https://genesis.cajacopieps.com/temp/63dcxy1234560fa.pdf"
+    :return: True or False
+    """
+    if not url:
+        logger.info(f'URL NO detectada en radicado # {rad}.')
+        return True
+    else:
+        logger.info(f'URL detectada en radicado {rad} : {url}')
+        return False
+
+
+def download_file(download_url, filename):
+    """
+    Download a file into the tmp/ folder of the project
+    with the name of the autorization. Ex.: 857300123456789.pdf
+    :param download_url: "https://genesis.cajacopieps.com/temp/XYd1112120fb6a.pdf"
+    :param filename: 857300123456789
+    :return:
+    """
+    try:
+        Path(settings.MEDIA_ROOT).mkdir(parents=True, exist_ok=True)
+        filepath = settings.MEDIA_ROOT / f"{filename}.pdf"
+        response = urllib.request.urlopen(download_url)
+        with open(filepath, 'wb') as file:
+            file.write(response.read())
+    except Exception as e:
+        logger.error('Error descargando archivo:', e)
+        return ''
+    else:
+        return filepath
 
 
 def guardar_info_bd(**kwargs):
@@ -144,11 +189,6 @@ def notify(reason: str, subject: str, body: str):
     :param body: Cuerpo del Correo
     :return: Nada
     """
-    if reason == 'error-bd':
-        msg = 'Correo enviado notificando problema al guardar en BD'
-    elif reason == 'error-api':
-        msg = 'Correo enviado notificando problema con API'
-
     email = EmailMessage(
         subject=subject,
         body=body,
@@ -157,4 +197,10 @@ def notify(reason: str, subject: str, body: str):
     )
 
     if sent := email.send(fail_silently=False):
-        logger.error(msg)
+        msg = {
+            'error-bd': 'Correo enviado notificando problema al guardar en BD.',
+            'error-api': 'Correo enviado notificando problema con API.',
+            'error-archivo-url': 'Correo enviado notificando radicado sin archivo.',
+            'error-email': 'Correo enviado notificando problema al enviar e-mail de confirmación.',
+        }
+        logger.error(msg[reason])
