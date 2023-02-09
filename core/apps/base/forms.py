@@ -1,4 +1,3 @@
-from decouple import config, Csv
 from django import forms
 
 from core.apps.base.models import Municipio, Barrio, Radicacion
@@ -31,9 +30,11 @@ class AutorizacionServicio(forms.Form):
         # ====== # Validaciones API EPS ======
         if num_aut == 99_999_999:
             resp_eps = read_json('resources/fake.json')
+        elif num_aut == 99_999_998:
+            resp_eps = read_json('resources/fake_file.json')
         elif Radicacion.objects.filter(numero_radicado=num_aut).exists():
             logger.info(f"Número de autorización {num_aut} radicado anteriormente")
-            raise forms.ValidationError(f"Numero de autorización {num_aut} se encuentra radicado")
+            raise forms.ValidationError(f"Número de autorización {num_aut} se encuentra radicado.")
         else:
             resp_eps = call_api_eps(num_aut)
 
@@ -76,7 +77,7 @@ class AutorizacionServicio(forms.Form):
         #     raise forms.ValidationError("Esta autorización se encuentra vencida.")
 
         # ====== # Validaciones API MEDICAR ======
-        if num_aut == 99_999_999:
+        if num_aut in [99_999_999, 99_999_998]:
             resp_mcar = {"error": "No se han encontrado registros."}
         else:
             resp_mcar = call_api_medicar(num_aut)
@@ -90,8 +91,8 @@ class AutorizacionServicio(forms.Form):
 
         if resp_mcar.get('autorizacion'):
             logger.info(f"Número de autorización {num_aut} se encuentra radicado.")
-            raise forms.ValidationError(f"Este domicilio se encuentra radicado en "
-                                        f"{resp_mcar.get('nombre_centro_factura')[:-5].strip()}\n"
+            raise forms.ValidationError(f"Esta autorización ({num_aut}) se encuentra radicada en "
+                                        f"{resp_mcar.get('nombre_centro_factura')[:-5].strip()}"
                                         f"con el número de acta: {resp_mcar.get('ssc')}\n\n"
                                         f"Para mayor información te puedes comunicar \n"
                                         f"con nosotros al: 333 033 3124")

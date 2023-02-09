@@ -1,0 +1,39 @@
+{
+  "TIPO_IDENTIFICACION": "CC",
+  "DOCUMENTO_ID": "12340316",
+  "AFILIADO": "GUTIERREZ TEIXEIRA JACKSON WOH",
+  "P_NOMBRE": "JACKSON",
+  "S_NOMBRE": "WOH",
+  "P_APELLIDO": "GUTIERREZ",
+  "S_APELLIDO": "TEIXEIRA",
+  "ESTADO_AFILIADO": "ACTIVO",
+  "SEDE_AFILIADO": "BARRANCABERMEJA",
+  "REGIMEN": "SUBSIDIADO",
+  "DIRECCION": "CL 123  45 678",
+  "CORREO": "jackson.gutierrez.teixeira123456789@gmail.com",
+  "TELEFONO": "4019255",
+  "CELULAR": "4014652512",
+  "ESTADO_AUTORIZACION": "PROCESADA",
+  "FECHA_AUTORIZACION": "15/11/2022",
+  "MEDICO_TRATANTE": "FRANK LAMPARD",
+  "MIPRES": "0",
+  "DIAGNOSTICO": "D571-ANEMIA FALCIFORME SIN CRISIS",
+  "ARCHIVO": "https://archivos-alfonso.s3.sa-east-1.amazonaws.com/doc1.pdf",
+  "DETALLE_AUTORIZACION": [
+    {
+      "CUMS": "20158642-1",
+      "NOMBRE_PRODUCTO": "RIVAROXABAN 20MG TABLETA RECUBIERTA",
+      "CANTIDAD": "30"
+    },
+    {
+      "CUMS": "42034-1",
+      "NOMBRE_PRODUCTO": "HIDROXIUREA 500MG CAPSULA",
+      "CANTIDAD": "60"
+    }
+  ],
+  "municipio": "Barrancamerbeja, Santander",
+  "barrio": "Any Neighbor, Florida",
+  "direccion": "321654987654",
+  "celular": 9151234567,
+  "email": "23131@gmail.com"
+}

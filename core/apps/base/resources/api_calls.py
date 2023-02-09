@@ -5,12 +5,12 @@ from datetime import datetime, timedelta
 import requests
 from decouple import config
 
+from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.tools import notify
 from core.settings import BASE_DIR
 from core.settings import logger
 
 pickle_path = BASE_DIR / "core/apps/base/resources/stored.pickle"
-
 
 
 # def call_api_eps(num_aut: int) -> dict:
@@ -128,6 +128,7 @@ pickle_path = BASE_DIR / "core/apps/base/resources/stored.pickle"
 #     return json.loads(response.text.encode('utf8'))
 
 
+@logtime('API')
 def call_api_eps(num_aut: int) -> dict:
     """
     Solicita información del numero de la autorización a la API de la EPS.
@@ -155,6 +156,7 @@ def call_api_eps(num_aut: int) -> dict:
                 "MEDICO_TRATANTE": "omar valle",
                 "MIPRES": "0",
                 "DIAGNOSTICO": "I10X-HIPERTENSION ESENCIAL (PRIMARIA)",
+                "ARCHIVO": "https://genesis.cajacopieps.com/temp/63dcxy1234560fa.pdf",
                 "DETALLE_AUTORIZACION": [
                     {
                         "CUMS": "20059406-1",
@@ -177,6 +179,7 @@ def call_api_eps(num_aut: int) -> dict:
     return request_api(url, headers, payload)
 
 
+@logtime('API')
 def auth_api_medicar():
     """
     Hace un llamado a la API de Medicar para obtener el token y
@@ -224,10 +227,11 @@ def request_api(url, headers, payload, method='POST'):
         else:
             return json.loads(response.text.encode('utf-8'), strict=False)
     except Exception as e:
-        logger.error("Error en request: ", response.text)
+        notify('error-api', f'ERROR EN API - Radicado #{num_aut}', f"ERROR: {e}")
         return {}
 
 
+@logtime('API')
 def call_api_medicar(num_aut: int) -> dict:
     """
     Recibe el número de autorización que aparece en los pedidos de los usuarios.
@@ -325,6 +329,7 @@ def should_i_call_auth():
             return True
         else:
             return token
+
 
 if __name__ == '__main__':
     ...
