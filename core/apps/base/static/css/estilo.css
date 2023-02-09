@@ -174,22 +174,31 @@ body {
     margin: 0;
 }
 .conten-progreso-global {
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 5vh;
-    width: 77%;
+    height: 4vh;
+    width: 56%;
     overflow: hidden;
     position: absolute;
-    top: 50%;
+    top: 69%;
     transform: rotate(90deg);
-    left: -36%;
+    left: -26%;
+}
+.pagina {
+    position: absolute;
+    font-size: 0.9em;
+    width: 9%;
+    height: 67%;
+    padding: 10px 0 0 5px;
 }
 .contenedor{
     text-align: center;
     width: 50%;
     height: 100%;
+    margin: auto 7%;
+    position: relative;
+    display: flex;
 }
 .progreso-contenedor{
     display: flex;
@@ -198,6 +207,7 @@ body {
     margin-bottom: 0px;
     max-width: 100%;
     width: 100%;
+    margin: auto;
 }
 .progreso-contenedor::before {
     content: '';
@@ -206,7 +216,8 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 100%;
     z-index: -1;
     transition: 0.4s ease;
@@ -217,7 +228,8 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 0%;
     z-index: -1;
     transition: 0.4s ease;
@@ -228,7 +240,8 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 22%;
     z-index: -1;
     transition: 0.4s ease;
@@ -239,7 +252,8 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 42%;
     z-index: -1;
     transition: 0.4s ease;
@@ -250,7 +264,8 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 62%;
     z-index: -1;
     transition: 0.4s ease;
@@ -261,7 +276,8 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 80%;
     z-index: -1;
     transition: 0.4s ease;
@@ -272,7 +288,8 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 100%;
     z-index: -1;
     transition: 0.4s ease;
@@ -280,14 +297,14 @@ body {
 .circulo{
     background-color: #fff;
     color: #999;
-    border-radius: 0%;
+    border-radius: 37%;
     height: 30px;
     width: 5px;    
     font-size: 0.8em;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 6px solid var(--linea--borde-vacio);
+    border: 4px solid var(--linea--borde-vacio);
     transition: 0.4s ease;
     box-sizing: border-box;
     transform: rotate(-90deg);
@@ -1282,22 +1299,33 @@ body {
     margin: 0;
 }
 .conten-progreso-global {
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 5vh;
-    width: 77%;
+    height: 4vh;
+    width: 56%;
     overflow: hidden;
     position: absolute;
-    top: 50%;
+    top: 69%;
     transform: rotate(90deg);
-    left: -37%;
+    left: -26%;
 }
+
+.pagina {
+    position: absolute;
+    font-size: 0.8em;
+    width: 9%;
+    height: 67%;
+    padding: 5px 0 0 5px;
+}
+
 .contenedor{
     text-align: center;
-    width: 50%;
+    width: 56%;
     height: 100%;
+    margin: auto 10%;
+    position: relative;
+    display: flex;
 }
 .progreso-contenedor{
     display: flex;
@@ -1306,6 +1334,7 @@ body {
     margin-bottom: 0px;
     max-width: 100%;
     width: 100%;
+    margin: auto;
 }
 .progreso-contenedor::before {
     content: '';
@@ -1314,10 +1343,12 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 100%;
     z-index: -1;
     transition: 0.4s ease;
+    border: solid 0px;
 }
 .progreso {
     background-color: var(--linea--borde-relleno);
@@ -1325,7 +1356,8 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 0%;
     z-index: -1;
     transition: 0.4s ease;
@@ -1336,7 +1368,8 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 22%;
     z-index: -1;
     transition: 0.4s ease;
@@ -1347,7 +1380,8 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 42%;
     z-index: -1;
     transition: 0.4s ease;
@@ -1358,7 +1392,8 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 62%;
     z-index: -1;
     transition: 0.4s ease;
@@ -1369,7 +1404,8 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 80%;
     z-index: -1;
     transition: 0.4s ease;
@@ -1380,7 +1416,8 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 100%;
     z-index: -1;
     transition: 0.4s ease;
@@ -1388,14 +1425,14 @@ body {
 .circulo{
     background-color: #fff;
     color: #999;
-    border-radius: 0%;
-    height: 30px;
+    border-radius: 43%;
+    height: 28px;
     width: 5px;    
     font-size: 0.8em;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 6px solid var(--linea--borde-vacio);
+    border: 4px solid var(--linea--borde-vacio);
     transition: 0.4s ease;
     box-sizing: border-box;
     transform: rotate(-90deg);
@@ -2393,22 +2430,33 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 }
 
 .conten-progreso-global {
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 3vh;
+    height: 2vh;
     width: 100%;
     overflow: hidden;
-    position: fixed;
+    position: absolute;
     top: 96%;
     transform: rotate(0deg);
     left: 0%;
 }
+
+.pagina {
+    position: absolute;
+    font-size: 1.2em;
+    width: 15%;
+    height: 67%;
+    padding: 0 0 0 30px;
+}
+
 .contenedor{
     text-align: center;
     width: 80%;
     height: 100%;
+    margin: auto 15%;
+    position: relative;
+    display: flex;
 }
 .progreso-contenedor{
     display: flex;
@@ -2417,6 +2465,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     margin-bottom: 0px;
     max-width: 100%;
     width: 100%;
+    margin: auto;
 }
 .progreso-contenedor::before {
     content: '';
@@ -2425,7 +2474,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 10px;
+    border-radius: 15px;
     width: 100%;
     z-index: -1;
     transition: 0.4s ease;
@@ -2436,7 +2486,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 10px;
+    border-radius: 11px;
     width: 0%;
     z-index: -1;
     transition: 0.4s ease;
@@ -2447,7 +2498,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 10px;
+    border-radius: 11px;
     width: 22%;
     z-index: -1;
     transition: 0.4s ease;
@@ -2458,7 +2510,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 10px;
+    border-radius: 11px;
     width: 42%;
     z-index: -1;
     transition: 0.4s ease;
@@ -2469,7 +2522,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 10px;
+    border-radius: 11px;
     width: 62%;
     z-index: -1;
     transition: 0.4s ease;
@@ -2480,7 +2534,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 10px;
+    border-radius: 11px;
     width: 80%;
     z-index: -1;
     transition: 0.4s ease;
@@ -2491,7 +2546,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 10px;
+    border-radius: 11px;
     width: 100%;
     z-index: -1;
     transition: 0.4s ease;
@@ -2499,14 +2555,14 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 .circulo{
     background-color: #fff;
     color: #999;
-    border-radius: 10%;
+    border-radius: 40%;
     height: 10px;
     width: 40px;    
     font-size: 0.8em;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 8px solid var(--linea--borde-vacio);
+    border: 5px solid var(--linea--borde-vacio);
     transition: 0.4s ease;
     box-sizing: border-box;
     transform: rotate(0deg);
@@ -3438,7 +3494,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     font-size: 1.1em;
     border-radius: 0px;
     left: 9%;
-    top: 90%;
+    top: 89%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -3516,22 +3572,33 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 }
 
 .conten-progreso-global {
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 3vh;
+    height: 2.5vh;
     width: 100%;
     overflow: hidden;
-    position: fixed;
-    top: 97%;
+    position: absolute;
+    top: 97.5%;
     transform: rotate(0deg);
     left: 0%;
 }
+
+.pagina {
+    position: absolute;
+    font-size: 0.8em;
+    width: 15%;
+    height: 67%;
+    padding: 0 0 0 5px;
+}
+
 .contenedor{
     text-align: center;
     width: 80%;
     height: 100%;
+    margin: auto 15%;
+    position: relative;
+    display: flex;
 }
 .progreso-contenedor{
     display: flex;
@@ -3540,6 +3607,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     margin-bottom: 0px;
     max-width: 100%;
     width: 100%;
+    margin: auto;
 }
 .progreso-contenedor::before {
     content: '';
@@ -3548,10 +3616,12 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
     width: 100%;
     z-index: -1;
     transition: 0.4s ease;
+    border: solid 0px;
+    border-radius: 8px;
 }
 .progreso {
     background-color: var(--linea--borde-relleno);
@@ -3559,7 +3629,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 0%;
     z-index: -1;
     transition: 0.4s ease;
@@ -3570,7 +3641,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 22%;
     z-index: -1;
     transition: 0.4s ease;
@@ -3581,7 +3653,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 42%;
     z-index: -1;
     transition: 0.4s ease;
@@ -3592,7 +3665,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 62%;
     z-index: -1;
     transition: 0.4s ease;
@@ -3603,7 +3677,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 80%;
     z-index: -1;
     transition: 0.4s ease;
@@ -3614,7 +3689,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 100%;
     z-index: -1;
     transition: 0.4s ease;
@@ -3622,7 +3698,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 .circulo{
     background-color: #fff;
     color: #999;
-    border-radius: 10%;
+    border-radius: 11px;
     height: 5px;
     width: 25px;    
     font-size: 0.8em;
@@ -3970,7 +4046,7 @@ main section.vista3 p.vist3_t2 {padding: 8% 6% 1% 6%;
     margin: 0;}
 
 main section.vista3 div.tet {
-    margin: 7% auto 5% auto; 
+    margin: 5% auto 5% auto; 
     width: 43%;
 }
 
@@ -4033,7 +4109,7 @@ main section.vista4 p.vist4_1 { width: 89%;
     margin: 0 auto;}
 
 .btn_archi {position: absolute;
-    top: 90%;
+    top: 89%;
     left: 9%;
     width: 81%;
     height: 7%;
@@ -4671,22 +4747,32 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 }
 
 .conten-progreso-global {
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 3vh;
+    height: 2vh;
     width: 100%;
     overflow: hidden;
-    position: fixed;
+    position: absolute;
     top: 94%;
     transform: rotate(0deg);
     left: 0%;
 }
+.pagina{
+    position: absolute;
+    font-size: 0.7em;
+    width: 15%;
+    height: 67%;
+    padding: 0 0 0 5px;
+}
+
 .contenedor{
     text-align: center;
     width: 80%;
     height: 100%;
+    margin: auto 15%;
+    position: relative;
+    display: flex;
 }
 .progreso-contenedor{
     display: flex;
@@ -4695,6 +4781,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     margin-bottom: 0px;
     max-width: 100%;
     width: 100%;
+    margin: auto;
 }
 .progreso-contenedor::before {
     content: '';
@@ -4703,10 +4790,12 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
     width: 100%;
     z-index: -1;
     transition: 0.4s ease;
+    border: solid 0px;
+    border-radius: 8px;
 }
 .progreso {
     background-color: var(--linea--borde-relleno);
@@ -4714,7 +4803,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 0%;
     z-index: -1;
     transition: 0.4s ease;
@@ -4725,7 +4815,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 22%;
     z-index: -1;
     transition: 0.4s ease;
@@ -4736,7 +4827,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 42%;
     z-index: -1;
     transition: 0.4s ease;
@@ -4747,7 +4839,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 62%;
     z-index: -1;
     transition: 0.4s ease;
@@ -4758,7 +4851,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 80%;
     z-index: -1;
     transition: 0.4s ease;
@@ -4769,10 +4863,30 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 4px;
+    height: 8px;
+    border-radius: 11px;
     width: 100%;
     z-index: -1;
     transition: 0.4s ease;
+}
+.circulo{
+    background-color: #fff;
+    color: #999;
+    border-radius: 11px;
+    height: 5px;
+    width: 25px;    
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid var(--linea--borde-vacio);
+    transition: 0.4s ease;
+    box-sizing: border-box;
+    transform: rotate(0deg);
+}
+
+.circulo.active{
+    border-color: var(--linea--borde-relleno);
 }
 
 
