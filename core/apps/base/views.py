@@ -78,7 +78,7 @@ class ContactWizard(CustomSessionWizard):
     # template_name = 'start.html'
     form_list = FORMS
     file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
-    condition_dict = {'fotoFormulaMedica': show_fotoFormulaMedica}
+    # condition_dict = {'fotoFormulaMedica': show_fotoFormulaMedica}
 
     def get_template_names(self):
         return [TEMPLATES[self.steps.current]]
@@ -87,7 +87,7 @@ class ContactWizard(CustomSessionWizard):
         logger.info(f'Entrando en done {form_list=}')
         form_data = self.process_from_data(form_list)
         self.request.session['temp_data'] = form_data
-        ContactWizard.new_form_list.clear()
+        # ContactWizard.new_form_list.clear()
         return HttpResponseRedirect(reverse('base:done'))
 
     @logtime('CORE')
@@ -113,7 +113,8 @@ class ContactWizard(CustomSessionWizard):
         except Exception as e:
             logger.error(f"No se pudo acceder a form_data[2]. {form_data=}", e)
 
-        keys = list(self.new_form_list.keys())
+        keys = list(self.form_list.keys())
+        # keys = list(self.new_form_list.keys())
         # Construye las variables que serán enviadas al template
         info_email = {
             **form_data[1]['num_autorizacion'],
