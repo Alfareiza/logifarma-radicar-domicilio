@@ -13,6 +13,7 @@ from core.settings import logger
 
 
 class CustomSessionWizard(SessionWizardView):
+    auth_serv = {}
     foto_fmedica = None
     form_valids = OrderedDict()
     rad_data = None
@@ -113,12 +114,13 @@ class CustomSessionWizard(SessionWizardView):
             logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} No fue capturado "
                         f"nada en vista{idx_view}={self.steps.current}")
         else:
-            logger.info(
-                f"{self.request.COOKIES.get('sessionid')[:6]} "
-                f"vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
+            logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} vista{idx_view}={self.steps.current}, ""capturado={form.cleaned_data}")
         ls_form_list = self.form_list.keys()
-        logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} "
-                    f"Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
+        logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Al salir de {self.steps.current} las vistas son ""{list(ls_form_list)}")
+        logger.info(f"vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
+            # if self.steps.current == 'autorizacionServicio':
+            #     self.auth_serv = form.cleaned_data
+
         return self.get_form_step_data(form)
 
     def render_goto_step(self, *args, **kwargs):
@@ -132,6 +134,8 @@ class CustomSessionWizard(SessionWizardView):
         """
         logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Acabó de clicar "
                     f"en \'< Atrás\' para ir de {self.steps.current} a {args[0]}.")
+        # if 'autorizacionServicio' in args:
+        #     CustomSessionWizard.new_form_list.clear()
         form = self.get_form(data=self.request.POST, files=self.request.FILES)
         # self.storage.set_step_data(self.steps.current, self.process_step(form))
         self.storage.set_step_files(self.steps.first, self.process_step_files(form))
@@ -164,17 +168,46 @@ class CustomSessionWizard(SessionWizardView):
         validate, `render_revalidation_failure` should get called.
         If everything is fine call `done`.
         """
+
+        # logger.info(f'Entrando en render_done {CustomSessionWizard.new_form_list=}')
         final_forms = OrderedDict()
         # walk through the form list and try to validate the data again.
-        for form_key, form_obj in self.form_valids.items():
-            # form_obj = self.get_form(
-            #     step=form_key,
-            #     data=self.storage.get_step_data(form_key),
-            #     files=self.storage.get_step_files(form_key)
-            # )
-            # if not form_obj.is_valid():
-            #     return self.render_revalidation_failure(form_key, form_obj, **kwargs)
+        for form_key in self.get_form_list():
+            form_obj = self.get_form(
+                step=form_key,
+                data=self.storage.get_step_data(form_key),
+                files=self.storage.get_step_files(form_key)
+            )
+            if not form_obj.is_valid():
+                return self.render_revalidation_failure(form_key, form_obj, **kwargs)
+
             final_forms[form_key] = form_obj
 
         # self.storage.reset()
         return self.done(list(final_forms.values()), form_dict=final_forms, **kwargs)
+
+
+    # def get_form_list(self):
+    #     """
+    #     This method returns a form_list based on the initial form list but
+    #     checks if there is a condition method/value in the condition_list.
+    #     If an entry exists in the condition list, it will call/read the value
+    #     and respect the result. (True means add the form, False means ignore
+    #     the form)
+    #
+    #     The form_list is always generated on the fly because condition methods
+    #     could use data from other (maybe previous forms).
+    #     """
+    #     if len(CustomSessionWizard.new_form_list) > 0:
+    #         return CustomSessionWizard.new_form_list
+    #
+    #     if all((self.auth_serv, self.storage.current_step == 'autorizacionServicio')):
+    #         for count, (form_key, form_class) in enumerate(self.form_list.items(), start=1):
+    #             condition = self.condition_dict.get(form_key, True)
+    #             if callable(condition) and condition.__name__ == 'show_fotoFormulaMedica':
+    #                 condition = condition(self.auth_serv)
+    #             if condition:
+    #                 CustomSessionWizard.new_form_list[form_key] = form_class
+    #         return CustomSessionWizard.new_form_list
+    #     return self.form_list
+
