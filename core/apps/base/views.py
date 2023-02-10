@@ -84,6 +84,7 @@ class ContactWizard(CustomSessionWizard):
         return [TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
+        logger.info(f'Entrando en done {form_list=}')
         form_data = self.process_from_data(form_list)
         self.request.session['temp_data'] = form_data
         ContactWizard.new_form_list.clear()
