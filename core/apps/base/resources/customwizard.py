@@ -112,7 +112,7 @@ class CustomSessionWizard(SessionWizardView):
         validate, `render_revalidation_failure` should get called.
         If everything is fine call `done`.
         """
-
+        logger.info(f'Entrando en render_done {CustomSessionWizard.new_form_list=}')
         # final_forms = OrderedDict()
         # walk through the form list and try to validate the data again.
         for form_key in CustomSessionWizard.new_form_list:
