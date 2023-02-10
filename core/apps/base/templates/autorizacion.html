@@ -6,6 +6,12 @@
 {% block content %}
 <section class="vista3">
     <form id="form-id" action="" method="post">
+
+        <button class="continuar" formnovalidate name=""
+            type="submit" value="" onclick="animabotoncarga_autorizacion()">
+            <p class="text_continuar">Continuar <i class="fa-solid fa-chevron-right"></i></p>
+    </button>
+
         {% csrf_token %}
         {{ wizard.management_form }}
 
@@ -50,7 +56,7 @@
         {% endif %}
         <p class="vist3_t">
             Validaremos que la autorización este activa <br>
-        
+
         </p>
         <div class="vist3_img">
             <img class="vist3" src="{% static 'img/img_autorizacion.gif' %}" alt="">
@@ -59,7 +65,7 @@
         <p class="vist3_t2">
             Si no cuentas con el número de autorización por favor
             comunícate con Cajacopi-EPS para mayor información:
-        </p> 
+        </p>
         <div class="tet">
             <a class="vist3" href="tel:018000111446">018000 111 446</a>
         </div>
@@ -72,6 +78,7 @@
         </button>
 
     </form>
+
     
     <div class="conten-progreso-global"> <div class="pagina">Paso {{ wizard.steps.step1 }} de 7</div>
         <div class="contenedor">
