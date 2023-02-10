@@ -116,11 +116,7 @@ class ContactWizard(CustomSessionWizard):
         if 'fotoFormulaMedica' in form_data:
             self.foto_fmedica = form_data['fotoFormulaMedica']['src']
 
-<<<<<<< HEAD
-=======
-        keys = list(self.form_list.keys())
-        # keys = list(self.new_form_list.keys())
->>>>>>> origin/stable2
+
         # Construye las variables que serán enviadas al template
         info_email = {
             **form_data['autorizacionServicio']['num_autorizacion'],
