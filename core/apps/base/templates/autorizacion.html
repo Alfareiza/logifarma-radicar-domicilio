@@ -6,12 +6,6 @@
 {% block content %}
 <section class="vista3">
     <form id="form-id" action="" method="post">
-
-        <button class="continuar" formnovalidate name=""
-            type="submit" value="" onclick="animabotoncarga_autorizacion()">
-            <p class="text_continuar">Continuar <i class="fa-solid fa-chevron-right"></i></p>
-    </button>
-
         {% csrf_token %}
         {{ wizard.management_form }}
 

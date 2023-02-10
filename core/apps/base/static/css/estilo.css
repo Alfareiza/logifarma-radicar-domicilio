@@ -190,20 +190,27 @@ body {
 .pagina {
     position: absolute;
     font-size: 0.9em;
-    width: 100%;
-    height: 100%;
+    width: 9%;
+    height: 67%;
     padding: 10px 0 0 5px;
+<<<<<<< HEAD
     word-spacing: -1px;
 =======
     left: -36%;
 >>>>>>> parent of 90fd86c (nuevo estilo de barra de progreso)
+=======
+>>>>>>> parent of 5db9e9f (Animacion del segundo boton continuar)
 }
 .contenedor{
     text-align: center;
     width: 50%;
     height: 100%;
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin: auto 10%;
+=======
+    margin: auto 7%;
+>>>>>>> parent of 5db9e9f (Animacion del segundo boton continuar)
     position: relative;
     display: flex;
 =======
@@ -1317,20 +1324,23 @@ body {
 .pagina {
     position: absolute;
     font-size: 0.8em;
-    width: 100%;
-    height: 100%;
+    width: 9%;
+    height: 67%;
     padding: 5px 0 0 5px;
-    word-spacing: -1px;
 }
 
 =======
 >>>>>>> parent of 90fd86c (nuevo estilo de barra de progreso)
 .contenedor{
     text-align: center;
-    width: 50%;
+    width: 56%;
     height: 100%;
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin: auto 13%;
+=======
+    margin: auto 10%;
+>>>>>>> parent of 5db9e9f (Animacion del segundo boton continuar)
     position: relative;
     display: flex;
 =======
@@ -2446,21 +2456,24 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 
 .pagina {
     position: absolute;
-    font-size: 1em;
-    width: 100%;
-    height: 100%;
+    font-size: 1.2em;
+    width: 15%;
+    height: 67%;
     padding: 0 0 0 30px;
-    word-spacing: -1px;
 }
 
 =======
 >>>>>>> parent of 90fd86c (nuevo estilo de barra de progreso)
 .contenedor{
     text-align: center;
-    width: 70%;
+    width: 80%;
     height: 100%;
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin: auto 20%;
+=======
+    margin: auto 15%;
+>>>>>>> parent of 5db9e9f (Animacion del segundo boton continuar)
     position: relative;
     display: flex;
 =======
@@ -3581,18 +3594,17 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     overflow: hidden;
 <<<<<<< HEAD
     position: absolute;
-    top: 98%;
+    top: 97.5%;
     transform: rotate(0deg);
     left: 0%;
 }
 
 .pagina {
     position: absolute;
-    font-size: 0.7em;
-    width: 100%;
-    height: 100%;
-    padding: 2px 0 0 5px;
-    word-spacing: -1px;
+    font-size: 0.8em;
+    width: 15%;
+    height: 67%;
+    padding: 0 0 0 5px;
 }
 
 =======
@@ -3604,10 +3616,14 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 >>>>>>> parent of 90fd86c (nuevo estilo de barra de progreso)
 .contenedor{
     text-align: center;
-    width: 70%;
+    width: 80%;
     height: 100%;
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin: auto 20%;
+=======
+    margin: auto 15%;
+>>>>>>> parent of 5db9e9f (Animacion del segundo boton continuar)
     position: relative;
     display: flex;
 =======
@@ -4767,20 +4783,23 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 .pagina{
     position: absolute;
     font-size: 0.7em;
-    width: 100%;
-    height: 100%;
-    padding: 0px 0 0 5px;
-    word-spacing: -1px;
+    width: 15%;
+    height: 67%;
+    padding: 0 0 0 5px;
 }
 
 =======
 >>>>>>> parent of 90fd86c (nuevo estilo de barra de progreso)
 .contenedor{
     text-align: center;
-    width: 70%;
+    width: 80%;
     height: 100%;
 <<<<<<< HEAD
+<<<<<<< HEAD
     margin: auto 22%;
+=======
+    margin: auto 15%;
+>>>>>>> parent of 5db9e9f (Animacion del segundo boton continuar)
     position: relative;
     display: flex;
 =======
