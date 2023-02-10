@@ -136,9 +136,8 @@ class ContactWizard(CustomSessionWizard):
 
         return form_data[1]['num_autorizacion']
 
-    @staticmethod
     @logtime('EMAIL')
-    def prepare_email(info_email):
+    def prepare_email(self, info_email):
         copia_oculta = config('EMAIL_BCC', cast=Csv())
 
         subject = f"{info_email['NUMERO_AUTORIZACION']} - Este es el " \
@@ -159,6 +158,10 @@ class ContactWizard(CustomSessionWizard):
             bcc=copia_oculta
         )
         email.content_subtype = "html"
+
+        if self.foto_fmedica:
+            email.attach_file(self.foto_fmedica.file.file.name)
+
         return email
 
     @logtime('EMAIL')
