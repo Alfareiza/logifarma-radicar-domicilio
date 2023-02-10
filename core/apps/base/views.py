@@ -188,9 +188,9 @@ class ContactWizard(CustomSessionWizard):
             else:
                 notify('error-email', f"ERROR ENVIANDO EMAIL- Radicado #{info_email['NUMERO_AUTORIZACION']}",
                        f"JSON_DATA: {info_email}")
-        finally:
-            if self.foto_fmedica:
-                del_file(self.foto_fmedica.file.file.name)
+        # finally:
+        #     if self.foto_fmedica:
+        #         del_file(self.foto_fmedica.file.file.name)
 
 
 def finalizado(request):
