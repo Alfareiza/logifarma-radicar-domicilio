@@ -1,5 +1,6 @@
 import contextlib
 import threading
+from functools import lru_cache
 
 from decouple import config, Csv
 from django.core.files.storage import FileSystemStorage
@@ -12,7 +13,7 @@ from django.urls import reverse
 from core import settings
 from core.apps.base.forms import *
 from core.apps.base.resources.customwizard import CustomSessionWizard
-from core.apps.base.resources.decorators import logtime
+from core.apps.base.resources.decorators import logtime, count_calls
 from core.apps.base.resources.tools import convert_bytes, del_file, is_file_valid, notify, guardar_info_bd
 from core.settings import logger, BASE_DIR
 
@@ -42,13 +43,14 @@ TEMPLATES = {
 htmly = get_template(BASE_DIR / "core/apps/base/templates/correo.html")
 
 
-def show_fotoFormulaMedica(cleaned_data) -> bool:
+@lru_cache
+def show_fotoFormulaMedica(wizard) -> bool:
     """
     Determines if the 'fotoFormulaMedica' step have to be showed.
     Evaluate the cleaned data of the 'autorizacionServicio' step
     and checks if there is an ARCHIVO key on it. If this key is
     found, then will skip the 'fotoFormulaMedica' step.
-    :param cleaned_data:
+    :param wizard.rad_data:
            {'num_autorizacion':
                     {
                       ...
@@ -60,18 +62,22 @@ def show_fotoFormulaMedica(cleaned_data) -> bool:
     :return: True or False
     """
     try:
-        logger.info('Validando si radicado tiene URL con formula médica.')
-        url = cleaned_data['num_autorizacion']['ARCHIVO']
-        rad = cleaned_data['num_autorizacion']['NUMERO_AUTORIZACION']
+        ssid = wizard.request.COOKIES.get('sessionid')
+        if not ssid:
+            ssid = 'Unknown'
+        logger.info(f"{ssid} Validando si radicado tiene URL con formula médica.")
+        if cleaned_data := wizard.rad_data:
+            url = cleaned_data['num_autorizacion']['ARCHIVO']
+            rad = cleaned_data['num_autorizacion']['NUMERO_AUTORIZACION']
+            return is_file_valid(url, rad)
+        return True
     except Exception as e:
         logger.warning(f'ARCHIVO (key) NO detectado en respuesta de API en radicado # {rad}.')
         notify('error-archivo-url', f'Radicado {rad} sin archivo.',
                f"RESPUESTA DE API: {cleaned_data}\n\n")
         return True
-    else:
-        return is_file_valid(url, rad)
     finally:
-        logger.info('Validación de URL finalizada.')
+        logger.info(f"{ssid} Validación de URL finalizada.")
 
 
 class ContactWizard(CustomSessionWizard):
@@ -87,7 +93,6 @@ class ContactWizard(CustomSessionWizard):
         logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Entrando en done {form_list=}")
         form_data = self.process_from_data(form_list)
         self.request.session['temp_data'] = form_data
-        ContactWizard.new_form_list.clear()
         return HttpResponseRedirect(reverse('base:done'))
 
     @logtime('CORE')
@@ -105,23 +110,19 @@ class ContactWizard(CustomSessionWizard):
                 En caso de querer mostrar alguna información en el done.html
                 se debe retonar en esta función.
         """
-        form_data = [form.cleaned_data for form in form_list]
+        # form_data = [form.cleaned_data for form in form_list]
+        form_data = {form.prefix: form.cleaned_data for form in form_list}
 
-        try:
-            if form_data[2].get('src'):
-                self.foto_fmedica = form_data[2]['src']
-        except Exception as e:
-            logger.error(f"{self.request.COOKIES.get('sessionid')[:6]} No se pudo acceder a form_data[2]. {form_data=}", e)
+        if 'fotoFormulaMedica' in form_data:
+            self.foto_fmedica = form_data['fotoFormulaMedica']['src']
 
-
-        keys = list(self.new_form_list.keys())
         # Construye las variables que serán enviadas al template
         info_email = {
-            **form_data[1]['num_autorizacion'],
-            **form_data[keys.index('eligeMunicipio')],  # Ciudad
-            **form_data[keys.index('digitaDireccionBarrio')],  # Barrio y dirección
-            **form_data[keys.index('digitaCelular')],  # Celular
-            **form_data[keys.index('digitaCorreo')],  # e-mail
+            **form_data['autorizacionServicio']['num_autorizacion'],
+            **form_data['eligeMunicipio'],  # Ciudad
+            **form_data['digitaDireccionBarrio'],  # Barrio y dirección
+            **form_data['digitaCelular'],  # Celular
+            **form_data['digitaCorreo'],  # e-mail
         }
 
         # Guardará en BD cuando DEBUG sean números reales
@@ -130,13 +131,13 @@ class ContactWizard(CustomSessionWizard):
                                                                    self.request.META.get('REMOTE_ADDR')))
 
         logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Radicación finalizada. E-mail de confirmación "
-                    f"será enviado a {form_data[keys.index('digitaCorreo')]}")
+                    f"será enviado a {form_data['digitaCorreo']}")
 
         # Envía e-mail
         x = threading.Thread(target=self.send_mail, args=(info_email,))
         x.start()
 
-        return form_data[1]['num_autorizacion']
+        return form_data['autorizacionServicio']['num_autorizacion']
 
     @logtime('EMAIL')
     def prepare_email(self, info_email):
@@ -162,7 +163,7 @@ class ContactWizard(CustomSessionWizard):
         email.content_subtype = "html"
 
         if self.foto_fmedica:
-            email.attach_file(self.foto_fmedica.file.file.name)
+            email.attach_file(settings.MEDIA_ROOT / self.foto_fmedica.name)
 
         return email
 
@@ -183,7 +184,7 @@ class ContactWizard(CustomSessionWizard):
             if r == 1:
                 if self.foto_fmedica:
                     logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Correo enviado a {info_email['email']} con imagen "
-                                f"adjunta de {convert_bytes(self.foto_fmedica.file.size)}.")
+                                f"adjunta de {convert_bytes(self.foto_fmedica.size)}.")
                 else:
                     logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Correo enviado a {info_email['email']} sin imagem")
             else:
