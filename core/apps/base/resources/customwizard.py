@@ -18,14 +18,17 @@ class CustomSessionWizard(SessionWizardView):
 
     @csrf_protected_method
     def get(self, request, *args, **kwargs):
-        logger.info(f"IP={self.request.META.get('HTTP_X_FORWARDED_FOR', 'NO_IP_DETECTED')} "
+        sessionid = self.request.COOKIES.get('sessionid')
+        if not sessionid:
+            sessionid = 'Unknown'
+        logger.info(f"{sessionid[:7]} IP={self.request.META.get('HTTP_X_FORWARDED_FOR',  self.request.META.get('REMOTE_ADDR'))} "
                     f"entró en vista={self.request.resolver_match.url_name}")
         return super().get(request, *args, **kwargs)
 
     @csrf_protected_method
     def post(self, *args, **kwargs):
         method = self.request.method
-        logger.info(f"IP={self.request.META.get('HTTP_X_FORWARDED_FOR', 'NO_IP_DETECTED')} "
+        logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} IP={self.request.META.get('HTTP_X_FORWARDED_FOR',  self.request.META.get('REMOTE_ADDR'))} "
                     f"[{method}.{self.response_class.status_code}] "
                     f"agent={parse_agent(self.request.META.get('HTTP_USER_AGENT'))} "
                     f"saliendo_de={self.steps.current}")
@@ -60,12 +63,14 @@ class CustomSessionWizard(SessionWizardView):
         """
         idx_view = list(self.form_list).index(self.steps.current)
         if not form.cleaned_data:
-            logger.info(f"No fue capturado nada en vista{idx_view}={self.steps.current}")
+            logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} No fue capturado nada en vista{idx_view}={self.steps.current}")
         else:
-            logger.info(f"vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
+            logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
             if self.steps.current == 'autorizacionServicio':
                 self.auth_serv = form.cleaned_data
-
+        ls_form_list = self.new_form_list.keys()
+        logger.info(
+            f"{self.request.COOKIES.get('sessionid')[:6]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
         return self.get_form_step_data(form)
 
     def render_goto_step(self, *args, **kwargs):
@@ -77,6 +82,7 @@ class CustomSessionWizard(SessionWizardView):
         :param kwargs:
         :return:
         """
+        logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Acabó de clicar en \'< Atrás\' para ir de {self.steps.current} a {args[0]}.")
         if 'autorizacionServicio' in args:
             CustomSessionWizard.new_form_list.clear()
         form = self.get_form(data=self.request.POST, files=self.request.FILES)
@@ -112,7 +118,8 @@ class CustomSessionWizard(SessionWizardView):
         validate, `render_revalidation_failure` should get called.
         If everything is fine call `done`.
         """
-        logger.info(f'Entrando en render_done {CustomSessionWizard.new_form_list=}')
+        ls_new_form_list = CustomSessionWizard.new_form_list.keys()
+        logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Entrando en render_done, las vistas son {list(ls_new_form_list)}")
         # final_forms = OrderedDict()
         # walk through the form list and try to validate the data again.
         for form_key in CustomSessionWizard.new_form_list:
