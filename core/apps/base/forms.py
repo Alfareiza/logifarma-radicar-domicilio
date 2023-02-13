@@ -149,13 +149,25 @@ class DigitaCelular(forms.Form):
     Vista 8:
     """
     celular = forms.IntegerField()
+    whatsapp = forms.IntegerField(required=False)
 
-    def clean_celular(self):
+    def clean(self):
         cel = self.cleaned_data.get('celular')
+        whatsapp = self.cleaned_data.get('whatsapp')
+
+        if not cel:
+            logger.info("Número de celular no ingresado incorrecto.")
+            raise forms.ValidationError("Por favor ingrese un número de celular.")
+
         if str(cel)[0] != "3" or len(str(cel)) != 10:
             logger.info(f"Número de celular {cel} incorrecto.")
             raise forms.ValidationError(f"Número de celular incorrecto:\n{cel}")
-        return cel
+
+        if whatsapp and (str(whatsapp)[0] != "3" or len(str(whatsapp)) != 10):
+            logger.info(f"Número de whatsapp incorrecto -> \'{whatsapp}\'.")
+            raise forms.ValidationError(f"Número de whatsapp incorrecto:\n{whatsapp}")
+
+        # return cel
 
 
 class DigitaCorreo(forms.Form):

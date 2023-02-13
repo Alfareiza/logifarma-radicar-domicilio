@@ -62,10 +62,15 @@ def parse_agent(agent: str) -> str:
         os_device = agent[start_os:end_os + 1]
         start_brw = len(agent) - agent[::-1].find(')') + 1
         brw_device = agent[start_brw:].split(' ')[0]
+
+        os_device.find(';')
+        os_device.find(')')
+        device = os_device[os_device.find(';')+2:os_device.find(')')]
+
     except Exception as e:
         logger.warning("Parsear el agent=", agent, "ERROR=", e)
         return agent
-    return f'{os_device}({brw_device})'
+    return f"({device})"
 
 
 def is_file_valid(url: str, rad: str) -> bool:
@@ -167,7 +172,7 @@ def guardar_info_bd(**kwargs):
                                       municipio__name__iexact=municipio
                                   ).get(name=kwargs.pop('barrio', None).lower()),
                                   cel_uno=kwargs.pop('celular', None),
-                                  cel_dos=None,
+                                  cel_dos=kwargs.pop('whatsapp', None),
                                   email=kwargs.pop('email', None),
                                   direccion=kwargs.pop('direccion', None),
                                   ip=kwargs.pop('ip', None),

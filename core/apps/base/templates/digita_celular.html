@@ -26,7 +26,7 @@
                     </div>
                     <div class="contenido">
                         <p class="texto">
-                           {{ form.errors.celular.as_text|cut:"* "|linebreaksbr }}
+                            {{ form.non_field_errors.as_text|cut:"* "|linebreaksbr }}
                         </p>
                     </div>
                 </div>
@@ -52,7 +52,9 @@
             <p class="p_vist8">Te informaremos por este medio cuando el domicilio este en camino.</p>
 
         <div class="cont_inpu_whatsapp">
-            <input class="inp_vist8" type="number" inputmode="numeric" placeholder="Ingrese el número de Whatsapp (Opcional)" name="digitaCelular-whatsapp"
+            <input class="inp_vist8" type="number" inputmode="numeric"
+                   placeholder="Ingrese el número de Whatsapp (Opcional)"
+                   name="digitaCelular-whatsapp"
             id="id_digitaCelular-whatsapp" >
         </div>
 
