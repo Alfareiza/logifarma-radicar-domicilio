@@ -550,7 +550,7 @@
                                             <tr>
                                                 <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
                                                     <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
-                                                        <p><span style="color: #55575d; font-size: 14px;">Celular:</span></p>
+                                                        <p><span style="color: #55575d;">Celular:</span></p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -577,9 +577,56 @@
                 </tbody>
             </table>
         </div>
-
+        {% if whatsapp %}
         <div style="background: #eaeaff; background-color: #eaeaff; margin: 0px auto; max-width: 600px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #eaeaff; background-color: #eaeaff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 0px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0; line-height: 0; text-align: left; display: inline-block; width: 100%; direction: ltr; vertical-align: top;">
+                                <div class="m_-699636249018344079mj-column-per-33" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 33%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">Whatsapp:</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="m_-699636249018344079mj-column-per-67" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 67%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">{{whatsapp}}</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        {% if email %}
+        {% if whatsapp %}
+        <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
+                {% else %}
+                <div style="background: #eaeaff; background-color: #eaeaff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #eaeaff; background-color: #eaeaff; width: 100%;">
+                {% endif %}
                 <tbody>
                     <tr>
                         <td style="direction: ltr; font-size: 0px; padding: 0px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
@@ -617,6 +664,7 @@
                 </tbody>
             </table>
         </div>
+        {% endif %}
 
         <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
