@@ -64,11 +64,8 @@ class OpaWizard(SessionWizardView):
         successful) or the done view (if no more steps are available)
         """
         method = self.request.method
-        logger.info(f"Formularios válidos -> {self._form_valids}")
-        logger.info(
-            f"${self.request.COOKIES.get('sessionid')[:6]} IP={self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))} "
-            f"agent={parse_agent(self.request.META.get('HTTP_USER_AGENT'))} "
-            f"saliendo_de={self.steps.current}")
+        logger.info(f"[en el post] ${self.request.COOKIES.get('sessionid')[:7]} formularios válidos -> {self._form_valids}")
+        logger.info(f"${self.request.COOKIES.get('sessionid')[:6]} saliendo_de={self.steps.current}")
         # Look for a wizard_goto_step element in the posted data which
         # contains a valid step name. If one was found, render the requested
         # form. (This makes stepping back a lot easier).
@@ -92,10 +89,16 @@ class OpaWizard(SessionWizardView):
         form = self.get_form(data=self.request.POST, files=self.request.FILES)
 
         # and try to validate
+        logger.info(
+            f"[en el post, antes de form.is_valid()] ${self.request.COOKIES.get('sessionid')[:7]} formularios válidos -> {self._form_valids}")
         if form.is_valid():
             # if the form is valid, store the cleaned data and files.
             print(f'==> {form.prefix} is valid...')
+            logger.info(
+                f"[en el post, (antes) dentro de form.is_valid()] ${self.request.COOKIES.get('sessionid')[:7]} formularios válidos -> {self._form_valids}")
             self._form_valids[form.prefix] = form
+            logger.info(
+                f"[en el post, (dsps) dentro de form.is_valid()] ${self.request.COOKIES.get('sessionid')[:7]} formularios válidos -> {self._form_valids}")
             if form.prefix == "autorizacionServicio":
                 self.rad_data = form.cleaned_data
             self.storage.set_step_data(self.steps.current, self.process_step(form))
@@ -146,7 +149,7 @@ class OpaWizard(SessionWizardView):
         ls_form_list = self.form_list.keys()
         logger.info(
             f"${self.request.COOKIES.get('sessionid')[:7]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
-        logger.info(f"${self.request.COOKIES.get('sessionid')[:7]} Formularios validos : {self._form_valids}")
+        logger.info(f"[en el process_step] ${self.request.COOKIES.get('sessionid')[:7]} Formularios validos : {self._form_valids}")
 
         return self.get_form_step_data(form)
 
