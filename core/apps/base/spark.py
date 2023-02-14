@@ -134,8 +134,8 @@ class OpaWizard(SessionWizardView):
             logger.info(
                 f"${self.request.COOKIES.get('sessionid')[:7]} vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
         ls_form_list = self.form_list.keys()
-        logger.info(
-            f"${self.request.COOKIES.get('sessionid')[:7]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
+        logger.info(f"${self.request.COOKIES.get('sessionid')[:7]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
+        logger.info(f"${self.request.COOKIES.get('sessionid')[:7]} Formularios validos : {self.form_valids}")
 
         return self.get_form_step_data(form)
 
