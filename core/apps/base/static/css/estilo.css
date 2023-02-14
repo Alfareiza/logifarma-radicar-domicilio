@@ -87,7 +87,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     font-size: 2em;
     border-radius: 0px;
     left: 40%;
-    top: 91%;
+    top: 90%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -177,27 +177,29 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 4vh;
-    width: 56%;
+    height: 2vh;
+    width: 50%;
     overflow: hidden;
     position: absolute;
-    top: 69%;
-    transform: rotate(90deg);
-    left: -26%;
+    top: 97%;
+    transform: rotate(0deg);
+    left: 20%;
 }
+
 .pagina {
     position: absolute;
-    font-size: 0.9em;
+    font-size: 1em;
     width: 100%;
     height: 100%;
-    padding: 10px 0 0 5px;
+    padding: 0 0 0 75px;
     word-spacing: -1px;
 }
+
 .contenedor{
     text-align: center;
-    width: 50%;
+    width: 70%;
     height: 100%;
-    margin: auto 10%;
+    margin: auto 20%;
     position: relative;
     display: flex;
 }
@@ -217,8 +219,8 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 8px;
-    border-radius: 11px;
+    height: 10px;
+    border-radius: 15px;
     width: 100%;
     z-index: -1;
     transition: 0.4s ease;
@@ -229,7 +231,7 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 8px;
+    height: 10px;
     border-radius: 11px;
     width: 0%;
     z-index: -1;
@@ -241,7 +243,7 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 8px;
+    height: 10px;
     border-radius: 11px;
     width: 22%;
     z-index: -1;
@@ -253,7 +255,7 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 8px;
+    height: 10px;
     border-radius: 11px;
     width: 42%;
     z-index: -1;
@@ -265,7 +267,7 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 8px;
+    height: 10px;
     border-radius: 11px;
     width: 62%;
     z-index: -1;
@@ -277,7 +279,7 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 8px;
+    height: 10px;
     border-radius: 11px;
     width: 80%;
     z-index: -1;
@@ -289,29 +291,30 @@ body {
     top: 50%;
     left: 0;
     transform: translateY(-50%);
-    height: 8px;
+    height: 10px;
     border-radius: 11px;
     width: 100%;
     z-index: -1;
     transition: 0.4s ease;
 }
 .circulo{
-    background-color: #fff;
+    background-color: var(--linea--borde-vacio);
     color: #999;
-    border-radius: 37%;
-    height: 30px;
-    width: 5px;
+    border-radius: 40%;
+    height: 10px;
+    width: 40px;
     font-size: 0.8em;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 4px solid var(--linea--borde-vacio);
+    border: 5px solid var(--linea--borde-vacio);
     transition: 0.4s ease;
     box-sizing: border-box;
-    transform: rotate(-90deg);
+    transform: rotate(0deg);
 }
 .circulo.active{
     border-color: var(--linea--borde-relleno);
+    background-color: var(--linea--borde-relleno);
 }
 
 
@@ -921,13 +924,47 @@ main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1.4em;
     font-weight: 300;}
 
-main section.vista7 input.inp_vist7 {margin: 5% 14%;
-    padding: 3% 0;
+.cont_inpu_direccion {position: relative;
+    margin: 3% auto;
+    width: 30%;
+    height: 5vh;
+    display: flex;}
+
+.inp_vist7 {position: relative;
+    margin: 0 auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 70%;}
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border-radius: 0px;}
 
+.inp_vist7::-webkit-inner-spin-button,
+.inp_vist7::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
+
+.inp_vist7:valid ~ .inputext_direccion, .inp_vist7:focus ~ .inputext_direccion {
+color: #0572ce;
+transform: translateX(10px) translateY(-20px);
+font-size: 0.8em;
+transition: 0.5S;
+}
+
+.inputext_direccion {position: absolute;
+    width: 100%;
+    height: 46%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 2% 0;
+    pointer-events: none;
+    font-size: 1em;
+    color: #606060;
+    }
 
 option {
   background-color: white;
@@ -968,7 +1005,13 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1.4em;
     font-weight: 300;}
 
-.cont_inpu_direccion {position: relative;
+.cont_inpu_celular {position: relative;
+    margin: 3% auto;
+    width: 30%;
+    height: 5vh;
+    display: flex;}
+
+.cont_inpu_whatsapp {position: relative;
     margin: 3% auto;
     width: 30%;
     height: 5vh;
@@ -979,13 +1022,14 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     padding: 0;
     border: 0px;
     border-bottom: solid 1px;
-    font-size: 1em;
     width: 100%;
     height: 100%;
     outline: none;
+    font-size: 1.1em;
+    color: #606060;
     border-radius: 0px;}
 
-.inp_vist8:valid ~ .inputext_direccion, .inp_vist8:focus ~ .inputext_direccion {
+.inp_vist8:valid ~ .inputext_celular, .inp_vist8:focus ~ .inputext_celular {
     color: #0572ce;
     transform: translateX(10px) translateY(-30px);
     font-size: 1em;
@@ -998,7 +1042,7 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
 margin: 0;
 }
 
-.inputext_direccion {position: absolute;
+.inputext_celular {position: absolute;
     width: 100%;
     height: 46%;
     top: 0;
@@ -1213,7 +1257,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     font-size: 1.8em;
     border-radius: 0px;
     left: 40%;
-    top: 90%;
+    top: 89%;
     background: #ffffff;
     border-color: #468bc4;
     color: #468bc4;}
@@ -1303,13 +1347,13 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 4vh;
-    width: 56%;
+    height: 2vh;
+    width: 50%;
     overflow: hidden;
     position: absolute;
-    top: 69%;
-    transform: rotate(90deg);
-    left: -26%;
+    top: 97%;
+    transform: rotate(0deg);
+    left: 22%;
 }
 
 .pagina {
@@ -1317,15 +1361,15 @@ body {
     font-size: 0.8em;
     width: 100%;
     height: 100%;
-    padding: 5px 0 0 5px;
+    padding: 0 0 0 45px;
     word-spacing: -1px;
 }
 
 .contenedor{
     text-align: center;
-    width: 50%;
+    width: 70%;
     height: 100%;
-    margin: auto 13%;
+    margin: auto 20%;
     position: relative;
     display: flex;
 }
@@ -1346,11 +1390,10 @@ body {
     left: 0;
     transform: translateY(-50%);
     height: 8px;
-    border-radius: 11px;
+    border-radius: 15px;
     width: 100%;
     z-index: -1;
     transition: 0.4s ease;
-    border: solid 0px;
 }
 .progreso {
     background-color: var(--linea--borde-relleno);
@@ -1425,22 +1468,23 @@ body {
     transition: 0.4s ease;
 }
 .circulo{
-    background-color: #fff;
+    background-color: var(--linea--borde-vacio);
     color: #999;
-    border-radius: 43%;
-    height: 28px;
-    width: 5px;
+    border-radius: 40%;
+    height: 8px;
+    width: 40px;
     font-size: 0.8em;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 4px solid var(--linea--borde-vacio);
+    border: 3px solid var(--linea--borde-vacio);
     transition: 0.4s ease;
     box-sizing: border-box;
-    transform: rotate(-90deg);
+    transform: rotate(0deg);
 }
 .circulo.active{
     border-color: var(--linea--borde-relleno);
+    background-color: var(--linea--borde-relleno);
 }
 
 
@@ -1752,7 +1796,7 @@ main section.vista3 p.vist3_t {position: relative;
 
 main section.vista3 div.vist3_img {position: absolute;
     width: 40%;
-    top: 35%;
+    top: 34%;
     right: 7%;
     height: 50vh;
     margin: 0 auto;
@@ -2041,12 +2085,47 @@ main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1.3em;
     font-weight: 300;}
 
-main section.vista7 input.inp_vist7 {margin: 5% 14%;
-    padding: 3% 0;
+.cont_inpu_direccion {position: relative;
+    margin: 3% auto;
+    width: 30%;
+    height: 7vh;
+    display: flex;}
+
+.inp_vist7 {position: relative;
+    margin: 0 auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 70%;}
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border-radius: 0px;}
+
+.inp_vist7::-webkit-inner-spin-button,
+.inp_vist7::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
+
+.inp_vist7:valid ~ .inputext_direccion, .inp_vist7:focus ~ .inputext_direccion {
+color: #0572ce;
+transform: translateX(10px) translateY(-20px);
+font-size: 0.8em;
+transition: 0.5S;
+}
+
+.inputext_direccion {position: absolute;
+    width: 100%;
+    height: 46%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 2% 0;
+    pointer-events: none;
+    font-size: 1em;
+    color: #606060;
+    }
 
 .errorlist {
     color:#cc0033;
@@ -2096,7 +2175,13 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1.4em;
     font-weight: 300;}
 
-.cont_inpu_direccion {position: relative;
+.cont_inpu_celular {position: relative;
+    margin: 3% auto;
+    width: 30%;
+    height: 7vh;
+    display: flex;}
+
+.cont_inpu_whatsapp {position: relative;
     margin: 3% auto;
     width: 30%;
     height: 7vh;
@@ -2107,11 +2192,13 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     padding: 0;
     border: 0px;
     border-bottom: solid 1px;
-    font-size: 1em;
+    font-size: 1.1em;
+    color: #606060;
     width: 100%;
     height: 100%;
     outline: none;
     border-radius: 0px;}
+
 
 .inp_vist8::-webkit-inner-spin-button,
 .inp_vist8::-webkit-inner-spin-button{
@@ -2119,14 +2206,14 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
 margin: 0;
 }
 
-.inp_vist8:valid ~ .inputext_direccion, .inp_vist8:focus ~ .inputext_direccion {
+.inp_vist8:valid ~ .inputext_celular, .inp_vist8:focus ~ .inputext_celular {
 color: #0572ce;
 transform: translateX(10px) translateY(-20px);
 font-size: 0.8em;
 transition: 0.5S;
 }
 
-.inputext_direccion {position: absolute;
+.inputext_celular {position: absolute;
     width: 100%;
     height: 46%;
     top: 0;
@@ -2135,6 +2222,7 @@ transition: 0.5S;
     padding: 2% 0;
     pointer-events: none;
     font-size: 1em;
+    color: #606060;
     }
 
 .p_vist8 {position: relative;
@@ -2264,6 +2352,1185 @@ main section.vista10 p.vist10 {position: relative;
 
 .home {text-decoration: none;
     color: #468bc4;
+}
+
+
+/* .
+.
+.
+.
+.
+.---------------------------------------------------------------------------------
+.
+.
+.
+.
+.
+.
+ */
+
+    
+
+@media only screen and (max-width:1024px) and (max-height:1366px){
+
+h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
+    font-family: 'Montserrat', sans-serif; }
+
+        header, main, footer, aside, nav, figure, figcaption, article { display: block;}
+
+        h1, h2, h3, h4, h5, h6, p {margin: 0; }
+
+        body { margin: 0 !important;}
+
+    html {scroll-behavior: smooth;}
+
+
+main { width: 100%; height: auto; position: relative; margin: 0 auto; float: none;}
+
+
+.atras {margin: 0% 0% 0% 2%;
+    position: absolute;
+    border: 0px;
+    background: #ffff;
+    top: 2%;
+    z-index: 9;}
+
+.b_atras {
+    position: relative;
+    font-size: 2.5em;
+    color: #468bc4;
+}
+
+#vist{position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+.img1 {position: relative;
+    margin: 0% auto;
+    width: 36%;
+    padding: 3% 32%;}
+
+.label_vist {position: relative;
+    font-size: 2.2em;
+    color: #333;}
+
+.select_opt {position: relative;
+    padding: 0%;
+    color: #0572ce;
+    border-color: #0572ce;
+    font-size: 2em;
+    width: 100%;
+    height: 100%;
+    margin: 0;}
+
+.btn {position: absolute;
+    padding: 3% 14%;
+    margin: 0 auto;
+    font-size: 2em;
+    border-radius: 0px;
+    left: 29%;
+    top: 89%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+.conten_carga { background: #ffffff;
+    height: 100%;
+    width: 100%;
+    left: -1%;
+    top: -5%;
+    position: absolute;
+    -webkit-animation: all 1s ease;
+    -o-ani-webkit-animation: all 1s ease;
+    animation: all 1s ease;
+    z-index: 99;
+    display: none;
+    border: solid #3333;
+    border-radius: 12px;
+}
+
+.carga {border: solid 7px #ccc;
+    border-top-color: #2180f7;
+    border-top-style: groove;
+    height: 24px;
+    width: 24px;
+    border-radius: 100%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: girar 1.5s linear infinite;
+    -o-animation: girar 1.5s linear infinite ;
+    animation: girar 1.5s linear infinite;
+}
+
+.conten_carga_home { background: #ffffff;
+    height: 100%;
+    width: 100%;
+    left: -1%;
+    top: -5%;
+    position: absolute;
+    -webkit-animation: all 1s ease;
+    -o-ani-webkit-animation: all 1s ease;
+    animation: all 1s ease;
+    z-index: 99;
+    display: none;
+    border: solid #3333;
+    border-radius: 0px;}
+
+.carga_home {border: solid 7px #ccc;
+    border-top-color: #2180f7;
+    border-top-style: groove;
+    height: 24px;
+    width: 24px;
+    border-radius: 100%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: girarhome 1.5s linear infinite;
+    -o-animation: girarhome 1.5s linear infinite ;
+    animation: girarhome 1.5s linear infinite;}
+
+@keyframes girarhome {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
+
+@keyframes girar {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
+
+.conten-progreso-global {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 2vh;
+    width: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 96%;
+    transform: rotate(0deg);
+    left: 0%;
+}
+
+.pagina {
+    position: absolute;
+    font-size: 1em;
+    width: 100%;
+    height: 100%;
+    padding: 0 0 0 30px;
+    word-spacing: -1px;
+}
+
+.contenedor{
+    text-align: center;
+    width: 70%;
+    height: 100%;
+    margin: auto 20%;
+    position: relative;
+    display: flex;
+}
+.progreso-contenedor{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 0px;
+    max-width: 100%;
+    width: 100%;
+    margin: auto;
+}
+.progreso-contenedor::before {
+    content: '';
+    background-color: var(--linea--borde-vacio);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 10px;
+    border-radius: 15px;
+    width: 100%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 10px;
+    border-radius: 11px;
+    width: 0%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso2 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 10px;
+    border-radius: 11px;
+    width: 22%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso3 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 10px;
+    border-radius: 11px;
+    width: 42%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso4 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 10px;
+    border-radius: 11px;
+    width: 62%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso5 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 10px;
+    border-radius: 11px;
+    width: 80%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.progreso6 {
+    background-color: var(--linea--borde-relleno);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 10px;
+    border-radius: 11px;
+    width: 100%;
+    z-index: -1;
+    transition: 0.4s ease;
+}
+.circulo{
+    background-color: var(--linea--borde-vacio);
+    color: #999;
+    border-radius: 40%;
+    height: 10px;
+    width: 40px;
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 5px solid var(--linea--borde-vacio);
+    transition: 0.4s ease;
+    box-sizing: border-box;
+    transform: rotate(0deg);
+}
+.circulo.active{
+    border-color: var(--linea--borde-relleno);
+    background-color: var(--linea--borde-relleno);
+}
+
+main section.vista1 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+main section.vista1 div.vist1 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+    height: 8vh;}
+
+main section.vista1 div.vist1 img.img1 {position: relative;
+    margin: 0% auto;
+    width: 50%;
+    height: 80%;
+    padding: 1% 25.5%;}
+
+main section.vista1 div.vist1_1 {position: relative;
+    margin: 40px auto 0;
+    width: 60%;
+    padding: 0;
+    height: 35vh;}
+
+main section.vista1 div.vist1_1 img.img2 {position: relative;
+    margin: 0% auto;
+    width: 100%;
+    height: 100%;
+    padding: 0;}
+
+
+.cont_adv {position: relative;
+    width: 63%;
+    height: 5vh;
+    margin: 30px auto 0;}
+
+.cont_icon {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.adv_icon {position: relative;
+    width: 9%;
+    height: 80%;
+    margin: auto;
+}
+
+.icon_img {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex_img {position: relative;
+    width: 100%;
+    height: 50%;
+    margin: auto 0 auto 2%;}
+
+.p_adv {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #3c468f}
+
+
+.cont_mensaje {position: relative;
+    width: 63%;
+    height: 4vh;
+    margin: 10px auto 30px;}
+
+.cont_icono_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.icon_mensaje {position: relative;
+    width: 8%;
+    height: 80%;
+    margin: auto;}
+
+.icon_img_mensaje {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex_img_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    margin: auto 0 auto 2%;}
+
+.p_mensaje {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #3c468f;}
+
+.piedepagina{position: relative;
+    width: 100%;
+    height: 40vh;
+    margin: 0px auto 0%;
+    padding: 0;
+    background: #3c468f;
+}
+
+.cont_piedepagina{position: relative;
+    width: 63%;
+    height: 17%;
+    margin: 0 auto;
+    color: #ffff;
+    display: flex;
+}
+
+.text_piedepagina{font-size: 1.5em;
+    margin: auto;
+}
+
+.cont_pie {position: relative;
+    width: 63%;
+    height: 6vh;
+    margin: 5px auto 5px;}
+
+.cont_icon_pie {position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;}
+
+.icon_pie {position: relative;
+    width: 9%;
+    height: 80%;
+    margin: auto;}
+
+.icon_img_pie {position: relative;
+    width: 100%;
+    height: 100%;}
+
+.tex_img_pie {position: relative;
+    width: 100%;
+    height: 40%;
+    margin: auto 0 auto 2%;}
+
+.p_pie {position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 1.2em;
+    color: #ffff;
+    font-weight: 600;
+}
+.btn_inicio {position: absolute;
+    padding: 3% 14%;
+    margin: 0px auto 0;
+    font-size: 2em;
+    border-radius: 0px;
+    border: solid 2px white;
+    left: 29%;
+    top: 89%;
+    background: #3c468f;
+    color: #ffff;
+    font-weight: 100;}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section.vista2 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section.vista2 div.vist2_text { position: relative;
+    margin: 0 auto;
+    width: 100%;
+    height: 15vh;
+    font-weight: 500;}
+
+main section.vista2 div.vist2_text h1 { font-size: 2.5em;
+    padding: 0 0 0 2%;}
+
+main section.vista2 div.vist2_text p {font-size: 1.5em;
+    padding: 2% 0 0 4%;}
+
+main section.vista2 nav.vist2 { width: 100%;
+    height: auto;
+    position: relative;
+    margin: 1vh 0% 0% 0%;
+    float: none;}
+
+main section.vista2 nav#vist2 div.img { width: 100%;
+    height: 15vh;}
+
+main section.vista2 nav.vist2 div.img img.vist2 { position: absolute;
+    padding: 1% 0% 0% 10%; width: 14%; height: 13%;}
+
+main section.vista2 nav.vist2 div.img p.vist2 {padding: 0px 2% 0 29%; font-size: 1.8em;}
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+.modal {position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(0, 0, 0, 0.5);
+    transition: all 500ms ease;
+    z-index: 99;
+width: 100%;
+height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+opacity: 1;
+visibility: visible;
+}
+
+.conten {width: 70%;
+    height: 40%;
+    margin: auto;
+    background: #fff;
+    box-shadow: 1px 7px 25px rgb(0, 0, 0, 0.6);
+    transition: all 500ms ease;
+    position: relative;
+    border: solid 4px #3367c7;
+    transform: translateY(0%);
+}
+
+.conten header {padding: 4px;
+    background: #3367c7;
+    color: #fff;
+}
+
+.modal_btn {position: relative;
+    margin: 0 auto;
+    width: 10%;
+    height: 5vh;
+    top: -31px;}
+
+.conten button {
+    position: relative;
+    top: 0;
+    padding: 13px 18px;
+    color: #fff;
+    font-size: 1.5em;
+    cursor: pointer;
+    border: solid 1px #2a57a9;
+    border-radius: 26px;
+    background: #3367c7;
+}
+
+.texto {position: relative;
+    margin: 3%;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+
+@keyframes girar {
+    0% { transform: rotate(0deg);}
+    100% { transform: rotate(360deg);}
+}
+
+main section.vista3 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+main section.vista3 div.vist3_text {position: relative;
+    padding: 0% 0% 0% 9%;}
+
+main section#vist3 p.vist3 { font-size: 1.9em; }
+
+main section.vista3 h1.vist3 { font-size: 2.4em; font-weight: 500;}
+
+.cont_inpu_auto {position: relative;
+    margin: 4% auto 3%;
+    width: 80%;
+    height: 6vh;
+    display: flex;}
+
+main section.vista3 input.inp_vist3 {position: relative;
+    margin: 0 auto;
+    padding: 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 2em;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border-radius: 0px;
+}
+
+.inp_vist3:valid + .inputext_auto, .inp_vist3:focus + .inputext_auto {
+color: #0572ce;
+transform: translateX(10px) translateY(-35px);
+font-size: 1.4em;
+transition: 0.5S;
+}
+
+main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
+main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
+
+.inputext_auto {position: absolute;
+    width: 100%;
+    height: 46%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 2% 0;
+    pointer-events: none;
+    font-size: 2em;
+    }
+    
+main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
+    box-shadow: 0 1px 0 0 #0572ce;}
+
+main section.vista3 p.vist3_t { position: relative;
+    text-align: center;
+    margin: 1%;
+    font-size: 1.2em;
+width: 100%;}
+
+main section.vista3 div.vist3_img {position: relative;
+    width: 80%;
+    height: 30vh;
+    top: 0;
+    right: 0;
+    margin: 10% auto 1%;
+    filter: drop-shadow(0px 1px 2px #e4dddd);}
+
+main section.ist3 div.vist3_img img.vist3 {position: relative;
+    width: 100%;
+    height: 100%;}
+
+main section.vista3 p.vist3_t2 {padding: 6% 6% 1% 6%;
+    font-size: 1.5em;
+    text-align: center;
+    width: 88%;
+    margin: 0;}
+
+main section.vista3 div.tet {margin: 4% auto 4% auto; width: 27%; }
+
+main section.vista3 div.tet a.vist3 {left: 0%;
+    position: relative; font-size: 1.7em;}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section.vista4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section.vista4 h1.vist4 {width: 75%;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 2.4em;
+    font-weight: 400;}
+
+
+main section.vista4 p.vist4_1 { width: 63%;
+    text-align: center;
+    margin: 4% auto;
+    font-size: 1.7em;
+    color: red;}
+
+
+.video {position: relative;
+    width: 95%;
+    height: 39vh;
+    padding: 0 2% 0 2.5%;}
+
+.conten_foto {position: relative;
+    width: 100%;
+    height: 420px;
+    padding: 0%;
+    margin: 0 auto;
+    overflow: hidden;}
+
+.img_fot {position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0 0% 0 0%;
+    object-fit: contain;
+    overflow: hidden;
+    margin: 0 auto;
+    border: 0;}
+
+.btn_archi {position: absolute;
+    top: 88%;
+    left: 29%;
+    width: 46%;
+    height: 8%;
+    border: solid 2px #468bc4;
+    border-radius: 0px;
+    color: #468bc4;
+    display: block;
+    font-size: 1.9em;}
+
+.btn_archi::before {content: 'Adjuntar foto';
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    position: absolute;
+    top: 33%;
+    left: 31%;}
+
+.arch_btn {opacity: 0;
+    width: 100%;
+    height: 100%;}
+
+.btn_f {position: absolute;
+    padding: 3% 14%;
+    margin: 0 auto;
+    font-size: 1.1em;
+    border-radius: 12px;
+    left: 25%;
+    top: 81%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+.btn1 {position: absolute;
+    padding: 3% 5%;
+    margin: 0 auto;
+    font-size: 2em;
+    border-radius: 12px;
+    left: 6%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+.btn2 {position: absolute;
+    padding: 2.7% 11%;
+    margin: 0 auto;
+    font-size: 1.7em;
+    border-radius: 12px;
+    left: 32%;
+    top: 85%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section.vista5 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section.vista5 h1.vist5 {width: 81%;
+    height: 11vh;
+    text-align: center;
+    margin: 0% auto;
+    font-size: 2.4em;
+    font-weight: 300;}
+
+main section.vista5 p.vist5 { width: 81%;
+    height: 10vh;
+    text-align: center;
+    margin: 0% auto;
+    font-size: 1.5em;
+    font-weight: 300;}
+
+main section.vista5 div.vist5_1 {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;}
+
+main section.vista5 div.vist5_1 img.img2 {position: fixed;
+    width: 58%;
+    z-index: 9;
+    left: 22%;}
+
+main section.vista5 div.vist5_1 img.img3 { position: relative;
+    margin: 0% auto;
+    width: 74%;
+    padding: 3% 10%;}
+
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+.vist6 {width: 81%;
+    height: 9vh;
+    text-align: center;
+    margin: 3% auto 0;
+    font-size: 2em;
+    font-weight: 300;}
+
+.p_vist6 {position: relative;
+    width: 93%;
+    height: 3vh;
+    text-align: center;
+    font-size: 1em;
+    font-weight: 600;
+    margin: 0px auto 5% auto}
+
+.filt {position: relative;
+    margin: 5px auto;
+    width: 70%;
+    height: 6vh;
+    display: flex;}
+
+.inpfilt {position: relative;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    outline: none;
+    border: 0;
+    border-bottom: solid 1px black ;
+    border-radius: 0;
+    text-align: left;
+    font-size: 1.9em;}
+
+.inpfilt:hover { text-decoration: none;}
+
+.icon {position: absolute;
+    height: 100%;
+    width: 10%;
+    margin: 0;
+    right: 3px;
+    display: flex;
+}
+
+.foricon {position: relative;
+    margin: auto auto;
+    width: 50%;
+    height: 50%;
+    right: 10px;
+    top: 0%;
+    left: 0%;
+    color: #a3a3a3;}
+
+.fa-solid {font-weight: 900;
+    position: relative;
+    font-size: 25px;}
+
+.select_opt[type='radio']:after {
+    width: 90%;
+    height: 90%;
+    border-radius: 15px;
+    top: -1px;
+    left: -1px;
+    position: relative;
+    background-color: #ffffff;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 3px solid #0572ce
+}
+
+.select_opt[type='radio']:checked:after {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    top: -1px;
+    left: -1px;
+    position: relative;
+    background-color: #0572ce;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 1px solid #0572ce;
+}
+
+.elec {position: relative;
+    width: 70%;
+    height: 26vh;
+    margin: 5% auto 0 auto;
+    overflow: auto;}
+
+.elec::-webkit-scrollbar{
+   width: 10px;
+   background: #ffff;
+}
+
+.elec::-webkit-scrollbar-thumb{
+    background: #0572ce;
+    border-radius: 8px;
+}
+
+.con {display: flex;
+    margin: 5px 0px;
+    height: 29px;}
+
+.con:hover {background: #d4cfcf;}
+
+.radio {margin: 1px auto 0% 2%;
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+}
+
+.labelfil {width: 90%;
+    margin: auto 0% auto 0%;
+    font-size: 1.9em;
+    padding: 0px 1px 0px 9%;
+    z-index: 99; }
+
+.btn_muni {position: absolute;
+    padding: 3% 13%;
+    margin: 0 auto;
+    font-size: 2em;
+    border-radius: 12px;
+    left: 29%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+.vist7 {width: 70%;
+    height: 4vh;
+    text-align: left;
+    margin: 12% auto 0;
+    font-size: 2em;
+    font-weight: 300;}
+
+.cont_inpu_direccion {position: relative;
+margin: 4% auto 7%;
+width: 70%;
+height: 6vh;
+display: flex;}
+
+.inp_vist7 {position: relative;
+    margin: 0 auto;
+    padding: 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 2em;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border-radius: 0px;}
+
+.inp_vist7:valid ~ .inputext_direccion, .inp_vist7:focus ~ .inputext_direccion {
+color: #0572ce;
+transform: translateX(10px) translateY(-45px);
+font-size: 1.5em;
+transition: 0.5S;
+}
+
+.inputext_direccion {position: absolute;
+    width: 100%;
+    height: 40%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 4% 0;
+    pointer-events: none;
+    font-size: 2em;
+    color: #8f8f8f;
+    }
+
+.p_vist7{position: relative;
+    width: 64%;
+    height: 6vh;
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: 400;
+    margin: 0 auto 0;
+    border-radius: 0px;}
+
+.inp_vist7::-webkit-inner-spin-button,
+.inp_vist7::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
+
+option {
+  background-color: white;
+  padding: 4px;
+  color: rgb(107, 107, 197);
+  margin-bottom: 1px;
+   font-size: 1em;
+  cursor: pointer;
+}
+
+.btn_dir {position: fixed;
+    padding: 0.5% 5%;
+    margin: 0 auto;
+    font-size: 1.5em;
+    border-radius: 12px;
+    left: 41%;
+    top: 88%;
+    background: #ffffff;
+    border-color: #468bc4;
+    color: #468bc4;}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+
+main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+.vist8 {width: 81%;
+    height: 10vh;
+    text-align: center;
+    margin: 5% auto 0;
+    font-size: 2.4em;
+    font-weight: 300;}
+
+.ti_vist8 {position: relative;
+    width: 81%;
+    text-align: center;
+    margin: 6% auto 0;
+    font-size: 2.4em;
+    font-weight: 300;}
+
+.cont_inpu_celular {position: relative;
+margin: 4% auto 7%;
+width: 70%;
+height: 6vh;
+display: flex;}
+
+.cont_inpu_whatsapp {position: relative;
+    margin: 4% auto 7%;
+    width: 70%;
+    height: 6vh;
+    display: flex;}
+
+.inp_vist8 {position: relative;
+    margin: 0 auto;
+    padding: 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1.7em;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border-radius: 0px;}
+
+.inp_vist8:valid ~ .inputext_celular, .inp_vist8:focus ~ .inputext_celular {
+color: #0572ce;
+transform: translateX(10px) translateY(-45px);
+font-size: 1.3em;
+transition: 0.5S;
+}
+
+
+.inputext_celular {position: absolute;
+    width: 100%;
+    height: 40%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 4% 0;
+    pointer-events: none;
+    font-size: 1.7em;
+    color: #8f8f8f;
+    }
+
+
+.p_vist8 {position: relative;
+    width: 64%;
+    height: 6vh;
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: 400;
+    margin: 0 auto 0;
+    border-radius: 0px;}
+
+.inp_vist8::-webkit-inner-spin-button,
+.inp_vist8::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
+
+
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+main section.vista9 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+.ti_vist9 {position: relative;
+    width: 81%;
+    text-align: center;
+    margin: 6% auto 0;
+    font-size: 2.4em;
+    font-weight: 300;}
+
+.inp_vist9 {position: relative;
+    margin: 0% auto;
+    padding: 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1.8em;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    background: none;
+    color: #333;}
+
+
+.p_vist9 {position: relative;
+    width: 64%;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: 400;
+    margin: 0% auto;}
+
+.vist9_t {position: relative; width: 81%;
+    text-align: center;
+    margin: 7% auto 0%;
+    font-size: 2.4em;
+    font-weight: 300;}
+
+
+main section.vista9 p.vist9_t {position: relative;
+    width: 84%;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: 400;
+    margin: 0% auto;}
+
+.valid {position: relative;
+    margin: 3% auto 7% auto;
+    width: 85%;
+    height: 7vh;
+    display: flex;}
+
+.icons {position: absolute;
+    right: 5%;
+    top: 30%;
+    z-index: 9;}
+
+.icons span{ display: none;}
+
+.icon1 { color: #e74c3c; border-color: #e74c3c; position: relative; border: 1px solid; border-radius: 70px; width: 0px; height: 16px; padding: 0px 10px 0 7px;}
+
+.icon2 { color: #27ae60; border-color: #27ae60; position: relative; border: 1px solid; border-radius: 70px; width: 10px; height: 16px; padding: 0px 6px 0 1px;}
+
+.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 1.1rem; padding: 0px; border-radius: 2px; user-select: none; left: 30%; top: 107%; width: 39%; height: 32%; text-align: center; display: none;} 
+
+.text-error:before{ position: absolute; content: "";         top: -7px; width: 160px; height: 14px; text-align: center; right: 20px; transform: rotate(45deg);
+}
+
+.load{position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(255, 255, 255);
+    transition: all 500ms ease;
+    z-index: 99;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.carga_animacion {position: relative;
+    margin: auto auto;
+    width: 50%;
+    height: 11vh;}
+
+.cargac {position: relative;
+width: 100%;
+height: 100%;}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+
+
+
+main section.vista10 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
+
+
+main section.vista10 h1.vist10 {width: 61%;
+    text-align: left;
+    margin: 20% auto 15%;
+    font-size: 1.4em;
+    font-weight: 600;}
+
+main section.vista10 p.vist10 {position: relative;
+    width: 65%;
+    text-align: left;
+    font-size: 1.5em;
+    font-weight: 200;
+    margin: 0% auto;}
+
+.home {text-decoration: none;
+    color: #468bc4;
+}
+
 }
 
 /* .
@@ -2556,7 +3823,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     transition: 0.4s ease;
 }
 .circulo{
-    background-color: #fff;
+    background-color: var(--linea--borde-vacio);
     color: #999;
     border-radius: 40%;
     height: 10px;
@@ -2572,6 +3839,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 }
 .circulo.active{
     border-color: var(--linea--borde-relleno);
+    background-color: var(--linea--borde-relleno);
 }
 
 
@@ -3186,13 +4454,56 @@ main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 2em;
     font-weight: 300;}
 
-main section.vista7 input.inp_vist7 {margin: 5% 14%;
-    padding: 3% 0;
+.cont_inpu_direccion {position: relative;
+margin: 4% auto 7%;
+width: 70%;
+height: 6vh;
+display: flex;}
+
+.inp_vist7 {position: relative;
+    margin: 0 auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
-    font-size: 1em;
-    width: 70%;}
+    font-size: 2em;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border-radius: 0px;}
 
+.inp_vist7:valid ~ .inputext_direccion, .inp_vist7:focus ~ .inputext_direccion {
+color: #0572ce;
+transform: translateX(10px) translateY(-45px);
+font-size: 1.5em;
+transition: 0.5S;
+}
+
+.inputext_direccion {position: absolute;
+    width: 100%;
+    height: 40%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 4% 0;
+    pointer-events: none;
+    font-size: 2em;
+    color: #8f8f8f;
+    }
+
+.p_vist7{position: relative;
+    width: 64%;
+    height: 6vh;
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: 400;
+    margin: 0 auto 0;
+    border-radius: 0px;}
+
+.inp_vist7::-webkit-inner-spin-button,
+.inp_vist7::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 
 option {
   background-color: white;
@@ -3233,31 +4544,38 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 2.4em;
     font-weight: 300;}
 
-.cont_inpu_direccion {position: relative;
+.cont_inpu_celular {position: relative;
 margin: 4% auto 7%;
 width: 70%;
 height: 6vh;
 display: flex;}
+
+.cont_inpu_whatsapp {position: relative;
+    margin: 4% auto 7%;
+    width: 70%;
+    height: 6vh;
+    display: flex;}
 
 .inp_vist8 {position: relative;
     margin: 0 auto;
     padding: 0;
     border: 0px;
     border-bottom: solid 1px;
-    font-size: 2em;
+    font-size: 1.5em;
+    color: #606060;
     width: 100%;
     height: 100%;
     outline: none;
     border-radius: 0px;}
 
-.inp_vist8:valid ~ .inputext_direccion, .inp_vist8:focus ~ .inputext_direccion {
+.inp_vist8:valid ~ .inputext_celular, .inp_vist8:focus ~ .inputext_celular {
 color: #0572ce;
 transform: translateX(10px) translateY(-45px);
-font-size: 1.5em;
+font-size: 1.3em;
 transition: 0.5S;
 }
 
-.inputext_direccion {position: absolute;
+.inputext_celular {position: absolute;
     width: 100%;
     height: 40%;
     top: 0;
@@ -3265,7 +4583,7 @@ transition: 0.5S;
     text-align: left;
     padding: 4% 0;
     pointer-events: none;
-    font-size: 2em;
+    font-size: 1.7em;
     color: #8f8f8f;
     }
 
@@ -3700,7 +5018,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     transition: 0.4s ease;
 }
 .circulo{
-    background-color: #fff;
+    background-color: var(--linea--borde-vacio);
     color: #999;
     border-radius: 11px;
     height: 5px;
@@ -3716,6 +5034,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 }
 .circulo.active{
     border-color: var(--linea--borde-relleno);
+    background-color: var(--linea--borde-relleno);
 }
 
 
@@ -4354,20 +5673,48 @@ main section.vista7 {width: 100%; height: 90vh; position: relative; margin: 0 au
     font-size: 1.2em;
     font-weight: 300;}
 
-main section.vista7 input.inp_vist7 {margin: 5% 14%;
-    padding: 3% 0;
+.cont_inpu_direccion {position: relative;
+margin: 3% auto;
+width: 85%;
+height: 6vh;
+display: flex;}
+
+.inp_vist7 {position: relative;
+    margin: 0 auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
-    font-size: 1em;
-    width: 70%;}
+    font-size: 1.1em;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border-radius: 0px;}
 
-option {
-  background-color: white;
-  padding: 4px;
-  color: rgb(107, 107, 197);
-  margin-bottom: 1px;
-   font-size: 1em;
-  cursor: pointer;
+.inp_vist7:valid ~ .inputext_direccion, .inp_vist7:focus ~ .inputext_direccion {
+color: #0572ce;
+transform: translateX(10px) translateY(-25px);
+font-size: 1em;
+transition: 0.5S;
+}
+
+.inputext_direccion {position: absolute;
+    width: 100%;
+    height: 40%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 4% 0;
+    pointer-events: none;
+    font-size: 1.1em;
+    color: #9c9c9c;
+    font-weight: 300;
+    }
+
+
+.inp_vist7::-webkit-inner-spin-button,
+.inp_vist7::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
 }
 
 .btn_dir {position: fixed;
@@ -4400,31 +5747,39 @@ main section.vista8 {width: 100%; height: 90vh; position: relative; margin: 0 au
     font-size: 1.4em;
     font-weight: 300;}
 
-.cont_inpu_direccion {position: relative;
+.cont_inpu_celular {position: relative;
 margin: 3% auto;
 width: 85%;
 height: 6vh;
 display: flex;}
+
+.cont_inpu_whatsapp {position: relative;
+    margin: 5% auto;
+    width: 85%;
+    height: 6vh;
+    display: flex;}
 
 .inp_vist8 {position: relative;
     margin: 0 auto;
     padding: 0;
     border: 0px;
     border-bottom: solid 1px;
-    font-size: 1.1em;
+    font-size: 1em;
+    color: #606060;
     width: 100%;
     height: 100%;
     outline: none;
     border-radius: 0px;}
 
-.inp_vist8:valid ~ .inputext_direccion, .inp_vist8:focus ~ .inputext_direccion {
+.inp_vist8:valid ~ .inputext_celular, .inp_vist8:focus ~ .inputext_celular {
 color: #0572ce;
 transform: translateX(10px) translateY(-25px);
-font-size: 1em;
+font-size: 0.8em;
 transition: 0.5S;
 }
 
-.inputext_direccion {position: absolute;
+
+.inputext_celular {position: absolute;
     width: 100%;
     height: 40%;
     top: 0;
@@ -4432,7 +5787,7 @@ transition: 0.5S;
     text-align: left;
     padding: 4% 0;
     pointer-events: none;
-    font-size: 1.1em;
+    font-size: 1em;
     color: #9c9c9c;
     font-weight: 300;
     }
@@ -4875,7 +6230,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     transition: 0.4s ease;
 }
 .circulo{
-    background-color: #fff;
+    background-color: var(--linea--borde-vacio);
     color: #999;
     border-radius: 11px;
     height: 5px;
@@ -4892,6 +6247,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 
 .circulo.active{
     border-color: var(--linea--borde-relleno);
+    background-color: var(--linea--borde-relleno);
 }
 
 
@@ -5509,13 +6865,47 @@ main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1em;
     font-weight: 300;}
 
-main section.vista7 input.inp_vist7 {margin: 5% 14%;
-    padding: 3% 0;
+.inp_vist7 {position: relative;
+    margin: 0 auto;
+    padding: 0;
     border: 0px;
     border-bottom: solid 1px;
     font-size: 1em;
-    width: 70%;}
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border-radius: 0px;
+}
 
+.cont_inpu_direccion {position: relative;
+margin: 3% auto;
+width: 85%;
+height: 6vh;
+display: flex;}
+
+.inp_vist7:valid ~ .inputext_direccion, .inp_vist7:focus ~ .inputext_direccion {
+color: #0572ce;
+transform: translateX(10px) translateY(-15px);
+font-size: 0.8em;
+transition: 0.5S;
+}
+
+.inputext_direccion {position: absolute;
+    width: 100%;
+    height: 40%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 4% 0;
+    pointer-events: none;
+    font-size: 1em;
+    }
+
+.inp_vist7::-webkit-inner-spin-button,
+.inp_vist7::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 
 option {
   background-color: white;
@@ -5555,31 +6945,38 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: 1.4em;
     font-weight: 300;}
 
-.cont_inpu_direccion {position: relative;
+.cont_inpu_celular {position: relative;
 margin: 3% auto;
 width: 85%;
 height: 6vh;
 display: flex;}
+
+.cont_inpu_whatsapp {position: relative;
+    margin: 3% auto;
+    width: 85%;
+    height: 6vh;
+    display: flex;}
 
 .inp_vist8 {position: relative;
     margin: 0 auto;
     padding: 0;
     border: 0px;
     border-bottom: solid 1px;
-    font-size: 1em;
+    font-size: 0.8em;
+    color: #606060;
     width: 100%;
     height: 100%;
     outline: none;
     border-radius: 0px;}
 
-.inp_vist8:valid ~ .inputext_direccion, .inp_vist8:focus ~ .inputext_direccion {
+.inp_vist8:valid ~ .inputext_celular, .inp_vist8:focus ~ .inputext_celular {
 color: #0572ce;
 transform: translateX(10px) translateY(-15px);
 font-size: 0.8em;
 transition: 0.5S;
 }
 
-.inputext_direccion {position: absolute;
+.inputext_celular {position: absolute;
     width: 100%;
     height: 40%;
     top: 0;
@@ -5587,7 +6984,7 @@ transition: 0.5S;
     text-align: left;
     padding: 4% 0;
     pointer-events: none;
-    font-size: 1em;
+    font-size: 0.8em;
     }
 
 .inp_vist8::-webkit-inner-spin-button,
