@@ -31,8 +31,18 @@ from core.settings import logger
 class OpaWizard(SessionWizardView):
     auth_serv = {}
     foto_fmedica = None
-    form_valids = OrderedDict()
+    _form_valids = OrderedDict()
     rad_data = None
+
+    @property
+    def form_valids(self):
+        return self._form_valids
+
+    @form_valids.setter
+    def form_valids(self, value):
+        print("some_value changed to", value)
+        self._form_valids = value
+
     csrf_protected_method = method_decorator(csrf_protect)
 
     @csrf_protected_method
@@ -54,9 +64,9 @@ class OpaWizard(SessionWizardView):
         successful) or the done view (if no more steps are available)
         """
         method = self.request.method
+        logger.info(f"Formularios válidos -> {self._form_valids}")
         logger.info(
             f"${self.request.COOKIES.get('sessionid')[:6]} IP={self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))} "
-            f"[{method}.{self.response_class.status_code}] "
             f"agent={parse_agent(self.request.META.get('HTTP_USER_AGENT'))} "
             f"saliendo_de={self.steps.current}")
         # Look for a wizard_goto_step element in the posted data which
@@ -85,7 +95,7 @@ class OpaWizard(SessionWizardView):
         if form.is_valid():
             # if the form is valid, store the cleaned data and files.
             print(f'==> {form.prefix} is valid...')
-            self.form_valids[form.prefix] = form
+            self._form_valids[form.prefix] = form
             if form.prefix == "autorizacionServicio":
                 self.rad_data = form.cleaned_data
             self.storage.set_step_data(self.steps.current, self.process_step(form))
@@ -134,8 +144,9 @@ class OpaWizard(SessionWizardView):
             logger.info(
                 f"${self.request.COOKIES.get('sessionid')[:7]} vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
         ls_form_list = self.form_list.keys()
-        logger.info(f"${self.request.COOKIES.get('sessionid')[:7]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
-        logger.info(f"${self.request.COOKIES.get('sessionid')[:7]} Formularios validos : {self.form_valids}")
+        logger.info(
+            f"${self.request.COOKIES.get('sessionid')[:7]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
+        logger.info(f"${self.request.COOKIES.get('sessionid')[:7]} Formularios validos : {self._form_valids}")
 
         return self.get_form_step_data(form)
 
@@ -185,9 +196,10 @@ class OpaWizard(SessionWizardView):
 
         final_forms = OrderedDict()
         # walk through the form list and try to validate the data again.
-        for form_key, form_obj in self.form_valids.items():
+        for form_key, form_obj in self._form_valids.items():
             final_forms[form_key] = form_obj
         return self.done(list(final_forms.values()), form_dict=final_forms, **kwargs)
+
 
 
 FORMS = [
