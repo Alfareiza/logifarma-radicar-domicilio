@@ -49,8 +49,8 @@ class Command(BaseCommand):
                     if resp.get('ssc'):
                         logger.info(
                             f"{idx}. Cambiando acta para radicado #{rad.numero_radicado} de fecha {format(rad.datetime, '%D %T')}")
-                        # rad.acta_entrega = str(resp.get('ssc'))
-                        # var = rad.save
+                        rad.acta_entrega = str(resp.get('ssc'))
+                        var = rad.save
                         updated.append(rad.numero_radicado)
                     else:
                         logger.alert(
