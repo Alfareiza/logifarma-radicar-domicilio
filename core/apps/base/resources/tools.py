@@ -65,7 +65,7 @@ def parse_agent(agent: str) -> str:
 
         os_device.find(';')
         os_device.find(')')
-        device = os_device[os_device.find(';')+2:os_device.find(')')]
+        device = os_device[os_device.find(';') + 2:os_device.find(')')]
 
     except Exception as e:
         logger.warning("Parsear el agent=", agent, "ERROR=", e)
@@ -207,5 +207,6 @@ def notify(reason: str, subject: str, body: str):
             'error-api': 'Correo enviado notificando problema con API.',
             'error-archivo-url': 'Correo enviado notificando radicado sin archivo.',
             'error-email': 'Correo enviado notificando problema al enviar e-mail de confirmación.',
+            'check-acta': 'Correo enviado con reporte de chequeo de actas.',
         }
-        logger.error(msg[reason])
+        logger.info(msg[reason])
