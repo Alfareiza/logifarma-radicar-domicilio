@@ -1,0 +1,80 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Foto de la fórmula{% endblock %}
+
+{% block content %}
+
+<section class="vista4">
+     <form id="form-id" enctype="multipart/form-data" action="{% url 'base:spark' %}" method="post">
+
+        <button class="continuar" formnovalidate name=""
+            type="submit" value="" onclick="animabotoncarga_general()">
+            <p class="text_continuar">Continuar <i class="fa-solid fa-chevron-right"></i></p>
+    </button>
+
+        {% csrf_token %}
+        {{ wizard.management_form }}
+        {% include "base/logo.html" %}
+
+        <h1 class="vist4">Envíanos una foto de la <br> <strong>FORMULA MEDICA</strong> <br> que te entregó el médico tratante</h1>
+
+
+        <p class="vist4_1"> Nota: No de la autorización de Cajacopi EPS.</p>
+        {% for field in form %}
+            {{ field.error }}
+        {% endfor %}
+        {% if wizard.form.forms %}
+            {{ wizard.form.management_form }}
+        {% else %}
+            <div class="container">
+                <div class="conten_foto" style="object-fit: contain;">
+                    <img id="file-preview" class="img_fot">
+                </div>
+                <div class="btn_archi" id="id_btn_archi">
+<!--                <label for="file" id="fotoFormulaMedica-src">Select an Image</label>-->
+                    <input required type="file" name="fotoFormulaMedica-src" accept="image/*"
+                       id="id_fotoFormulaMedica-src" class="arch_btn" >
+                </div>
+            </div>
+            <button class="btn" id="btn_conti" type="submit" style="display: none;" onclick="animabotoncarga_general()">
+                Continuar
+                <div id="btn_carga" class="conten_carga">
+                    <div class="carga"></div>
+                </div>
+            </button>
+        {% endif %}
+    </form>
+
+    <div class="conten-progreso-global"><div class="pagina">Paso {{ wizard.steps.step1 }} de 7</div>
+        <div class="contenedor">
+            <div class="progreso-contenedor">
+               <div class="progreso2" id="progreso"></div>
+               <div class="circulo active"></div>
+               <div class="circulo active"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+            </div>
+        </div>
+      </div>
+
+</section>
+<script>
+    const continuarbtn = document.getElementById("btn_conti");
+    const uploadButton = document.getElementById('id_fotoFormulaMedica-src');
+    uploadButton.addEventListener('change', (e)=>{
+    const currFiles = e.target.files
+    if(currFiles.length > 0){
+          let src = URL.createObjectURL(currFiles[0])
+          let imagePreview = document.getElementById('file-preview')
+          let oul = document.getElementById('id_btn_archi')
+          imagePreview.src = src
+          imagePreview.style.display = "block"
+          continuarbtn.style.display = "block";
+          oul.style.display = "none";
+        }
+    })
+</script>
+{% endblock %}

@@ -218,15 +218,15 @@ FORMS = [
 ]
 
 TEMPLATES = {
-    "home": "home.html",
+    "home": "extras/home_spark.html",
     # "instrucciones": "instrucciones.html",
-    "autorizacionServicio": "autorizacion.html",
-    "fotoFormulaMedica": "foto.html",
-    # "avisoDireccion": "aviso_direccion.html",
-    "eligeMunicipio": "elige_municipio.html",
-    "digitaDireccionBarrio": "direccion_barrio.html",
-    "digitaCelular": "digita_celular.html",
-    "digitaCorreo": "digita_correo.html"}
+    "autorizacionServicio": "extras/autorizacion_spark.html",
+    "fotoFormulaMedica": "extras/foto_spark.html",
+    # "avisoDireccion": "aviso_direccion_spark.html",
+    "eligeMunicipio": "extras/elige_municipio_spark.html",
+    "digitaDireccionBarrio": "extras/direccion_barrio_spark.html",
+    "digitaCelular": "extras/digita_celular_spark.html",
+    "digitaCorreo": "extras/digita_correo_spark.html"}
 
 htmly = get_template(BASE_DIR / "core/apps/base/templates/correo.html")
 
@@ -283,7 +283,6 @@ class Spark(OpaWizard):
         self.request.session['temp_data'] = form_data
         return HttpResponseRedirect(reverse('base:done'))
 
-    @logtime('CORE')
     def process_from_data(self, form_list) -> dict:
         """
         Guarda en base de datos y envía el correo con la información capturada
@@ -327,7 +326,6 @@ class Spark(OpaWizard):
 
         return form_data['autorizacionServicio']['num_autorizacion']
 
-    @logtime('EMAIL')
     def prepare_email(self, info_email):
         copia_oculta = config('EMAIL_BCC', cast=Csv())
 
