@@ -20,7 +20,7 @@ class Command(BaseCommand):
     def pretty_date(self, dt) -> str:
         return format(dt, '%d/%h')
 
-    def calc_interval_dates(self, start=1, end=0):
+    def calc_interval_dates(self, start=4, end=2):
         """Calculates the dates according to an interval of days"""
         tod = datetime.datetime.now()
         s = datetime.timedelta(days=start)
