@@ -1,4 +1,5 @@
 import urllib.request
+from datetime import date, timedelta
 from pathlib import Path
 
 from django.core.mail import EmailMessage
@@ -65,7 +66,7 @@ def parse_agent(agent: str) -> str:
 
         os_device.find(';')
         os_device.find(')')
-        device = os_device[os_device.find(';')+2:os_device.find(')')]
+        device = os_device[os_device.find(';') + 2:os_device.find(')')]
 
     except Exception as e:
         logger.warning("Parsear el agent=", agent, "ERROR=", e)
@@ -207,5 +208,44 @@ def notify(reason: str, subject: str, body: str):
             'error-api': 'Correo enviado notificando problema con API.',
             'error-archivo-url': 'Correo enviado notificando radicado sin archivo.',
             'error-email': 'Correo enviado notificando problema al enviar e-mail de confirmación.',
+            'check-acta': 'Correo enviado con reporte de chequeo de actas.',
         }
-        logger.error(msg[reason])
+        logger.info(msg[reason])
+
+
+def months() -> tuple:
+    """Return the list of months in spanish"""
+    return ('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre',
+            'Diciembre')
+
+
+def pretty_date(dt) -> str:
+    """
+    Receives a date and return the nex format:
+    13 de Febrero del 2023 a las 10:05 AM
+    hoy a las 7:44 AM
+    ayer a las 2:08 PM
+    """
+
+    first_part = when(dt)
+    return format(dt, f'{first_part} a las %I:%M %p')
+
+
+def when(dt) -> str:
+    """
+    Validate the day of the input date and might return the next:
+        - 'Ayer'
+        - 'Hoy'
+        - '%e de Julio'
+    """
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+    if today.day == dt.day:
+        return 'hoy'
+    elif yesterday.day == dt.day:
+        return 'ayer'
+    else:
+        month = months()
+        m = dt.month
+        return f'el %e de {month[m]}'

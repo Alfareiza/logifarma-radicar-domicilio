@@ -1,0 +1,29 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Listo{% endblock %}
+
+{% block content %}
+<section class="vista10">
+
+    
+    <div class="vist1">
+        <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
+    </div>
+
+    <h1 class="vist10">¡Proceso terminado!</h1>
+
+    <p class="vist10">
+        Nos encontramos haciendo validación de tus
+        documentos, si todo esta correcto un agente le
+        notificara la radicación exitosa de su solicitud.
+    </p>
+
+    <button class="btn" id="btn_conti" type="button" onclick="animabotoncarga_general()">
+        <a class="home" href="{% url 'base:spark' %}"> Finalizar</a>
+        <div id="btn_carga" class="conten_carga">
+            <div class="carga"></div>
+        </div>
+    </button>
+</section>
+{% endblock %}
