@@ -24,7 +24,7 @@ os.environ["PATH"] += f'{os.pathsep}/usr/local/bin'
 class VisualWizardTests(StaticLiveServerTestCase):
     vistas = [ele[0] for ele in FORMS]
     map_vistas = [
-        {'Inicio': 'self.process_home()'},
+        {'Domicilios Logifarma': 'self.process_home()'},
         {'Autorización de servicio': "self.process_autorizacion()"},
         {'Foto de la fórmula': 'self.process_foto()'},
         {'Elige Municipio': 'self.process_elige_municipio()'},
