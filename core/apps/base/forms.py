@@ -1,8 +1,9 @@
 from django import forms
+from django.utils import timezone
 
 from core.apps.base.models import Municipio, Barrio, Radicacion
 from core.apps.base.resources.api_calls import call_api_eps, call_api_medicar
-from core.apps.base.resources.tools import read_json
+from core.apps.base.resources.tools import read_json, pretty_date
 from core.settings import logger
 
 
@@ -32,9 +33,11 @@ class AutorizacionServicio(forms.Form):
             resp_eps = read_json('resources/fake.json')
         elif num_aut == 99_999_998:
             resp_eps = read_json('resources/fake_file.json')
-        elif Radicacion.objects.filter(numero_radicado=num_aut).exists():
+        elif rad := Radicacion.objects.filter(numero_radicado=num_aut).first():
             logger.info(f"Número de autorización {num_aut} radicado anteriormente")
-            raise forms.ValidationError(f"Número de autorización {num_aut} se encuentra radicado.")
+            raise forms.ValidationError(f"Número de autorización {num_aut} radicado"
+                                        f" {pretty_date(rad.datetime.astimezone(timezone.get_current_timezone()))}.\n\n"
+                                        f"Si tiene alguna duda se puede comunicar con nosotros al 3330333124.")
         else:
             resp_eps = call_api_eps(num_aut)
 
