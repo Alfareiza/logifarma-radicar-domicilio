@@ -35,8 +35,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         start, end = self.calc_interval_dates()
         rads = Radicacion.objects.filter(datetime__gte=start).filter(datetime__lte=end).filter(
-            acta_entrega=None
-        )
+            acta_entrega__exact='None'
+        ).order_by('datetime')
         errs, updated, alert = [], [], []
         logger.info('Ejecutando script de chequeo de actas.')
         if rads:
@@ -55,18 +55,17 @@ class Command(BaseCommand):
                     else:
                         logger.alert(
                             f'{idx}.  Radicado #{rad.numero_radicado} no tiene aún número de acta. {rad.datetime}.')
-                        alert.append(rad.numero_radicado)
+                        alert.append(f"Radicado #{rad.numero_radicado} radicado el {self.pretty_date(rad.datetime)}")
                 else:
                     logger.warning(
                         f"{idx}. \'SSC\' no encontrado en respuesta de API de Radicado #{rad.numero_radicado}.")
                     errs.append(rad.numero_radicado)
             notify('check-acta',
-                   "PRUEBA",
-                   # f"Reporte radicados sin acta del {format(start, '%D')} al {format(end, '%D')}",
+                   f"Reporte de radicados sin acta del {format(start, '%D')} al {format(end, '%D')}",
                    f"Analisis ejecutado el {format(self.pretty_date(datetime.datetime.now()))}.\n\n" \
                    f"Intervalo analizado: Desde el {self.start} hasta {self.end}.\n\n" \
                    f"Radicados analizados: {len(rads)}.\n\n" \
-                   f"Radicados actualizados: {len(updated)}. {', '.join(updated)}\n\n" \
+                   f"Radicados actualizados: {len(updated)}. \n\n" \
                    f"Radicados sin fecha de acta: {len(alert)}. {', '.join(alert)}\n\n" \
                    f"Radicados con error al consultarse: {len(errs)}. {', '.join(errs)}")
         else:
