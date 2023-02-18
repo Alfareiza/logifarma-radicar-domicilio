@@ -35,7 +35,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         start, end = self.calc_interval_dates()
         rads = Radicacion.objects.filter(datetime__gte=start).filter(datetime__lte=end).filter(
-            acta_entrega__exact='None'
+            acta_entrega=None
         ).order_by('datetime')
         errs, updated, alert = [], [], []
         logger.info('Ejecutando script de chequeo de actas.')
@@ -47,28 +47,31 @@ class Command(BaseCommand):
                 resp = call_api_medicar(rad.numero_radicado)
                 if 'ssc' in resp:
                     if resp.get('ssc'):
-                        logger.info(
-                            f"{idx}. Cambiando acta para radicado #{rad.numero_radicado} de fecha {format(rad.datetime, '%D %T')}")
+                        logger.info(f"{idx}. Cambiando acta para radicado #{rad.numero_radicado}"
+                                    f" de fecha {format(rad.datetime, '%D %T')}")
                         rad.acta_entrega = str(resp.get('ssc'))
                         var = rad.save
                         updated.append(rad.numero_radicado)
                     else:
-                        logger.alert(
-                            f'{idx}.  Radicado #{rad.numero_radicado} no tiene aún número de acta. {rad.datetime}.')
-                        alert.append(f"Radicado #{rad.numero_radicado} radicado el {self.pretty_date(rad.datetime)}")
+                        logger.alert(f'{idx}.  Radicado #{rad.numero_radicado} no '
+                                     f'tiene aún número de acta. {rad.datetime}.')
+                        alert.append(f"Radicado #{rad.numero_radicado} radicado el {self.pretty_date(rad.datetime)} "
+                                     f"y autorizado el {rad.paciente_data['FECHA_AUTORIZACION']}")
                 else:
-                    logger.warning(
-                        f"{idx}. \'SSC\' no encontrado en respuesta de API de Radicado #{rad.numero_radicado}.")
+                    logger.warning(f"{idx}. \'SSC\' no encontrado en "
+                                   f"respuesta de API de Radicado #{rad.numero_radicado}.")
                     errs.append(rad.numero_radicado)
-            notify('check-acta',
-                   f"Reporte de radicados sin acta del {format(start, '%D')} al {format(end, '%D')}",
-                   f"Analisis ejecutado el {format(self.pretty_date(datetime.datetime.now()))}.\n\n" \
-                   f"Intervalo analizado: Desde el {self.start} hasta {self.end}.\n\n" \
-                   f"Radicados analizados: {len(rads)}.\n\n" \
-                   f"Radicados actualizados: {len(updated)}. \n\n" \
-                   f"Radicados sin fecha de acta: {len(alert)}. {', '.join(alert)}\n\n" \
-                   f"Radicados con error al consultarse: {len(errs)}. {', '.join(errs)}")
+            if alert:
+                notify('check-acta',
+                       f"Reporte de radicados sin acta del {format(start, '%D')} al {format(end, '%D')}",
+                       f"Analisis ejecutado el {format(self.pretty_date(datetime.datetime.now()))}.\n\n" \
+                       f"Intervalo analizado: Desde el {self.start} hasta {self.end}.\n\n" \
+                       f"Radicados analizados: {len(rads)}.\n\n" \
+                       f"Radicados actualizados: {len(updated)}. \n\n" \
+                       f"Radicados sin fecha de acta: {len(alert)}. {', '.join(alert)}\n\n" \
+                       f"Radicados con error al consultarse: {len(errs)}. {', '.join(errs)}")
         else:
-            logger.info(f"No se encontraron radicados entre el {format(start, '%D %T')} y el {format(end, '%D %T')}.")
+            logger.info(f"No se encontraron radicados entre el"
+                        f" {format(start, '%D %T')} y el {format(end, '%D %T')}.")
 
         # self.stdout.write(self.style.SUCCESS('Successfully closed poll "%s"' % poll_id))
