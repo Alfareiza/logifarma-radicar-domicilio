@@ -71,7 +71,6 @@ class Command(BaseCommand):
                 notify('check-acta',
                        f"Reporte de radicados sin acta hasta el {format(end, '%D')}",
                        f"Analisis ejecutado el {format(self.pretty_date(datetime.datetime.now()))}.\n\n" \
-                       f"Intervalo analizado: Desde el {self.start} hasta {self.end}.\n\n" \
                        f"Radicados analizados: {len(rads)}.\n\n" \
                        f"Radicados actualizados: {len(updated)}. \n\n" \
                        f"Radicados sin fecha de acta: {len(alert)}. {', '.join(alert)}\n\n" \
