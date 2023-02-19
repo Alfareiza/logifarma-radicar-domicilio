@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 from core.apps.base.models import Radicacion
 from core.apps.base.resources.api_calls import call_api_medicar, should_i_call_auth
 from core.apps.base.resources.decorators import logtime
-from core.apps.base.resources.tools import notify
+from core.apps.base.resources.tools import notify, day_slash_month_year, pretty_date
 from core.settings import logger
 
 
@@ -19,9 +19,6 @@ class Command(BaseCommand):
         self.start = None
         self.end = None
 
-    def pretty_date(self, dt) -> str:
-        return format(dt, '%d/%h')
-
     def calc_interval_dates(self, start=4, end=2):
         """Calculates the dates according to an interval of days"""
         tod = datetime.datetime.now()
@@ -29,8 +26,8 @@ class Command(BaseCommand):
         e = datetime.timedelta(days=end)
         start = (tod - s).replace(hour=0, minute=0, second=0)
         end = (tod - e).replace(hour=23, minute=59, second=59)
-        self.start = self.pretty_date(start)
-        self.end = self.pretty_date(end)
+        self.start = pretty_date(start)
+        self.end = pretty_date(end)
         return start, end
 
     @logtime('SCRIPT')
@@ -58,23 +55,24 @@ class Command(BaseCommand):
                             else:
                                 logger.alert(f'Radicado #{rad.numero_radicado} no '
                                              f'tiene aún número de acta. {rad.datetime}.')
-                                alert.append(f"#{rad.numero_radicado} radicado el {self.pretty_date(rad.datetime)} "
-                                             f"y autorizado el {rad.paciente_data['FECHA_AUTORIZACION']}")
+                                alert.append(f"\t\t#{rad.numero_radicado} radicado el {day_slash_month_year(rad.datetime)} "
+                                             f"y autorizado el {rad.paciente_data['FECHA_AUTORIZACION']}.")
                         else:
-                            logger.warning(f"\'SSC\' no encontrado en respuesta de API de Radicado #{rad.numero_radicado}.")
-                            errs.append(f"#{rad.numero_radicado} radicado el {self.pretty_date(rad.datetime)} "
-                                        f"y autorizado el {rad.paciente_data['FECHA_AUTORIZACION']}")
+                            logger.warning(
+                                f"\'SSC\' no encontrado en respuesta de API de Radicado #{rad.numero_radicado}.")
+                            errs.append(f"#{rad.numero_radicado} radicado el {day_slash_month_year(rad.datetime)} "
+                                        f"y autorizado el {rad.paciente_data['FECHA_AUTORIZACION']}.\n")
                     except Exception as exc:
                         print(f'{rad!r} generated an exception: {exc}')
 
             if alert or errs:
                 notify('check-acta',
-                       f"Reporte de radicados sin acta hasta el {format(end, '%D')}",
-                       f"Analisis ejecutado el {format(self.pretty_date(datetime.datetime.now()))}.\n\n" \
+                       f"Reporte de radicados sin acta hasta el {format(end, '%d/%m')}",
+                       f"Analisis ejecutado el {day_slash_month_year(datetime.datetime.now())}.\n\n" \
                        f"Radicados analizados: {len(rads)}.\n\n" \
                        f"Radicados actualizados: {len(updated)}. \n\n" \
-                       f"Radicados sin fecha de acta: {len(alert)}. {', '.join(alert)}\n\n" \
-                       f"Radicados con error al consultarse: {len(errs)}. {', '.join(errs)}")
+                       f"Radicados sin fecha de acta: {len(alert)}.\n{' '.join(alert)}\n\n" \
+                       f"Radicados con error al consultarse: {len(errs)}.\n {' '.join(errs)}")
         else:
             logger.info(f"No se encontraron radicados con \'acta_entrega\' vacía desde el inicio"
                         f" de los tiempos, hasta el {format(end, '%D %T')}.")

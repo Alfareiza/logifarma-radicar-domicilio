@@ -232,6 +232,14 @@ def pretty_date(dt) -> str:
     return format(dt, f'{first_part} a las %I:%M %p')
 
 
+def day_slash_month_year(dt) -> str:
+    """
+    Return a date with the next format:
+        - 13/07/23
+    """
+    return format(dt, '%d/%m/%y')
+
+
 def when(dt) -> str:
     """
     Validate the day of the input date and might return the next:
