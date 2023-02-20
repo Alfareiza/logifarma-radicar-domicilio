@@ -218,9 +218,8 @@ class Spark(OpaWizard):
                 se debe retonar en esta función.
         """
         # form_data = [form.cleaned_data for form in form_list]
-        data = kwargs['form_dict'][self.request.COOKIES.get('sessionid')[:7]]
         # form_data = {form.prefix: form.cleaned_data for form in form_list}
-        form_data = {k: v.cleaned_data for k, v in data.items()}
+        form_data = {k: v.cleaned_data for k, v in kwargs['form_dict'].items() if v.is_bound}
 
         if 'fotoFormulaMedica' in form_data:
             self.foto_fmedica = form_data['fotoFormulaMedica']['src']
@@ -233,14 +232,14 @@ class Spark(OpaWizard):
             **form_data['digitaCelular'],  # Celular
             **form_data['digitaCorreo'],  # e-mail
         }
-
+        # breakpoint()
         # Guardará en BD cuando DEBUG sean números reales
         # if info_email['NUMERO_AUTORIZACION'] not in [99_999_999, 99_999_998]:
         #     guardar_info_bd(**info_email, ip=self.request.META.get('HTTP_X_FORWARDED_FOR',
         #                                                            self.request.META.get('REMOTE_ADDR')))
 
         logger.info(f"${self.request.COOKIES.get('sessionid')[:6]} Radicación finalizada. E-mail de confirmación "
-                    f"será enviado a {form_data['digitaCorreo']}")
+                    f"será enviado a {form_data['digitaCorreo']['email'] if form_data.get('digitaCorreo') else ''}")
 
 
         # Envía e-mail
@@ -397,7 +396,9 @@ class Spark(OpaWizard):
                 files=self.storage.get_step_files(form_key)
             )
             if not form_obj.is_valid():
-                return self.render_revalidation_failure(form_key, form_obj, **kwargs)
+                ...
+                print(f'El formulario {form.prefix} no es válido...')
+                # return self.render_revalidation_failure(form_key, form_obj, **kwargs)
             # print(f'{form_key=}')
             final_forms[form_key] = form_obj
 
