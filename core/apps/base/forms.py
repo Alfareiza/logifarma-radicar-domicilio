@@ -34,9 +34,9 @@ class AutorizacionServicio(forms.Form):
         elif num_aut == 99_999_998:
             resp_eps = read_json('resources/fake_file.json')
         elif rad := Radicacion.objects.filter(numero_radicado=num_aut).first():
-            logger.info(f"Número de autorización {num_aut} radicado anteriormente")
-            raise forms.ValidationError(f"Número de autorización {num_aut} radicado"
-                                        f" {pretty_date(rad.datetime.astimezone(timezone.get_current_timezone()))}.\n\n"
+            dt = pretty_date(rad.datetime.astimezone(timezone.get_current_timezone()))
+            logger.info(f"Número de autorización {num_aut} radicado {dt}.")
+            raise forms.ValidationError(f"Número de autorización {num_aut} radicado {dt}.\n\n"
                                         f"Si tiene alguna duda se puede comunicar con nosotros al 3330333124.")
         else:
             resp_eps = call_api_eps(num_aut)

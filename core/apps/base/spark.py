@@ -181,17 +181,6 @@ class Spark(OpaWizard):
     form_list = FORMS
     file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
     condition_dict = {'fotoFormulaMedica': show_fotoFormulaMedica}
-    # _form_valids = OrderedDict()
-
-    # @property
-    # def form_valids(self):
-    #     return self._form_valids
-    #
-    # @form_valids.setter
-    # def form_valids(self, value):
-    #     print("some_value changed to", value)
-    #     self._form_valids = value
-
 
     def get_template_names(self):
         return [TEMPLATES[self.steps.current]]
@@ -395,14 +384,9 @@ class Spark(OpaWizard):
                 data=self.storage.get_step_data(form_key),
                 files=self.storage.get_step_files(form_key)
             )
-            if not form_obj.is_valid():
-                ...
-                print(f'El formulario {form.prefix} no es válido...')
-                # return self.render_revalidation_failure(form_key, form_obj, **kwargs)
-            # print(f'{form_key=}')
-            final_forms[form_key] = form_obj
+            if form_obj.is_valid():
+                final_forms[form_key] = form_obj
 
-        print(f'{final_forms=}')
         return self.done(list(final_forms.values()), form_dict=final_forms, **kwargs)
 
 def finalizado_spark(request):

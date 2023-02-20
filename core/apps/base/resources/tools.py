@@ -215,7 +215,7 @@ def notify(reason: str, subject: str, body: str):
 
 def months() -> tuple:
     """Return the list of months in spanish"""
-    return ('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    return ('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
             'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre',
             'Diciembre')
 
