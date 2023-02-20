@@ -71,7 +71,7 @@ class OpaWizard(SessionWizardView):
             #     f"${self.request.COOKIES.get('sessionid')[:7]} vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
         # ls_form_list = self.form_list.keys()
         # logger.info(f"${self.request.COOKIES.get('sessionid')[:7]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
-        logger.info(f"[en el process_step] ${self.request.COOKIES.get('sessionid')[:7]} Formularios validos : {self._form_valids}")
+        # logger.info(f"[en el process_step] ${self.request.COOKIES.get('sessionid')[:7]} Formularios validos : {self._form_valids}")
 
         return self.get_form_step_data(form)
 
@@ -181,16 +181,16 @@ class Spark(OpaWizard):
     form_list = FORMS
     file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
     condition_dict = {'fotoFormulaMedica': show_fotoFormulaMedica}
-    _form_valids = OrderedDict()
+    # _form_valids = OrderedDict()
 
-    @property
-    def form_valids(self):
-        return self._form_valids
-
-    @form_valids.setter
-    def form_valids(self, value):
-        print("some_value changed to", value)
-        self._form_valids = value
+    # @property
+    # def form_valids(self):
+    #     return self._form_valids
+    #
+    # @form_valids.setter
+    # def form_valids(self, value):
+    #     print("some_value changed to", value)
+    #     self._form_valids = value
 
 
     def get_template_names(self):
@@ -200,7 +200,7 @@ class Spark(OpaWizard):
         logger.info(f"${self.request.COOKIES.get('sessionid')[:7]} Entrando en done {form_list=}")
         form_data = self.process_from_data(form_list, **kwargs)
         self.request.session['temp_data'] = form_data
-        del self._form_valids[self.request.COOKIES.get('sessionid')[:7]]
+        # del self._form_valids[self.request.COOKIES.get('sessionid')[:7]]
         return HttpResponseRedirect('/finalizado_spark/')
 
     def process_from_data(self, form_list, **kwargs) -> dict:
@@ -315,11 +315,11 @@ class Spark(OpaWizard):
             sessionid = 'Unknown'
         logger.info(f"${sessionid[:7]} "
                     f"IP={self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))} entró en vista={self.request.resolver_match.url_name}")
-        if self._form_valids and (sessionid[:7] in self._form_valids):
-            del self._form_valids[self.request.COOKIES.get('sessionid')[:7]]
-            logger.info(f'${sessionid[:7]} Abierta otra sessión en paralelo')
+        # if self._form_valids and (sessionid[:7] in self._form_valids):
+            # del self._form_valids[self.request.COOKIES.get('sessionid')[:7]]
+            # logger.info(f'${sessionid[:7]} Abierta otra sessión en paralelo')
 
-        logger.info(f'${sessionid[:7]} [En el get] formularios validos {self._form_valids}')
+        # logger.info(f'${sessionid[:7]} [En el get] formularios validos {self._form_valids}')
         return super().get(request, *args, **kwargs)
 
     @csrf_protected_method
@@ -357,12 +357,12 @@ class Spark(OpaWizard):
         # and try to validate
         if form.is_valid():
             # if the form is valid, store the cleaned data and files.
-            ssid = self.request.COOKIES.get('sessionid')[:7]
-            if ssid not in self._form_valids:
-                self._form_valids[self.request.COOKIES.get('sessionid')[:7]] = OrderedDict()
-
-            self._form_valids[self.request.COOKIES.get('sessionid')[:7]][form.prefix] = form
-
+            # ssid = self.request.COOKIES.get('sessionid')[:7]
+            # if ssid not in self._form_valids:
+            #     self._form_valids[self.request.COOKIES.get('sessionid')[:7]] = OrderedDict()
+            #
+            # self._form_valids[self.request.COOKIES.get('sessionid')[:7]][form.prefix] = form
+            #
             if form.prefix == "autorizacionServicio":
                 self.rad_data = form.cleaned_data
 
@@ -388,20 +388,20 @@ class Spark(OpaWizard):
 
         final_forms = OrderedDict()
         # walk through the form list and try to validate the data again.
-        for form_key, form_obj in self._form_valids.items():
-            final_forms[form_key] = form_obj
-        # for form_key in self.get_form_list():
-        #     form_obj = self.get_form(
-        #         step=form_key,
-        #         data=self.storage.get_step_data(form_key),
-        #         files=self.storage.get_step_files(form_key)
-        #     )
-        #     if not form_obj.is_valid():
-        #         return self.render_revalidation_failure(form_key, form_obj, **kwargs)
-        #     print(f'{form_key=}')
+        # for form_key, form_obj in self._form_valids.items():
         #     final_forms[form_key] = form_obj
-        #
-        # print(f'{final_forms=}')
+        for form_key in self.get_form_list():
+            form_obj = self.get_form(
+                step=form_key,
+                data=self.storage.get_step_data(form_key),
+                files=self.storage.get_step_files(form_key)
+            )
+            if not form_obj.is_valid():
+                return self.render_revalidation_failure(form_key, form_obj, **kwargs)
+            # print(f'{form_key=}')
+            final_forms[form_key] = form_obj
+
+        print(f'{final_forms=}')
         return self.done(list(final_forms.values()), form_dict=final_forms, **kwargs)
 
 def finalizado_spark(request):
