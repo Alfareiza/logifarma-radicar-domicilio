@@ -38,11 +38,11 @@ class CustomSessionWizard(SessionWizardView):
         successful) or the done view (if no more steps are available)
         """
         method = self.request.method
-        logger.info(
-            f"{self.request.COOKIES.get('sessionid')[:6]} IP={self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))} "
-            f"[{method}.{self.response_class.status_code}] "
-            f"agent={parse_agent(self.request.META.get('HTTP_USER_AGENT'))} "
-            f"saliendo_de={self.steps.current}")
+        # logger.info(
+        #     f"{self.request.COOKIES.get('sessionid')[:6]} IP={self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))} "
+        #     f"[{method}.{self.response_class.status_code}] "
+        #     f"agent={parse_agent(self.request.META.get('HTTP_USER_AGENT'))} "
+        #     f"saliendo_de={self.steps.current}")
         # Look for a wizard_goto_step element in the posted data which
         # contains a valid step name. If one was found, render the requested
         # form. (This makes stepping back a lot easier).
@@ -68,7 +68,7 @@ class CustomSessionWizard(SessionWizardView):
         # and try to validate
         if form.is_valid():
             # if the form is valid, store the cleaned data and files.
-            self.form_valids[form.prefix] = form
+            # self.form_valids[form.prefix] = form
             if form.prefix == "autorizacionServicio":
                 self.rad_data = form.cleaned_data
             self.storage.set_step_data(self.steps.current, self.process_step(form))
@@ -117,9 +117,6 @@ class CustomSessionWizard(SessionWizardView):
             logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
         ls_form_list = self.form_list.keys()
         logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
-            # if self.steps.current == 'autorizacionServicio':
-            #     self.auth_serv = form.cleaned_data
-
         return self.get_form_step_data(form)
 
     def render_goto_step(self, *args, **kwargs):
@@ -133,8 +130,6 @@ class CustomSessionWizard(SessionWizardView):
         """
         logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Acabó de clicar "
                     f"en \'< Atrás\' para ir de {self.steps.current} a {args[0]}.")
-        # if 'autorizacionServicio' in args:
-        #     CustomSessionWizard.new_form_list.clear()
         form = self.get_form(data=self.request.POST, files=self.request.FILES)
         # self.storage.set_step_data(self.steps.current, self.process_step(form))
         self.storage.set_step_files(self.steps.first, self.process_step_files(form))
@@ -177,10 +172,9 @@ class CustomSessionWizard(SessionWizardView):
                 data=self.storage.get_step_data(form_key),
                 files=self.storage.get_step_files(form_key)
             )
-            if not form_obj.is_valid():
-                return self.render_revalidation_failure(form_key, form_obj, **kwargs)
-
-            final_forms[form_key] = form_obj
+            if form_obj.is_valid():
+                final_forms[form_key] = form_obj
+                # return self.render_revalidation_failure(form_key, form_obj, **kwargs)
 
         # self.storage.reset()
         return self.done(list(final_forms.values()), form_dict=final_forms, **kwargs)

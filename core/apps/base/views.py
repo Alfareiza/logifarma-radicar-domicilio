@@ -65,7 +65,7 @@ def show_fotoFormulaMedica(wizard) -> bool:
         ssid = wizard.request.COOKIES.get('sessionid')
         if not ssid:
             ssid = 'Unknown'
-        logger.info(f"{ssid} Validando si radicado tiene URL con formula médica.")
+        logger.info(f"{ssid[:7]} Validando si radicado tiene URL con formula médica.")
         if cleaned_data := wizard.rad_data:
             url = cleaned_data['num_autorizacion']['ARCHIVO']
             rad = cleaned_data['num_autorizacion']['NUMERO_AUTORIZACION']
@@ -77,26 +77,26 @@ def show_fotoFormulaMedica(wizard) -> bool:
                f"RESPUESTA DE API: {cleaned_data}\n\n")
         return True
     finally:
-        logger.info(f"{ssid} Validación de URL finalizada.")
+        logger.info(f"{ssid[:7]} Validación de URL finalizada.")
 
 
 class ContactWizard(CustomSessionWizard):
     # template_name = 'start.html'
     form_list = FORMS
     file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
-    # condition_dict = {'fotoFormulaMedica': show_fotoFormulaMedica}
+    condition_dict = {'fotoFormulaMedica': show_fotoFormulaMedica}
 
     def get_template_names(self):
         return [TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
         logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Entrando en done {form_list=}")
-        form_data = self.process_from_data(form_list)
+        form_data = self.process_from_data(form_list, **kwargs)
         self.request.session['temp_data'] = form_data
         return HttpResponseRedirect(reverse('base:done'))
 
     @logtime('CORE')
-    def process_from_data(self, form_list) -> dict:
+    def process_from_data(self, form_list, **kwargs) -> dict:
         """
         Guarda en base de datos y envía el correo con la información capturada
         en el paso autorizacionServicio.
@@ -111,11 +111,10 @@ class ContactWizard(CustomSessionWizard):
                 se debe retonar en esta función.
         """
         # form_data = [form.cleaned_data for form in form_list]
-        form_data = {form.prefix: form.cleaned_data for form in form_list}
+        form_data = {k: v.cleaned_data for k, v in kwargs['form_dict'].items()}
 
         if 'fotoFormulaMedica' in form_data:
             self.foto_fmedica = form_data['fotoFormulaMedica']['src']
-
 
         # Construye las variables que serán enviadas al template
         info_email = {
