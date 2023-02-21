@@ -65,7 +65,7 @@ def show_fotoFormulaMedica(wizard) -> bool:
         ssid = wizard.request.COOKIES.get('sessionid')
         if not ssid:
             ssid = 'Unknown'
-        logger.info(f"{ssid[:7]} Validando si radicado tiene URL con formula médica.")
+        # logger.info(f"{ssid[:7]} Validando si radicado tiene URL con formula médica.")
         if cleaned_data := wizard.rad_data:
             url = cleaned_data['num_autorizacion']['ARCHIVO']
             rad = cleaned_data['num_autorizacion']['NUMERO_AUTORIZACION']
@@ -77,7 +77,8 @@ def show_fotoFormulaMedica(wizard) -> bool:
                f"RESPUESTA DE API: {cleaned_data}\n\n")
         return True
     finally:
-        logger.info(f"{ssid[:7]} Validación de URL finalizada.")
+        ...
+        # logger.info(f"{ssid[:7]} Validación de URL finalizada.")
 
 
 class ContactWizard(CustomSessionWizard):

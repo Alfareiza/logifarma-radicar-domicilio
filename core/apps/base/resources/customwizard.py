@@ -115,8 +115,8 @@ class CustomSessionWizard(SessionWizardView):
                         f"nada en vista{idx_view}={self.steps.current}")
         else:
             logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
-        ls_form_list = self.form_list.keys()
-        logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
+        # ls_form_list = self.form_list.keys()
+        # logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
         return self.get_form_step_data(form)
 
     def render_goto_step(self, *args, **kwargs):

@@ -42,7 +42,7 @@ class AutorizacionServicio(forms.Form):
             resp_eps = call_api_eps(num_aut)
 
         if resp_eps.get('codigo') == "1":
-            logger.info(f"Número de autorización {num_aut} no encontrado")
+            logger.info(f"Número de autorización {num_aut} no encontrado.")
             raise forms.ValidationError(f"Número de autorización {num_aut} no encontrado\n\n"
                                         "Por favor verifique\n\n"
                                         "Si el número está correcto, comuníquese con cajacopi EPS\n"
@@ -63,17 +63,17 @@ class AutorizacionServicio(forms.Form):
                     break
 
         if inconsistencia:
-            logger.info(f"Incosistencia en número de autorización {num_aut}")
+            logger.info(f"Incosistencia en radicado #{num_aut}.")
             raise forms.ValidationError(f"Detectamos un problema interno con este número de autorización\n"
                                         f"{num_aut}\n\n"
                                         "Comuníquese con Logifarma al 3330333124")
 
         if resp_eps.get('ESTADO_AFILIADO') != 'ACTIVO':
-            logger.info("Afiliado no se encuentra activo")
-            raise forms.ValidationError("Afiliado no se encuentra activo")
+            logger.info(f"EL estado del afiliado de radicado #{num_aut} no se encuentra activo.")
+            raise forms.ValidationError("Afiliado no se encuentra activo.")
 
         if resp_eps.get('ESTADO_AUTORIZACION') != 'PROCESADA':
-            logger.info("El estado de la autorización no está activa.")
+            logger.info(f"El estado de la autorización #{num_aut} es diferente de PROCESADA.")
             raise forms.ValidationError("El estado de la autorización no está activa.")
 
         # if (datetime.now() - resp_eps.get('FECHA_AUTORIZACION')).days > 30:
@@ -86,7 +86,7 @@ class AutorizacionServicio(forms.Form):
             resp_mcar = call_api_medicar(num_aut)
 
         if not resp_mcar:
-            logger.info(f"No se pudo obtener información del número de autorización {num_aut}")
+            logger.info(f"No se pudo obtener información del radicado #{num_aut}.")
             raise forms.ValidationError("Pedimos disculpas, pero no pudimos obtener información\n"
                                         f"con este número de autorización.\n{num_aut}\n"
                                         "Puedes esperar unos minutos e intentar de nuevo\n"
@@ -101,7 +101,7 @@ class AutorizacionServicio(forms.Form):
                                         f"con nosotros al: 333 033 3124")
 
         resp_eps['NUMERO_AUTORIZACION'] = num_aut
-        logger.info(f"Número de autorización {num_aut} válido")
+        logger.info(f"Número de autorización {num_aut} válido.")
         return resp_eps
 
 
