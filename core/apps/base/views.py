@@ -1,8 +1,6 @@
-import contextlib
 import threading
 from functools import lru_cache
 
-from decouple import config, Csv
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
@@ -13,8 +11,9 @@ from django.urls import reverse
 from core import settings
 from core.apps.base.forms import *
 from core.apps.base.resources.customwizard import CustomSessionWizard
-from core.apps.base.resources.decorators import logtime, count_calls
-from core.apps.base.resources.tools import convert_bytes, del_file, is_file_valid, notify, guardar_info_bd
+from core.apps.base.resources.decorators import logtime
+from core.apps.base.resources.email_helpers import make_subject_and_cco, make_destinatary
+from core.apps.base.resources.tools import convert_bytes, is_file_valid, notify, guardar_info_bd
 from core.settings import logger, BASE_DIR
 
 FORMS = [
@@ -142,24 +141,12 @@ class ContactWizard(CustomSessionWizard):
 
     @logtime('EMAIL')
     def prepare_email(self, info_email):
-        copia_oculta = config('EMAIL_BCC', cast=Csv())
-
-        subject = f"{info_email['NUMERO_AUTORIZACION']} - Este es el " \
-                  f"número de radicación de tu domicilio en Logifarma"
-
-        if info_email['NUMERO_AUTORIZACION'] in [99_999_999, 99_999_998]:
-            subject = '[OMITIR] CORREO DE PRUEBA'
-            with contextlib.suppress(Exception):
-                copia_oculta.remove('radicacion.domicilios@logifarma.co')
-
-        destinatary = (info_email['email'],)
+        subject, copia_oculta = make_subject_and_cco(info_email)
+        destinatary = make_destinatary(info_email)
         html_content = htmly.render(info_email)
-
         email = EmailMessage(
-            subject, html_content,
-            from_email=f"Domicilios Logifarma <{settings.EMAIL_HOST_USER}>",
-            to=destinatary,
-            bcc=copia_oculta
+            subject, html_content, to=destinatary, bcc=copia_oculta,
+            from_email=f"Domicilios Logifarma <{settings.EMAIL_HOST_USER}>"
         )
         email.content_subtype = "html"
 
@@ -184,10 +171,12 @@ class ContactWizard(CustomSessionWizard):
         else:
             if r == 1:
                 if self.foto_fmedica:
-                    logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Correo enviado a {info_email['email']} con imagen "
-                                f"adjunta de {convert_bytes(self.foto_fmedica.size)}.")
+                    logger.info(
+                        f"{self.request.COOKIES.get('sessionid')[:6]} Correo enviado a {info_email['email']} con imagen "
+                        f"adjunta de {convert_bytes(self.foto_fmedica.size)}.")
                 else:
-                    logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Correo enviado a {info_email['email']} sin imagem")
+                    logger.info(
+                        f"{self.request.COOKIES.get('sessionid')[:6]} Correo enviado a {info_email['email']} sin imagem")
             else:
                 notify('error-email', f"ERROR ENVIANDO EMAIL- Radicado #{info_email['NUMERO_AUTORIZACION']}",
                        f"JSON_DATA: {info_email}")
@@ -198,8 +187,9 @@ class ContactWizard(CustomSessionWizard):
 
 def finalizado(request):
     if ctx := request.session.get('temp_data', {}):
-        logger.info(f"{request.COOKIES.get('sessionid')[:6]} Acessando a vista /finalizado al haber terminado el wizard. "
-                    f"Radicado #{ctx['NUMERO_AUTORIZACION']}.")
+        logger.info(
+            f"{request.COOKIES.get('sessionid')[:6]} Acessando a vista /finalizado al haber terminado el wizard. "
+            f"Radicado #{ctx['NUMERO_AUTORIZACION']}.")
         return render(request, 'done.html', ctx)
     else:
         logger.info("Se ha intentado acceder a vista /finalizado directamente")

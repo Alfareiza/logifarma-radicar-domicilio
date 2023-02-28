@@ -207,7 +207,7 @@ def auth_api_medicar():
 
 
 def request_api(url, headers, payload, method='POST'):
-    num_aut = payload.get('autorizacion')
+    num_aut = payload.get('autorizacion') or payload.get('serial')
     payload = json.dumps(payload)
     logger.info(f'API Llamando [{method}]: {url}')
     # logger.info(f'API Header: {headers}')
@@ -227,7 +227,7 @@ def request_api(url, headers, payload, method='POST'):
         else:
             return json.loads(response.text.encode('utf-8'), strict=False)
     except Exception as e:
-        notify('error-api', f'ERROR EN API - Radicado #{num_aut}', f"ERROR: {e}")
+        notify('error-api', f'ERROR EN API - Radicado #{num_aut}', f"ERROR: {e}\n\nRESPUESTA DE API: {response.text}")
         return {}
 
 
