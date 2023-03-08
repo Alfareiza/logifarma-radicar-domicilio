@@ -12,122 +12,6 @@ from core.settings import logger
 
 pickle_path = BASE_DIR / "core/apps/base/resources/stored.pickle"
 
-
-# def call_api_eps(num_aut: int) -> dict:
-#     """
-#     Recibe el número de autorización que aparece en los pedidos de los usuarios.
-#     Realiza el llamado a la API y retorna un diccionario con la respuesta.
-#     :param num_aut: Número de autorización completo.
-#                 Ej: 875800731698
-#     :return: Dict
-#               > Ej: Cuando no se encontró la información solicitada.
-#                 {
-#                   "DatosBasico": [  ],
-#                   "Servicios": [  ],
-#                   "Total": [
-#                     {
-#                       "valort": "$.00",
-#                       "copagot": "$.00",
-#                       "totalt": "$.00"
-#                     }
-#                   ]
-#                 }
-#               > Ej: Cuando se encontró la información
-#                 {
-#                   "DatosBasico": [
-#                     {
-#                           "Nit": "NIT: 890.XXX.XXX-1",
-#                       "dirc": "Calle XX N XX-XX Barrio Centro",
-#                       "telc": "32XXX53",
-#                       "ubic": "SOLEDAD",
-#                       "numc": "X75XXXXXX69X",
-#                       "entec": "Administradora",
-#                       "desente": "",
-#                       "tipoc": "",
-#                       "clasec": "SERVICIO FARMACEUTICO",
-#                       "nomb": "BELVEDERE ROJAS CARLOS",
-#                       "fechab": "11/11/2022",
-#                       "fecha_aut": "11/11/2022",
-#                       "venceb": "11/12/2022",
-#                       "idenb": "CC 14988099",
-#                       "sexob": "M",
-#                       "nacb": "24/07/1945",
-#                       "diagb": "I10X - H533",
-#                       "sedeb": "SOLEDAD",
-#                       "fecafib": "01/04/2020",
-#                       "regb": "SUBSIDIADO",
-#                       "nivelb": "1",
-#                       "dirb": "CRA XX NO XX - 30",
-#                       "contrab": "5",
-#                       "modalb": "",
-#                       "telb": "- 302XXX89XX",
-#                       "mailb": "",
-#                       "estadob": "ACTIVO",
-#                       "obss": "1RA ENTREGA =LOREN ALVES",
-#                       "idenp": "90XXXX22X",
-#                       "nomp": "LOGIFARMA S.A.S.",
-#                       "dirp": "BARRIO CENTRO CALLE XXA #1X-3X LOCAL 1",
-#                       "telp": "YULIETH GOMEZ-3XX39109XX",
-#                       "ciup": "SOLEDAD",
-#                       "autpor": "OSPINO ARROYO JOSE ENITH",
-#                       "cargo": "AUDITOR SECCIONAL HOSPITALARIO",
-#                       "nums": "",
-#                       "fechas": "11/11/2022",
-#                       "ubis": "Consulta Externa",
-#                       "mipres": "0",
-#                       "pos": "POS",
-#                       "impresion": "9",
-#                       "sysdate": "14/11/2022 07:55",
-#                       "numero": "731698",
-#                       "ubicacion": "8758",
-#                       "nombre_medico": "omar xxxxx",
-#                       "anticipo": "N",
-#                       "observacion": "1RA ENTREGA =LOREN ALVES",
-#                       "tutela": "",
-#                       "altocosto": "N",
-#                       "discapacidad": "",
-#                       "prioridad": "N",
-#                       "aut_solnopbs": "N",
-#                       "clasificacion": "714",
-#                       "servis": ""
-#                     }
-#                   ],
-#                   "Servicios": [
-#                     {
-#                       "reng": "1",
-#                       "producto": "20059406-1",
-#                       "servicio": "FOSFOMICINA 3GR POLVO PARA RECONSTRUIR",
-#                       "cant": "4",
-#                       "valor": "$18,148.00",
-#                       "copago": "$.00",
-#                       "total": "$18,148.00"
-#                     },
-#                     {
-#                       "reng": "2",
-#                       "producto": "19938870-7",
-#                       "servicio": "ACIDO FOLICO 1MG + HIERRO 100MG TABLETA RECUBIERTA",
-#                       "cant": "30",
-#                       "valor": "$61,050.00",
-#                       "copago": "$.00",
-#                       "total": "$61,050.00"
-#                     }
-#                   ],
-#                   "Total": [
-#                     {
-#                       "valort": "$79,198.00",
-#                       "copagot": "$.00",
-#                       "totalt": "$79,198.00"
-#                     }
-#                   ]
-#                 }
-#     """
-#     url = f'https://genesis.cajacopieps.com/api/api_imprimir_aut.php?' \
-#           f'numero={str(num_aut)[-8:]}&' \
-#           f'ubicacion={str(num_aut)[:-8]}'
-#     response = requests.request("GET", url)
-#     return json.loads(response.text.encode('utf8'))
-
-
 @logtime('API')
 def call_api_eps(num_aut: int) -> dict:
     """
@@ -213,7 +97,7 @@ def request_api(url, headers, payload, method='POST'):
     # logger.info(f'API Header: {headers}')
     # logger.info(f'API Payload: {payload}')
     try:
-        response = requests.request(method, url, headers=headers, data=payload)
+        response = requests.request(method, url, headers=headers, data=payload, timeout=20)
         # logger.info(f'API Response [{response.status_code}]: {response.text}')
         if response.status_code != 200:
             res = requests.request('GET', 'https://httpbin.org/ip')
