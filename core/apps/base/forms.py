@@ -93,15 +93,15 @@ class AutorizacionServicio(forms.Form):
                                         "o comunícarte con nosotros al \n333 033 3124")
 
         if resp_mcar.get('autorizacion'):
-            logger.info(f"Número de autorización {num_aut} se encuentra radicado.")
+            radicada_en = resp_mcar.get('nombre_centro_factura')[:-5].strip()
+            logger.info(f"Número de autorización {num_aut} se encuentra radicado {radicada_en}.")
             raise forms.ValidationError(f"Esta autorización ({num_aut}) se encuentra radicada en "
-                                        f"{resp_mcar.get('nombre_centro_factura')[:-5].strip()}"
-                                        f"con el número de acta: {resp_mcar.get('ssc')}\n\n"
+                                        f"{radicada_en} con el número de acta: {resp_mcar.get('ssc')}\n\n"
                                         f"Para mayor información te puedes comunicar \n"
                                         f"con nosotros al: 333 033 3124")
 
         resp_eps['NUMERO_AUTORIZACION'] = num_aut
-        logger.info(f"Número de autorización {num_aut} válido.")
+        logger.info(f"Número de autorización {num_aut} pasó las validaciones.")
         return resp_eps
 
 
