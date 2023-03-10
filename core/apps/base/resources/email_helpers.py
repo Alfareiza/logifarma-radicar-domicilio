@@ -37,12 +37,14 @@ def make_destinatary(info_email) -> list:
     :return: Empty list or list with validated e-mail.
     """
     destinatary = []
-    if email := info_email.get('email'):
-        if email_exists(email):
-            destinatary.append(email)
-        else:
-            logger.info(f'Email {email} no existe.')
-            info_email['email'] = ''
+    # If the email key comes and his first item of the list has something, then:
+    if 'email' in info_email and info_email['email'][0]:
+        for e in info_email['email']:
+            if email_exists(e):
+                destinatary.append(e)
+            else:
+                logger.info(f'Email {e} no existe.')
+                info_email['email'].remove(e)
     return destinatary
 
 

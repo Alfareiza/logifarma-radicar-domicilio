@@ -177,4 +177,11 @@ class DigitaCorreo(forms.Form):
     """
     Vista 9:
     """
-    email = forms.EmailField(required=False)
+    email = forms.CharField(required=False, max_length=255)
+
+    def clean(self):
+        if email := self.cleaned_data.get('email'):
+            emails = email.split(',') if ',' in email else [email]
+            return list(map(lambda n: n.strip(), emails))
+        return [email]
+

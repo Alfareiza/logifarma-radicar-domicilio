@@ -119,11 +119,11 @@ class ContactWizard(CustomSessionWizard):
         # Construye las variables que serán enviadas al template
         info_email = {
             **form_data['autorizacionServicio']['num_autorizacion'],
-            **form_data['eligeMunicipio'],  # Ciudad
-            **form_data['digitaDireccionBarrio'],  # Barrio y dirección
-            **form_data['digitaCelular'],  # Celular
-            **form_data['digitaCorreo'],  # e-mail
-        }
+            **form_data['eligeMunicipio'],
+            **form_data['digitaDireccionBarrio'],
+            **form_data['digitaCelular'],
+            'email': [*form_data['digitaCorreo']]
+            }
 
         # Guardará en BD cuando DEBUG sean números reales
         if info_email['NUMERO_AUTORIZACION'] not in [99_999_999, 99_999_998]:

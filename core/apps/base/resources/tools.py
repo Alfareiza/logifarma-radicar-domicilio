@@ -163,6 +163,11 @@ def guardar_info_bd(**kwargs):
         logger.info(f"Número de radicación {rad} ya existe!.")
         return
     municipio = kwargs.pop('municipio').name.lower()
+
+    email = kwargs.pop('email', None)
+    if email:
+        email = email[0]
+
     logger.info(f"Guardando radicación # {rad}")
     try:
         Radicacion.objects.create(numero_radicado=str(rad),
@@ -174,7 +179,7 @@ def guardar_info_bd(**kwargs):
                                   ).get(name=kwargs.pop('barrio', None).lower()),
                                   cel_uno=kwargs.pop('celular', None),
                                   cel_dos=kwargs.pop('whatsapp', None),
-                                  email=kwargs.pop('email', None),
+                                  email=email,
                                   direccion=kwargs.pop('direccion', None),
                                   ip=kwargs.pop('ip', None),
                                   paciente_nombre=kwargs.pop('AFILIADO', None),
