@@ -21,7 +21,7 @@ class AllFLow(VisualWizardTests):
         self.selenium.get(f'{self.live_server_url}/')
         print(f'===== TESTING ===== > {self.selenium.title}')
         title = self.selenium.title
-        self.assertEqual(title, 'Inicio')
+        self.assertEqual(title, 'Domicilios Logifarma')
 
     # def test_0_home_0_btn_continuar(self):
     #     boton_continuar = self.get_boton_continuar()
@@ -86,4 +86,4 @@ class AllFLow(VisualWizardTests):
 
     def test_6_finalizado_0_connect_to_home(self):
         self.process_finalizado()
-        self.assertEqual(self.selenium.title, 'Inicio')
+        self.assertEqual(self.selenium.title, 'Domicilios Logifarma')

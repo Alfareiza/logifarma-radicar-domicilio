@@ -17,6 +17,7 @@ from core.apps.base.forms import Home, AutorizacionServicio, FotoFormulaMedica, 
 from core.apps.base.models import Municipio, Barrio
 from core.apps.base.views import FORMS, TEMPLATES
 from core.settings import BASE_DIR
+import undetected_chromedriver as uc
 
 os.environ["PATH"] += f'{os.pathsep}/usr/local/bin'
 
@@ -37,7 +38,8 @@ class VisualWizardTests(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        options = Options()
+        # options = Options()
+        options = uc.ChromeOptions()
         options.add_argument('--headless')
         options.add_argument("--window-size=1920,1200")
         options.add_argument('--no-sandbox')
@@ -45,9 +47,10 @@ class VisualWizardTests(StaticLiveServerTestCase):
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('disable-infobars')
         options.add_argument('--disable-extensions')
-        cls.selenium = webdriver.Chrome(
+        cls.selenium = uc.Chrome(
             # service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),
-            options=options
+            options=options,
+            version_main=108
         )
         cls.selenium.maximize_window()
         cls.selenium.implicitly_wait(10)
@@ -149,7 +152,7 @@ class VisualWizardTests(StaticLiveServerTestCase):
 
     def process_finalizado(self):
         self.get_boton_continuar().click()
-        if self.selenium.title != 'Home':
+        if self.selenium.title != 'Domicilios Logifarma':
             self.take_me_to_the_step('digitaCorreo')
             self.get_boton_continuar().click()
             self.get_boton_continuar().click()
