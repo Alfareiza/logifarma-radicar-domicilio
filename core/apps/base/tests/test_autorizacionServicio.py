@@ -86,7 +86,7 @@ class AutorizacionWizardTests(TestCase):
                     <div class="modal_btn">
                         <button type="button" id="btn_modal" class="close">X</button>
                     </div>""", response.rendered_content)
-        self.assertIn("Numero de autorización 5000102222349 se encuentra radicado", response.rendered_content)
+        self.assertIn("Número de autorización 5000102222349 radicado hoy a las ", response.rendered_content)
 
 
 class AutorizacionFormTests(TestCase):
@@ -105,6 +105,9 @@ class AutorizacionFormTests(TestCase):
         self.assertDictEqual(form.cleaned_data, {'num_autorizacion': {'TIPO_IDENTIFICACION': 'CC',
                                                                       'DOCUMENTO_ID': '12340316',
                                                                       'AFILIADO': 'GUTIERREZ TEIXEIRA JACKSON WOH',
+                                                                      'P_NOMBRE': 'JACKSON', 'S_NOMBRE': 'WOH',
+                                                                      'P_APELLIDO': 'GUTIERREZ',
+                                                                      'S_APELLIDO': 'TEIXEIRA',
                                                                       'ESTADO_AFILIADO': 'ACTIVO',
                                                                       'SEDE_AFILIADO': 'BARRANCABERMEJA',
                                                                       'REGIMEN': 'SUBSIDIADO',
