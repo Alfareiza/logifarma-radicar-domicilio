@@ -54,3 +54,32 @@ function buscador_interno(){
 } catch (error) {
     
 }
+
+
+const btnPageTwo = document.getElementById('btn_conti');
+
+btnPageTwo.addEventListener('click', function() {
+  
+  const timestamp = Date.now();
+
+  localStorage.setItem('timestamp', timestamp);
+});
+
+const savedTimestamp = localStorage.getItem('timestamp');
+
+function  verificarTiempo(){
+
+    if (savedTimestamp) {
+
+        const elapsedTime = (Date.now() - savedTimestamp) / 1000;
+      
+        if (elapsedTime >= 1800) {
+          localStorage.removeItem('timestamp');
+      
+          window.location.href = "{% url '/' %}";
+        };
+      };
+
+};
+
+setInterval(verificarTiempo, 5000);
