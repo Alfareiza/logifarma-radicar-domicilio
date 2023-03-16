@@ -1129,7 +1129,7 @@ main section.vista9 p.vist9_t {position: relative;
 
 .icon2 { color: #27ae60; border-color: #27ae60; position: relative; border: 1px solid; border-radius: 70px; width: 10px; height: 16px; padding: 0px 6px 0 1px;}
 
-.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 1rem; padding: 0px; border-radius: 2px; user-select: none; left: 30%; top: 107%; width: 39%; height: 32%; text-align: center; display: none;}
+.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 1rem; padding: 0px; border-radius: 2px; user-select: none; left: 27%; top: 107%; width: 48%; height: 32%; text-align: center; display: none;}
 
 .text-error:before{ position: absolute; content: "";         top: -7px; width: 160px; height: 14px; text-align: center; right: 20px; transform: rotate(45deg);
 }
@@ -2299,7 +2299,7 @@ main section.vista9 p.vist9_t {position: relative;
 
 .icon2 { color: #27ae60; border-color: #27ae60; position: relative; border: 1px solid; border-radius: 70px; width: 10px; height: 16px; padding: 0px 6px 0 1px;}
 
-.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 0.7rem; padding: 0px; border-radius: 2px; user-select: none; left: 30%; top: 107%; width: 39%; height: 32%; text-align: center; display: none;}
+.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 0.7rem; padding: 0px; border-radius: 2px; user-select: none; left: 27%; top: 107%; width: 46%; height: 32%; text-align: center; display: none;}
 
 .text-error:before{ position: absolute; content: "";         top: -7px; width: 160px; height: 14px; text-align: center; right: 20px; transform: rotate(45deg);
 }
@@ -3478,7 +3478,7 @@ main section.vista9 p.vist9_t {position: relative;
 
 .icon2 { color: #27ae60; border-color: #27ae60; position: relative; border: 1px solid; border-radius: 70px; width: 10px; height: 16px; padding: 0px 6px 0 1px;}
 
-.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 1.1rem; padding: 0px; border-radius: 2px; user-select: none; left: 30%; top: 107%; width: 39%; height: 32%; text-align: center; display: none;} 
+.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 1.1rem; padding: 0px; border-radius: 2px; user-select: none; left: 28%; top: 107%; width: 43%; height: 32%; text-align: center; display: none;} 
 
 .text-error:before{ position: absolute; content: "";         top: -7px; width: 160px; height: 14px; text-align: center; right: 20px; transform: rotate(45deg);
 }
@@ -4667,7 +4667,7 @@ main section.vista9 p.vist9_t {position: relative;
 
 .icon2 { color: #27ae60; border-color: #27ae60; position: relative; border: 1px solid; border-radius: 70px; width: 10px; height: 16px; padding: 0px 6px 0 1px;}
 
-.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 1.1rem; padding: 0px; border-radius: 2px; user-select: none; left: 30%; top: 107%; width: 39%; height: 32%; text-align: center; display: none;}
+.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 1.1rem; padding: 0px; border-radius: 2px; user-select: none; left: 23%; top: 107%; width: 55%; height: 32%; text-align: center; display: none;}
 
 .text-error:before{ position: absolute; content: "";         top: -7px; width: 160px; height: 14px; text-align: center; right: 20px; transform: rotate(45deg);
 }
@@ -5882,7 +5882,7 @@ main section.vista9 p.vist9_t {position: relative;
 
 .icon2 { color: #27ae60; border-color: #27ae60; position: relative; border: 1px solid; border-radius: 70px; width: 10px; height: 16px; padding: 0px 6px 0 1px;}
 
-.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 0.7rem; padding: 0px; border-radius: 2px; user-select: none; left: 30%; top: 107%; width: 39%; height: 32%; text-align: center; display: none;}
+.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 0.7rem; padding: 0px; border-radius: 2px; user-select: none; left: 19%; top: 107%; width: 62%; height: 32%; text-align: center; display: none;}
 
 .text-error:before{ position: absolute; content: "";         top: -7px; width: 160px; height: 14px; text-align: center; right: 20px; transform: rotate(45deg);
 }
@@ -7072,7 +7072,7 @@ main section.vista9 p.vist9_t {position: relative;
 
 .icon2 { color: #27ae60; border-color: #27ae60; position: relative; border: 1px solid; border-radius: 70px; width: 10px; height: 16px; padding: 0px 6px 0 1px;}
 
-.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 0.5rem; padding: 0px; border-radius: 2px; user-select: none; left: 30%; top: 107%; width: 39%; height: 32%; text-align: center; display: none;} 
+.text-error{position: absolute; margin: 0 auto; background: #e74d3cec; color: #fceae8; font-size: 0.5rem; padding: 0px; border-radius: 2px; user-select: none; left: 19%; top: 107%; width:62%; height: 32%; text-align: center; display: none;} 
 
 .text-error:before{ position: absolute; content: "";         top: -7px; width: 160px; height: 14px; text-align: center; right: 20px; transform: rotate(45deg);
 }
