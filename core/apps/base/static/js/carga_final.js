@@ -13,7 +13,7 @@ emailInput.addEventListener('input', () => {
     if (regExp.test(email)) {
       validEmails.push(email);
     }
-  }
+  } 
 
   if (validEmails.length === emails.length) {
         emailInput.style.borderColor="#27ae60";
