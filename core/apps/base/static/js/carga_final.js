@@ -7,7 +7,7 @@ const error = document.querySelector(".text-error");
 emailInput.addEventListener('input', () => {
   const emails = emailInput.value.split(/,\s*/);
   const validEmails = [];
-  const regExp =/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-4])?\.)+[a-z0-4](?:[a-z0-4-]*[a-z0-4])?$/;
+  const regExp =/^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-4])?\.)+[a-zA-Z0-4](?:[a-zA-Z0-4-]*[a-zA-Z0-4])?$/;
 
   for (const email of emails) {
     if (regExp.test(email)) {
