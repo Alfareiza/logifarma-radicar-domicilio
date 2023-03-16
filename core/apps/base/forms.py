@@ -181,6 +181,7 @@ class DigitaCorreo(forms.Form):
 
     def clean(self):
         if email := self.cleaned_data.get('email'):
+            email = email.lower()
             emails = email.split(',') if ',' in email else [email]
             return list(map(lambda n: n.strip(), emails))
         return [email]

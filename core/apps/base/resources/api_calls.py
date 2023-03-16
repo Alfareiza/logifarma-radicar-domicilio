@@ -4,15 +4,15 @@ from datetime import datetime, timedelta
 
 import requests
 from decouple import config
+from requests import Timeout
 
-from core.apps.base.resources.decorators import logtime
+from core.apps.base.resources.decorators import logtime, hash_dict, timed_lru_cache
 from core.apps.base.resources.tools import notify
 from core.settings import BASE_DIR
 from core.settings import logger
 
 pickle_path = BASE_DIR / "core/apps/base/resources/stored.pickle"
 
-@logtime('API')
 def call_api_eps(num_aut: int) -> dict:
     """
     Solicita información del numero de la autorización a la API de la EPS.
@@ -76,7 +76,6 @@ def auth_api_medicar():
 
     headers = {'Content-Type': 'text/plain'}
     try:
-        logger.info('Solicitando autorización API MEDICAR')
         if response := requests.request("POST", url, headers=headers):
             result = json.loads(response.text.encode('utf8'))
             with open(pickle_path, 'wb') as f:
@@ -90,10 +89,13 @@ def auth_api_medicar():
         logger.error('Error llamando API de medicar: ', e)
 
 
+@hash_dict
+@logtime('API')
+@timed_lru_cache(300)
 def request_api(url, headers, payload, method='POST'):
     num_aut = payload.get('autorizacion') or payload.get('serial')
     payload = json.dumps(payload)
-    logger.info(f'API Llamando [{method}]: {url}')
+    # logger.info(f'API Llamando [{method}]: {url}')
     # logger.info(f'API Header: {headers}')
     # logger.info(f'API Payload: {payload}')
     try:
@@ -110,12 +112,14 @@ def request_api(url, headers, payload, method='POST'):
             return {'error': 'No se han encontrado registros.', 'codigo': '1'}
         else:
             return json.loads(response.text.encode('utf-8'), strict=False)
+    except Timeout as e:
+        notify('error-api', f'ERROR EN API - Radicado #{num_aut}', f"ERROR: {e}.\nNo hubo respuesta de la API en 20 segundos")
+        return {}
     except Exception as e:
         notify('error-api', f'ERROR EN API - Radicado #{num_aut}', f"ERROR: {e}\n\nRESPUESTA DE API: {response.text}")
         return {}
 
 
-@logtime('API')
 def call_api_medicar(num_aut: int) -> dict:
     """
     Recibe el número de autorización que aparece en los pedidos de los usuarios.

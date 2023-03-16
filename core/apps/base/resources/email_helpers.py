@@ -40,6 +40,7 @@ def make_destinatary(info_email) -> list:
     # If the email key comes and his first item of the list has something, then:
     if 'email' in info_email and info_email['email'][0]:
         for e in info_email['email']:
+            # TODO corregir email pq el usuario ha podido escribir gamil en vez de gmail (por ejemplo)
             if email_exists(e):
                 destinatary.append(e)
             else:

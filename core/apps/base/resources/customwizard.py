@@ -11,7 +11,7 @@ from core.apps.base.models import Barrio
 from core.apps.base.resources.tools import parse_agent
 from core.settings import logger
 
-
+from core.apps.base.resources.api_calls import request_api
 class CustomSessionWizard(SessionWizardView):
     auth_serv = {}
     foto_fmedica = None
@@ -24,7 +24,7 @@ class CustomSessionWizard(SessionWizardView):
         sessionid = self.request.COOKIES.get('sessionid')
         if not sessionid:
             sessionid = 'Unknown'
-        logger.info(f"{sessionid[:7]} "
+        logger.info(f"{sessionid[:6]} "
                     f"IP={self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))} entró en vista={self.request.resolver_match.url_name}")
         return super().get(request, *args, **kwargs)
 
