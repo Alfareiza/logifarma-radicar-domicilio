@@ -50,7 +50,7 @@ class VisualWizardTests(StaticLiveServerTestCase):
         cls.selenium = uc.Chrome(
             # service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()),
             options=options,
-            version_main=108
+            version_main=111
         )
         cls.selenium.maximize_window()
         cls.selenium.implicitly_wait(10)
