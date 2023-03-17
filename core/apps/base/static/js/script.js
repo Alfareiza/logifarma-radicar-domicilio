@@ -76,7 +76,7 @@ function  verificarTiempo(){
         if (elapsedTime >= 1800) {
           localStorage.removeItem('timestamp');
       
-          window.location.href = "{% url '/' %}";
+          window.location.href = "/";
         };
       };
 
