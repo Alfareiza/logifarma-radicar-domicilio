@@ -68,18 +68,13 @@ btnPageTwo.addEventListener('click', function() {
 const savedTimestamp = localStorage.getItem('timestamp');
 
 function  verificarTiempo(){
-
     if (savedTimestamp) {
-
         const elapsedTime = (Date.now() - savedTimestamp) / 1000;
-      
         if (elapsedTime >= 1800) {
           localStorage.removeItem('timestamp');
-      
-          window.location.href = "{% url '/' %}";
+          window.location.href = "/";
         };
       };
-
 };
 
 setInterval(verificarTiempo, 5000);
