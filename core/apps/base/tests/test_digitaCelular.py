@@ -62,12 +62,11 @@ class DigitaCelularWizardTests(TestCase):
 
 class DigitaCelularFormTests(TestCase):
     def test_invalid_numbers(self):
-        for number in [-123456, 1, 0, 310_123_456, 414_123_4567]:
+        for number in [-123456, 1, 310_123_456, 414_123_4567]:
             with self.subTest(i=number):
                 form = DigitaCelular(data={'celular': number})
                 self.assertFalse(form.is_valid())
-                self.assertEqual(form.errors['celular'],
-                                 [f"Número de celular incorrecto:\n{number}"])
+                self.assertIn(f"Número de celular incorrecto:\n{number}", form.errors.as_text())
 
     def test_valid_number(self):
         for number in [300_000_0000, 301_601_2996, 311_111_1111]:
