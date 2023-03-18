@@ -192,6 +192,16 @@ def guardar_info_bd(**kwargs):
                      f" ({kwargs.get('NUMERO_AUTORIZACION')}): ", e)
 
 
+def discover_rad(body) -> str:
+    """
+    Busca el radicado en el cuerpo del correo.
+    :param body:
+    :return: # de radicado
+    """
+    return ''
+    # TODO Crear expresión regular para capturar número de radicado
+
+
 def notify(reason: str, subject: str, body: str):
     """
     Función que envía un correo notificando algo
@@ -206,6 +216,11 @@ def notify(reason: str, subject: str, body: str):
         from_email=f"Logs Domicilios Logifarma <{settings.EMAIL_HOST_USER}>",
         to=['alfareiza@gmail.com', 'logistica@logifarma.co']
     )
+    from django.utils.safestring import SafeString
+    if isinstance(body, SafeString):
+        email.content_subtype = "html"
+
+    rad = discover_rad(body)
 
     if sent := email.send(fail_silently=False):
         msg = {
@@ -214,8 +229,9 @@ def notify(reason: str, subject: str, body: str):
             'error-archivo-url': 'Correo enviado notificando radicado sin archivo.',
             'error-email': 'Correo enviado notificando problema al enviar e-mail de confirmación.',
             'check-acta': 'Correo enviado con reporte de chequeo de actas.',
+            'check-aut': '{} Correo de alerta de autorización no radicada enviado.',
         }
-        logger.info(msg[reason])
+        logger.info(msg[reason].format(rad).strip())
 
 
 def months() -> tuple:

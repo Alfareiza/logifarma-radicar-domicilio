@@ -3,12 +3,13 @@ import datetime
 from concurrent.futures import ThreadPoolExecutor
 
 from django.core.management.base import BaseCommand
+from django.template.loader import get_template
 
-from core.apps.base.models import Radicacion
+from core.apps.base.models import Radicacion, Municipio, Barrio
 from core.apps.base.resources.api_calls import call_api_medicar, should_i_call_auth, call_api_eps
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.tools import notify, day_slash_month_year, pretty_date
-from core.settings import logger
+from core.settings import logger, BASE_DIR
 
 
 class Command(BaseCommand):
@@ -78,17 +79,34 @@ class Command(BaseCommand):
                          f" y autorizado el {rad.paciente_data['FECHA_AUTORIZACION']}.\n"
 
     def validate(self, resp, rad):
+        """
+        Realiza las siguientes validaciones por radicado en el respectivo orden:
+            1. Valida en la api de medicar que tenga un ssc.
+               De ser así actualiza el campo acta_entrega en la bd.
+            2. Si no tiene un ssc, entonces:
+                2.1. Valida con la api de cajacopi si el ESTADO_AUTORIZACION es 'RECHAZADA'
+                     De ser así actualiza el campo acta_entrega en la bd.
+                2.2. Valida con la api de cajacopi si el ESTADO_AFILIADO es 'FALLECIDO'
+                     De ser así actualiza el campo acta_entrega en la bd.
+                2.3 Sino, entonces es considerado como un radicado que no tiene acta
+                    y es agregado a la lista self.errs. Junto a eso también envia un correo
+                    con la información de ese radicado.
+        :param resp: Respuesta de la api de medicar.
+                     (Información previamente capturada de forma asíncrona)
+        :param rad: 800102180806
+        :return: None
+        """
         if 'ssc' in resp:
             if resp.get('ssc'):
                 self.update_acta_entrega(rad, str(resp.get('ssc')))
             else:
                 # Nunca debería entrar aquí. Cuando el radicado no tiene # de acta, retorna:
                 # { "error": "No se han encontrado registros." }
-                logger.alert(f'Radicado #{rad.numero_radicado} no tiene aún número de acta. {rad.datetime}.')
+                logger.alert(f'{rad.numero_radicado} Radicado no tiene aún número de acta. {rad.datetime}.')
                 self.alert.append(rad)
         else:
-            logger.warning(f"\'SSC\' no encontrado en respuesta de API de Radicado #{rad.numero_radicado}.")
-            logger.info(f"Validando si fue rechazada o el afiliado falleció.")
+            logger.warning(f"{rad.numero_radicado} \'SSC\' no encontrado en API Medicar.")
+            logger.info(f"{rad.numero_radicado} Validando si fue rechazada o el afiliado falleció.")
             try:
                 resp_eps = call_api_eps(rad.numero_radicado)
                 if 'ESTADO_AUTORIZACION' in resp_eps and resp_eps['ESTADO_AUTORIZACION'] == 'RECHAZADA':
@@ -97,12 +115,77 @@ class Command(BaseCommand):
                     self.update_acta_entrega(rad, 'afiliado fallecido')
                 else:
                     self.errs.append(rad)
+                    self.send_alert_mail(rad, resp_eps)
             except Exception as e:
                 notify('error-api', f"ERROR EN API - Radicado #{rad.numero_radicado}", f"ERROR : \n{e}")
                 self.errs.append(rad)
 
     def update_acta_entrega(self, rad, new_value):
-        logger.info(f"Actualizando radicado #{rad.numero_radicado} de fecha {format(rad.datetime, '%D %T')}.")
+        logger.info(f"{rad.numero_radicado} Actualizando radicado con fecha {format(rad.datetime, '%D %T')}.")
         rad.acta_entrega = new_value
-        rad.save()
+        # rad.save()
         self.updated.append(rad.numero_radicado)
+
+    def send_alert_mail(self, rad, info):
+        """
+        Envía email usando template autorización_no_radicada.html con información
+        del radicado.
+        :param rad: Objeto de Radicacion obtenido de la base de datos.
+                Ej.: <Radicacion: 829600082168>
+        :param info: Información de radicado de api eps.
+                     Obs.: No recibe info de api medicar porque esta solo tiene
+                           { "error": "No se han encontrado registros."}
+                Ej: {
+                         'TIPO_IDENTIFICACION': 'CC',
+                         'DOCUMENTO_ID': '22728593',
+                         'AFILIADO': 'MENDOZA CERVANTES GLORIA ELENA',
+                         'P_NOMBRE': 'GLORIA',
+                         'S_NOMBRE': 'ELENA',
+                         'P_APELLIDO': 'MENDOZA',
+                         'S_APELLIDO': 'CERVANTES',
+                         'ESTADO_AFILIADO': 'ACTIVO',
+                         'SEDE_AFILIADO': 'LURUACO',
+                         'REGIMEN': 'CONTRIBUTIVO',
+                         'DIRECCION': 'CRA 6 NO 2 41',
+                         'CORREO': 'gloriame4ndoza@gmail.com',
+                         'TELEFONO': '',
+                         'CELULAR': '3002102028',
+                         'ESTADO_AUTORIZACION': 'PROCESADA',
+                         'FECHA_AUTORIZACION': '20/12/2022',
+                         'MEDICO_TRATANTE': 'ERICK CAMPANELLI',
+                         'MIPRES': '0',
+                         'DIAGNOSTICO': 'D27X-TUMOR BENIGNO DEL OVARIO',
+                         'ARCHIVO': '',
+                         'IPS_SOLICITA': 'VIVA 1A IPS S.A.',
+                         'Observacion': '',
+                         'RESPONSABLE_GUARDA': 'VIVA 1A IPS S.A.',
+                         'CORREO_RESP_GUARDA': 'mcorrea@viva1a.com.co',
+                         'RESPONSABLE_AUT': 'USUARIO API',
+                         'CORREO_RESP_AUT': '',
+                         'DETALLE_AUTORIZACION': [
+                                {'CUMS': '19938908-1',
+                                'NOMBRE_PRODUCTO': 'CALCIO 600MG + VITAMINA D  200UI + ISOFLAVONA 25MG TABLETA RECUBIERTA',
+                                'CANTIDAD': '30'}
+                                ]
+                   }
+
+        :return: None
+        """
+        mun = Municipio.objects.get(id=rad.municipio_id)
+        municipio_str = f"{mun.name.title()} - {mun.departamento.title()}"
+
+        barr = Barrio.objects.get(id=rad.barrio_id)
+        barr_str = barr.name.title()
+        info_email = {
+            **info,
+            'NUMERO_AUTORIZACION': rad.numero_radicado,
+            'municipio':  municipio_str,
+            'barrio': barr_str,
+            'direccion': rad.direccion,
+            'celular': rad.cel_uno,
+            'whatsapp': rad.cel_dos,
+            'email': [rad.email] if rad.email else [],
+        }
+        htmly = get_template(BASE_DIR / "core/apps/base/templates/notifiers/autorizacion_no_radicada.html")
+        html_content = htmly.render(info_email)
+        notify('check-aut', f'Autorización: {rad.numero_radicado} No radicada', html_content)

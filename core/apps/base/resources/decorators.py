@@ -30,6 +30,10 @@ def logtime(tag):
                     title = f"{tag} MEDICAR"
                 if 'cajacopieps' in fargs[0]:
                     title = f"{tag} CAJACOPI"
+                if 'autorizacion' in fargs[2]:
+                    title = f"{title} {fargs[2]['autorizacion']}"
+                if 'serial' in fargs[2]:
+                    title = f"{title} {fargs[2]['serial']}"
             logger.info(f"{title or tag} {func.__name__!r} tardó {format(time() - start, '.4f')}s.")
             return value
         return wrapper
