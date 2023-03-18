@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logifarma</title>
+
+</head>
+<body>
+    <div style="word-spacing: normal; background-color: #f4f4f4;">
+    <div style="background-color: #f4f4f4;">
+        <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 5px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 5px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 100%;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td align="left" style="font-size: 0px; padding: 0px 25px 0px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                <div style="font-family: Ubuntu, Helvetica, Arial, sans-serif; font-size: 20px; letter-spacing: normal; line-height: 22px; text-align: left; color: #55575d;">
+                                                    <h1><span style="font-size: 25px;">¡Alerta!</span></h1>
+                                                    <h1><span style="font-size: 18px;">Autorización: {{NUMERO_AUTORIZACION}} no radicada</span></h1>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td align="left" style="font-size: 0px; padding: 0px 40px 0px 40px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                <div style="font-family: Ubuntu, Helvetica, Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 22px; text-align: left; color: #55575d;">
+                                                    <p>
+                                                        <span style="color: #55575d; font-family: Arial; font-size: 16px;">
+                                                            <strong>Aut. Realizada por:</strong>
+                                                            <span style="color: #55575d; font-family: Arial; font-size: 13px;">
+                                                                {{RESPONSABLE_GUARDA}} ({{CORREO_RESP_GUARDA}})
+                                                            </span>
+                                                        </span>
+                                                    </p>
+                                                    <p>
+                                                        <span style="color: #55575d; font-family: Arial; font-size: 16px;">
+                                                            <strong>Aut. Procesada por:</strong>
+                                                            <span style="color: #55575d; font-family: Arial; font-size: 13px;">
+                                                                {{RESPONSABLE_AUT}} ({{CORREO_RESP_AUT}})
+                                                            </span>
+                                                        </span>
+                                                    </p>
+                                                    <p>
+                                                        <span style="color: #55575d; font-family: Arial; font-size: 16px;">
+                                                            <strong>IPS Formuladora:</strong>
+                                                            <span style="color: #55575d; font-family: Arial; font-size: 13px;">
+                                                            {{IPS_SOLICITA}}
+                                                            </span>
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 20px 0; padding-bottom: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 100%;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td align="center" style="font-size: 0px; padding: 10px 25px; word-break: break-word;">
+                                                <p style="border-top: solid 2px #e6e6e6; font-size: 1px; margin: 0px auto; width: 100%;"></p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 0px 0px 5px 0px; padding-bottom: 5px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 100%;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                    <h3><span style="font-family: Arial; font-size: 18px;">Información de radicación</span></h3>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #e5f7ff; background-color: #e5f7ff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #e5f7ff; background-color: #e5f7ff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 0px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0; line-height: 0; text-align: left; display: inline-block; width: 100%; direction: ltr; vertical-align: top;">
+                                <div class="m_-699636249018344079mj-column-per-50" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 50%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 0px 25px 0px 25px; padding-top: 0px; padding-right: 25px; padding-bottom: 0px; padding-left: 25px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">Número de autorización:</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="m_-699636249018344079mj-column-per-50" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 50%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">{{NUMERO_AUTORIZACION}}</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 0px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0; line-height: 0; text-align: left; display: inline-block; width: 100%; direction: ltr; vertical-align: top;">
+                                <div class="m_-699636249018344079mj-column-per-50" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 50%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">Fecha de autorización</span><span style="color: #55575d; font-size: 14px;">:</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="m_-699636249018344079mj-column-per-50" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 50%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">{{FECHA_AUTORIZACION}}</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #e5f7ff; background-color: #e5f7ff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #e5f7ff; background-color: #e5f7ff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 0px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0; line-height: 0; text-align: left; display: inline-block; width: 100%; direction: ltr; vertical-align: top;">
+                                <div class="m_-699636249018344079mj-column-per-50" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 50%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">Estado de autorización:</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="m_-699636249018344079mj-column-per-50" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 50%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">{{ESTADO_AUTORIZACION}}</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 0px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0; line-height: 0; text-align: left; display: inline-block; width: 100%; direction: ltr; vertical-align: top;">
+                                <div class="m_-699636249018344079mj-column-per-50" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 50%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">MIPRES:</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="m_-699636249018344079mj-column-per-50" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 50%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">{{MIPRES}}</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #e5f7ff; background-color: #e5f7ff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #e5f7ff; background-color: #e5f7ff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 0px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0; line-height: 0; text-align: left; display: inline-block; width: 100%; direction: ltr; vertical-align: top;">
+                                <div class="m_-699636249018344079mj-column-per-50" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 50%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">Medico tratante:</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="m_-699636249018344079mj-column-per-50" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 50%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">{{MEDICO_TRATANTE}}</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 0px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0; line-height: 0; text-align: left; display: inline-block; width: 100%; direction: ltr; vertical-align: top;">
+                                <div class="m_-699636249018344079mj-column-per-50" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 50%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">Diagnóstico:</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="m_-699636249018344079mj-column-per-50" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 50%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">{{DIAGNOSTICO}}</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #e4fae6; background-color: #e4fae6; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #e4fae6; background-color: #e4fae6; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 5px 0px 5px 0px; padding-bottom: 5px; padding-left: 0px; padding-right: 0px; padding-top: 5px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 100%;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                    <p>
+                                                        <span style="color: #55575d;"><strong>Afiliado</strong>: {{AFILIADO|title}} (Documento: {{TIPO_IDENTIFICACION}} {{DOCUMENTO_ID}})</span>
+                                                    </p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 20px 0; padding-bottom: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 100%;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td align="center" style="font-size: 0px; padding: 10px 25px; word-break: break-word;">
+                                                <p style="border-top: solid 2px #e6e6e6; font-size: 1px; margin: 0px auto; width: 100%;"></p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 5px 0px 5px 0px; padding-bottom: 5px; padding-left: 0px; padding-right: 0px; padding-top: 5px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 100%;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                    <h3><span style="font-family: Arial; font-size: 18px;">Información de entrega</span></h3>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #eaeaff; background-color: #eaeaff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #eaeaff; background-color: #eaeaff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 0px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0; line-height: 0; text-align: left; display: inline-block; width: 100%; direction: ltr; vertical-align: top;">
+                                <div class="m_-699636249018344079mj-column-per-33" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 33%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d; font-size: 14px;">Ciudad:</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="m_-699636249018344079mj-column-per-67" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 67%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">{{municipio}}</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 0px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0; line-height: 0; text-align: left; display: inline-block; width: 100%; direction: ltr; vertical-align: top;">
+                                <div class="m_-699636249018344079mj-column-per-33" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 33%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">Barrio</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="m_-699636249018344079mj-column-per-67" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 67%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">{{barrio}}</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #eaeaff; background-color: #eaeaff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #eaeaff; background-color: #eaeaff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 0px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0; line-height: 0; text-align: left; display: inline-block; width: 100%; direction: ltr; vertical-align: top;">
+                                <div class="m_-699636249018344079mj-column-per-33" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 33%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">Dirección:</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="m_-699636249018344079mj-column-per-67" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 67%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">{{direccion}}</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 0px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0; line-height: 0; text-align: left; display: inline-block; width: 100%; direction: ltr; vertical-align: top;">
+                                <div class="m_-699636249018344079mj-column-per-33" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 33%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">Celular:</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="m_-699636249018344079mj-column-per-67" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 67%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">{{celular}}</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% if whatsapp %}
+        <div style="background: #eaeaff; background-color: #eaeaff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #eaeaff; background-color: #eaeaff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 0px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0; line-height: 0; text-align: left; display: inline-block; width: 100%; direction: ltr; vertical-align: top;">
+                                <div class="m_-699636249018344079mj-column-per-33" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 33%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">Whatsapp:</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="m_-699636249018344079mj-column-per-67" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 67%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">{{whatsapp}}</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        {% if email %}
+        {% if whatsapp %}
+        <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
+                {% else %}
+                <div style="background: #eaeaff; background-color: #eaeaff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #eaeaff; background-color: #eaeaff; width: 100%;">
+                {% endif %}
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 0px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0; line-height: 0; text-align: left; display: inline-block; width: 100%; direction: ltr; vertical-align: top;">
+                                <div class="m_-699636249018344079mj-column-per-33" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 33%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">Email:</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="m_-699636249018344079mj-column-per-67" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 67%;">
+                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                        <tbody>
+                                            <tr>
+                                                <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                    <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                        <p><span style="color: #55575d;">{{email|join:", "}}</span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 0px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 100%;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                <div style="font-family: Ubuntu, Helvetica, Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 22px; text-align: left; color: #55575d;">
+                                                    <h3><span style="color: #55575d; font-family: Arial, sans-serif; font-size: 13px;">Tiene {{DETALLE_AUTORIZACION|length}} artículo{{DETALLE_AUTORIZACION|length|pluralize}}:</span></h3>
+                                                    {% for articulo in DETALLE_AUTORIZACION %}
+                                                        <ul>
+                                                            <li><span style="color: #55575d; font-family: Arial, sans-serif; font-size: 13px;">{{articulo.NOMBRE_PRODUCTO}} (CUM: {{articulo.CUMS}}) Cantidad: {{articulo.CANTIDAD}}</span></li>
+                                                        </ul>
+                                                    {% empty %}
+                                                        <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
+                                                            <p><span style="color: #55575d;">No se registraron artículos para esta autorización.</span></p>
+                                                        </div>  
+                                                    {% endfor %}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="direction: ltr; font-size: 0px; padding: 20px 0; text-align: center;">
+                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 100%;">
+                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                    <tbody>
+                                        <tr>
+                                            <td align="center" style="font-size: 0px; padding: 0px 25px 0px 25px; padding-top: 0px; padding-right: 25px; padding-bottom: 0px; padding-left: 25px; word-break: break-word;">
+                                                <p style="border-top: solid 2px #e6e6e6; font-size: 1px; margin: 0px auto; width: 100%;"></p>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                <div style="font-family: Ubuntu, Helvetica, Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 22px; text-align: left; color: #55575d;">
+                                                    <p style="text-align: center;"><span style="font-family: Arial; font-size: 13px;">Gracias por utilizar nuestro servicio a domicilio</span></p>
+                                                    <p style="text-align: center;">
+                                                        <span style="font-family: Arial; font-size: 13px;">Si quieres hablar con nosotros más adelante lo puedes hacer llamando a nuestra línea amiga 3330333124</span>
+                                                    </p>
+                                                    <p>&nbsp;</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="yj6qo"></div>
+            <div class="adL"></div>
+        </div>
+        <div class="adL"></div>
+    </div>
+    <div class="adL"></div>
+</div>
+
+</body>

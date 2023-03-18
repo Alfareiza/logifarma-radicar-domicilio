@@ -39,7 +39,7 @@ TEMPLATES = {
     "digitaCelular": "digita_celular.html",
     "digitaCorreo": "digita_correo.html"}
 
-htmly = get_template(BASE_DIR / "core/apps/base/templates/correo.html")
+htmly = get_template(BASE_DIR / "core/apps/base/templates/notifiers/correo.html")
 
 
 @lru_cache
