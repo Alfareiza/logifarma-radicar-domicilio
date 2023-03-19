@@ -123,7 +123,7 @@ class Command(BaseCommand):
     def update_acta_entrega(self, rad, new_value):
         logger.info(f"{rad.numero_radicado} Actualizando radicado con fecha {format(rad.datetime, '%D %T')}.")
         rad.acta_entrega = new_value
-        # rad.save()
+        rad.save()
         self.updated.append(rad.numero_radicado)
 
     def send_alert_mail(self, rad, info):
