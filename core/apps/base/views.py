@@ -71,7 +71,7 @@ def show_fotoFormulaMedica(wizard) -> bool:
             return is_file_valid(url, rad)
         return True
     except Exception as e:
-        logger.warning(f'ARCHIVO (key) NO detectado en respuesta de API en radicado # {rad}.')
+        logger.warning(f'{rad} ARCHIVO (key) NO detectado en respuesta de API en radicado.')
         notify('error-archivo-url', f'Radicado {rad} sin archivo.',
                f"RESPUESTA DE API: {cleaned_data}\n\n")
         return True
@@ -123,15 +123,15 @@ class ContactWizard(CustomSessionWizard):
             **form_data['digitaDireccionBarrio'],
             **form_data['digitaCelular'],
             'email': [*form_data['digitaCorreo']]
-            }
+        }
 
         # Guardará en BD cuando DEBUG sean números reales
         if info_email['NUMERO_AUTORIZACION'] not in [99_999_999, 99_999_998]:
             guardar_info_bd(**info_email, ip=self.request.META.get('HTTP_X_FORWARDED_FOR',
                                                                    self.request.META.get('REMOTE_ADDR')))
 
-        logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Radicación finalizada. E-mail de confirmación "
-                    f"será enviado a {form_data['digitaCorreo']}")
+        logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']}"
+                    f" Radicación finalizada. E-mail de confirmación será enviado a {form_data['digitaCorreo']}")
 
         # Envía e-mail
         x = threading.Thread(target=self.send_mail, args=(info_email,))
@@ -172,11 +172,12 @@ class ContactWizard(CustomSessionWizard):
             if r == 1:
                 if self.foto_fmedica:
                     logger.info(
-                        f"{self.request.COOKIES.get('sessionid')[:6]} Correo enviado a {info_email['email']} con imagen "
-                        f"adjunta de {convert_bytes(self.foto_fmedica.size)}.")
+                        f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']} "
+                        f"Correo enviado a {info_email['email']} con imagen adjunta de {convert_bytes(self.foto_fmedica.size)}.")
                 else:
                     logger.info(
-                        f"{self.request.COOKIES.get('sessionid')[:6]} Correo enviado a {info_email['email']} sin imagem")
+                        f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']} "
+                        f"correo enviado a {info_email['email']} sin imagem")
             else:
                 notify('error-email', f"ERROR ENVIANDO EMAIL- Radicado #{info_email['NUMERO_AUTORIZACION']}",
                        f"JSON_DATA: {info_email}")
@@ -188,8 +189,8 @@ class ContactWizard(CustomSessionWizard):
 def finalizado(request):
     if ctx := request.session.get('temp_data', {}):
         logger.info(
-            f"{request.COOKIES.get('sessionid')[:6]} Acessando a vista /finalizado al haber terminado el wizard. "
-            f"Radicado #{ctx['NUMERO_AUTORIZACION']}.")
+            f"{request.COOKIES.get('sessionid')[:6]} {ctx['NUMERO_AUTORIZACION']} acessando a vista /finalizado"
+            f" al haber terminado el wizard.")
         return render(request, 'done.html', ctx)
     else:
         logger.info("Se ha intentado acceder a vista /finalizado directamente")

@@ -88,10 +88,10 @@ def is_file_valid(url: str, rad: str) -> bool:
     :return: True or False
     """
     if not url:
-        logger.info(f'URL NO detectada en radicado # {rad}.')
+        logger.info(f'{rad} URL NO detectada en radicado.')
         return True
     else:
-        logger.info(f'URL detectada en radicado {rad} : {url}')
+        logger.info(f'{rad} URL detectada en radicado: {url}')
         return False
 
 
@@ -160,7 +160,7 @@ def guardar_info_bd(**kwargs):
     """
     rad = kwargs.pop('NUMERO_AUTORIZACION', None)
     if Radicacion.objects.filter(numero_radicado=str(rad)).exists():
-        logger.info(f"Número de radicación {rad} ya existe!.")
+        logger.info(f"{rad} Número de radicación ya existe!.")
         return
     municipio = kwargs.pop('municipio').name.lower()
 
@@ -168,7 +168,7 @@ def guardar_info_bd(**kwargs):
     if email:
         email = email[0]
 
-    logger.info(f"Guardando radicación # {rad}")
+    logger.info(f"{rad} Guardando radicación.")
     try:
         Radicacion.objects.create(numero_radicado=str(rad),
                                   municipio=Municipio.objects.get(
@@ -188,8 +188,7 @@ def guardar_info_bd(**kwargs):
         logger.info("Radicación guardada con éxito!")
     except Exception as e:
         notify('error-bd', f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", e)
-        logger.error(f"Error guardando radicación"
-                     f" ({kwargs.get('NUMERO_AUTORIZACION')}): ", e)
+        logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación: {e}")
 
 
 def discover_rad(body) -> str:
