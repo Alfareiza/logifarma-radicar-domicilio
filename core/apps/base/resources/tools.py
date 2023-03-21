@@ -201,19 +201,32 @@ def discover_rad(body) -> str:
     # TODO Crear expresión regular para capturar número de radicado
 
 
-def notify(reason: str, subject: str, body: str):
+def notify(reason: str, subject: str, body: str,
+           to=None,
+           bcc: list = []):
     """
-    Función que envía un correo notificando algo
-    :param reason: Puede ser error-bd o error-api
+    Envía un correo notificando algo.
+    :param to: Para quien será enviado el correo.
+    :param bcc: Copia oculta.
+    :param reason: Puede ser:
+                    'error-bd'
+                    'error-api'
+                    'error-archivo-url'
+                    'error-email'
+                    'check-acta'
+                    'check-aut'
     :param subject: Asunto del correo
     :param body: Cuerpo del Correo
     :return: Nada
     """
+    if to is None:
+        to = ['alfareiza@gmail.com', 'logistica@logifarma.co']
     email = EmailMessage(
         subject=subject,
         body=body,
         from_email=f"Logs Domicilios Logifarma <{settings.EMAIL_HOST_USER}>",
-        to=['alfareiza@gmail.com', 'logistica@logifarma.co']
+        to=to,
+        bcc=bcc
     )
     from django.utils.safestring import SafeString
     if isinstance(body, SafeString):
