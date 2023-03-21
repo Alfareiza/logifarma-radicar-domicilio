@@ -188,4 +188,8 @@ class Command(BaseCommand):
         }
         htmly = get_template(BASE_DIR / "core/apps/base/templates/notifiers/autorizacion_no_radicada.html")
         html_content = htmly.render(info_email)
-        notify('check-aut', f'Autorización: {rad.numero_radicado} No radicada', html_content)
+        notify('check-aut',
+               f'Autorización: {rad.numero_radicado} No radicada',
+               html_content,
+               to=['alfonso@n2vec.com'], bcc=['alfareiza@gmail.com']
+               )

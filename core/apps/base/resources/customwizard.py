@@ -1,6 +1,8 @@
 from collections import OrderedDict
 
 from django.core.exceptions import SuspiciousOperation
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_protect
@@ -8,10 +10,9 @@ from formtools.wizard.forms import ManagementForm
 from formtools.wizard.views import SessionWizardView
 
 from core.apps.base.models import Barrio
-from core.apps.base.resources.tools import parse_agent
 from core.settings import logger
 
-from core.apps.base.resources.api_calls import request_api
+
 class CustomSessionWizard(SessionWizardView):
     auth_serv = {}
     foto_fmedica = None
@@ -113,8 +114,10 @@ class CustomSessionWizard(SessionWizardView):
         if not form.cleaned_data:
             logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} No fue capturado "
                         f"nada en vista{idx_view}={self.steps.current}")
+
         else:
-            logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
+            logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} "
+                        f"vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
         # ls_form_list = self.form_list.keys()
         # logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
         return self.get_form_step_data(form)
@@ -128,8 +131,17 @@ class CustomSessionWizard(SessionWizardView):
         :param kwargs:
         :return:
         """
+        steps = ("home", "autorizacionServicio", "eligeMunicipio",
+                 "digitaDireccionBarrio", "digitaCelular", "digitaCorreo")
+        if (steps.index(self.steps.current) - steps.index(args[0])) != 1:
+            self.request.session['ctx'] = {}
+            logger.warning(f"{self.request.COOKIES.get('sessionid')[:6]} redireccionando "
+                           f"a err_multitabs por multipestañas.")
+            return HttpResponseRedirect(reverse('base:err_multitabs'))
+
         logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Acabó de clicar "
                     f"en \'< Atrás\' para ir de {self.steps.current} a {args[0]}.")
+
         form = self.get_form(data=self.request.POST, files=self.request.FILES)
         # self.storage.set_step_data(self.steps.current, self.process_step(form))
         self.storage.set_step_files(self.steps.first, self.process_step_files(form))
@@ -179,7 +191,6 @@ class CustomSessionWizard(SessionWizardView):
         # self.storage.reset()
         return self.done(list(final_forms.values()), form_dict=final_forms, **kwargs)
 
-
     # def get_form_list(self):
     #     """
     #     This method returns a form_list based on the initial form list but
@@ -203,4 +214,3 @@ class CustomSessionWizard(SessionWizardView):
     #                 CustomSessionWizard.new_form_list[form_key] = form_class
     #         return CustomSessionWizard.new_form_list
     #     return self.form_list
-

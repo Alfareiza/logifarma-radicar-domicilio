@@ -18,22 +18,21 @@ from core.settings import logger, BASE_DIR
 
 FORMS = [
     ("home", Home),
-    # ("instrucciones", Instrucciones),
     ("autorizacionServicio", AutorizacionServicio),
     ("fotoFormulaMedica", FotoFormulaMedica),
-    # ("avisoDireccion", AvisoDireccion),
     ("eligeMunicipio", EligeMunicipio),
     ("digitaDireccionBarrio", DireccionBarrio),
     ("digitaCelular", DigitaCelular),
     ("digitaCorreo", DigitaCorreo)
 ]
 
+MANDATORIES_STEPS = ("home", "autorizacionServicio", "eligeMunicipio",
+                     "digitaDireccionBarrio", "digitaCelular", "digitaCorreo")
+
 TEMPLATES = {
     "home": "home.html",
-    # "instrucciones": "instrucciones.html",
     "autorizacionServicio": "autorizacion.html",
     "fotoFormulaMedica": "foto.html",
-    # "avisoDireccion": "aviso_direccion.html",
     "eligeMunicipio": "elige_municipio.html",
     "digitaDireccionBarrio": "direccion_barrio.html",
     "digitaCelular": "digita_celular.html",
@@ -91,12 +90,23 @@ class ContactWizard(CustomSessionWizard):
 
     def done(self, form_list, **kwargs):
         logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Entrando en done {form_list=}")
-        form_data = self.process_from_data(form_list, **kwargs)
-        self.request.session['temp_data'] = form_data
-        return HttpResponseRedirect(reverse('base:done'))
+
+        if self.steps_completed(**kwargs):
+            form_data = self.process_from_data(form_list, **kwargs)
+            self.request.session['ctx'] = form_data
+            return HttpResponseRedirect(reverse('base:done'))
+
+        self.request.session['ctx'] = {}
+        logger.warning(f"{self.request.COOKIES.get('sessionid')[:6]} redireccionando "
+                       f"a err_multitabs por multipestañas.")
+        return HttpResponseRedirect(reverse('base:err_multitabs'))
+
+    def steps_completed(self, **kwargs) -> bool:
+        """Valida si todos los pasos obligatorios llegan al \'done\'"""
+        return not bool(set(MANDATORIES_STEPS).difference(kwargs['form_dict']))
 
     @logtime('CORE')
-    def process_from_data(self, form_list, **kwargs) -> dict:
+    def process_from_data(self, form_list, **kwargs):
         """
         Guarda en base de datos y envía el correo con la información capturada
         en el paso autorizacionServicio.
@@ -124,7 +134,6 @@ class ContactWizard(CustomSessionWizard):
             **form_data['digitaCelular'],
             'email': [*form_data['digitaCorreo']]
         }
-
         # Guardará en BD cuando DEBUG sean números reales
         if info_email['NUMERO_AUTORIZACION'] not in [99_999_999, 99_999_998]:
             guardar_info_bd(**info_email, ip=self.request.META.get('HTTP_X_FORWARDED_FOR',
@@ -139,7 +148,6 @@ class ContactWizard(CustomSessionWizard):
 
         return form_data['autorizacionServicio']['num_autorizacion']
 
-    @logtime('EMAIL')
     def prepare_email(self, info_email):
         subject, copia_oculta = make_subject_and_cco(info_email)
         destinatary = make_destinatary(info_email)
@@ -187,11 +195,23 @@ class ContactWizard(CustomSessionWizard):
 
 
 def finalizado(request):
-    if ctx := request.session.get('temp_data', {}):
+    if ctx := request.session.get('ctx', {}):
         logger.info(
             f"{request.COOKIES.get('sessionid')[:6]} {ctx['NUMERO_AUTORIZACION']} acessando a vista /finalizado"
             f" al haber terminado el wizard.")
         return render(request, 'done.html', ctx)
     else:
         logger.info("Se ha intentado acceder a vista /finalizado directamente")
+        return HttpResponseRedirect('/')
+
+
+def err_multitabs(request):
+    """Vista llamada cuando se detecte error de multi pestañas"""
+    if 'ctx' in request.session:
+        del request.session['ctx']
+        return render(request, 'errors/multitabs.html')
+    else:
+        logger.info("Se ha intentado acceder a vista /error directamente")
+        # Se puede agregar un mensaje para que aparezca un modal al
+        # ser redireccionado al home.
         return HttpResponseRedirect('/')
