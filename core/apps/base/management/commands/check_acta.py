@@ -191,5 +191,5 @@ class Command(BaseCommand):
         notify('check-aut',
                f'Autorización: {rad.numero_radicado} No radicada',
                html_content,
-               to=['logistica@logifarma.co'], bcc=['alfareiza@gmail.com']
+               to=['logistica@logifarma.co', 'radicacion.domicilios@logifarma.co'], bcc=['alfareiza@gmail.com']
                )
