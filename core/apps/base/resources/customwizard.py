@@ -131,8 +131,8 @@ class CustomSessionWizard(SessionWizardView):
         :param kwargs:
         :return:
         """
-        steps = ("home", "autorizacionServicio", "eligeMunicipio",
-                 "digitaDireccionBarrio", "digitaCelular", "digitaCorreo")
+        ls_form_list = self.form_list.keys()
+        steps = list(ls_form_list)
         if (steps.index(self.steps.current) - steps.index(args[0])) != 1:
             self.request.session['ctx'] = {}
             logger.warning(f"{self.request.COOKIES.get('sessionid')[:6]} redireccionando "
