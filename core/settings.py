@@ -35,10 +35,18 @@ ALLOWED_HOSTS = ['domicilios.logifarma.com.co',
                  'radicatudomicilio.herokuapp.com',
                  '*']
 
-# Application definition
+LOGIN_URL = '/login/'
 
+LOGIN_REDIRECT_URL = '/inicio/'
+
+LOGOUT_REDIRECT_URL = '/login/'
+
+
+
+# Application definition
 INSTALLED_APPS = [
     'core.apps.base',
+    'core.apps.home',
     'formtools',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -60,6 +68,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'core.urls'
+
 
 TEMPLATES = [
     {

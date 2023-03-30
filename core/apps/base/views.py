@@ -143,8 +143,13 @@ class ContactWizard(CustomSessionWizard):
                     f" Radicación finalizada. E-mail de confirmación será enviado a {form_data['digitaCorreo']}")
 
         # Envía e-mail
-        x = threading.Thread(target=self.send_mail, args=(info_email,))
-        x.start()
+        if not self.foto_fmedica:
+            x = threading.Thread(target=self.send_mail, args=(info_email,))
+            x.start()
+        else:
+            self.send_mail(info_email)
+
+
 
         return form_data['autorizacionServicio']['num_autorizacion']
 
