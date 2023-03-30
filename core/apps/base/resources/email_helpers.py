@@ -29,6 +29,16 @@ def make_subject_and_cco(info_email) -> tuple:
     return subject, copia_oculta
 
 
+def purge_email(email) -> str:
+    email = email.replace('gamil', 'gmail')
+    email = email.replace('gemail', 'gmail')
+    email = email.replace('logimarga', 'logifarma')
+    if email in ('notiene@gmail.com'):
+        return ''
+    return email
+
+
+
 def make_destinatary(info_email) -> list:
     """
     Validate if the e-mail exists.
@@ -40,8 +50,7 @@ def make_destinatary(info_email) -> list:
     # If the email key comes and his first item of the list has something, then:
     if 'email' in info_email and info_email['email'][0]:
         for e in info_email['email']:
-            # TODO corregir email pq el usuario ha podido escribir gamil en vez de gmail (por ejemplo)
-            if email_exists(e):
+            if purge_email(e) and email_exists(e):
                 destinatary.append(e)
             else:
                 logger.info(f'Email {e} no existe.')
