@@ -1,9 +1,9 @@
 from django import forms
-from django.utils import timezone
 
-from core.apps.base.models import Municipio, Barrio, Radicacion
+from core.apps.base.models import Barrio, Municipio, Radicacion
 from core.apps.base.resources.api_calls import call_api_eps, call_api_medicar
-from core.apps.base.resources.tools import read_json, pretty_date
+from core.apps.base.resources.tools import read_json
+from core.apps.base.validators import validate_status
 from core.settings import logger
 
 
@@ -34,10 +34,9 @@ class AutorizacionServicio(forms.Form):
         elif num_aut == 99_999_998:
             resp_eps = read_json('resources/fake_file.json')
         elif rad := Radicacion.objects.filter(numero_radicado=num_aut).first():
-            dt = pretty_date(rad.datetime.astimezone(timezone.get_current_timezone()))
-            logger.info(f"Número de autorización {num_aut} radicado {dt}.")
-            raise forms.ValidationError(f"Número de autorización {num_aut} radicado {dt}.\n\n"
-                                        f"Si tiene alguna duda se puede comunicar con nosotros al 3330333124.")
+            # Consulta para verificar si tiene ssc (acta)
+            resp_mcar = call_api_medicar(num_aut)
+            validate_status(resp_mcar, rad)
         else:
             resp_eps = call_api_eps(num_aut)
 
@@ -94,7 +93,8 @@ class AutorizacionServicio(forms.Form):
 
         if resp_mcar.get('autorizacion'):
             radicada_en = resp_mcar.get('nombre_centro_factura')[:-5].strip()
-            logger.info(f"Número de autorización {num_aut} se encuentra radicado {radicada_en}.")
+            logger.info(f"{num_aut} se encuentra radicado en {radicada_en}.")
+            # TODO actualizar número de acta en bd
             raise forms.ValidationError(f"Esta autorización ({num_aut}) se encuentra radicada en "
                                         f"{radicada_en} con el número de acta: {resp_mcar.get('ssc')}\n\n"
                                         f"Para mayor información te puedes comunicar \n"
@@ -184,5 +184,7 @@ class DigitaCorreo(forms.Form):
             email = email.lower()
             emails = email.split(',') if ',' in email else [email]
             return list(map(lambda n: n.strip(), emails))
+        if len(email) < 5:
+            logger.error(f"Usuario ingresó {self.cleaned_data.get('email')} pero se processó {email}")
         return [email]
 
