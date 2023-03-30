@@ -113,10 +113,12 @@ def request_api(url, headers, payload, method='POST'):
         else:
             return json.loads(response.text.encode('utf-8'), strict=False)
     except Timeout as e:
-        notify('error-api', f'ERROR EN API - Radicado #{num_aut}', f"ERROR: {e}.\nNo hubo respuesta de la API en 20 segundos")
+        notify('error-api', f'ERROR EN API - Radicado #{num_aut}',
+               f"ERROR: {e}.\nNo hubo respuesta de la API en 20 segundos")
         return {}
     except Exception as e:
-        notify('error-api', f'ERROR EN API - Radicado #{num_aut}', f"ERROR: {e}\n\nRESPUESTA DE API: {response.text}")
+        notify('error-api', f'ERROR EN API - Radicado #{num_aut}',
+               f"ERROR: {e}\n\nRESPUESTA DE API: {response.text}")
         return {}
 
 
@@ -126,14 +128,12 @@ def call_api_medicar(num_aut: int) -> dict:
     Realiza el llamado a la API y retorna un diccionario con la respuesta.
     :param num_aut:
     :return: Dict:
+            Ej: En caso de haber un error
+                {}
             Ej: En caso de no haber encontrado registros
-                {
-                    "error": "No se han encontrado registros."
-                }
-            Ej: En caso de no haber encontrado registros
-                {
-                    "error": "El Nit ingresado no corresponde a ningun convenio."
-                }
+                { "error": "No se han encontrado registros."}
+            Ej: En caso de enviar el nit incorrecto
+                { "error": "El Nit ingresado no corresponde a ningun convenio."}
             Ej: En caso de haber encontrado registros
                 {
                     "ssc": 2640835,
@@ -202,6 +202,7 @@ def call_api_medicar(num_aut: int) -> dict:
         return {}
 
 
+
 def should_i_call_auth():
     """
     Verifica si debe ser solicitado un nuevo
@@ -217,6 +218,33 @@ def should_i_call_auth():
             return True
         else:
             return token
+
+
+@logtime('FIREBASE')
+def get_firebase_acta(acta: int) -> dict:
+    try:
+        response = requests.request(
+            'GET',
+            f"{config('FIREBASE_URL')}/completed_deliveries/{acta}.json",
+            timeout=20
+            )
+        if response.status_code != 200:
+            raise Exception(response.text)
+        if response.text == 'null':
+            return {'state': 'null'}
+        else:
+            return json.loads(response.text.encode('utf-8'), strict=False)
+    except Timeout as e:
+        notify('error-api', f'ERROR CONSULTANDO FIREBASE - Acta #{acta}',
+               f"ERROR: {e}.\nNo hubo respuesta de FIREBASE en 20 segundos")
+        return {}
+    except Exception as e:
+        notify('error-api', f'ERROR CONSULTANDO FIREBASE - Acta #{acta}',
+               f"ERROR: {e}\n\nRESPUESTA DE API: {response.text}")
+        return {}
+
+
+
 
 
 if __name__ == '__main__':

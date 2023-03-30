@@ -176,7 +176,8 @@ def guardar_info_bd(**kwargs):
                                   ),
                                   barrio=Barrio.objects.filter(
                                       municipio__name__iexact=municipio
-                                  ).get(name=kwargs.pop('barrio', None).lower()),
+                                  ).get(
+                                      name=kwargs.pop('barrio', None).lower()),
                                   cel_uno=kwargs.pop('celular', None),
                                   cel_dos=kwargs.pop('whatsapp', None),
                                   email=email,
@@ -187,8 +188,10 @@ def guardar_info_bd(**kwargs):
                                   paciente_data=kwargs)
         logger.info("Radicación guardada con éxito!")
     except Exception as e:
-        notify('error-bd', f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", e)
-        logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación: {e}")
+        notify('error-bd',
+               f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", e)
+        logger.error(
+            f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación: {e}")
 
 
 def discover_rad(body) -> str:
@@ -290,3 +293,25 @@ def when(dt) -> str:
         month = months()
         m = dt.month
         return f'el %e de {month[m]}'
+
+
+dct = {'0': 'X', '1': 'y', '2': 'z', '3': 'N', '4': 'o', '5': 'k',
+           '6': 'J', '7': 'C', '8': 'b', '9': 'a'}
+
+def encrypt(num: int) -> str:
+    """
+    >>> encrypt(875800757559)
+    'bckbxxckckka'
+    """
+    resp = [dct[s] for s in str(num) if s in dct]
+    return ''.join(resp)
+
+
+def decrypt(txt: str) -> str:
+    """
+    >>> decrypt('bckbxxckckka')
+    875800757559
+    """
+    reverse_dct = {v: k for k, v in dct.items()}
+    resp = [reverse_dct[s] for s in txt if s in reverse_dct]
+    return ''.join(resp)

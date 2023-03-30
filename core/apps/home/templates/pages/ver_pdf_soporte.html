@@ -1,0 +1,10 @@
+{% extends 'layouts/base-auth.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-sm-12">
+          <iframe src="https://drive.google.com/file/d/{{ doc_id }}/preview" onload="this.width=screen.width;this.height=screen.height;"></iframe>
+    </div>
+  </div>
+{% endblock content %}
