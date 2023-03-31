@@ -64,7 +64,7 @@ def validate_status(resp_mcar: dict, rad: Radicacion) -> ValidationError:
                 text_resp = (
                     f'Número de autorización {rad.numero_radicado} radicado '
                     f'{radicado_dt} y entregado {entregado_dt}<br><br>'
-                    '<a style="text-decoration:none" href="{0}" target="_blank" rel="noopener noreferrer">Ver soporte</a><br>'
+                    '<a style="text-decoration:none" href="{0}"">Ver soporte</a><br>'
                     '(Solo para personal autorizado)<br><br>'
                     'Si tiene alguna duda se puede comunicar con nosotros '
                     'al 3330333124 <br><br>').format(reverse('soporte', args=(value, )))
