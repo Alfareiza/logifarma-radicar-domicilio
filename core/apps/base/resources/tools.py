@@ -186,7 +186,7 @@ def guardar_info_bd(**kwargs):
                                   paciente_nombre=kwargs.pop('AFILIADO', None),
                                   paciente_cc=kwargs.pop('DOCUMENTO_ID', None),
                                   paciente_data=kwargs)
-        logger.info("Radicación guardada con éxito!")
+        logger.info(f"{rad} Radicación guardada con éxito!")
     except Exception as e:
         notify('error-bd',
                f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", e)

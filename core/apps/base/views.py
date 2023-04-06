@@ -89,7 +89,7 @@ class ContactWizard(CustomSessionWizard):
         return [TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
-        logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Entrando en done {form_list=}")
+        # logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Entrando en done {form_list=}")
 
         if self.steps_completed(**kwargs):
             form_data = self.process_from_data(form_list, **kwargs)

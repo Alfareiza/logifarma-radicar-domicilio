@@ -183,8 +183,11 @@ class DigitaCorreo(forms.Form):
         if email := self.cleaned_data.get('email'):
             email = email.lower()
             emails = email.split(',') if ',' in email else [email]
+            if 0 < len(email) < 5:
+                logger.error(
+                    f"Usuario ingresó {self.cleaned_data.get('email')} pero "
+                    f"se procesó {email}")
             return list(map(lambda n: n.strip(), emails))
-        if len(email) < 5:
-            logger.error(f"Usuario ingresó {self.cleaned_data.get('email')} pero se processó {email}")
+
         return [email]
 
