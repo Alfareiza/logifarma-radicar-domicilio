@@ -14,6 +14,7 @@ from functools import partial
 from os.path import join
 from pathlib import Path
 
+import pyrebase
 from decouple import config
 from dj_database_url import parse
 
@@ -41,7 +42,10 @@ LOGIN_REDIRECT_URL = '/inicio/'
 
 LOGOUT_REDIRECT_URL = '/login/'
 
-
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'core.apps.home.backends.FireBase'
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -68,7 +72,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'core.urls'
-
 
 TEMPLATES = [
     {
@@ -102,7 +105,8 @@ WSGI_APPLICATION = 'core.wsgi.application'
 default_db_url = 'sqlite:///' + join(BASE_DIR, 'db.sqlite3')
 parse_database = partial(parse, conn_max_age=600)
 DATABASES = {
-    'default': config('DATABASE_URL', default=default_db_url, cast=parse_database)
+    'default': config('DATABASE_URL', default=default_db_url,
+                      cast=parse_database)
 }
 
 # Password validation
@@ -183,3 +187,17 @@ ch.setFormatter(formatter)
 
 # add ch to logger
 logger.addHandler(ch)
+
+# Firebase configuration
+# https://github.com/nhorvath/Pyrebase4
+
+FIREBASE_CONFIG = {
+    'apiKey': config('FBASE_apiKey'),
+    'authDomain': config('FBASE_authDomain'),
+    'databaseURL': config('FBASE_databaseURL'),
+    'projectId': config('FBASE_projectId'),
+    'storageBucket': config('FBASE_storageBucket'),
+    'messagingSenderId': config('FBASE_messagingSenderId')
+}
+FIREBASE = pyrebase.initialize_app(FIREBASE_CONFIG)
+FIREBASE_DB = FIREBASE.database()
