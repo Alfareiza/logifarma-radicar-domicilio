@@ -1,48 +1,31 @@
 'use strict';
+const data = document.currentScript.dataset;
+const radicados = JSON.parse(data.radicados);
+const newList = [];
+// Creando lista con radicados por día
+Object.keys(radicados).forEach(key => {
+  newList.push({
+    y: key,
+    Cant: radicados[key]
+  });
+});
+
+console.log(typeof newList);
+console.log(newList);
 $(document).ready(function() {
     setTimeout(function() {
     // [ bar-simple ] chart start
     Morris.Bar({
         element: 'morris-bar-chart',
-        data: [{
-                y: '2008',
-                a: 50,
-                b: 40,
-                c: 35,
-            },
-            {
-                y: '2009',
-                a: 75,
-                b: 65,
-                c: 60,
-            },
-            {
-                y: '2010',
-                a: 50,
-                b: 40,
-                c: 55,
-            },
-            {
-                y: '2011',
-                a: 75,
-                b: 65,
-                c: 85,
-            },
-            {
-                y: '2012',
-                a: 100,
-                b: 90,
-                c: 40,
-            }
-        ],
+        data: newList,
         xkey: 'y',
         barSizeRatio: 0.70,
         barGap: 3,
         resize: true,
         responsive:true,
-        ykeys: ['a', 'b', 'c'],
-        labels: ['Bar 1', 'Bar 2', 'Bar 3'],
-        barColors: ["0-#1de9b6-#1dc4e9", "0-#899FD4-#A389D4", "#04a9f5"]
+        ykeys: ['Cant'],
+        labels: ['Cant'],
+        barColors: ["0-#698cdf-#1e3c83", "0-#899FD4-#A389D4", "#04a9f5"]
     });
     // [ bar-simple ] chart end
 
@@ -303,34 +286,51 @@ $(document).ready(function() {
     // [ line-smooth-chart ] end
 
     // [ Donut-chart ] Start
+    const radicados_mun = JSON.parse(data.radicados_mun);
+    Object.keys(radicados).forEach(key => {
+        newList.push({
+            y: key,
+            Cant: radicados[key]
+        });
+    });
+    const totalRadicados = radicados_mun.slice(7).reduce((acc, obj) => acc + obj.radicados, 0);
+    const result = {
+        "municipio__name": "otros",
+        "radicados": totalRadicados
+    };
+
+    let result_list = [];
+    result_list.push(...radicados_mun.slice(0,7));
+    result_list.push(result);
+    console.log(result_list);
+    const newResult = [];
+    Object.keys(result_list).forEach(key => {
+            var municipio_one = result_list[key]['municipio__name'];
+            var municipio_two = municipio_one.charAt(0).toUpperCase() + municipio_one.slice(1);
+            newResult.push({
+                value: result_list[key]['radicados'],
+                label: municipio_two,
+            });
+        });
+    console.log(newResult);
+
     var graph = Morris.Donut({
         element: 'morris-donut-chart',
-        data: [{
-                value: 60,
-                label: 'Data 1'
-            },
-            {
-                value: 20,
-                label: 'Data 1'
-            },
-            {
-                value: 10,
-                label: 'Data 1'
-            },
-            {
-                value: 5,
-                label: 'Data 1'
-            }
-        ],
+        data: newResult,
         colors: [
             '#1de9b6',
             '#A389D4',
             '#04a9f5',
             '#1dc4e9',
+
+            '#698cdf',
+             '#07ff00',
+             '#25A0D8',
+             '#3C468F',
         ],
         resize: true,
         formatter: function(x) {
-            return "val : " + x
+            return "Cant : " + x
         }
     });    
     // [ Donut-chart ] end
