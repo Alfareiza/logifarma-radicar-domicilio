@@ -1,183 +1,232 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
+{% load my_filters %}
+{% block extrastyle %}
+<!-- datatable css https://datatables.net -->
+<!--<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">-->
+<link rel="stylesheet" href="{% static 'assets/plugins/chart-morris/css/morris.css' %}">
+{% endblock extrastyle %}
 
 {% block breadcrumbs %}{% endblock breadcrumbs %}
 
 {% block content %}
 
-  <!-- [ Main Content ] start -->
+  <!-- [ Main Content ] start https://django-datta-able.appseed-srv1.com/ -->
   <div class="row">
-    <!--[ daily sales section ] start-->
-    <div class="col-md-6 col-xl-4">
+    <!--[ daily rads section ] start-->
+    {% now "d" as current_day %}
+    <div class="col-md-4 col-xl-4">
       <div class="card daily-sales">
         <div class="card-block">
-          <h6 class="mb-4">Daily Sales</h6>
+          <h6 class="mb-4">Radicados de hoy</h6>
           <div class="row d-flex align-items-center">
             <div class="col-9">
-              <h3 class="f-w-300 d-flex align-items-center m-b-0"><i
-                  class="feather icon-arrow-up text-c-green f-30 m-r-10"></i>$
-                99999999.95</h3>
+              <h3 class="f-w-300 d-flex align-items-center m-b-0">
+                <!--<i class="feather icon-arrow-up text-c-green f-30 m-r-10"></i>-->
+                {{ radicados_day|get_item:current_day }}</h3>
             </div>
-
+            {% with percent_today=radicados_day|get_item:current_day|calc_percent:400 %}
             <div class="col-3 text-right">
-              <p class="m-b-0">67%</p>
+              <p class="m-b-0">{{ percent_today }}%</p>
             </div>
           </div>
           <div class="progress m-t-30" style="height: 7px;">
             <div class="progress-bar progress-c-theme" role="progressbar" style="width: 50%;"
-              aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+              aria-valuenow="{{ percent_today }}" aria-valuemin="0" aria-valuemax="400"></div>
           </div>
+          {% endwith %}
         </div>
       </div>
     </div>
-    <!--[ daily sales section ] end-->
-    <!--[ Monthly  sales section ] starts-->
-    <div class="col-md-6 col-xl-4">
+    <!--[ daily rads section ] end-->
+    <!--[ Monthly rads section ] starts-->
+    <div class="col-md-4 col-xl-4">
       <div class="card Monthly-sales">
         <div class="card-block">
-          <h6 class="mb-4">Monthly Sales</h6>
+          <h6 class="mb-4">Radicados del mes</h6>
           <div class="row d-flex align-items-center">
             <div class="col-9">
-              <h3 class="f-w-300 d-flex align-items-center  m-b-0"><i
-                  class="feather icon-arrow-down text-c-red f-30 m-r-10"></i>$
-                2.942.32</h3>
+              <h3 class="f-w-300 d-flex align-items-center  m-b-0">
+                <!--<i class="feather icon-arrow-down text-c-red f-30 m-r-10"></i>-->
+                {{ radicados|length }}
+              </h3>
             </div>
+            {% with percent_month=radicados|length|calc_percent:4000 %}
             <div class="col-3 text-right">
-              <p class="m-b-0">36%</p>
+              <p class="m-b-0">{{ percent_month }}%</p>
             </div>
           </div>
           <div class="progress m-t-30" style="height: 7px;">
             <div class="progress-bar progress-c-theme2" role="progressbar" style="width: 35%;"
-              aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+              aria-valuenow="{{ percent_month }}" aria-valuemin="0" aria-valuemax="4000"></div>
           </div>
+          {% endwith %}
         </div>
       </div>
     </div>
-    <!--[ Monthly  sales section ] end-->
-    <!--[ year  sales section ] starts-->
-    <div class="col-md-12 col-xl-4">
+    <!--[ Monthly rads section ] end-->
+    <!--[ year rads section ] starts-->
+    <div class="col-md-4 col-xl-4">
       <div class="card yearly-sales">
         <div class="card-block">
-          <h6 class="mb-4">Yearly Sales</h6>
+          <h6 class="mb-4">Dispositivos reconocidos en el mes</h6>
           <div class="row d-flex align-items-center">
             <div class="col-9">
-              <h3 class="f-w-300 d-flex align-items-center  m-b-0"><i
-                  class="feather icon-arrow-up text-c-green f-30 m-r-10"></i>$
-                8.638.32</h3>
+              <h3 class="f-w-300 d-flex align-items-center  m-b-0">
+                <i class="feather icon-smartphone text-c-green f-30 m-r-10"></i>
+                {{ radicados|calc_devices|length }}
+              </h3>
             </div>
-            <div class="col-3 text-right">
+            <!--<div class="col-3 text-right">
               <p class="m-b-0">80%</p>
-            </div>
+            </div>-->
           </div>
-          <div class="progress m-t-30" style="height: 7px;">
-            <div class="progress-bar progress-c-theme" role="progressbar" style="width: 70%;"
-              aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
+           <p class="m-0" style="height: 37px;"><br>Información capturada através de la IP.</p>
         </div>
       </div>
     </div>
-    <!--[ year  sales section ] end-->
-    <!--[ Recent Users ] start-->
-    <div class="col-xl-8 col-md-6">
+    <!--[ year rads section ] end-->
+
+  <!--Graphs-->
+  <!-- [ Main Content ] start -->
+    <!-- [ Morris Chart ] start -->
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-header">
+          <h5>Cantidad de radicaciones por día</h5>
+        </div>
+        <div class="card-block">
+          <div id="morris-bar-chart" style="height:300px"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6" hidden>
+      <div class="card">
+        <div class="card-header">
+          <h5>Bar [ Stacked ] Chart</h5>
+        </div>
+        <div class="card-block">
+          <div id="morris-bar-stacked-chart" style="height:300px"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6" hidden>
+      <div class="card">
+        <div class="card-header">
+          <h5>Line [ Angle ] Chart</h5>
+        </div>
+        <div class="card-block">
+          <div id="morris-area-chart" style="height:300px"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6" hidden>
+      <div class="card">
+        <div class="card-header">
+          <h5>Area [ Smooth ] Chart</h5>
+        </div>
+        <div class="card-block">
+          <div id="morris-area-curved-chart" style="height:300px"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6" hidden>
+      <div class="card">
+        <div class="card-header">
+          <h5>Line [ Angle ] Chart</h5>
+        </div>
+        <div class="card-block">
+          <div id="morris-line-chart" class="ChartShadow" style="height:300px"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6" hidden>
+      <div class="card">
+        <div class="card-header">
+          <h5>Line [ Smooth ] Chart</h5>
+        </div>
+        <div class="card-block">
+          <div id="morris-line-smooth-chart" class="ChartShadow" style="height:300px"></div>
+        </div>
+      </div>
+    </div>
+</ul>
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-header">
+          <h5>Cantidad de radicaciones del mes por municipio</h5>
+        </div>
+        <div class="card-block">
+          <div id="morris-donut-chart" style="height:300px"></div>
+        </div>
+      </div>
+    </div>
+    <!-- [ Morris Chart ] end -->
+  <!-- [ Main Content ] end -->
+  <!-- End Graphs-->
+
+    <!--[ Recent Rads ] start-->
+    <!--<div class="col-xl-12 col-md-12">
       <div class="card Recent-Users">
         <div class="card-header">
-          <h5>Recent Users</h5>
+          <h5>Radicados Recientes</h5>
         </div>
         <div class="card-block px-0 py-3">
           <div class="table-responsive">
-            <table class="table table-hover">
+            <table id="myTable" class="table table-hover display">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Celular</th>
+                  <th>Municipio/Departamento</th>
+                  <th>Dirección/Email</th>
+                  <th>Fecha de radicado</th>
+                  <th></th>
+                </tr>
+              </thead>
               <tbody>
+              {% comment %}
+              {% for rad in radicados_day|get_item:current_day|slice:":100" %}
                 <tr class="unread">
-                  <td><img class="rounded-circle" style="width:40px;" src="{% static 'assets/images/user/avatar-1.jpg' %}"
-                      alt="activity-user">
+                  <td>
+                    <h6 class="mb-1">{{ rad.paciente_nombre }}</h6>
+                    <p class="m-0">{{ rad.numero_radicado }}</p>
                   </td>
                   <td>
-                    <h6 class="mb-1">Isabella Christensen</h6>
-                    <p class="m-0">Lorem Ipsum is simply…</p>
+                    <h6 class="mb-1">{{ rad.cel_uno }}</h6>
+                    <h6 class="text-muted">{{ rad.cel_dos|default_if_none:'' }}</h6>
                   </td>
                   <td>
-                    <h6 class="text-muted"><i class="fas fa-circle text-c-green f-10 m-r-15"></i>11
-                      MAY 12:56</h6>
+                    <h6 class="mb-1">{{ rad.municipio }}</h6>
                   </td>
-                  <td><a href="#!" class="label theme-bg2 text-white f-12">Reject</a><a href="#!"
-                      class="label theme-bg text-white f-12">Approve</a>
+                  <td>
+                    <h6 class="mb-1">{{ rad.direccion }}</h6>
+                    <h6 class="mb-1">{{ rad.email }}</h6>
+                  </td>
+                  <td>
+                    <h6 class="text-muted">
+                      {{ rad.datetime|date:"j M Y H:i" }}
+                    </h6>
+                  </td>
+                  <td>
+                    <a href="#!" class="label theme-bg text-white f-12">Más</a>
                   </td>
                 </tr>
-                <tr class="unread">
-                  <td><img class="rounded-circle" style="width:40px;" src="{% static 'assets/images/user/avatar-2.jpg' %}"
-                      alt="activity-user">
-                  </td>
-                  <td>
-                    <h6 class="mb-1">Mathilde Andersen</h6>
-                    <p class="m-0">Lorem Ipsum is simply text of…</p>
-                  </td>
-                  <td>
-                    <h6 class="text-muted"><i class="fas fa-circle text-c-red f-10 m-r-15"></i>11 MAY
-                      10:35</h6>
-                  </td>
-                  <td><a href="#!" class="label theme-bg2 text-white f-12">Reject</a><a href="#!"
-                      class="label theme-bg text-white f-12">Approve</a>
-                  </td>
-                </tr>
-                <tr class="unread">
-                  <td><img class="rounded-circle" style="width:40px;" src="{% static 'assets/images/user/avatar-3.jpg' %}"
-                      alt="activity-user">
-                  </td>
-                  <td>
-                    <h6 class="mb-1">Karla Sorensen</h6>
-                    <p class="m-0">Lorem Ipsum is simply…</p>
-                  </td>
-                  <td>
-                    <h6 class="text-muted"><i class="fas fa-circle text-c-green f-10 m-r-15"></i>9 MAY
-                      17:38</h6>
-                  </td>
-                  <td><a href="#!" class="label theme-bg2 text-white f-12">Reject</a><a href="#!"
-                      class="label theme-bg text-white f-12">Approve</a>
-                  </td>
-                </tr>
-                <tr class="unread">
-                  <td><img class="rounded-circle" style="width:40px;" src="{% static 'assets/images/user/avatar-1.jpg' %}"
-                      alt="activity-user">
-                  </td>
-                  <td>
-                    <h6 class="mb-1">Ida Jorgensen</h6>
-                    <p class="m-0">Lorem Ipsum is simply text of…</p>
-                  </td>
-                  <td>
-                    <h6 class="text-muted f-w-300"><i class="fas fa-circle text-c-red f-10 m-r-15"></i>19
-                      MAY
-                      12:56</h6>
-                  </td>
-                  <td><a href="#!" class="label theme-bg2 text-white f-12">Reject</a><a href="#!"
-                      class="label theme-bg text-white f-12">Approve</a>
-                  </td>
-                </tr>
-                <tr class="unread">
-                  <td><img class="rounded-circle" style="width:40px;" src="{% static 'assets/images/user/avatar-2.jpg' %}"
-                      alt="activity-user">
-                  </td>
-                  <td>
-                    <h6 class="mb-1">Albert Andersen</h6>
-                    <p class="m-0">Lorem Ipsum is simply dummy…</p>
-                  </td>
-                  <td>
-                    <h6 class="text-muted"><i class="fas fa-circle text-c-green f-10 m-r-15"></i>21
-                      July 12:56</h6>
-                  </td>
-                  <td><a href="#!" class="label theme-bg2 text-white f-12">Reject</a><a href="#!"
-                      class="label theme-bg text-white f-12">Approve</a>
-                  </td>
-                </tr>
+              {% endfor %}
+              {% endcomment %}
               </tbody>
             </table>
           </div>
         </div>
       </div>
-    </div>
-    <!--[ Recent Users ] end-->
+    </div>-->
+    <!--[ Recent Rads ] end-->
 
-    <!-- [ statistics year chart ] start -->
-    <div class="col-xl-4 col-md-6">
+
+
+
+    <!-- [ statistics rads chart ] start -->
+    <!--<div class="col-xl-4 col-md-6">
       <div class="card card-event">
         <div class="card-block">
           <div class="row align-items-center justify-content-center">
@@ -193,6 +242,12 @@
           <i class="fab fa-angellist text-c-purple f-50"></i>
         </div>
       </div>
+
+    </div>-->
+    <!-- [ statistics rads chart ] end -->
+    <!--[social-media section] start-->
+
+    <!--<div class="col-md-12 col-xl-4">
       <div class="card">
         <div class="card-block border-bottom">
           <div class="row d-flex align-items-center">
@@ -217,10 +272,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <!-- [ statistics year chart ] end -->
-    <!--[social-media section] start-->
-    <div class="col-md-12 col-xl-4">
       <div class="card card-social">
         <div class="card-block border-bottom">
           <div class="row align-items-center justify-content-center">
@@ -319,10 +370,10 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>-->
     <!--[social-media section] end-->
     <!-- [ rating list ] starts-->
-    <div class="col-xl-4 col-md-6">
+    <!--<div class="col-xl-4 col-md-6">
       <div class="card user-list">
         <div class="card-header">
           <h5>Rating</h5>
@@ -387,9 +438,9 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>-->
     <!-- [ rating list ] end-->
-    <div class="col-xl-8 col-md-12 m-b-30">
+    <!--<div class="col-xl-8 col-md-12 m-b-30">
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
           <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
@@ -660,9 +711,22 @@
           </table>
         </div>
       </div>
-    </div>
+    </div>-->
 
   </div>
   <!-- [ Main Content ] end -->
 
 {% endblock content %}
+{% block extra_js %}
+<!-- chart-morris Js -->
+<script src="{% static 'assets/plugins/chart-morris/js/raphael.min.js' %}"></script>
+<script src="{% static 'assets/plugins/chart-morris/js/morris.min.js' %}"></script>
+<script src="{% static 'assets/js/pages/chart-morris-custom.js' %}" data-radicados="{{ radicados_day|jsonify }}" data-radicados_mun="{{ radicados_mun|jsonify }}"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#myTable').DataTable();
+});
+
+</script>
+{% endblock extra_js %}

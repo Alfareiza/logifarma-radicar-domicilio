@@ -3,9 +3,10 @@
 <nav class="pcoded-navbar">
   <div class="navbar-wrapper">
     <div class="navbar-brand header-logo">
-      <a href="#" class="b-brand">
+      <a href="{% url 'index' %}" class="b-brand">
         <div class="b-bg">
           <!--<i class="feather icon-trending-up"></i>-->
+          <img src="{% static 'img/ICONO-AZUL.png' %}" style="height: 1.5rem; width: 1.5rem">
         </div>
         <span class="b-title" >Domicilios Logifarma</span>
       </a>
@@ -40,35 +41,8 @@
         </li>
         {% endif %}
 
-        {% admin_get_menu as app_list %}
-        {% if app_list %}
-          {% for app in app_list %}
-            {% if app.has_perms and not app.pinned %}
-              <li data-username="basic components Button Alert Badges breadcrumb Paggination progress Tooltip popovers Carousel Cards Collapse Tabs pills Modal Grid System Typography Extra Shadows Embeds"
-                class="nav-item pcoded-hasmenu">
-                <a href="javascript:" class="nav-link ">
-                  <span class="pcoded-micon"><i class=" {% if app.icon %}{{ app.icon }} {% else %} feather icon-box {% endif %}"></i></span>
-                  <span class="pcoded-mtext">{{ app.label|slice:10 }}{% if app.label|length > 10 %}..{% endif %}</span>
-                </a>
-                {% if app.models %}
-                  <ul class="pcoded-submenu">
-                    {% for model in app.models %}
-                      {% if model.url %}
-                        <li class="nav-item {% if 'bootstrap-tables' in segment or model.url in request.path|urlencode %} active {% endif %}">
-                          <a class="nav-link" href="{{ model.url }}">{{ model.label }}</a>
-                        </li>
-                      {% else %}
-                        <li class="nav-item">{{ model.label }}</li>
-                      {% endif %}
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-              </li>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-
-        {% if request.user.is_authenticated and request.user.is_staff and request.user.username == 'admin' %}
+        {% if request.user.is_authenticated and request.user.is_staff %}
+        {% comment %}
         <li class="nav-item pcoded-menu-caption">
           <label>UI Element</label>
         </li>
@@ -136,6 +110,7 @@
               class="pcoded-micon"><i class="feather icon-power"></i></span><span class="pcoded-mtext">Disabled
               menu</span></a>
         </li>
+        {% endcomment %}
         {% endif %}
       </ul>
     </div>

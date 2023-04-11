@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
@@ -5,8 +7,12 @@ from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 
 from core.apps.base.resources.tools import decrypt
+from core.apps.home import facade
+from core.apps.home.context_processors import order_radicados_by_day
+from core.apps.home.facade import order_radicados_by_mun_mes
 from core.apps.home.forms import LoginForm
 from core.settings import logger
+
 
 @csrf_exempt
 @login_required
@@ -22,10 +28,17 @@ def ver_soporte_rad(request, value):
 @login_required
 def index(request):
     logger.warning(f'{request.user.username} ha accesado a inicio/ login.')
-    if request.user.username != 'admin':
+    if request.user.username not in ['admin', 'logistica']:
         logout(request)
         return redirect('base:home')
-    return render(request, "pages/index.html")
+    radicados = facade.listar_radicados_mes(datetime.datetime.now().month)
+    return render(request, "pages/index.html",
+                  {
+                      'radicados': radicados,
+                      'radicados_day': {f"{k}": len(v) for k, v in order_radicados_by_day(radicados).items()},
+                      'radicados_mun': order_radicados_by_mun_mes(datetime.datetime.now().month)
+                   }
+                  )
 
 
 # Authentication
