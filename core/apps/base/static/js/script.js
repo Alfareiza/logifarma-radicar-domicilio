@@ -83,3 +83,44 @@ function  verificarTiempo(){
 };
 
 setInterval(verificarTiempo, 5000);
+
+
+
+const inp_whatsapp = document.getElementById("id_digitaCelular-whatsapp");
+const inp_numero = document.getElementById("id_digitaCelular-celular");
+const error_vacio = document.getElementById("error_vacio");
+const error_celu = document.getElementById("error_celu");
+
+function habilitarcampo() {
+
+    const check_whatsapp = document.getElementById("btn-switch");
+
+    if (check_whatsapp.checked) {
+
+        if ( inp_numero.value !== "" ) {
+
+            if (inp_numero.value > 100000000 && inp_numero.value < 10000000000) {
+
+                inp_whatsapp.value = inp_numero.value;
+                error_vacio.style.display = "none";
+                error_celu.style.display = "none";
+
+           }else{
+
+            check_whatsapp.checked = false;
+            error_celu.style.display = "block";
+           }
+
+        }else {
+            check_whatsapp.checked = false;
+            error_vacio.style.display = "block";
+        }
+        
+    } else{
+        inp_whatsapp.value = "";
+    }
+
+    
+
+  };
+  

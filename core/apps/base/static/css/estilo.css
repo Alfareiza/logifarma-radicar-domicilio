@@ -1006,7 +1006,7 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-weight: 300;}
 
 .cont_inpu_celular {position: relative;
-    margin: 3% auto;
+    margin: 3% auto 0%;
     width: 30%;
     height: 5vh;
     display: flex;}
@@ -1063,7 +1063,93 @@ margin: 0;
     margin: 1% auto 0;
     text-align: center;}
 
+.switch {
+    position: relative;
+    width: 30%;
+    height: 5vh;
+    margin: 1% auto 0;
+}
 
+.grup-switch {
+    position: relative;
+    display: flex;
+    width: 91%;
+    height: 3vh; 
+}
+
+.conten-switch{
+    position: relative;
+    width: 9%;
+    height: 95%;
+    margin: auto 0px;
+}
+
+.text-switch{
+    font-size: 0.9em;
+    font-weight: 100;
+    margin: 6px;
+}
+
+.lbl-switch {
+    display: inline-block;
+    width: 33px;
+    height: 17px;
+    background: #aaa;
+    border-radius: 100px;
+    position: relative;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.inp-switch:checked ~ .lbl-switch {
+    background: #61A0FF;
+}
+
+.lbl-switch::after {
+    position: absolute;
+    content: '';
+    width: 13px;
+    height: 13px;
+    background: #fff;
+    border-radius: 100px;
+    top: 2px;
+    left: 4px;
+    transition: 0.3s;
+}
+
+.inp-switch:checked ~ .lbl-switch::after {
+    left: 17px;
+}
+
+.inp-switch {
+    display: none;
+}
+
+.error_vaci{
+    position: relative;
+    width: 100%;
+    height: 3vh;
+    margin: 10px auto 0;
+    display: none;
+}
+
+.error_celu{
+    position: relative;
+    width: 100%;
+    height: 3vh;
+    margin: 10px auto 0;
+    display: none;
+}
+
+.tex {
+    position: relative;
+    margin: auto;
+    width: 18%;
+    height: 100%;
+    color: red;
+    font-weight: 100;
+    font-size: 0.9em;
+}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -2176,13 +2262,13 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-weight: 300;}
 
 .cont_inpu_celular {position: relative;
-    margin: 3% auto;
+    margin: 0% auto 0%;
     width: 30%;
     height: 7vh;
     display: flex;}
 
 .cont_inpu_whatsapp {position: relative;
-    margin: 3% auto;
+    margin: 1% auto 5%;
     width: 30%;
     height: 7vh;
     display: flex;}
@@ -2226,13 +2312,74 @@ transition: 0.5S;
     }
 
 .p_vist8 {position: relative;
-    width: 64%;
-    height: 10vh;
-    font-size: 0.8em;
+    width: 30%;
+    height: 6vh;
+    font-size: 0.9em;
     font-weight: 400;
-    margin: 2% auto 0;
+    margin: 1% auto 0;
     text-align: center;}
 
+.switch {
+    position: relative;
+    width: 30%;
+    height: 5vh;
+    margin: 2% auto 2%;
+}
+
+.grup-switch {
+    position: relative;
+    display: flex;
+    width: 91%;
+    height: 3vh; 
+}
+
+.conten-switch{
+    position: relative;
+    width: 9%;
+    height: 95%;
+    margin: 0px 1% 0px 0px;
+}
+
+.text-switch{
+    font-size: 0.8em;
+    font-weight: 100;
+    margin: 1px auto;
+}
+
+.lbl-switch {
+    display: inline-block;
+    width: 33px;
+    height: 17px;
+    background: #aaa;
+    border-radius: 100px;
+    position: relative;
+    cursor: pointer;
+    margin: 0;
+}
+
+.inp-switch:checked ~ .lbl-switch {
+    background: #61A0FF;
+}
+
+.lbl-switch::after {
+    position: absolute;
+    content: '';
+    width: 13px;
+    height: 13px;
+    background: #fff;
+    border-radius: 100px;
+    top: 2px;
+    left: 4px;
+    transition: 0.3s;
+}
+
+.inp-switch:checked ~ .lbl-switch::after {
+    left: 17px;
+}
+
+.inp-switch {
+    display: none;
+}
 
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
@@ -3355,7 +3502,7 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-weight: 300;}
 
 .cont_inpu_celular {position: relative;
-margin: 4% auto 7%;
+margin: 4% auto 4%;
 width: 70%;
 height: 6vh;
 display: flex;}
@@ -3413,7 +3560,67 @@ transition: 0.5S;
 margin: 0;
 }
 
+.switch {
+    position: relative;
+    width: 68%;
+    height: 2vh;
+    margin: 2% auto 7%;
+}
 
+.grup-switch {
+    position: relative;
+    display: flex;
+    width: 77%;
+    height: 100%; 
+}
+
+.conten-switch{
+    position: relative;
+    width: 9%;
+    height: 95%;
+    margin: 0px 1% 0px 0px;
+}
+
+.text-switch{
+    font-size: 1.2em;
+    font-weight: 100;
+    margin: 1px auto;
+}
+
+.lbl-switch {
+    display: inline-block;
+    width: 38px;
+    height: 22px;
+    background: #aaa;
+    border-radius: 100px;
+    position: relative;
+    cursor: pointer;
+    margin: 0;
+}
+
+.inp-switch:checked ~ .lbl-switch {
+    background: #61A0FF;
+}
+
+.lbl-switch::after {
+    position: absolute;
+    content: '';
+    width: 15px;
+    height: 15px;
+    background: #fff;
+    border-radius: 100px;
+    top: 3px;
+    left: 4px;
+    transition: 0.3s;
+}
+
+.inp-switch:checked ~ .lbl-switch::after {
+    left: 18px;
+}
+
+.inp-switch {
+    display: none;
+}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -4602,7 +4809,67 @@ transition: 0.5S;
 margin: 0;
 }
 
+.switch {
+    position: relative;
+    width: 68%;
+    height: 3vh;
+    margin: 2% auto 7%;
+}
 
+.grup-switch {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%; 
+}
+
+.conten-switch{
+    position: relative;
+    width: 9%;
+    height: 95%;
+    margin: 0px;
+}
+
+.text-switch{
+    font-size: 1.2em;
+    font-weight: 100;
+    margin: 0px;
+}
+
+.lbl-switch {
+    display: inline-block;
+    width: 40px;
+    height: 22px;
+    background: #aaa;
+    border-radius: 100px;
+    position: relative;
+    cursor: pointer;
+    margin: 0;
+}
+
+.inp-switch:checked ~ .lbl-switch {
+    background: #61A0FF;
+}
+
+.lbl-switch::after {
+    position: absolute;
+    content: '';
+    width: 15px;
+    height: 15px;
+    background: #fff;
+    border-radius: 100px;
+    top: 3px;
+    left: 4px;
+    transition: 0.3s;
+}
+
+.inp-switch:checked ~ .lbl-switch::after {
+    left: 18px;
+}
+
+.inp-switch {
+    display: none;
+}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -5807,7 +6074,94 @@ margin: 0;
     margin: 0 auto;
     height: 6vh;}
 
+.switch {
+    position: relative;
+    width: 85%;
+    height: 3vh;
+    margin: 5% auto 7%;
+}
 
+.grup-switch {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%; 
+}
+
+.conten-switch{
+    position: relative;
+    width: 9%;
+    height: 76%;
+    margin: auto 0;
+}
+
+.text-switch{
+    font-size: 0.7em;
+    font-weight: 100;
+    margin: 4px;
+}
+
+.lbl-switch {
+    display: inline-block;
+    width: 28px;
+    height: 16px;
+    background: #aaa;
+    border-radius: 100px;
+    position: relative;
+    cursor: pointer;
+    margin: 0;
+}
+
+.inp-switch:checked ~ .lbl-switch {
+    background: #61A0FF;
+}
+
+.lbl-switch::after {
+    position: absolute;
+    content: '';
+    width: 11px;
+    height: 11px;
+    background: #fff;
+    border-radius: 100px;
+    top: 2px;
+    left: 4px;
+    transition: 0.3s;
+}
+
+.inp-switch:checked ~ .lbl-switch::after {
+    left: 18px;
+}
+
+.inp-switch {
+    display: none;
+}
+
+.error_vaci{
+    position: relative;
+    width: 100%;
+    height: 3vh;
+    margin: 10px auto 0;
+    display: none;
+}
+
+.error_celu{
+    position: relative;
+    width: 100%;
+    height: 3vh;
+    margin: 10px auto 0;
+    display: none;
+}
+    
+.tex {
+    position: relative;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    color: red;
+    font-weight: 100;
+    font-size: 0.9em;
+    text-align: center;
+}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
@@ -7000,7 +7354,94 @@ margin: 0;
     font-weight: 400;
     margin: 0 auto;}
 
+.switch {
+    position: relative;
+    width: 85%;
+    height: 3vh;
+    margin: 5% auto 7%;
+}
 
+.grup-switch {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%; 
+}
+
+.conten-switch{
+    position: relative;
+    width: 9%;
+    height: 76%;
+    margin: auto 0;
+}
+
+.text-switch{
+    font-size: 0.7em;
+    font-weight: 100;
+    margin: 4px;
+}
+
+.lbl-switch {
+    display: inline-block;
+    width: 28px;
+    height: 16px;
+    background: #aaa;
+    border-radius: 100px;
+    position: relative;
+    cursor: pointer;
+    margin: 0;
+}
+
+.inp-switch:checked ~ .lbl-switch {
+    background: #61A0FF;
+}
+
+.lbl-switch::after {
+    position: absolute;
+    content: '';
+    width: 11px;
+    height: 11px;
+    background: #fff;
+    border-radius: 100px;
+    top: 2px;
+    left: 4px;
+    transition: 0.3s;
+}
+
+.inp-switch:checked ~ .lbl-switch::after {
+    left: 18px;
+}
+
+.inp-switch {
+    display: none;
+}
+
+.error_vaci{
+    position: relative;
+    width: 100%;
+    height: 3vh;
+    margin: 10px auto 0;
+    display: none;
+}
+
+.error_celu{
+    position: relative;
+    width: 100%;
+    height: 3vh;
+    margin: 10px auto 0;
+    display: none;
+}
+    
+.tex {
+    position: relative;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    color: red;
+    font-weight: 100;
+    font-size: 0.9em;
+    text-align: center;
+}
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
