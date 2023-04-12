@@ -25,6 +25,9 @@ $('.labelfil').click(function() {
 
 function buscador_interno(){
 
+    function removeAccents(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      }
 
     filter = escri.value.toUpperCase();
     li = box_o.getElementsByTagName("div");
@@ -36,7 +39,7 @@ function buscador_interno(){
         textValue = a.textContent || a.innerText;
 
 
-        if(textValue.toUpperCase().indexOf(filter) > -1){
+        if(removeAccents(textValue.toUpperCase()).indexOf(removeAccents(filter)) > -1){
 
             li[i].style.display = "";
             box_o.style.display = "block";
