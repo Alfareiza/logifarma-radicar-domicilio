@@ -102,6 +102,7 @@ function habilitarcampo() {
             if (inp_numero.value > 100000000 && inp_numero.value < 10000000000) {
 
                 inp_whatsapp.value = inp_numero.value;
+                inp_whatsapp.disabled = true;
                 error_vacio.style.display = "none";
                 error_celu.style.display = "none";
 
