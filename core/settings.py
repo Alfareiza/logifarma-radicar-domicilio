@@ -51,13 +51,15 @@ AUTHENTICATION_BACKENDS = [
 INSTALLED_APPS = [
     'core.apps.base',
     'core.apps.home',
+    'core.apps.api',
     'formtools',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -201,3 +203,17 @@ FIREBASE_CONFIG = {
 }
 FIREBASE = pyrebase.initialize_app(FIREBASE_CONFIG)
 FIREBASE_DB = FIREBASE.database()
+
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'API Domicilios Logifarma',
+    'SWAGGER_UI_FAVICON_HREF': 'http://domicilios.logifarma.com.co/static/img/ICONO-AZUL.png',
+    'VERSION': '1.0.0',
+    "SWAGGER_UI_SETTINGS": {
+        'supportedSubmitMethods': ['']
+    },
+}
