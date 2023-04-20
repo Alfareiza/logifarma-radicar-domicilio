@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status, viewsets
+from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
@@ -150,6 +151,11 @@ class RadicacionViewSet(viewsets.ModelViewSet):
 
         response_serializer = RadicacionDetailSerializer(instance)
         return Response(response_serializer.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = get_object_or_404(Radicacion.objects.filter(**kwargs))
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
 
 def create_range_dates(days: int = 7):

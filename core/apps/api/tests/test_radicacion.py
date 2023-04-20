@@ -1,4 +1,5 @@
 import datetime
+import unittest
 from unittest import TestCase
 
 from django.urls import reverse
@@ -89,6 +90,18 @@ class RadicacionApiTests(TestCase):
 
         serializer = RadicacionDetailSerializer(self.rad)
         self.assertEqual(res.data, serializer.data)
+
+    @unittest.skip("Only works if is executed with production db")
+    def test_get_radicacion_detail_specific_one(self):
+        """Testing GET /api/v1/radicaciones/800102253316"""
+        input_rad = 800102253316
+        url = detail_url(input_rad)
+        res = self.client.get(url)
+        rad = Radicacion.objects.get(numero_radicado=input_rad)
+
+        serializer = RadicacionDetailSerializer(rad)
+        self.assertEqual(res.data, serializer.data)
+
 
     def test_create_radicacion(self):
         """Testing POST /api/v1/radicaciones/"""

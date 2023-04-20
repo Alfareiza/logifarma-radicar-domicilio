@@ -194,12 +194,12 @@ logger.addHandler(ch)
 # https://github.com/nhorvath/Pyrebase4
 
 FIREBASE_CONFIG = {
-    'apiKey': config('FBASE_apiKey'),
-    'authDomain': config('FBASE_authDomain'),
-    'databaseURL': config('FBASE_databaseURL'),
-    'projectId': config('FBASE_projectId'),
-    'storageBucket': config('FBASE_storageBucket'),
-    'messagingSenderId': config('FBASE_messagingSenderId')
+    'apiKey': config('FBASE_APIKEY'),
+    'authDomain': config('FBASE_AUTHDOMAIN'),
+    'databaseURL': config('FBASE_DATABASEURL'),
+    'projectId': config('FBASE_PROJECTID'),
+    'storageBucket': config('FBASE_STORAGEBUCKET'),
+    'messagingSenderId': config('FBASE_MESSAGINGSENDERID')
 }
 FIREBASE = pyrebase.initialize_app(FIREBASE_CONFIG)
 FIREBASE_DB = FIREBASE.database()
