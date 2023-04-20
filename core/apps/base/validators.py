@@ -8,7 +8,8 @@ from django.utils.safestring import mark_safe
 
 from core.apps.base.models import Radicacion
 from core.apps.base.resources.api_calls import get_firebase_acta
-from core.apps.base.resources.tools import encrypt, pretty_date
+from core.apps.base.resources.tools import encrypt, pretty_date, \
+    update_rad_from_fbase
 from core.settings import logger
 
 
@@ -31,13 +32,15 @@ def validate_status(resp_mcar: dict, rad: Radicacion) -> ValidationError:
     logger.info(f"{rad.numero_radicado} radicado {radicado_dt}.")
     text_resp = ''
     if ssc := resp_mcar.get('ssc'):
-        rad.acta_entrega = ssc
-        rad.save()
+        if not rad.acta_entrega:
+            rad.acta_entrega = ssc
+            rad.save()
         if factura := resp_mcar.get('factura'):
             # Radicado  tiene SSC, factura y está por confirmar si está firebase
             logger.info(f"{rad.numero_radicado} radicado con factura detectada.")
-            rad.factura = factura
-            rad.save()
+            if not rad.factura:
+                rad.factura = factura
+                rad.save()
             text_resp = f'Número de autorización {rad.numero_radicado} radicado ' \
                         f'{radicado_dt}.<br><br>Este domicilio se encuentra en reparto<br><br>' \
                         f'Si tiene alguna duda se puede comunicar con nosotros ' \
@@ -45,15 +48,7 @@ def validate_status(resp_mcar: dict, rad: Radicacion) -> ValidationError:
             resp_fbase = get_firebase_acta(ssc)
             if resp_fbase and resp_fbase['state'] == 'Completed':
                 # Radicado  tiene SSC, factura y está en firebase
-                rad.domiciliario_nombre = resp_fbase['nomDomi']
-                rad.domicilario_ide = resp_fbase['docDomi']
-                rad.despachado = datetime.strptime(
-                    f"{resp_fbase['deliveryDate']} {resp_fbase['deliveryHour']}",
-                    '%Y/%m/%d %H:%M:%S'
-                )
-                rad.domiciliario_empresa = resp_fbase['empDomi']
-                rad.estado = resp_fbase['state']
-                rad.factura = resp_fbase['invoice']
+                update_rad_from_fbase(rad, resp_fbase)
                 rad.save()
                 entregado_dt = pretty_date(
                     rad.despachado.astimezone(timezone.get_current_timezone())
@@ -71,7 +66,7 @@ def validate_status(resp_mcar: dict, rad: Radicacion) -> ValidationError:
 
         else:
             # Radicado  tiene SSC pero no tiene factura y por eso se asume que no está en firebase
-            logger.info(f"{rad.numero_radicado} radicado en preparación acta (#{ssc}).")
+            logger.info(f"{rad.numero_radicado} radicado en preparación, acta #{ssc}.")
             text_resp = f'Número de autorización {rad.numero_radicado} radicado ' \
                         f'{radicado_dt}.<br><br>Este domicilio se encuentra en preparación<br><br>' \
                         'Si tiene alguna duda se puede comunicar con nosotros ' \

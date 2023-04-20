@@ -222,10 +222,34 @@ def should_i_call_auth():
 
 @logtime('FIREBASE')
 def get_firebase_acta(acta: int) -> dict:
+    """
+    Consulta información en firebase con base al número de acta
+    :param acta: 123456
+    :return: Una vez consultada la url
+            Si el status_code != 200:
+             :return {}
+            Si no hubo respuesta en 20 segundos:
+             :return {}
+            Si el status_code == 200:
+                Si el response.text == null
+                    :return {'state': 'null'}
+                Si no:
+                    :return
+                      {"act":"123456", "actFileId": "1Z654-I_Hla",
+                      "address": "CRA 9 88 88", "affiliateDoc": "1143000000",
+                      "afiliateName": "JANE DOE FOO BAR",
+                      "authorizationNumber": "8758000000",
+                      "city": "SOLEDAD", "deliveryDate": "2023/3/29",
+                      "deliveryHour": "11:34:24", "departament": "ATL",
+                      "docDomi": "ID11430000045", "empDomi": "Nombre Empresa",
+                      "haveInvoiceDocument": true, "invoice": "LGF456123",
+                      "item": 3, "mipres": "0", "neighborhood": "SOLEDAD 2000",
+                      "nomDomi": "Jane Jane Jane", "phone1": "3160000000",
+                      "phone2": "", "state": "Completed"}
+    """
     try:
-        response = requests.request(
-            'GET',
-            f"{config('FIREBASE_URL')}/completed_deliveries/{acta}.json",
+        response = requests.request('GET',
+            f"{config('FBASE_DATABASEURL')}/completed_deliveries/{acta}.json",
             timeout=20
             )
         if response.status_code != 200:

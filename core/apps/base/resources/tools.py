@@ -1,5 +1,5 @@
 import urllib.request
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from django.core.mail import EmailMessage
@@ -296,7 +296,8 @@ def when(dt) -> str:
 
 
 dct = {'0': 'X', '1': 'y', '2': 'z', '3': 'N', '4': 'o', '5': 'k',
-           '6': 'J', '7': 'C', '8': 'b', '9': 'a'}
+       '6': 'J', '7': 'C', '8': 'b', '9': 'a'}
+
 
 def encrypt(num: int) -> str:
     """
@@ -315,3 +316,22 @@ def decrypt(txt: str) -> str:
     reverse_dct = {v: k for k, v in dct.items()}
     resp = [reverse_dct[s] for s in txt if s in reverse_dct]
     return ''.join(resp)
+
+
+def update_rad_from_fbase(rad: Radicacion, resp_fbase: dict) -> None:
+    """Actualiza un radicado con base en resp_fbase"""
+    logger.info(f"{rad.numero_radicado} siendo actualizado con información de Firebase.")
+    if not rad.acta_entrega:
+        rad.acta_entrega = str(resp_fbase['act'])
+    rad.domiciliario_nombre = resp_fbase['nomDomi']
+    rad.domiciliario_ide = resp_fbase['docDomi']
+    rad.despachado = datetime.strptime(
+        f"{resp_fbase['deliveryDate']} {resp_fbase['deliveryHour']}",
+        '%Y/%m/%d %H:%M:%S'
+    )
+    rad.domiciliario_empresa = resp_fbase['empDomi']
+    rad.estado = resp_fbase['state']
+    rad.factura = resp_fbase['invoice']
+
+
+
