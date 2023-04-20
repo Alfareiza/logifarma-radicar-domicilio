@@ -1,4 +1,4 @@
-name: Python application
+name: API
 
 on: [pull_request_target]
 env: # Or as an environment variable
