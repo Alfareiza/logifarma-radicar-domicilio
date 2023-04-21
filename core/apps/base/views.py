@@ -10,6 +10,7 @@ from django.urls import reverse
 
 from core import settings
 from core.apps.base.forms import *
+from core.apps.base.resources.api_calls import check_meds
 from core.apps.base.resources.customwizard import CustomSessionWizard
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.email_helpers import make_subject_and_cco, make_destinatary
@@ -135,12 +136,16 @@ class ContactWizard(CustomSessionWizard):
             'email': [*form_data['digitaCorreo']]
         }
         # Guardará en BD cuando DEBUG sean números reales
+        ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
         if info_email['NUMERO_AUTORIZACION'] not in [99_999_999, 99_999_998]:
-            guardar_info_bd(**info_email, ip=self.request.META.get('HTTP_X_FORWARDED_FOR',
-                                                                   self.request.META.get('REMOTE_ADDR')))
+            guardar_info_bd(**info_email, ip=ip)
 
         logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']}"
                     f" Radicación finalizada. E-mail de confirmación será enviado a {form_data['digitaCorreo']}")
+
+        # Revisa medicamentos
+        ask_med = threading.Thread(target=check_meds, args=(info_email,))
+        ask_med.start()
 
         # Envía e-mail
         if not self.foto_fmedica:
