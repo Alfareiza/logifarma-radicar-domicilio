@@ -4,14 +4,17 @@ from datetime import datetime, timedelta
 
 import requests
 from decouple import config
+from django.template.loader import get_template
 from requests import Timeout
 
-from core.apps.base.resources.decorators import logtime, hash_dict, timed_lru_cache
+from core.apps.base.resources.decorators import hash_dict, logtime, \
+    timed_lru_cache
 from core.apps.base.resources.tools import notify
 from core.settings import BASE_DIR
 from core.settings import logger
 
 pickle_path = BASE_DIR / "core/apps/base/resources/stored.pickle"
+
 
 def call_api_eps(num_aut: int) -> dict:
     """
@@ -84,7 +87,8 @@ def auth_api_medicar():
 
             return result["access_token"]
         else:
-            logger.warning(f'Error solicitando autorización API MEDICAR: {response.text}')
+            logger.warning(f'Error solicitando autorización'
+                           f' API MEDICAR: {response.text}')
     except Exception as e:
         logger.error('Error llamando API de medicar: ', e)
 
@@ -145,19 +149,19 @@ def call_api_medicar(num_aut: int) -> dict:
                     "codigo_centro_factura": "920",
                     "nombre_centro_factura": "Central Domicilios Barranquilla (920)",
                     "direccion_centro_factura": "VIA 40 No. 69 - 58 Bodega D5 Parque \r\nIndustrial VIA 40",
-                    "usuario_dispensa": "Libardo Jose Iriarte Camargo",
+                    "usuario_dispensa": "Silva Jose Thiago Camargo",
                     "nombre_eps": "CAJA DE COMPENSACION FAMILIAR CAJACOPI ATLANTICO",
                     "nit_eps": "890102044",
                     "plan": "REGIMEN SUBSIDIADO",
-                    "direccion_eps": "Calle 44 No 46 – 56",
-                    "nombre_afiliado": "GUILLERMO  COLLAZOS ROJAS",
+                    "direccion_eps": "Calle 4 No 4 – 5",
+                    "nombre_afiliado": "GUTIERREZ TEIXEIRA JACKSON WOH",
                     "tipo_documento_afiliado": "CC",
-                    "documento_afiliado": "14988099",
+                    "documento_afiliado": "12340316",
                     "nivel": "6",
                     "mipres": null,
                     "id_mipres": null,
-                    "nombre_medico": "OMAR ANTONIO VALLE NAVARRO",
-                    "nombre_ips": "Hospital De Soledad Materno Infantil",
+                    "nombre_medico": "FRANK LAMPARD",
+                    "nombre_ips": "Hospital De Leticia Materno Infantil",
                     "articulos": [
                         {
                             "codigo_barras": "7707184601001",
@@ -185,7 +189,8 @@ def call_api_medicar(num_aut: int) -> dict:
     call_auth = should_i_call_auth()
     token = auth_api_medicar() if call_auth is True else call_auth
     url = "https://medicarws.sis-colombia.com/api/logifarma/obtenerDatosFormula"
-    headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}
+    headers = {'Authorization': f'Bearer {token}',
+               'Content-Type': 'application/json'}
     payload = {"nit_eps": "901543211", "autorizacion": f"{num_aut}"}
     resp = request_api(url, headers, payload)
     try:
@@ -200,7 +205,6 @@ def call_api_medicar(num_aut: int) -> dict:
         # msg = f"{resp}"
         logger.error('Al consultarse hubo una respuesta inesperada: ', str(resp))
         return {}
-
 
 
 def should_i_call_auth():
@@ -249,9 +253,9 @@ def get_firebase_acta(acta: int) -> dict:
     """
     try:
         response = requests.request('GET',
-            f"{config('FBASE_DATABASEURL')}/completed_deliveries/{acta}.json",
-            timeout=20
-            )
+                                    f"{config('FBASE_DATABASEURL')}/completed_deliveries/{acta}.json",
+                                    timeout=20
+                                    )
         if response.status_code != 200:
             raise Exception(response.text)
         if response.text == 'null':
@@ -268,7 +272,92 @@ def get_firebase_acta(acta: int) -> dict:
         return {}
 
 
+def check_meds(info_email: dict):
+    """
+    Revisa el CUM de cada medicamento y si no lo encuentra en la página
+    web de la función check_med, entonces envía un correo.
+    :param info_email:
+           Ex.:
+               {
+                  'AFILIADO': 'GUTIERREZ TEIXEIRA JACKSON WOH',
+                 'ARCHIVO': 'https://address.eps.com/temp/14429d7a96171a.pdf',
+                 'CELULAR': '3103095613',
+                 'CORREO': 'something@gmail.com',
+                 'CORREO_RESP_AUT': 'something@eps.com',
+                 'CORREO_RESP_GUARDA': 'something@gmail.com',
+                 'DETALLE_AUTORIZACION': [{'CANTIDAD': '30',
+                                           'CUMS': '15875-1',
+                                           'NOMBRE_PRODUCTO': 'TRIMEBUTINA MALEATO 200MG '
+                                                              'TABLETA RECUBIERTA'}],
+                 'DIAGNOSTICO': 'R102-DOLOR PELVICO Y PERINEAL',
+                 'DIRECCION': 'CL 6C 1 41',
+                 'DOCUMENTO_ID': '12340316',
+                 'ESTADO_AFILIADO': 'ACTIVO',
+                 'ESTADO_AUTORIZACION': 'PROCESADA',
+                 'FECHA_AUTORIZACION': '10/04/2023',
+                 'IPS_SOLICITA': 'FUNDACION CLINICA MATERNO INFANTIL ADELA DE CHAR',
+                 'MEDICO_TRATANTE': 'FRANK LAMPARD',
+                 'MIPRES': '0',
+                 'NUMERO_AUTORIZACION': 8758007512345,
+                 'Observacion': 'UNICA ENTREGA Y DE LA HOZ',
+                 'P_APELLIDO': 'GUTIERREZ',
+                 'P_NOMBRE': 'JACKSON',
+                 'REGIMEN': 'CONTRIBUTIVO',
+                 'RESPONSABLE_AUT': 'ZUCKEBERG GARCIA CARLOS ELIAS',
+                 'RESPONSABLE_GUARDA': 'CARMELO BARBOSA GATES',
+                 'SEDE_AFILIADO': 'SOLEDAD',
+                 'S_APELLIDO': 'TEIXEIRA',
+                 'S_NOMBRE': 'WOH',
+                 'TELEFONO': '',
+                 'TIPO_IDENTIFICACION': 'CC',
+                 'barrio': 'El Recreo',
+                 'celular': 3111231234,
+                 'direccion': 'Karrera 3sur#7A-17',
+                 'email': [''],
+                 'municipio': <Municipio: Barranquilla, Atlántico>,
+                 'whatsapp': None
+                 }
+    :return: None
+    """
+    meds = info_email['DETALLE_AUTORIZACION']
+    htmly = get_template(BASE_DIR / "core/apps/base/templates/notifiers/cum_no_encontrado.html")
 
+    for med in meds:
+        expediente = med['CUMS'].split('-')[0]
+        res = check_med(expediente)
+        if not res:
+            info_email.update(expediente=expediente, cum=med['CUMS'], desc=med['NOMBRE_PRODUCTO'])
+            html_content = htmly.render(info_email)
+            notify(
+                "expd-no-encontrado",
+                f"No existe código CUM {expediente} en BD",
+                html_content,
+            )
+
+
+def check_med(med: str) -> list:
+    """
+    Consulta el expediente de un medicamento y retorna la respuesta.
+    :param med: 20110698
+    :return: Si existe, retorna una lista con al menos un dicionário
+             Sino, una lista vacía.
+    """
+    try:
+        url = f"https://www.datos.gov.co/resource/i7cb-raxc.json?expediente={med}"
+        response = requests.request('GET', url)
+        if response.status_code != 200:
+            raise Exception(response.text)
+        else:
+            return json.loads(response.text.encode('utf-8'), strict=False)
+    except Timeout as e:
+        notify('check-datosgov', f'ERROR CONSULTANDO EXPEDIENTE {med}',
+               f"ERROR: {e}.\nNo hubo respuesta de datos.gov.co")
+        return []
+    except Exception as e:
+        notify('check-datosgov', f'ERROR CONSULTANDO EXPEDIENTE #c{med}',
+               f"URL: {url}\nERROR: {e}\n\nNo se pudo procesar la respuesta de"
+               f" datos.gov.co: {response.text}")
+        return []
 
 
 if __name__ == '__main__':

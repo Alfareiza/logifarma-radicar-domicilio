@@ -1,3 +1,4 @@
+import threading
 import urllib.request
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -200,8 +201,10 @@ def discover_rad(body) -> str:
     :param body:
     :return: # de radicado
     """
+    import re
+    if expr := re.findall("\d{9}\d+", body):
+        return expr[0]
     return ''
-    # TODO Crear expresión regular para capturar número de radicado
 
 
 def notify(reason: str, subject: str, body: str,
@@ -245,6 +248,8 @@ def notify(reason: str, subject: str, body: str,
             'error-email': 'Correo enviado notificando problema al enviar e-mail de confirmación.',
             'check-acta': 'Correo enviado con reporte de chequeo de actas.',
             'check-aut': '{} Correo de alerta de autorización no radicada enviado.',
+            'check-datosgov': 'Correo enviado por problema al consultar datos.gov.co.',
+            'expd-no-encontrado': '{} Correo enviado por expediente no encontrado.',
         }
         logger.info(msg[reason].format(rad).strip())
 
