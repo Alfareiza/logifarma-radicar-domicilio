@@ -13,6 +13,12 @@ env: # Or as an environment variable
       EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
       EMAIL_API_MEDICAR: ${{ secrets.EMAIL_API_MEDICAR }}
       PWD_API_MEDICAR: ${{ secrets.PWD_API_MEDICAR }}
+      FBASE_APIKEY: ${{ secrets.FBASE_APIKEY }}
+      FBASE_AUTHDOMAIN: ${{ secrets.FBASE_AUTHDOMAIN }}
+      FBASE_DATABASEURL: ${{ secrets.FBASE_DATABASEURL }}
+      FBASE_PROJECTID: ${{ secrets.FBASE_PROJECTID }}
+      FBASE_STORAGEBUCKET: ${{ secrets.FBASE_STORAGEBUCKET }}
+      FBASE_MESSAGINGSENDERID: ${{ secrets.FBASE_MESSAGINGSENDERID }}
 jobs:
   build:
     runs-on: ubuntu-latest
