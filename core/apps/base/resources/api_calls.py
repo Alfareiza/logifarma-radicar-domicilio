@@ -324,7 +324,7 @@ def check_meds(info_email: dict):
 
     for med in meds:
         expediente = med['CUMS'].split('-')[0]
-        res = check_med(expediente)
+        res = check_med_bd(expediente)
         if not res:
             info_email.update(expediente=expediente, cum=med['CUMS'], desc=med['NOMBRE_PRODUCTO'])
             html_content = htmly.render(info_email)
@@ -359,6 +359,27 @@ def check_med(med: str) -> list:
                f" datos.gov.co: {response.text}")
         return []
 
+def check_med_bd(codcum: str):
+    try:
+        import pyodbc
+        server = config('SQL_SERVER_HOST')
+        database = config('SQL_SERVER_DB')
+        username = config('SQL_SERVER_USER')
+        password = config('SQL_SERVER_PASS')
+
+        cnxn = pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+                              f"SERVER='{server}';DATABASE='{database};"
+                              f"UID='{username}';PWD='{password}")
+        cursor = cnxn.cursor()
+        cursor.execute(
+            'select codcum_exp as codcum from articulos01 where codcum_exp = ?',
+            codcum)
+
+        results = cursor.fetchall()
+    except Exception as exc:
+        logger.error(f"Error al consultar expediente {codcum}: {exc}")
+    else:
+        return bool(cursor.rowcount)
 
 if __name__ == '__main__':
     ...
