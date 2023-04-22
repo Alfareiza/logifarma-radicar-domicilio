@@ -39,7 +39,7 @@ class Command(BaseCommand):
     @logtime('SCRIPT')
     def handle(self, *args, **options):
         start, end = self.calc_interval_dates()
-        rads = Radicacion.objects.filter(datetime__lte=end).filter(acta_entrega=None).order_by('datetime')
+        rads = Radicacion.objects.filter(datetime__lte=end, acta_entrega=None).order_by('datetime')
         logger.info('Ejecutando script de chequeo de actas.')
         if rads:
             logger.info(f"Verificando {len(rads)} número de actas.")
@@ -121,8 +121,9 @@ class Command(BaseCommand):
                     self.update_acta_entrega(rad, 'rechazada por cajacopi')
                 elif 'ESTADO_AFILIADO' in resp_eps and resp_eps['ESTADO_AFILIADO'] == 'FALLECIDO':
                     self.update_acta_entrega(rad, 'afiliado fallecido')
+                elif 'ESTADO_AFILIADO' in resp_eps and resp_eps['ESTADO_AFILIADO'] == 'ANULADA':
+                    self.update_acta_entrega(rad, 'anulada por cajacopi')
                 else:
-                    logger.info(f"{rad.numero_radicado} aún no tiene acta de entrega.")
                     self.errs.append(rad)
                     self.send_alert_mail(rad, resp_eps)
             except Exception as e:
