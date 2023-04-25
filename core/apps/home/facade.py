@@ -20,7 +20,7 @@ def listar_radicados_mes(month: str, year: str = '2023') -> List[Radicacion]:
     ).values().order_by('-datetime'))
 
 
-def order_radicados_by_mun_mes(month: str, year: str = '2023') -> list[dict]:
+def order_radicados_by_mun_mes(month: str, year: str = '2023') -> List[dict]:
     """
     Lista a cantidad de radicados por municipio en determinado mes/año
     :param month: Obligatório. '04' o '12' o '10' ...
