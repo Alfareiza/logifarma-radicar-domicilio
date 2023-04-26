@@ -15,7 +15,6 @@ from core.settings import logger
 
 pickle_path = BASE_DIR / "core/apps/base/resources/stored.pickle"
 
-
 def call_api_eps(num_aut: int) -> dict:
     """
     Solicita información del numero de la autorización a la API de la EPS.
