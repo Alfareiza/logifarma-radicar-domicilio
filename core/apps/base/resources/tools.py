@@ -238,12 +238,12 @@ def notify(reason: str, subject: str, body: str,
     if isinstance(body, SafeString):
         email.content_subtype = "html"
 
-    rad = discover_rad(body)
+    rad = discover_rad(body) or discover_rad(subject)
 
     if sent := email.send(fail_silently=False):
         msg = {
-            'error-bd': 'Correo enviado notificando problema al guardar en BD.',
-            'error-api': 'Correo enviado notificando problema con API.',
+            'error-bd': '{} Correo enviado notificando problema al guardar en BD.',
+            'error-api': '{} Correo enviado notificando problema con API.',
             'error-archivo-url': 'Correo enviado notificando radicado sin archivo.',
             'error-email': 'Correo enviado notificando problema al enviar e-mail de confirmación.',
             'check-acta': 'Correo enviado con reporte de chequeo de actas.',
