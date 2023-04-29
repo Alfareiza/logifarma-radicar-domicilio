@@ -360,21 +360,17 @@ def check_med(med: str) -> list:
 
 def check_med_bd(codcum: str):
     try:
-        import pyodbc
+        import pymssql
         server = config('SQL_SERVER_HOST')
         database = config('SQL_SERVER_DB')
         username = config('SQL_SERVER_USER')
         password = config('SQL_SERVER_PASS')
-
-        cnxn = pyodbc.connect(f"DRIVER={{ODBC Driver 17 for SQL Server}};"
-                              f"SERVER='{server}';DATABASE='{database};"
-                              f"UID='{username}';PWD='{password}")
-        cursor = cnxn.cursor()
-        cursor.execute(
-            'select codcum_exp as codcum from articulos01 where codcum_exp = ?',
-            codcum)
-
-        results = cursor.fetchall()
+        conn = pymssql.connect(server=server, database=database,
+                               user=username, password=password)
+        cursor = conn.cursor()
+        cursor.execute("SELECT codcum_exp as codcum FROM Logifarma2.dbo.articulos01 "
+                       f"WHERE codcum = '{codcum}'")
+        cursor.fetchall()
     except Exception as exc:
         logger.error(f"Error al consultar expediente {codcum}: {exc}")
     else:
