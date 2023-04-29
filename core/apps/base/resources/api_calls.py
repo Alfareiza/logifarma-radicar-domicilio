@@ -331,6 +331,8 @@ def check_meds(info_email: dict):
                 "expd-no-encontrado",
                 f"No existe código CUM {expediente} en BD",
                 html_content,
+                to=['logistica@logifarma.co'],
+                bcc=['alfareiza@gmail.com']
             )
 
 
@@ -375,6 +377,9 @@ def check_med_bd(codcum: str):
         logger.error(f"Error al consultar expediente {codcum}: {exc}")
     else:
         return bool(cursor.rowcount)
+    finally:
+        cursor.close()
+        conn.close()
 
 if __name__ == '__main__':
     ...
