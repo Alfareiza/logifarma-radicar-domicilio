@@ -325,11 +325,11 @@ def check_meds(info_email: dict):
         expediente = med['CUMS'].split('-')[0]
         res = check_med_bd(expediente)
         if not res:
-            info_email.update(expediente=expediente, cum=med['CUMS'], desc=med['NOMBRE_PRODUCTO'])
+            info_email.update(cum=med['CUMS'], desc=med['NOMBRE_PRODUCTO'])
             html_content = htmly.render(info_email)
             notify(
                 "expd-no-encontrado",
-                f"No existe código CUM {expediente} en BD",
+                f"No existe código CUM {med['CUMS']} en BD",
                 html_content,
                 to=['logistica@logifarma.co'],
                 bcc=['alfareiza@gmail.com']
