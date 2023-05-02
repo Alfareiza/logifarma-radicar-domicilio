@@ -322,8 +322,8 @@ def check_meds(info_email: dict):
     htmly = get_template(BASE_DIR / "core/apps/base/templates/notifiers/cum_no_encontrado.html")
 
     for med in meds:
-        expediente = med['CUMS'].split('-')[0]
-        res = check_med_bd(expediente)
+        # expediente = med['CUMS'].split('-')[0]
+        res = check_med_bd(med['CUMS'])
         if not res:
             info_email.update(cum=med['CUMS'], desc=med['NOMBRE_PRODUCTO'])
             html_content = htmly.render(info_email)
@@ -370,6 +370,7 @@ def check_med_bd(codcum: str):
         conn = pymssql.connect(server=server, database=database,
                                user=username, password=password)
         cursor = conn.cursor()
+        logger.info(f'Buscando expediente {codcum} en base de datos.')
         cursor.execute("SELECT codcum_exp as codcum FROM Logifarma2.dbo.articulos01 "
                        f"WHERE codcum = '{codcum}'")
         cursor.fetchall()
