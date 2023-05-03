@@ -21,7 +21,7 @@ env: # Or as an environment variable
       FBASE_MESSAGINGSENDERID: ${{ secrets.FBASE_MESSAGINGSENDERID }}
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         python-version: [3.8]
