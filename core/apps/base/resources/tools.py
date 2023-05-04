@@ -3,6 +3,7 @@ import urllib.request
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
+import pytz
 from django.core.mail import EmailMessage
 
 from core import settings
@@ -171,22 +172,24 @@ def guardar_info_bd(**kwargs):
 
     logger.info(f"{rad} Guardando radicación.")
     try:
-        Radicacion.objects.create(numero_radicado=str(rad),
-                                  municipio=Municipio.objects.get(
-                                      name__iexact=municipio
-                                  ),
-                                  barrio=Barrio.objects.filter(
-                                      municipio__name__iexact=municipio
-                                  ).get(
-                                      name=kwargs.pop('barrio', None).lower()),
-                                  cel_uno=kwargs.pop('celular', None),
-                                  cel_dos=kwargs.pop('whatsapp', None),
-                                  email=email,
-                                  direccion=kwargs.pop('direccion', None),
-                                  ip=kwargs.pop('ip', None),
-                                  paciente_nombre=kwargs.pop('AFILIADO', None),
-                                  paciente_cc=kwargs.pop('DOCUMENTO_ID', None),
-                                  paciente_data=kwargs)
+        Radicacion.objects.create(
+            creado=datetime.now(tz=pytz.timezone("America/Bogota")),
+            numero_radicado=str(rad),
+            municipio=Municipio.objects.get(
+                  name__iexact=municipio
+                ),
+            barrio=Barrio.objects.filter(
+                municipio__name__iexact=municipio
+                ).get(
+                name=kwargs.pop('barrio', None).lower()),
+            cel_uno=kwargs.pop('celular', None),
+            cel_dos=kwargs.pop('whatsapp', None),
+            email=email,
+            direccion=kwargs.pop('direccion', None),
+            ip=kwargs.pop('ip', None),
+            paciente_nombre=kwargs.pop('AFILIADO', None),
+            paciente_cc=kwargs.pop('DOCUMENTO_ID', None),
+            paciente_data=kwargs)
         logger.info(f"{rad} Radicación guardada con éxito!")
     except Exception as e:
         notify('error-bd',
