@@ -173,7 +173,7 @@ def guardar_info_bd(**kwargs):
     logger.info(f"{rad} Guardando radicación.")
     try:
         Radicacion.objects.create(
-            creado=datetime.now(tz=pytz.timezone("America/Bogota")),
+            # creado=datetime.now(tz=pytz.timezone("America/Bogota")),
             numero_radicado=str(rad),
             municipio=Municipio.objects.get(
                   name__iexact=municipio
