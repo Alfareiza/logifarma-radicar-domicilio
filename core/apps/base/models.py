@@ -42,7 +42,7 @@ class Barrio(Model):
 
 class Radicacion(Model):
     datetime = DateTimeField(auto_now_add=True)
-    creado = DateTimeField(blank=True, null=True)
+    # creado = DateTimeField(blank=True, null=True)
 
     numero_radicado = CharField(unique=True, max_length=24)
     municipio = ForeignKey(Municipio, on_delete=CASCADE)

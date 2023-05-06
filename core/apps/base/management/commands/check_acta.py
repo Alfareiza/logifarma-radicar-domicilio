@@ -117,12 +117,10 @@ class Command(BaseCommand):
             logger.info(f"{rad.numero_radicado} Validando si fue rechazada o el afiliado falleció.")
             try:
                 resp_eps = call_api_eps(rad.numero_radicado)
-                if 'ESTADO_AUTORIZACION' in resp_eps and resp_eps['ESTADO_AUTORIZACION'] == 'RECHAZADA':
-                    self.update_acta_entrega(rad, 'rechazada por cajacopi')
+                if 'ESTADO_AUTORIZACION' in resp_eps and resp_eps['ESTADO_AUTORIZACION'] in ['RECHAZADA', 'ANULADA']:
+                    self.update_acta_entrega(rad, f"{resp_eps['ESTADO_AUTORIZACION'].lower()} por cajacopi")
                 elif 'ESTADO_AFILIADO' in resp_eps and resp_eps['ESTADO_AFILIADO'] == 'FALLECIDO':
                     self.update_acta_entrega(rad, 'afiliado fallecido')
-                elif 'ESTADO_AFILIADO' in resp_eps and resp_eps['ESTADO_AFILIADO'] == 'ANULADA':
-                    self.update_acta_entrega(rad, 'anulada por cajacopi')
                 else:
                     self.errs.append(rad)
                     self.send_alert_mail(rad, resp_eps)
