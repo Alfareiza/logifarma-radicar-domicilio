@@ -187,7 +187,7 @@ class CustomSessionWizard(SessionWizardView):
             )
             if files:
                 logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} "
-                            f"files => ")
+                            f"files => {files}")
             if form_obj.is_valid():
                 final_forms[form_key] = form_obj
                 # return self.render_revalidation_failure(form_key, form_obj, **kwargs)
