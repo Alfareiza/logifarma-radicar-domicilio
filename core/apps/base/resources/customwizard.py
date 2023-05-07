@@ -179,11 +179,15 @@ class CustomSessionWizard(SessionWizardView):
         final_forms = OrderedDict()
         # walk through the form list and try to validate the data again.
         for form_key in self.get_form_list():
+            files = self.storage.get_step_files(form_key)
             form_obj = self.get_form(
                 step=form_key,
                 data=self.storage.get_step_data(form_key),
-                files=self.storage.get_step_files(form_key)
+                files=files
             )
+            if files:
+                logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} "
+                            f"files => ")
             if form_obj.is_valid():
                 final_forms[form_key] = form_obj
                 # return self.render_revalidation_failure(form_key, form_obj, **kwargs)
