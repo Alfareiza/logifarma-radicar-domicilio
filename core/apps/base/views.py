@@ -1,6 +1,7 @@
 import threading
 from functools import lru_cache
 
+from decouple import config
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
@@ -126,6 +127,8 @@ class ContactWizard(CustomSessionWizard):
 
         if 'fotoFormulaMedica' in form_data:
             self.foto_fmedica = form_data['fotoFormulaMedica']['src']
+            logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} "
+                        f"self.foto_fmedica={self.foto_fmedica}")
 
         # Construye las variables que serán enviadas al template
         info_email = {
@@ -144,8 +147,9 @@ class ContactWizard(CustomSessionWizard):
                     f" Radicación finalizada. E-mail de confirmación será enviado a {form_data['digitaCorreo']}")
 
         # Revisa medicamentos
-        ask_med = threading.Thread(target=check_meds, args=(info_email,))
-        ask_med.start()
+        if not config('DEBUG'):
+            ask_med = threading.Thread(target=check_meds, args=(info_email,))
+            ask_med.start()
 
         # Envía e-mail
         if not self.foto_fmedica:
@@ -153,8 +157,6 @@ class ContactWizard(CustomSessionWizard):
             x.start()
         else:
             self.send_mail(info_email)
-
-
 
         return form_data['autorizacionServicio']['num_autorizacion']
 
@@ -169,7 +171,16 @@ class ContactWizard(CustomSessionWizard):
         email.content_subtype = "html"
 
         if self.foto_fmedica:
-            email.attach_file(settings.MEDIA_ROOT / self.foto_fmedica.name)
+            uploaded = settings.MEDIA_ROOT / self.foto_fmedica.name
+            logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']} "
+                        f"adjuntando imagen {str(uploaded)}")
+            email.attach_file(str(uploaded))
+            if email.attachments:
+                logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']} "
+                            f"Imagen adjuntada con éxito.")
+            else:
+                logger.error(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']} "
+                             f"No se adjuntó la imagen. email.attachments={email.attachments}")
 
         return email
 
@@ -182,10 +193,17 @@ class ContactWizard(CustomSessionWizard):
         """
         try:
             email = self.prepare_email(info_email)
+            if self.foto_fmedica and not email.attachments:
+                logger.error(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']} "
+                             f"Perdida la referencia de imagen adjunta.")
             r = email.send(fail_silently=False)
         except Exception as e:
             notify('error-email', f"ERROR ENVIANDO EMAIL- Radicado #{info_email['NUMERO_AUTORIZACION']}",
                    f"JSON_DATA: {info_email}\n\nERROR: {e}")
+            if rad := Radicacion.objects.filter(numero_radicado=info_email['NUMERO_AUTORIZACION']).first():
+                rad.delete()
+                logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {rad}"
+                            "Eliminado radicado al no haberse enviado correo.")
         else:
             if r == 1:
                 if self.foto_fmedica:
