@@ -102,7 +102,7 @@ def request_api(url, headers, payload, method='POST'):
     # logger.info(f'API Header: {headers}')
     # logger.info(f'API Payload: {payload}')
     try:
-        response = requests.request(method, url, headers=headers, data=payload, timeout=20)
+        response = requests.request(method, url, headers=headers, data=payload, timeout=20, verify=False)
         # logger.info(f'API Response [{response.status_code}]: {response.text}')
         if response.status_code != 200:
             res = requests.request('GET', 'https://httpbin.org/ip')
@@ -119,6 +119,9 @@ def request_api(url, headers, payload, method='POST'):
         notify('error-api', f'ERROR EN API - Radicado #{num_aut}',
                f"ERROR: {e}.\nNo hubo respuesta de la API en 20 segundos")
         return {}
+    except requests.exceptions.SSLError as e:
+        notify('error-api', f'ERROR SSL en API - Radicado #{num_aut}',
+               f"ERROR: {e}")
     except Exception as e:
         notify('error-api', f'ERROR EN API - Radicado #{num_aut}',
                f"ERROR: {e}\n\nRESPUESTA DE API: {response.text}")
