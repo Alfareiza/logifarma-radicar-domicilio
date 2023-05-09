@@ -122,6 +122,7 @@ def request_api(url, headers, payload, method='POST'):
     except requests.exceptions.SSLError as e:
         notify('error-api', f'ERROR SSL en API - Radicado #{num_aut}',
                f"ERROR: {e}")
+        return {}
     except Exception as e:
         notify('error-api', f'ERROR EN API - Radicado #{num_aut}',
                f"ERROR: {e}\n\nRESPUESTA DE API: {response.text}")

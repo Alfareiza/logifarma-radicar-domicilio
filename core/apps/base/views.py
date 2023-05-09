@@ -147,7 +147,7 @@ class ContactWizard(CustomSessionWizard):
                     f" Radicación finalizada. E-mail de confirmación será enviado a {form_data['digitaCorreo']}")
 
         # Revisa medicamentos
-        if not config('DEBUG'):
+        if not config("DEBUG", cast=bool):
             ask_med = threading.Thread(target=check_meds, args=(info_email,))
             ask_med.start()
 
