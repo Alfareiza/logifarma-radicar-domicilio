@@ -102,7 +102,7 @@ def request_api(url, headers, payload, method='POST'):
     # logger.info(f'API Header: {headers}')
     # logger.info(f'API Payload: {payload}')
     try:
-        response = requests.request(method, url, headers=headers, data=payload, timeout=20, verify=False)
+        response = requests.request(method, url, headers=headers, data=payload, timeout=20)
         # logger.info(f'API Response [{response.status_code}]: {response.text}')
         if response.status_code != 200:
             res = requests.request('GET', 'https://httpbin.org/ip')
