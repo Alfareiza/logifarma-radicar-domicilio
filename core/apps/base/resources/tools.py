@@ -271,7 +271,6 @@ def pretty_date(dt) -> str:
     hoy a las 7:44 AM
     ayer a las 2:08 PM
     """
-
     first_part = when(dt)
     return format(dt, f'{first_part} a las %I:%M %p')
 
@@ -293,9 +292,9 @@ def when(dt) -> str:
     """
     today = date.today()
     yesterday = today - timedelta(days=1)
-    if today.day == dt.day:
+    if today.day == dt.day and today.month == dt.month:
         return 'hoy'
-    elif yesterday.day == dt.day:
+    elif yesterday.day == dt.day and yesterday.month == dt.month:
         return 'ayer'
     else:
         month = months()
