@@ -243,17 +243,21 @@ def notify(reason: str, subject: str, body: str,
 
     rad = discover_rad(body) or discover_rad(subject)
 
-    if sent := email.send(fail_silently=False):
-        msg = {
-            'error-bd': '{} Correo enviado notificando problema al guardar en BD.',
-            'error-api': '{} Correo enviado notificando problema con API.',
-            'error-archivo-url': 'Correo enviado notificando radicado sin archivo.',
-            'error-email': 'Correo enviado notificando problema al enviar e-mail de confirmación.',
-            'check-acta': 'Correo enviado con reporte de chequeo de actas.',
-            'check-aut': '{} Correo de alerta de autorización no radicada enviado.',
-            'check-datosgov': 'Correo enviado por problema al consultar datos.gov.co.',
-            'expd-no-encontrado': '{} Correo enviado por expediente no encontrado.',
-        }
+    try:
+        if sent := email.send(fail_silently=False):
+            msg = {
+                'error-bd': '{} Correo enviado notificando problema al guardar en BD.',
+                'error-api': '{} Correo enviado notificando problema con API.',
+                'error-archivo-url': 'Correo enviado notificando radicado sin archivo.',
+                'error-email': 'Correo enviado notificando problema al enviar e-mail de confirmación.',
+                'check-acta': 'Correo enviado con reporte de chequeo de actas.',
+                'check-aut': '{} Correo de alerta de autorización no radicada enviado.',
+                'check-datosgov': 'Correo enviado por problema al consultar datos.gov.co.',
+                'expd-no-encontrado': '{} Correo enviado por expediente no encontrado.',
+            }
+    except Exception as e:
+        logger.error(f"{rad} Correo de {reason} no fue enviado. Error: {e}")
+    else:
         logger.info(msg[reason].format(rad).strip())
 
 
