@@ -74,6 +74,7 @@ class Radicacion(Model):
     def __str__(self):
         return f"{self.numero_radicado}"
 
+
 class Med_Controlado(Model):
     cum = CharField(max_length=24)
     nombre = CharField(max_length=250)
@@ -84,5 +85,10 @@ class Med_Controlado(Model):
     class Meta:
         verbose_name_plural = "Medicamentos Controlados"
         verbose_name = "medicamento controlado"
+
+    def save(self, *args, **kwargs):
+        self.nombre = self.nombre.lower()
+        return super(Med_Controlado, self).save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.cum} - {self.nombre}"
