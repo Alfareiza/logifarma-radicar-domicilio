@@ -210,9 +210,32 @@ def discover_rad(body) -> str:
     return ''
 
 
-def notify(reason: str, subject: str, body: str,
-           to=None,
-           bcc: list = []):
+def make_email(subject: str, body: str, to=None, bcc: list = []) -> EmailMessage:
+    """
+    Crea un objeto EmailMessage a partir de los campos recebidos.
+    :param subject: Asunto del correo
+    :param body: Cuerpo del Correo
+    :param to: Para quien será enviado el correo.
+    :param bcc: Copia oculta.
+    :return: EmailMessage
+    """
+    if to is None:
+        to = ['alfareiza@gmail.com', 'logistica@logifarma.co']
+    email = EmailMessage(
+        subject=subject,
+        body=body,
+        from_email=f"Logs Domicilios Logifarma <{settings.EMAIL_HOST_USER}>",
+        to=to,
+        bcc=bcc
+    )
+
+    from django.utils.safestring import SafeString
+    if isinstance(body, SafeString):
+        email.content_subtype = "html"
+
+    return email
+
+def notify(reason: str, subject: str, body: str, to=None, bcc: list = []):
     """
     Envía un correo notificando algo.
     :param to: Para quien será enviado el correo.
@@ -228,20 +251,9 @@ def notify(reason: str, subject: str, body: str,
     :param body: Cuerpo del Correo
     :return: Nada
     """
-    if to is None:
-        to = ['alfareiza@gmail.com', 'logistica@logifarma.co']
-    email = EmailMessage(
-        subject=subject,
-        body=body,
-        from_email=f"Logs Domicilios Logifarma <{settings.EMAIL_HOST_USER}>",
-        to=to,
-        bcc=bcc
-    )
-    from django.utils.safestring import SafeString
-    if isinstance(body, SafeString):
-        email.content_subtype = "html"
+    email = make_email(subject, body, to, bcc)
 
-    rad = discover_rad(body) or discover_rad(subject)
+    rad = discover_rad(email.body) or discover_rad(email.subject)
 
     try:
         if sent := email.send(fail_silently=False):
