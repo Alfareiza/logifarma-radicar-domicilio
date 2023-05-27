@@ -2,6 +2,7 @@ import concurrent
 import datetime
 from concurrent.futures import ThreadPoolExecutor
 
+from django.core import mail
 from django.core.management.base import BaseCommand
 from django.template.loader import get_template
 
@@ -9,7 +10,7 @@ from core.apps.base.models import Radicacion, Municipio, Barrio
 from core.apps.base.resources.api_calls import call_api_medicar, \
     get_firebase_acta, should_i_call_auth, call_api_eps
 from core.apps.base.resources.decorators import logtime
-from core.apps.base.resources.tools import notify, day_slash_month_year, \
+from core.apps.base.resources.tools import make_email, notify, day_slash_month_year, \
     pretty_date, update_rad_from_fbase
 from core.settings import logger, BASE_DIR
 
@@ -24,6 +25,7 @@ class Command(BaseCommand):
         self.alert = []
         self.start = None
         self.end = None
+        self.emails = []
 
     def calc_interval_dates(self, start=4, end=1):
         """Calculates the dates according to an interval of days"""
@@ -41,6 +43,8 @@ class Command(BaseCommand):
         start, end = self.calc_interval_dates()
         rads = Radicacion.objects.filter(datetime__lte=end, acta_entrega=None).order_by('datetime')
         logger.info('Ejecutando script de chequeo de actas.')
+        connection = mail.get_connection()
+        connection.open()
         if rads:
             logger.info(f"Verificando {len(rads)} número de actas.")
             with ThreadPoolExecutor(max_workers=4) as executor:
@@ -55,17 +59,23 @@ class Command(BaseCommand):
                         print(f'{rad!r} generated an exception: {str(exc)}')
 
             self.sort_rads()
+
+            # Envia mensajes de alerta de cada autorización
+            connection.send_messages(self.emails)
+
             if self.errs:
                 notify('check-acta',
                        f"Reporte de radicados sin acta hasta el {format(end, '%d/%m')}",
-                       f"Analisis ejecutado el {day_slash_month_year(datetime.datetime.now())}.\n\n" \
-                       f"Radicados analizados: {len(rads)}.\n\n" \
-                       f"Radicados actualizados: {len(self.updated)}. \n\n" \
+                       f"Analisis ejecutado el {day_slash_month_year(datetime.datetime.now())}.\n" \
+                       f"Radicados analizados: \t{len(rads)}.\n" \
+                       f"Radicados actualizados: \t{len(self.updated)}. \n" \
                        f"Radicados sin acta o con error al consultarse: {len(self.errs)}.\n {' '.join(self.errs)}")
+
         else:
             logger.info(f"No se encontraron radicados con \'acta_entrega\' vacía desde el inicio"
                         f" de los tiempos, hasta el {format(end, '%D %T')}.")
 
+        connection.close()
         # self.stdout.write(self.style.SUCCESS('Successfully closed poll "%s"' % poll_id))
 
     def sort_rads(self):
@@ -79,12 +89,10 @@ class Command(BaseCommand):
             for i, rad in enumerate(lst):
                 try:
                     lst[i] = f"\t\t#{rad.numero_radicado} radicado el " \
-                            f"{day_slash_month_year(rad.datetime)} y autorizado" \
-                            f" el {rad.paciente_data['FECHA_AUTORIZACION']}.\n"
+                             f"{day_slash_month_year(rad.datetime)} y autorizado" \
+                             f" el {rad.paciente_data['FECHA_AUTORIZACION']}.\n"
                 except Exception as exc:
                     logger.error(f"{rad.numero_radicado} ERROR: {exc}")
-
-
 
     def validate(self, resp, rad):
         """
@@ -123,7 +131,7 @@ class Command(BaseCommand):
                     self.update_acta_entrega(rad, 'afiliado fallecido')
                 else:
                     self.errs.append(rad)
-                    self.send_alert_mail(rad, resp_eps)
+                    self.add_alert_email(rad, resp_eps)
             except Exception as e:
                 notify('error-api', f"ERROR EN API - Radicado #{rad.numero_radicado}", f"ERROR : \n{e}")
                 self.errs.append(rad)
@@ -156,10 +164,10 @@ class Command(BaseCommand):
         else:
             self.updated.append(rad.numero_radicado)
 
-    def send_alert_mail(self, rad, info):
+    def add_alert_email(self, rad, info):
         """
-        Envía email usando template autorización_no_radicada.html con información
-        del radicado.
+        Agrega un objeto EmailMessage a la fila de emails a ser enviados
+        usando template autorización_no_radicada.html con información del radicado.
         :param rad: Objeto de Radicacion obtenido de la base de datos.
                 Ej.: <Radicacion: 829600082168>
         :param info: Información de radicado de api eps.
@@ -209,7 +217,7 @@ class Command(BaseCommand):
         info_email = {
             **info,
             'NUMERO_AUTORIZACION': rad.numero_radicado,
-            'municipio':  municipio_str,
+            'municipio': municipio_str,
             'barrio': barr_str,
             'direccion': rad.direccion,
             'celular': rad.cel_uno,
@@ -218,8 +226,11 @@ class Command(BaseCommand):
         }
         htmly = get_template(BASE_DIR / "core/apps/base/templates/notifiers/autorizacion_no_radicada.html")
         html_content = htmly.render(info_email)
-        notify('check-aut',
-               f'Autorización: {rad.numero_radicado} No radicada',
-               html_content,
-               to=['logistica@logifarma.co', 'radicacion.domicilios@logifarma.co'], bcc=['alfareiza@gmail.com']
-               )
+
+        email = make_email(
+            f'Autorización: {rad.numero_radicado} No radicada',
+            html_content, to=['logistica@logifarma.co', 'radicacion.domicilios@logifarma.co'],
+            bcc=['alfareiza@gmail.com']
+        )
+
+        self.emails.append(email)
