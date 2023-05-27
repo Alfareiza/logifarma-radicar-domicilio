@@ -3,7 +3,8 @@ from django import forms
 from core.apps.base.models import Barrio, Municipio, Radicacion
 from core.apps.base.resources.api_calls import call_api_eps, call_api_medicar
 from core.apps.base.resources.tools import read_json
-from core.apps.base.validators import validate_status
+from core.apps.base.validators import validate_aut_exists, validate_cums, validate_status, validate_status_afiliado, \
+    validate_status_aut, validate_structure
 from core.settings import logger
 
 
@@ -40,40 +41,20 @@ class AutorizacionServicio(forms.Form):
         else:
             resp_eps = call_api_eps(num_aut)
 
-        if resp_eps.get('codigo') == "1":
-            logger.info(f"Número de autorización {num_aut} no encontrado.")
-            raise forms.ValidationError(f"Número de autorización {num_aut} no encontrado\n\n"
-                                        "Por favor verifique\n\n"
-                                        "Si el número está correcto, comuníquese con cajacopi EPS\n"
-                                        "al 01 8000 111 446")
-        inconsistencia = False
-        if len(list(resp_eps.keys())) == 0 or len(str(num_aut)) > 20:
-            inconsistencia = True
-        else:
-            for k, v in resp_eps.items():
-                if k == 'DOCUMENTO_ID' and len(v) > 32:
-                    inconsistencia = True
-                    break
-                if k == 'AFILIADO' and len(v) > 150:
-                    inconsistencia = True
-                    break
-                if k == 'num_aut' and len(v) > 24:
-                    inconsistencia = True
-                    break
+        # Validación de numero de autorización encontrado en API de Cajacopi
+        validate_aut_exists(resp_eps, num_aut)
 
-        if inconsistencia:
-            logger.info(f"Incosistencia en radicado #{num_aut}.")
-            raise forms.ValidationError(f"Detectamos un problema interno con este número de autorización\n"
-                                        f"{num_aut}\n\n"
-                                        "Comuníquese con Logifarma al 3330333124")
+        # Validación de estructura de respuesta de API de Cajacopi
+        validate_structure(resp_eps, num_aut)
 
-        if resp_eps.get('ESTADO_AFILIADO') != 'ACTIVO':
-            logger.info(f"EL estado del afiliado de radicado #{num_aut} no se encuentra activo.")
-            raise forms.ValidationError("Afiliado no se encuentra activo.")
+        # Validación de medicamentos controlados
+        validate_cums(resp_eps, num_aut)
 
-        if resp_eps.get('ESTADO_AUTORIZACION') != 'PROCESADA':
-            logger.info(f"El estado de la autorización #{num_aut} es diferente de PROCESADA.")
-            raise forms.ValidationError("El estado de la autorización no está activa.")
+        # Validación de status de afiliado
+        validate_status_afiliado(resp_eps, num_aut)
+
+        # Validación de status de autorización
+        validate_status_aut(resp_eps, num_aut)
 
         # if (datetime.now() - resp_eps.get('FECHA_AUTORIZACION')).days > 30:
         #     raise forms.ValidationError("Esta autorización se encuentra vencida.")
