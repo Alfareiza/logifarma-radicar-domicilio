@@ -3,7 +3,7 @@ import csv
 from django.contrib import admin
 from django.http import HttpResponse
 
-from core.apps.base.models import Municipio, Barrio
+from core.apps.base.models import Municipio, Barrio, Med_Controlado
 
 
 # Documentation
@@ -40,4 +40,13 @@ class BarrioAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     ordering = ('municipio', 'name', 'zona')
     raw_id_fields = ('municipio',)
+    actions = [export_csv]
+
+@admin.register(Med_Controlado)
+class MedicamentoControladoAdmin(admin.ModelAdmin):
+    exclude = ("field_one", 'field_two')
+    list_display = ('nombre', 'cum', 'activo')
+    list_filter = ('activo',)
+    search_fields = ('name', 'cum')
+    ordering = ('nombre', 'cum')
     actions = [export_csv]

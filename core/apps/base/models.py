@@ -1,5 +1,5 @@
 from django.db.models import (
-    CASCADE,
+    BooleanField, CASCADE,
     CharField,
     DateTimeField,
     EmailField,
@@ -73,3 +73,16 @@ class Radicacion(Model):
 
     def __str__(self):
         return f"{self.numero_radicado}"
+
+class Med_Controlado(Model):
+    cum = CharField(max_length=24)
+    nombre = CharField(max_length=250)
+    activo = BooleanField(default=True)
+    field_one = CharField(max_length=24, blank=True, null=True)
+    field_two = CharField(max_length=24, blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = "Medicamentos Controlados"
+        verbose_name = "medicamento controlado"
+    def __str__(self):
+        return f"{self.cum} - {self.nombre}"
