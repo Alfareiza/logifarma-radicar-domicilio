@@ -1,5 +1,7 @@
 import concurrent
 import datetime
+import random
+import time
 from concurrent.futures import ThreadPoolExecutor
 
 from django.core import mail
@@ -59,10 +61,6 @@ class Command(BaseCommand):
                         print(f'{rad!r} generated an exception: {str(exc)}')
 
             self.sort_rads()
-
-            # Envia mensajes de alerta de cada autorización
-            connection.send_messages(self.emails)
-
             if self.errs:
                 notify('check-acta',
                        f"Reporte de radicados sin acta hasta el {format(end, '%d/%m')}",
@@ -75,6 +73,11 @@ class Command(BaseCommand):
             logger.info(f"No se encontraron radicados con \'acta_entrega\' vacía desde el inicio"
                         f" de los tiempos, hasta el {format(end, '%D %T')}.")
 
+        # Envia mensajes de alerta de cada autorización
+        # connection.send_messages(self.emails)
+        for em in self.emails:
+            time.sleep(random.randint(1, 5))
+            em.send()
         connection.close()
         # self.stdout.write(self.style.SUCCESS('Successfully closed poll "%s"' % poll_id))
 
@@ -88,7 +91,7 @@ class Command(BaseCommand):
         for lst in args:
             for i, rad in enumerate(lst):
                 try:
-                    lst[i] = f"\t\t#{rad.numero_radicado} radicado el " \
+                    lst[i] = f"\t• {rad.numero_radicado} radicado el " \
                              f"{day_slash_month_year(rad.datetime)} y autorizado" \
                              f" el {rad.paciente_data['FECHA_AUTORIZACION']}.\n"
                 except Exception as exc:
@@ -118,11 +121,10 @@ class Command(BaseCommand):
             else:
                 # Nunca debería entrar aquí. Cuando el radicado no tiene # de acta, retorna:
                 # { "error": "No se han encontrado registros." }
-                logger.alert(f'{rad.numero_radicado} Radicado no tiene aún número de acta. {rad.datetime}.')
+                logger.info(f'{rad.numero_radicado} Radicado no tiene aún número de acta. {rad.datetime}.')
                 self.alert.append(rad)
         else:
-            logger.warning(f"{rad.numero_radicado} \'SSC\' no encontrado en API Medicar.")
-            logger.info(f"{rad.numero_radicado} Validando si fue rechazada o el afiliado falleció.")
+            logger.info(f"{rad.numero_radicado} sin \'SSC\' en API Medicar, validando estados en API Cajacopi.")
             try:
                 resp_eps = call_api_eps(rad.numero_radicado)
                 if 'ESTADO_AUTORIZACION' in resp_eps and resp_eps['ESTADO_AUTORIZACION'] in ['RECHAZADA', 'ANULADA']:
@@ -130,6 +132,7 @@ class Command(BaseCommand):
                 elif 'ESTADO_AFILIADO' in resp_eps and resp_eps['ESTADO_AFILIADO'] == 'FALLECIDO':
                     self.update_acta_entrega(rad, 'afiliado fallecido')
                 else:
+                    logger.info(f"{rad.numero_radicado} Radicado sin acta.")
                     self.errs.append(rad)
                     self.add_alert_email(rad, resp_eps)
             except Exception as e:
@@ -154,10 +157,10 @@ class Command(BaseCommand):
         self.updated.append(rad.numero_radicado)
 
     def update_acta_entrega(self, rad, new_value):
-        logger.info(f"{rad.numero_radicado} Actualizando "
-                    f"acta_entrega para \"{new_value}\".")
         rad.acta_entrega = new_value
         try:
+            logger.info(f"{rad.numero_radicado} Actualizando "
+                        f"acta_entrega para \"{new_value}\".")
             rad.save()
         except Exception:
             self.errs.append(rad.numero_radicado)
@@ -229,7 +232,9 @@ class Command(BaseCommand):
 
         email = make_email(
             f'Autorización: {rad.numero_radicado} No radicada',
-            html_content, to=['logistica@logifarma.co', 'radicacion.domicilios@logifarma.co'],
+            html_content,
+            # to=['alfareiza@gmail.com'],
+            to=['logistica@logifarma.co', 'radicacion.domicilios@logifarma.co'],
             bcc=['alfareiza@gmail.com']
         )
 
