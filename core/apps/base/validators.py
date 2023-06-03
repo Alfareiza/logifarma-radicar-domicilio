@@ -1,16 +1,18 @@
+import threading
 from datetime import datetime
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.template.loader import get_template
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 
 from core.apps.base.models import Med_Controlado, Radicacion
 from core.apps.base.resources.api_calls import get_firebase_acta
-from core.apps.base.resources.tools import encrypt, pretty_date, \
+from core.apps.base.resources.tools import encrypt, notify, pretty_date, \
     update_rad_from_fbase
-from core.settings import logger
+from core.settings import BASE_DIR, logger
 
 
 def validate_status(resp_mcar: dict, rad: Radicacion) -> ValidationError:
@@ -123,7 +125,7 @@ def validate_structure(resp_eps: dict, num_aut: int) -> ValidationError:
                                     "Comuníquese con Logifarma al 3330333124")
 
 
-def validate_cums(resp_eps: dict, num_aut: int) -> ValidationError:
+def validate_med_controlados(resp_eps: dict, num_aut: int) -> ValidationError:
     """
     Valida los cums de los articulos provenientes de la API de Cajacopi
     y en caso de al menos uno encontrarse en la bd, entonces lanzará
@@ -145,6 +147,14 @@ def validate_cums(resp_eps: dict, num_aut: int) -> ValidationError:
                     f'<br><br> Por favor dirigete a uno de nuestros dispensarios.' \
                     f'<br><br> Si tiene alguna duda se puede comunicar con nosotros ' \
                     'al 3330333124 <br><br>'
+
+        htmly = get_template(BASE_DIR / "core/apps/base/templates/notifiers/med_controlados.html")
+        x = threading.Thread(target=notify, args=(
+            'med-control', f'Medicamento controlado en autorización {num_aut}',
+            htmly.render({'CUMS_FOUND': cums_found, 'NUMERO_AUTORIZACION': num_aut}),
+        ))
+        x.start()
+
         raise forms.ValidationError(mark_safe(text_resp))
 
 

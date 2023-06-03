@@ -3,7 +3,7 @@ from django import forms
 from core.apps.base.models import Barrio, Municipio, Radicacion
 from core.apps.base.resources.api_calls import call_api_eps, call_api_medicar
 from core.apps.base.resources.tools import read_json
-from core.apps.base.validators import validate_aut_exists, validate_cums, validate_status, validate_status_afiliado, \
+from core.apps.base.validators import validate_aut_exists, validate_med_controlados, validate_status, validate_status_afiliado, \
     validate_status_aut, validate_structure
 from core.settings import logger
 
@@ -48,7 +48,7 @@ class AutorizacionServicio(forms.Form):
         validate_structure(resp_eps, num_aut)
 
         # Validación de medicamentos controlados
-        validate_cums(resp_eps, num_aut)
+        validate_med_controlados(resp_eps, num_aut)
 
         # Validación de status de afiliado
         validate_status_afiliado(resp_eps, num_aut)
