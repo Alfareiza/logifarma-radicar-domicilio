@@ -17,7 +17,7 @@ def listar_radicados_mes(month: str, year: str = '2023') -> List[Radicacion]:
         datetime__month__gte=month,
         datetime__year__lte=year,
         datetime__month__lte=month,
-    ).values('datetime', 'numero_radicado').order_by('-datetime'))
+    ).values('datetime', 'numero_radicado', 'ip').order_by('-datetime'))
 
 
 def order_radicados_by_mun_mes(month: str, year: str = '2023') -> List[dict]:
