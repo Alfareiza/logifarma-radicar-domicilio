@@ -14,4 +14,8 @@ def order_radicados_by_day(radicados: List[dict]) -> dict:
             res[day] = []
         del rad['datetime']
         res[day].append(rad)
+
+    today = datetime.now().day
+    if today not in res:
+        res[today] = []
     return res
