@@ -7,7 +7,7 @@ import pytz
 from django.core.mail import EmailMessage
 
 from core import settings
-from core.apps.base.models import Radicacion, Municipio, Barrio
+from core.apps.base.models import Radicacion, Municipio, Barrio, RadicacionTemporal
 from core.settings import BASE_DIR, logger
 
 
@@ -170,32 +170,60 @@ def guardar_info_bd(**kwargs):
     if email:
         email = email[0]
 
-    logger.info(f"{rad} Guardando radicación.")
     try:
-        Radicacion.objects.create(
-            # creado=datetime.now(tz=pytz.timezone("America/Bogota")),
-            numero_radicado=str(rad),
-            municipio=Municipio.objects.get(
-                  name__iexact=municipio
-                ),
-            barrio=Barrio.objects.filter(
-                municipio__name__iexact=municipio
-                ).get(
-                name=kwargs.pop('barrio', None).lower()),
-            cel_uno=kwargs.pop('celular', None),
-            cel_dos=kwargs.pop('whatsapp', None),
-            email=email,
-            direccion=kwargs.pop('direccion', None),
-            ip=kwargs.pop('ip', None),
-            paciente_nombre=kwargs.pop('AFILIADO', None),
-            paciente_cc=kwargs.pop('DOCUMENTO_ID', None),
-            paciente_data=kwargs)
-        logger.info(f"{rad} Radicación guardada con éxito!")
+        if kwargs.get('AFILIADO'):
+            save_radicacion(rad, municipio, email, **kwargs)
+        else:
+            save_prev_radicacion(rad, municipio, email, **kwargs)
     except Exception as e:
         notify('error-bd',
                f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", e)
         logger.error(
             f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación: {e}")
+
+def save_radicacion(rad, municipio, email, **kwargs):
+    logger.info(f"{rad} Guardando radicación.")
+    radicado = Radicacion(
+        numero_radicado=str(rad),
+        municipio=Municipio.objects.get(
+            name__iexact=municipio
+        ),
+        barrio=Barrio.objects.filter(
+            municipio__name__iexact=municipio
+        ).get(name=kwargs.pop('barrio', None).lower()),
+        cel_uno=kwargs.pop('celular', None),
+        cel_dos=kwargs.pop('whatsapp', None),
+        email=email,
+        direccion=kwargs.pop('direccion', None),
+        ip=kwargs.pop('ip', None),
+    )
+    radicado.paciente_nombre = kwargs.pop('AFILIADO')
+    radicado.paciente_cc = kwargs.pop('DOCUMENTO_ID')
+    radicado.paciente_data = kwargs
+    radicado.save()
+    logger.info(f"{radicado} Radicación guardada con éxito!")
+
+def save_prev_radicacion(rad, municipio, email, **kwargs):
+    logger.info(f"{rad} Guardando radicación temporal.")
+    radicadoTemp = RadicacionTemporal(
+        numero_radicado=str(rad),
+        municipio=Municipio.objects.get(
+            name__iexact=municipio
+        ),
+        barrio=Barrio.objects.filter(
+            municipio__name__iexact=municipio
+        ).get(name=kwargs.pop('barrio', None).lower()),
+        cel_uno=kwargs.pop('celular', None),
+        cel_dos=kwargs.pop('whatsapp', None),
+        email=email,
+        direccion=kwargs.pop('direccion', None),
+        ip=kwargs.pop('ip', None),
+        tipo_doc=kwargs.pop('tipo_doc'),
+        doc=kwargs.pop('doc')
+    )
+    radicadoTemp.save()
+    logger.info(f"{radicadoTemp} Radicación temporal guardada con éxito!")
+
 
 
 def discover_rad(body) -> str:
@@ -356,6 +384,4 @@ def update_rad_from_fbase(rad: Radicacion, resp_fbase: dict) -> None:
     rad.domiciliario_empresa = resp_fbase['empDomi']
     rad.estado = resp_fbase['state']
     rad.factura = resp_fbase['invoice']
-
-
 

@@ -1,6 +1,7 @@
 import json
 import pickle
 from datetime import datetime, timedelta
+from typing import Dict
 
 import requests
 from decouple import config
@@ -14,6 +15,117 @@ from core.settings import BASE_DIR
 from core.settings import logger
 
 pickle_path = BASE_DIR / "core/apps/base/resources/stored.pickle"
+
+def call_api_eps_doc(tipo_doc: str, doc: str) -> dict:
+    """
+    Solicita información según su identificación.
+    :param tipo_doc: Tipo de identificación del usuario:
+                Ej.: 'CC', 'TI', 'SC', 'AS', 'CE', 'PT', 'RC', 'PE' o 'CN'.
+    :param doc:
+                Ej.: '12312313', 'T44645645', ...
+    :return: En caso de no hacer contacto con la API retorna:
+                {}
+            En caso de hacer contacto con la API, puede retornar:
+            Si documento no existe:
+                {
+                    "info": {
+                        "CODIGO": "0",
+                        "NOMBRE": "Datos del Afiliado no encontrado, 
+                                   por favor validar nuevamente"
+                    },
+                    "aut": [],
+                    "tipo": "API"
+                }
+            Si documento existe:
+                {
+                    "info": {
+                        "NombreCompleto": "JANE DOE FOO BAR",
+                        "Codigo": 1,
+                        "TipoDocumento": "TI",
+                        "Documento": "1043933683",
+                        "FechaNacimiento": "10/05/2016",
+                        "Departamento": "ATLANTICO",
+                        "Municipio": "TUBARA",
+                        "EdadDias": 1541,
+                        "Estado": "ACTIVO",
+                        "Regimen": "SUBSIDIADO",
+                        "Sexo": "MASCULINO",
+                        "Celular1": "3116655713 - ",
+                        "email": "notiene@hotmail.com",
+                        "SexoCodigo": "M",
+                        "CodigoRegimen": "S",
+                        "DIRECCION": "CARRERA 1 NO  2 34",
+                        "NIVEL": 1,
+                        "PORTABILIDAD": "N",
+                        "EMPLEADOR": null,
+                        "SINIESTRO": "false",
+                        "TUTELA": "false",
+                        "FECHA_AFILIACION": "05/09/2055",
+                        "FECHA_RETIRO": null,
+                        "CAMBIO_ESTADO": null,
+                        "ALTOCOSTO": "N",
+                        "SUPERSALUD": "CajacopiEPS",
+                        "AFIC_T045": "N"
+                    },
+                    "aut": [
+                        {
+                            "NUMERO": "16718",
+                            "UBICACION": "7914",
+                            "AUTORIZACION_MANUAL": "791400024211",
+                            "SERVICIO": "SERVICIO FARMACEUTICO",
+                            "NOMBRE_AFI": "FOO BAR JANE DOE",
+                            "FECHA": "01/06/2055",
+                            "FECHAORDEN": "04/04/2055",
+                            "FECHASOLICITUD": "28/05/2055",
+                            "RESPONSABLE": "DONALD TRUMP",
+                            "NUM_ESOA": "",
+                            "TIPO_DOC": "TI",
+                            "DOCUMENTO": "1043933683",
+                            "DX": "L80X",
+                            "NOM_DX": "VITILIGO",
+                            "REGIMEN": "SUBSIDIADO",
+                            "TUTELA": "0",
+                            "AUTC_CLASE": "PBS",
+                            "CONTRATO": "70581",
+                            "MIPRES": "0",
+                            "CLASIFICACION": "714",
+                            "UBICACION_PACIENTE": "Consulta Externa",
+                            "NIT": "600043221",
+                            "IPS": "LOGIFARMA S.A.S.",
+                            "ANTICIPO": "NO",
+                            "PROGRAMADA": "NO",
+                            "FACTURA": "0",
+                            "NUMSPAN": "2",
+                            "ESTADO_CLASE": "green",
+                            "STATUS": "NORMAL",
+                            "MOTIVO_ANULACION": "",
+                            "STATUS_CLASE": "green",
+                            "ESTADO": "PROCESADA",
+                            "DETALLES": [
+                                {
+                                    "renglon": "1",
+                                    "cod_producto": "20111586-1",
+                                    "nombre_producto": "TACROLIMUS 0,03G/100G UNGUENTO TOPICO",
+                                    "valor": "          $50,130.00",
+                                    "total": "50130",
+                                    "total_cf": "          $50,130.00",
+                                    "cantidad": "1"
+                                }
+                            ]
+                        },
+                        {...},
+                        {...}
+                    ],
+                    "tipo": "API"
+                }
+    """
+    url = "https://genesis.cajacopieps.com/api/api_consulta_aut_xdoc.php"
+    payload = {"function": "consulta_aut",
+               "tipo_doc": tipo_doc,
+               "documento": doc,
+               "nit": "900073223"}
+    headers = {'Content-Type': 'text/plain'}
+    return request_api(url, headers, payload)
 
 def call_api_eps(num_aut: int) -> dict:
     """
@@ -64,7 +176,6 @@ def call_api_eps(num_aut: int) -> dict:
     headers = {'Content-Type': 'text/plain'}
     return request_api(url, headers, payload)
 
-
 @logtime('API')
 def auth_api_medicar():
     """
@@ -91,14 +202,13 @@ def auth_api_medicar():
     except Exception as e:
         logger.error('Error llamando API de medicar: ', e)
 
-
 @hash_dict
 @logtime('API')
 @timed_lru_cache(300)
 def request_api(url, headers, payload, method='POST'):
     num_aut = payload.get('autorizacion') or payload.get('serial')
     payload = json.dumps(payload)
-    # logger.info(f'API Llamando [{method}]: {url}')
+    logger.info(f'API Llamando [{method}]: {url}')
     # logger.info(f'API Header: {headers}')
     # logger.info(f'API Payload: {payload}')
     try:
@@ -127,7 +237,6 @@ def request_api(url, headers, payload, method='POST'):
         notify('error-api', f'ERROR EN API - Radicado #{num_aut}',
                f"ERROR: {e}\n\nRESPUESTA DE API: {response.text}")
         return {}
-
 
 def call_api_medicar(num_aut: int) -> dict:
     """
@@ -209,7 +318,6 @@ def call_api_medicar(num_aut: int) -> dict:
         logger.error('Al consultarse hubo una respuesta inesperada: ', str(resp))
         return {}
 
-
 def should_i_call_auth():
     """
     Verifica si debe ser solicitado un nuevo
@@ -225,7 +333,6 @@ def should_i_call_auth():
             return True
         else:
             return token
-
 
 @logtime('FIREBASE')
 def get_firebase_acta(acta: int) -> dict:
@@ -273,7 +380,6 @@ def get_firebase_acta(acta: int) -> dict:
         notify('error-api', f'ERROR CONSULTANDO FIREBASE - Acta #{acta}',
                f"ERROR: {e}\n\nRESPUESTA DE API: {response.text}")
         return {}
-
 
 def check_meds(info_email: dict):
     """
@@ -339,7 +445,6 @@ def check_meds(info_email: dict):
                 bcc=['alfareiza@gmail.com']
             )
 
-
 def check_med(med: str) -> list:
     """
     Consulta el expediente de un medicamento y retorna la respuesta.
@@ -385,6 +490,95 @@ def check_med_bd(codcum: str):
     finally:
         cursor.close()
         conn.close()
+
+def build_data_from_doc(identificacion: dict, autorizacionServicio: dict) -> Dict:
+    """
+    Busca cedula en API de Cajacopi y con la respuesta busca la autorización
+    ingresada por el usuario. Si la encuentra entonces retorna un diccionário
+    con el formato de autorizacionServicio.
+    :param identificacion: {'tipo_identificacion': 'CC', 'valor_identificacion': '123456787'}
+    :param autorizacionServicio: {'num_autorizacion': {'NUMERO_AUTORIZACION': 123123123}}
+    :return:  Caso no haya respuesta de la API:
+                {'tipo_doc': 'CC', 'doc': '123456787}
+              Si hay respuesta de la API:
+                {
+                       "TIPO_IDENTIFICACION":"CC",
+                       "DOCUMENTO_ID":"32713544",
+                       "AFILIADO":"EVERTSZ GARCIA DENIS MARIA",
+                       "P_NOMBRE":"", "S_NOMBRE":"", "P_APELLIDO":"", "S_APELLIDO":"",
+                       "ESTADO_AFILIADO":"ACTIVO",
+                       "SEDE_AFILIADO":"SOLEDAD",
+                       "REGIMEN":"SUBSIDIADO",
+                       "DIRECCION":"CRA 15B 60B-18",
+                       "CORREO":"", "TELEFONO":"", "CELULAR":"",
+                       "ESTADO_AUTORIZACION":"PROCESADA",
+                       "FECHA_AUTORIZACION":"13/06/2023",
+                       "MEDICO_TRATANTE":"", "MIPRES":"0",
+                       "DIAGNOSTICO":"HIPERTENSION ESENCIAL (PRIMARIA)",
+                       "ARCHIVO":"",
+                       "IPS_SOLICITA":"LOGIFARMA S.A.S.",
+                       "Observacion":"",
+                       "RESPONSABLE_GUARDA":"MENDOZA LORENA",
+                       "CORREO_RESP_GUARDA":"", "RESPONSABLE_AUT":"", "CORREO_RESP_AUT":"",
+                       "DETALLE_AUTORIZACION":[
+                          {
+                             "CUMS":"20101182-6",
+                             "NOMBRE_PRODUCTO":"EMPAGLIF..INA 1000 MG TABLETA - JARDIANCE DUO",
+                             "CANTIDAD":"30"
+                          }
+                       ]
+                    }}
+    """
+    tipo_doc, doc = identificacion['tipo_identificacion'], identificacion['valor_identificacion']
+    resp_eps_doc = call_api_eps_doc(tipo_doc, doc)
+    num_aut = autorizacionServicio['num_autorizacion']['NUMERO_AUTORIZACION']
+    try:
+        data = {'tipo_doc': tipo_doc, 'doc': doc}
+        # Busca autorización en resp_eps_doc, si se encuentra entonces retornará la info con
+        # la estructura capturado como la del paso autorizacionServicio
+        if aut_detalle := list(
+                filter(
+                    lambda x: x['AUTORIZACION_MANUAL'] == str(num_aut), resp_eps_doc['aut']
+                )
+        ):
+            data = {
+                "TIPO_IDENTIFICACION": aut_detalle[0]['TIPO_DOC'],
+                "DOCUMENTO_ID": aut_detalle[0]['DOCUMENTO'],
+                "AFILIADO": aut_detalle[0]['NOMBRE_AFI'],
+                "P_NOMBRE": aut_detalle[0]['NOMBRE_AFI'].title(),
+                "S_NOMBRE": "", "P_APELLIDO": "", "S_APELLIDO": "",
+                "ESTADO_AFILIADO": resp_eps_doc['info']['Estado'],
+                "SEDE_AFILIADO": resp_eps_doc['info']['Municipio'],
+                "REGIMEN": resp_eps_doc['info']['Regimen'],
+                "DIRECCION": resp_eps_doc['info']['DIRECCION'],
+                "CORREO": "", "TELEFONO": "", "CELULAR": "",
+                "ESTADO_AUTORIZACION": aut_detalle[0]['ESTADO'],
+                "FECHA_AUTORIZACION": aut_detalle[0]['FECHA'],
+                "MEDICO_TRATANTE": "",
+                "MIPRES": aut_detalle[0]['MIPRES'],
+                "DIAGNOSTICO": aut_detalle[0]['NOM_DX'],
+                "ARCHIVO": "",
+                "IPS_SOLICITA": aut_detalle[0]['IPS'],
+                "Observacion": "",
+                "RESPONSABLE_GUARDA": aut_detalle[0]['RESPONSABLE'],
+                "CORREO_RESP_GUARDA": "", "RESPONSABLE_AUT": "", "CORREO_RESP_AUT": "",
+                "DETALLE_AUTORIZACION": []
+            }
+            for art in aut_detalle[0]['DETALLES']:
+                data['DETALLE_AUTORIZACION'].append(
+                    {
+                        "CUMS": art['cod_producto'],
+                        "NOMBRE_PRODUCTO": art['nombre_producto'],
+                        "CANTIDAD": art['cantidad']
+                    }
+                )
+        else:
+            logger.info(f'Autorización {num_aut} no encontrada asociada a documento {tipo_doc}. {doc}')
+    except Exception as e:
+        logger.error(f'{num_aut} No fue posible transformar datos de {tipo_doc}. {doc}: {e}')
+    finally:
+        return data
+
 
 if __name__ == '__main__':
     ...

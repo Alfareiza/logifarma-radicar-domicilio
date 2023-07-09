@@ -65,13 +65,13 @@ class CustomSessionWizard(SessionWizardView):
 
         # get the form for the current step
         form = self.get_form(data=self.request.POST, files=self.request.FILES)
-
         # and try to validate
         if form.is_valid():
             # if the form is valid, store the cleaned data and files.
             # self.form_valids[form.prefix] = form
             if form.prefix == "autorizacionServicio":
                 self.rad_data = form.cleaned_data
+
             self.storage.set_step_data(self.steps.current, self.process_step(form))
             self.storage.set_step_files(self.steps.current, self.process_step_files(form))
 
@@ -122,30 +122,30 @@ class CustomSessionWizard(SessionWizardView):
         # logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
         return self.get_form_step_data(form)
 
-    def render_goto_step(self, *args, **kwargs):
-        """
-        Es ejecutado cuando se clica en el botón "Atrás", y en caso de clicar
-        en el botón "Atrás" en la vista de foto, va a resetear la variable
-        new_form_list.
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        ls_form_list = self.form_list.keys()
-        steps = list(ls_form_list)
-        if (steps.index(self.steps.current) - steps.index(args[0])) != 1:
-            self.request.session['ctx'] = {}
-            logger.warning(f"{self.request.COOKIES.get('sessionid')[:6]} redireccionando "
-                           f"a err_multitabs por multipestañas.")
-            return HttpResponseRedirect(reverse('base:err_multitabs'))
-
-        logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Acabó de clicar "
-                    f"en \'< Atrás\' para ir de {self.steps.current} a {args[0]}.")
-
-        form = self.get_form(data=self.request.POST, files=self.request.FILES)
-        # self.storage.set_step_data(self.steps.current, self.process_step(form))
-        self.storage.set_step_files(self.steps.first, self.process_step_files(form))
-        return super().render_goto_step(*args, **kwargs)
+    # def render_goto_step(self, *args, **kwargs):
+    #     """
+    #     Es ejecutado cuando se clica en el botón "Atrás".
+    #     :param args:
+    #     :param kwargs:
+    #     :return:
+    #     """
+    #     ls_form_list = self.form_list.keys()
+    #     steps = list(ls_form_list)
+    #     de = self.steps.current
+    #     hacia = args[0]
+    #     if ('eligeMunicipio', 'autorizacionServicio') != (de, hacia) and (steps.index(de) - steps.index(hacia)) != 1:
+    #         self.request.session['ctx'] = {}
+    #         logger.warning(f"{self.request.COOKIES.get('sessionid')[:6]} redireccionando "
+    #                        f"a err_multitabs por multipestañas.")
+    #         return HttpResponseRedirect(reverse('base:err_multitabs'))
+    #
+    #     logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Acabó de clicar "
+    #                 f"en \'< Atrás\' para ir de {de} a {hacia}.")
+    #
+    #     form = self.get_form(data=self.request.POST, files=self.request.FILES)
+    #     # self.storage.set_step_data(self.steps.current, self.process_step(form))
+    #     self.storage.set_step_files(self.steps.first, self.process_step_files(form))
+    #     return super().render_goto_step(*args, **kwargs)
 
     def get_form(self, step=None, data=None, files=None):
         """
@@ -194,6 +194,12 @@ class CustomSessionWizard(SessionWizardView):
 
         # self.storage.reset()
         return self.done(list(final_forms.values()), form_dict=final_forms, **kwargs)
+
+    def get_context_data(self, form, **kwargs):
+        context = super().get_context_data(form=form, **kwargs)
+        # if self.steps.current == "autorizacionServicio":
+        context.update({'another_var': self.rad_data})
+        return context
 
     # def get_form_list(self):
     #     """

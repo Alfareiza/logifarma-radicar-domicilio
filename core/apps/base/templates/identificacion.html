@@ -1,0 +1,80 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Autorización de servicio{% endblock %}
+
+{% block content %}
+<section class="vista3">
+    <form id="form-id" action="" method="post">
+
+        <button class="continuar" formnovalidate name=""
+            type="submit" value="" onclick="animabotoncarga_autorizacion()">
+            <p class="text_continuar">Continuar <i class="fa-solid fa-chevron-right"></i></p>
+    </button>
+
+        {% csrf_token %}
+        {{ wizard.management_form }}
+
+        {% include "base/logo.html" %}
+
+        {% if form.errors %}
+            <script src="{% static 'js/modal.js' %}"></script>
+            <div class="modal" id="modal_vist">
+                <div class="conten" id="cont_mod">
+                    <header></header>
+                    <div class="modal_btn">
+                        <button type="button" id="btn_modal" class="close">X</button>
+                    </div>
+                    <div class="contenido">
+                        <p class="texto">
+                           {{ form.non_field_errors.as_text|cut:"* "|linebreaksbr }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if wizard.form.forms %}
+            <!--NOTHING-->
+            {{ wizard.form.management_form }}
+                {% for form in wizard.form.forms %}
+                    {{ form.as_table }}
+                {% endfor %}
+        {% else %}
+
+        {{ wizard.form.tipo_identificacion }}
+        <div class="cont_inpu_auto">
+            <input required type="text" maxlength="20" minlength="5" class="inp_vist3"
+               name="identificacion-valor_identificacion"
+               id="id_identificacion-valor_identificacion" autofocus>
+
+               <p class="inputext_auto">Ingrese su identificación</p>
+            </div>
+        {% endif %}
+
+        <button class="btn" id="btn_conti" type="submit" onclick="animabotoncarga_autorizacion()">
+            Continuar
+            <div id="btn_carga" class="conten_carga">
+                <div class="carga"></div>
+            </div>
+        </button>
+
+    </form>
+
+    
+    <div class="conten-progreso-global"> <div class="pagina">Paso {{ wizard.steps.step1 }} de 7</div>
+        <div class="contenedor">
+            <div class="progreso-contenedor">
+               <div class="progreso" id="progreso"></div>
+               <div class="circulo active"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+            </div>
+        </div>
+      </div>
+
+</section>
+{% endblock %}

@@ -21,6 +21,7 @@ from core.settings import logger, BASE_DIR
 FORMS = [
     ("home", Home),
     ("autorizacionServicio", AutorizacionServicio),
+    ("identificacion", Identificacion),
     ("fotoFormulaMedica", FotoFormulaMedica),
     ("eligeMunicipio", EligeMunicipio),
     ("digitaDireccionBarrio", DireccionBarrio),
@@ -34,6 +35,7 @@ MANDATORIES_STEPS = ("home", "autorizacionServicio", "eligeMunicipio",
 TEMPLATES = {
     "home": "home.html",
     "autorizacionServicio": "autorizacion.html",
+    "identificacion": "identificacion.html",
     "fotoFormulaMedica": "foto.html",
     "eligeMunicipio": "elige_municipio.html",
     "digitaDireccionBarrio": "direccion_barrio.html",
@@ -65,9 +67,9 @@ def show_fotoFormulaMedica(wizard) -> bool:
         ssid = wizard.request.COOKIES.get('sessionid')
         if not ssid:
             ssid = 'Unknown'
-        # logger.info(f"{ssid[:7]} Validando si radicado tiene URL con formula médica.")
+        logger.info(f"{ssid[:7]} Validando si radicado tiene URL con formula médica.")
         if cleaned_data := wizard.rad_data:
-            url = cleaned_data['num_autorizacion']['ARCHIVO']
+            url = cleaned_data['num_autorizacion'].get('ARCHIVO', '')
             rad = cleaned_data['num_autorizacion']['NUMERO_AUTORIZACION']
             return is_file_valid(url, rad)
         return True
@@ -80,12 +82,23 @@ def show_fotoFormulaMedica(wizard) -> bool:
         ...
         # logger.info(f"{ssid[:7]} Validación de URL finalizada.")
 
+@lru_cache
+def show_identificacion(wizard) -> bool:
+    ssid = wizard.request.COOKIES.get('sessionid')
+    logger.info(f"{ssid[:7]} Validando si se debe mostrar vista de cédula. {wizard.rad_data=}")
+    cleaned_data = wizard.rad_data
+    if cleaned_data and cleaned_data['num_autorizacion'].get('AFILIADO'):
+        return False
+        logger.info(f"{ssid[:7]} Mostrando vista de identificación.")
+    return True
 
 class ContactWizard(CustomSessionWizard):
     # template_name = 'start.html'
     form_list = FORMS
     file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
-    condition_dict = {'fotoFormulaMedica': show_fotoFormulaMedica}
+    condition_dict = {'fotoFormulaMedica': show_fotoFormulaMedica,
+                      'identificacion': show_identificacion
+                      }
 
     def get_template_names(self):
         return [TEMPLATES[self.steps.current]]
@@ -138,25 +151,18 @@ class ContactWizard(CustomSessionWizard):
             **form_data['digitaCelular'],
             'email': [*form_data['digitaCorreo']]
         }
+
+        if 'identificacion' in form_data:
+            info_email = {
+                **info_email,
+                # **build_data_from_doc(form_data['identificacion'], form_data['autorizacionServicio']),
+                **form_data['identificacion'],
+                          }
+
         # Guardará en BD cuando DEBUG sean números reales
         ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
         if info_email['NUMERO_AUTORIZACION'] not in [99_999_999, 99_999_998]:
-            guardar_info_bd(**info_email, ip=ip)
-
-        logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']}"
-                    f" Radicación finalizada. E-mail de confirmación será enviado a {form_data['digitaCorreo']}")
-
-        # Revisa medicamentos
-        if not config("DEBUG", cast=bool):
-            ask_med = threading.Thread(target=check_meds, args=(info_email,))
-            ask_med.start()
-
-        # Envía e-mail
-        if not self.foto_fmedica:
-            x = threading.Thread(target=self.send_mail, args=(info_email,))
-            x.start()
-        else:
-            self.send_mail(info_email)
+            self.end_done(**info_email, ip=ip)
 
         return form_data['autorizacionServicio']['num_autorizacion']
 
@@ -221,6 +227,24 @@ class ContactWizard(CustomSessionWizard):
         #     if self.foto_fmedica:
         #         del_file(self.foto_fmedica.file.file.name)
 
+    def end_done(self, **info_email):
+        guardar_info_bd(**info_email)
+
+        logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']}"
+                    f" Radicación finalizada. E-mail de confirmación será enviado a {info_email['email']}")
+
+        # Revisa medicamentos
+        if not config("DEBUG", cast=bool):
+            ask_med = threading.Thread(target=check_meds, args=(info_email,))
+            ask_med.start()
+
+        # Envía e-mail
+        if info_email.get('AFILIADO'):
+            if not self.foto_fmedica:
+                x = threading.Thread(target=self.send_mail, args=(info_email,))
+                x.start()
+            else:
+                self.send_mail(info_email)
 
 def finalizado(request):
     if ctx := request.session.get('ctx', {}):

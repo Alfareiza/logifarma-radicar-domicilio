@@ -1,5 +1,6 @@
 import threading
 from datetime import datetime
+from typing import Dict
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -174,3 +175,21 @@ def validate_status_aut(resp_eps: dict, num_aut: int) -> ValidationError:
     if resp_eps.get('ESTADO_AUTORIZACION') != 'PROCESADA':
         logger.info(f"El estado de la autorización #{num_aut} es diferente de PROCESADA.")
         raise forms.ValidationError("El estado de la autorización no está activa.")
+
+
+def validate_cedula(tipo_doc: str, doc: str, resp_eps_doc: dict) -> Dict[str, str]:
+    """
+
+    :param tipo_doc: Tipo de documento.
+    :param doc: valor del documento.
+    :param resp_eps_doc: Respuesta de la API de cajacopi al haber buscado el documento.
+    :param doc_exists: Determina si el documento existe o no en la base de datos.
+    :return:
+    """
+    if 'info' in resp_eps_doc and resp_eps_doc.get['info']['CODIGO'] == "0":
+        logger.error(f'API Cajacopi no encontró el documento {tipo_doc}. {doc} y tampoco '
+                     'se encuentra en bd.')
+        raise forms.ValidationError(f"Lo sentimos, no encontramos el documento "
+                                    f"{tipo_doc}. {doc}. en nuestro sistema.\n\n"
+                                    f"Para mayor información te puedes comunicar \n"
+                                    f"con nosotros al: 333 033 3124")

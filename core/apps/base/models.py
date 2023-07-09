@@ -75,6 +75,31 @@ class Radicacion(Model):
         return f"{self.numero_radicado}"
 
 
+class RadicacionTemporal(Model):
+    creado = DateTimeField(blank=True, null=True)
+
+    numero_radicado = CharField(unique=True, max_length=24)
+    # img_formula = ImageField
+    # img_autorizacion =
+
+    municipio = ForeignKey(Municipio, on_delete=CASCADE)
+    barrio = ForeignKey(Barrio, on_delete=CASCADE)
+    cel_uno = CharField(max_length=24, blank=True, null=True)
+    cel_dos = CharField(max_length=24, blank=True, null=True)
+    email = EmailField(max_length=254)
+    direccion = CharField(max_length=150)
+    ip = GenericIPAddressField(protocol='both')
+
+    tipo_doc = CharField(max_length=12)
+    doc = CharField(max_length=20)
+
+    estado = CharField(max_length=128, blank=True, null=True)
+    actualizado = DateTimeField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.numero_radicado}"
+
+
 class Med_Controlado(Model):
     cum = CharField(max_length=24)
     nombre = CharField(max_length=250)
