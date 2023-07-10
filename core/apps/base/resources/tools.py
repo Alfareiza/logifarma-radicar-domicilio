@@ -118,6 +118,19 @@ def download_file(download_url, filename):
         return filepath
 
 
+def clean_ip(ip):
+    """
+    En algunas ocaciones pueden venir dos ips.
+    Así que esta función garantiza que se usará
+    una sola
+    :param ip: Valor capturado desde el request.
+            Ex.: '192.168.0.122', o '192.168.0.122, 144.122.4.51'
+    :return:
+    """
+    ip = ip.split(',')
+    return ip[0]
+
+
 def guardar_info_bd(**kwargs):
     """
     Guarda radicado en base de datos
@@ -169,6 +182,8 @@ def guardar_info_bd(**kwargs):
     email = kwargs.pop('email', None)
     if email:
         email = email[0]
+
+    ip = clean_ip(kwargs.get('ip'))
 
     logger.info(f"{rad} Guardando radicación.")
     try:
