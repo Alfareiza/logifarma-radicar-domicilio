@@ -128,6 +128,8 @@ def clean_ip(ip):
     :return:
     """
     ip = ip.split(',')
+    # Log temporal agregado 12/Jul/23
+    logger.info(f"IP a ser guardada en BD -> {ip[0]}")
     return ip[0]
 
 
@@ -220,6 +222,11 @@ def discover_rad(body) -> str:
     :return: # de radicado
     """
     import re
+    # Log temporal agregado 12/Jul/23
+    logger.info(f"Buscando radicado en body {type(body)}")
+    if isinstance(body, str):
+        # Log temporal agregado 12/Jul/23
+        logger.info(f"Este es el body {body[:30]}")
     if expr := re.findall("\d{9}\d+", body):
         return expr[0]
     return ''
