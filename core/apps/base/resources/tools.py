@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytz
 from django.core.mail import EmailMessage
+from django.utils.safestring import SafeString
 
 from core import settings
 from core.apps.base.models import Radicacion, Municipio, Barrio
@@ -129,7 +130,7 @@ def clean_ip(ip):
     """
     ip = ip.split(',')
     # Log temporal agregado 12/Jul/23
-    logger.info(f"IP a ser guardada en BD -> {ip[0]}")
+    logger.info(f"IP a ser guardada en BD -> {ip[0]!r}")
     return ip[0]
 
 
@@ -185,7 +186,7 @@ def guardar_info_bd(**kwargs):
     if email:
         email = email[0]
 
-    ip = clean_ip(kwargs.get('ip'))
+    ip = clean_ip(kwargs.pop('ip'))
 
     logger.info(f"{rad} Guardando radicación.")
     try:
@@ -203,16 +204,16 @@ def guardar_info_bd(**kwargs):
             cel_dos=kwargs.pop('whatsapp', None),
             email=email,
             direccion=kwargs.pop('direccion', None),
-            ip=kwargs.pop('ip', None),
+            ip=ip,
             paciente_nombre=kwargs.pop('AFILIADO', None),
             paciente_cc=kwargs.pop('DOCUMENTO_ID', None),
             paciente_data=kwargs)
         logger.info(f"{rad} Radicación guardada con éxito!")
     except Exception as e:
-        notify('error-bd',
-               f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", e)
         logger.error(
             f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación: {e}")
+        notify('error-bd',
+               f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", e)
 
 
 def discover_rad(body) -> str:
@@ -222,13 +223,14 @@ def discover_rad(body) -> str:
     :return: # de radicado
     """
     import re
-    # Log temporal agregado 12/Jul/23
-    logger.info(f"Buscando radicado en body {type(body)}")
-    if isinstance(body, str):
-        # Log temporal agregado 12/Jul/23
-        logger.info(f"Este es el body {body[:30]}")
-    if expr := re.findall("\d{9}\d+", body):
-        return expr[0]
+    # Logs temporal agregados 13/Jul/23
+    logger.info(f"Buscando radicado en body de tipo {type(body)}")
+    if isinstance(body, (str, SafeString)):
+        if expr := re.findall("\d{9}\d+", body):
+            logger.info(f"Buscando radicado en body {body[:100]}")
+            return expr[0]
+    else:
+        logger.info(f"No fue buscado el radicado en body pq es {type(body)}")
     return ''
 
 
