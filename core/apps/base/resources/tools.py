@@ -129,8 +129,6 @@ def clean_ip(ip):
     :return:
     """
     ip = ip.split(',')
-    # Log temporal agregado 12/Jul/23
-    logger.info(f"IP a ser guardada en BD -> {ip[0]!r}")
     return ip[0]
 
 
@@ -223,14 +221,9 @@ def discover_rad(body) -> str:
     :return: # de radicado
     """
     import re
-    # Logs temporal agregados 13/Jul/23
-    logger.info(f"Buscando radicado en body de tipo {type(body)}")
     if isinstance(body, (str, SafeString)):
         if expr := re.findall("\d{9}\d+", body):
-            logger.info(f"Buscando radicado en body {body[:100]}")
             return expr[0]
-    else:
-        logger.info(f"No fue buscado el radicado en body pq es {type(body)}")
     return ''
 
 
