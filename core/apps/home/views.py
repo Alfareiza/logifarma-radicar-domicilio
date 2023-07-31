@@ -31,13 +31,21 @@ def index(request):
     if request.user.username not in ['admin', 'logistica']:
         logout(request)
         return redirect('base:home')
-    radicados = facade.listar_radicados_mes(datetime.datetime.now().month)
+    current_month = datetime.datetime.now().month
+    radicados = facade.listar_radicados_mes(current_month)
+    unique_pacientes_in_month = facade.listar_uniques_by_field(current_month, field='paciente_cc')
+    old_radicados = facade.listar_radicados_old_months(current_month)
+
     return render(request, "pages/index.html",
                   {
                       'radicados': radicados,
                       'radicados_day': {f"{k}": len(v) for k, v in order_radicados_by_day(radicados).items()},
-                      'radicados_mun': order_radicados_by_mun_mes(datetime.datetime.now().month)
-                   }
+                      'radicados_mun': order_radicados_by_mun_mes(current_month),
+                      'qty_pacientes': unique_pacientes_in_month.count(),
+                      'qty_new_pacientes': unique_pacientes_in_month.exclude(
+                          paciente_cc__in=old_radicados.values_list('paciente_cc', flat=True)
+                      ).count()
+                  }
                   )
 
 
