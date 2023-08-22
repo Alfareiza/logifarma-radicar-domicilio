@@ -33,7 +33,8 @@ class FireBase(BaseBackend):
                 user.groups.clear()
                 group, created = Group.objects.get_or_create(name=usr['role'])
                 group.user_set.add(user)
-                user.save()
+                user.save(using='default')
+                user.save(using='server')
             except User.DoesNotExist:
                 user = User.objects.create(
                     username=usr['userName'],
@@ -44,7 +45,8 @@ class FireBase(BaseBackend):
                 group, created = Group.objects.get_or_create(name=usr['role'])
                 group.user_set.add(user)
                 user.is_staff = False
-                user.save()
+                user.save(using='default')
+                user.save(using='server')
                 logger.info(f"Usuario {usr['userName']} creado con éxito.")
             except Exception as e:
                 logger.error(f"No fue posible actualizar "
