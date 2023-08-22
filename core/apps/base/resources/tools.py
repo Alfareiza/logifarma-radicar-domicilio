@@ -188,15 +188,12 @@ def guardar_info_bd(**kwargs):
 
     logger.info(f"{rad} Guardando radicación.")
     try:
-        Radicacion.objects.create(
-            # creado=datetime.now(tz=pytz.timezone("America/Bogota")),
+        rad = Radicacion(
             numero_radicado=str(rad),
-            municipio=Municipio.objects.get(
-                  name__iexact=municipio
-                ),
+            municipio=Municipio.objects.get(name__iexact=municipio),
             barrio=Barrio.objects.filter(
                 municipio__name__iexact=municipio
-                ).get(
+            ).get(
                 name=kwargs.pop('barrio', None).lower()),
             cel_uno=kwargs.pop('celular', None),
             cel_dos=kwargs.pop('whatsapp', None),
@@ -206,6 +203,18 @@ def guardar_info_bd(**kwargs):
             paciente_nombre=kwargs.pop('AFILIADO', None),
             paciente_cc=kwargs.pop('DOCUMENTO_ID', None),
             paciente_data=kwargs)
+        try:
+            rad.save(using='default')
+        except Exception as e:
+            logger.error(f"No fue posible guardar radicado {rad} en postgres")
+            logger.error(e)
+
+        try:
+            rad.save(using='server')
+        except Exception as e:
+            logger.error(f"No fue posible guardar radicado {rad} en server")
+            logger.error(e)
+
         logger.info(f"{rad} Radicación guardada con éxito!")
     except Exception as e:
         logger.error(

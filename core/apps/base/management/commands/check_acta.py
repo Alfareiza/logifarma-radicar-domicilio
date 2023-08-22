@@ -145,7 +145,8 @@ class Command(BaseCommand):
         if resp_fbase.get('act'):
             update_rad_from_fbase(rad, resp_fbase)
             try:
-                rad.save()
+                rad.save(using='default')
+                rad.save(using='server')
             except Exception:
                 self.errs.append(rad.numero_radicado)
             else:
@@ -161,7 +162,8 @@ class Command(BaseCommand):
         try:
             logger.info(f"{rad.numero_radicado} Actualizando "
                         f"acta_entrega para \"{new_value}\".")
-            rad.save()
+            rad.save(using='default')
+            rad.save(using='server')
         except Exception:
             self.errs.append(rad.numero_radicado)
         else:

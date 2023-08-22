@@ -108,7 +108,18 @@ default_db_url = 'sqlite:///' + join(BASE_DIR, 'db.sqlite3')
 parse_database = partial(parse, conn_max_age=600)
 DATABASES = {
     'default': config('DATABASE_URL', default=default_db_url,
-                      cast=parse_database)
+                      cast=parse_database),
+    'server': {
+        'ENGINE': 'mssql',
+        'NAME': config('MSSQL_NAME'),
+        'HOST': config('MSSQL_HOST'),
+        'USER': config('MSSQL_USER'),
+        'PASSWORD': config('MSSQL_PASSWORD'),
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
+    }
 }
 
 # Password validation
