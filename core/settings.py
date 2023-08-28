@@ -115,7 +115,7 @@ DATABASES = {
         'HOST': config('MSSQL_HOST'),
         'USER': config('MSSQL_USER'),
         'PASSWORD': config('MSSQL_PASSWORD'),
-        'PORT': '',
+        'PORT': '1433',
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
         },
