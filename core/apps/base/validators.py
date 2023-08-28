@@ -37,14 +37,14 @@ def validate_status(resp_mcar: dict, rad: Radicacion) -> ValidationError:
         if not rad.acta_entrega:
             rad.acta_entrega = ssc
             rad.save(using='default')
-            rad.save(using='server')
+            # rad.save(using='server')
         if factura := resp_mcar.get('factura'):
             # Radicado  tiene SSC, factura y está por confirmar si está firebase
             logger.info(f"{rad.numero_radicado} radicado con factura detectada.")
             if not rad.factura:
                 rad.factura = factura
                 rad.save(using='default')
-                rad.save(using='server')
+                # rad.save(using='server')
             text_resp = f'Número de autorización {rad.numero_radicado} radicado ' \
                         f'{radicado_dt}.<br><br>Este domicilio se encuentra en reparto<br><br>' \
                         f'Si tiene alguna duda se puede comunicar con nosotros ' \
@@ -54,7 +54,7 @@ def validate_status(resp_mcar: dict, rad: Radicacion) -> ValidationError:
                 # Radicado  tiene SSC, factura y está en firebase
                 update_rad_from_fbase(rad, resp_fbase)
                 rad.save(using='default')
-                rad.save(using='server')
+                # rad.save(using='server')
                 entregado_dt = pretty_date(
                     rad.despachado.astimezone(timezone.get_current_timezone())
                 )
