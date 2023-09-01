@@ -147,10 +147,11 @@ class Command(BaseCommand):
             try:
                 rad.save(using='default')
                 rad.save(using='server')
-            except Exception:
-                self.errs.append(rad.numero_radicado)
+            except Exception as e:
+                logger.error(f"{rad.numero_radicado} No fue posible guardar, ERROR={e}")
+                self.errs.append(rad)
             else:
-                self.updated.append(rad.numero_radicado)
+                self.updated.append(rad)
         else:
             logger.info(f"{rad.numero_radicado} tiene acta pero aún no tiene "
                         f"información en Firebase.")
@@ -164,8 +165,9 @@ class Command(BaseCommand):
                         f"acta_entrega para \"{new_value}\".")
             rad.save(using='default')
             rad.save(using='server')
-        except Exception:
-            self.errs.append(rad.numero_radicado)
+        except Exception as e:
+            logger.error(f"{rad.numero_radicado} No fue posible guardar, ERROR={e}")
+            self.errs.append(rad)
         else:
             self.updated.append(rad.numero_radicado)
 

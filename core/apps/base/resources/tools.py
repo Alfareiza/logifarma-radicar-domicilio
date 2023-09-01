@@ -210,8 +210,7 @@ def guardar_info_bd(**kwargs):
             logger.error(e)
 
         try:
-            # rad.save(using='server')
-            ...
+            rad.save(using='server')
         except Exception as e:
             logger.error(f"No fue posible guardar radicado {rad} en server. {rad.barrio.id=}, {rad.municipio.id=}")
             logger.error(e)
