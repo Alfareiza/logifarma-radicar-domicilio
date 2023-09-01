@@ -32,6 +32,9 @@ class MunicipioAdmin(admin.ModelAdmin):
     ordering = ('name', 'departamento')
     actions = [export_csv]
 
+    def save_model(self, request, obj, form, change):
+        obj.save(using='server')
+
 
 @admin.register(Barrio)
 class BarrioAdmin(admin.ModelAdmin):
@@ -42,6 +45,10 @@ class BarrioAdmin(admin.ModelAdmin):
     raw_id_fields = ('municipio',)
     actions = [export_csv]
 
+    def save_model(self, request, obj, form, change):
+        obj.save(using='server')
+
+
 @admin.register(Med_Controlado)
 class MedicamentoControladoAdmin(admin.ModelAdmin):
     exclude = ("field_one", 'field_two')
@@ -50,3 +57,6 @@ class MedicamentoControladoAdmin(admin.ModelAdmin):
     search_fields = ('name', 'cum')
     ordering = ('nombre', 'cum')
     actions = [export_csv]
+
+    def save_model(self, request, obj, form, change):
+        obj.save(using='server')
