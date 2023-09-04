@@ -46,6 +46,7 @@ class BarrioAdmin(admin.ModelAdmin):
     actions = [export_csv]
 
     def save_model(self, request, obj, form, change):
+        obj.save(using='default')
         obj.save(using='server')
 
 
@@ -59,4 +60,5 @@ class MedicamentoControladoAdmin(admin.ModelAdmin):
     actions = [export_csv]
 
     def save_model(self, request, obj, form, change):
+        obj.save(using='default')
         obj.save(using='server')
