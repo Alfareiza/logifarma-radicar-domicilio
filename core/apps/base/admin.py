@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.http import HttpResponse
 
 from core.apps.base.models import Municipio, Barrio, Med_Controlado
+from core.settings import logger
 
 
 # Documentation
@@ -33,7 +34,15 @@ class MunicipioAdmin(admin.ModelAdmin):
     actions = [export_csv]
 
     def save_model(self, request, obj, form, change):
-        obj.save(using='server')
+        self.saving_obj(obj)
+
+    def saving_obj(self, obj):
+        try:
+            obj.save(using='default')
+        except Exception as e:
+            logger.info("Error al guardar municipio: ", e)
+        else:
+            obj.save(using='server')
 
 
 @admin.register(Barrio)
@@ -46,9 +55,15 @@ class BarrioAdmin(admin.ModelAdmin):
     actions = [export_csv]
 
     def save_model(self, request, obj, form, change):
-        obj.save(using='default')
-        obj.save(using='server')
+        self.saving_obj(obj)
 
+    def saving_obj(self, obj):
+        try:
+            obj.save(using='default')
+        except Exception as e:
+            logger.info("Error al guardar barrio: ", e)
+        else:
+            obj.save(using='server')
 
 @admin.register(Med_Controlado)
 class MedicamentoControladoAdmin(admin.ModelAdmin):
@@ -60,5 +75,12 @@ class MedicamentoControladoAdmin(admin.ModelAdmin):
     actions = [export_csv]
 
     def save_model(self, request, obj, form, change):
-        obj.save(using='default')
-        obj.save(using='server')
+        self.saving_obj(obj)
+
+    def saving_obj(self, obj):
+        try:
+            obj.save(using='default')
+        except Exception as e:
+            logger.info("Error al guardar medicamento controlado: ", e)
+        else:
+            obj.save(using='server')
