@@ -9,11 +9,12 @@ from django.core.management.base import BaseCommand
 from django.template.loader import get_template
 
 from core.apps.base.models import Radicacion, Municipio, Barrio
-from core.apps.base.resources.api_calls import call_api_medicar, \
-    get_firebase_acta, should_i_call_auth, call_api_eps
+from core.apps.base.resources.api_calls import get_firebase_acta, should_i_call_auth, call_api_eps
 from core.apps.base.resources.decorators import logtime
-from core.apps.base.resources.tools import make_email, notify, day_slash_month_year, \
-    pretty_date, update_rad_from_fbase
+from core.apps.base.resources.medicar import obtener_datos_formula
+from core.apps.base.resources.tools import (
+    make_email, notify, day_slash_month_year,
+    pretty_date, update_rad_from_fbase)
 from core.settings import logger, BASE_DIR
 
 
@@ -51,7 +52,7 @@ class Command(BaseCommand):
             logger.info(f"Verificando {len(rads)} número de actas.")
             with ThreadPoolExecutor(max_workers=4) as executor:
                 should_i_call_auth()
-                future_to_rad = {executor.submit(call_api_medicar, r.numero_radicado): r for r in rads}
+                future_to_rad = {executor.submit(obtener_datos_formula, r.numero_radicado): r for r in rads}
                 for future in concurrent.futures.as_completed(future_to_rad):
                     rad = future_to_rad[future]
                     try:

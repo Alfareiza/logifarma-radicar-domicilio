@@ -1,6 +1,7 @@
 import json
 import pickle
 from datetime import datetime, timedelta
+from typing import Tuple, List, Dict
 
 import requests
 from decouple import config
@@ -14,6 +15,7 @@ from core.settings import BASE_DIR
 from core.settings import logger
 
 pickle_path = BASE_DIR / "core/apps/base/resources/stored.pickle"
+
 
 def call_api_eps(num_aut: int) -> dict:
     """
@@ -95,7 +97,7 @@ def auth_api_medicar():
 @hash_dict
 @logtime('API')
 @timed_lru_cache(300)
-def request_api(url, headers, payload, method='POST'):
+def request_api(url, headers, payload, method='POST') -> dict:
     num_aut = payload.get('autorizacion') or payload.get('serial')
     payload = json.dumps(payload)
     # logger.info(f'API Llamando [{method}]: {url}')
@@ -129,85 +131,27 @@ def request_api(url, headers, payload, method='POST'):
         return {}
 
 
-def call_api_medicar(num_aut: int) -> dict:
+def call_api_medicar(payload: dict, endpoint: str):
     """
-    Recibe el número de autorización que aparece en los pedidos de los usuarios.
-    Realiza el llamado a la API y retorna un diccionario con la respuesta.
-    :param num_aut:
-    :return: Dict:
-            Ej: En caso de haber un error
-                {}
-            Ej: En caso de no haber encontrado registros
-                { "error": "No se han encontrado registros."}
-            Ej: En caso de enviar el nit incorrecto
-                { "error": "El Nit ingresado no corresponde a ningun convenio."}
-            Ej: En caso de haber encontrado registros
-                {
-                    "ssc": 2640835,
-                    "autorizacion": "875800731698",
-                    "factura": null,
-                    "fecha_de_factura": null,
-                    "hora_de_factura": null,
-                    "resolucion_de_factura": null,
-                    "codigo_centro_factura": "920",
-                    "nombre_centro_factura": "Central Domicilios Barranquilla (920)",
-                    "direccion_centro_factura": "VIA 40 No. 69 - 58 Bodega D5 Parque \r\nIndustrial VIA 40",
-                    "usuario_dispensa": "Silva Jose Thiago Camargo",
-                    "nombre_eps": "CAJA DE COMPENSACION FAMILIAR CAJACOPI ATLANTICO",
-                    "nit_eps": "890102044",
-                    "plan": "REGIMEN SUBSIDIADO",
-                    "direccion_eps": "Calle 4 No 4 – 5",
-                    "nombre_afiliado": "GUTIERREZ TEIXEIRA JACKSON WOH",
-                    "tipo_documento_afiliado": "CC",
-                    "documento_afiliado": "12340316",
-                    "nivel": "6",
-                    "mipres": null,
-                    "id_mipres": null,
-                    "nombre_medico": "FRANK LAMPARD",
-                    "nombre_ips": "Hospital De Leticia Materno Infantil",
-                    "articulos": [
-                        {
-                            "codigo_barras": "7707184601001",
-                            "cum": "20089927-1",
-                            "atc": "J01XX01",
-                            "descripcion": "FOSFOMICINA 3G POL ORL C*1 SOB X 8G (LESGENA) - CLOSTER PHARMA",
-                            "cantidad": 0,
-                            "costo_promedio": 0,
-                            "precio_venta": null,
-                            "iva": 0
-                        },
-                        {
-                            "codigo_barras": "7703454121620",
-                            "cum": "19982964-5",
-                            "atc": "B03AE02",
-                            "descripcion": "HERREX FOL 1000 X 30  TABLETAS",
-                            "cantidad": 0,
-                            "costo_promedio": 0,
-                            "precio_venta": null,
-                            "iva": 0
-                        }
-                    ]
-                }
+    Consulta la API de medicar a partir de un payload y endpoint.
+    :param payload: Puede ser:
+                        - {"nit_eps": "901543211", "autorizacion": "123456"}
+                        - {"Centro": "920"}, "list-inventory/client/6"
+    :param endpoint: Puede ser:
+                        - 'logifarma/obtenerDatosFormula'
+                        - 'list-inventory/client/6'
+    :return: - En caso de consultar los datos de una formula, retornará un
+               diccionário con la información de la formula.
+             - En caso de consultar el inventario, retornaraá una lista con
+               diccionarios donde cada uno es un articulo.
     """
     call_auth = should_i_call_auth()
     token = auth_api_medicar() if call_auth is True else call_auth
-    url = "https://medicarws.sis-colombia.com/api/logifarma/obtenerDatosFormula"
+    url = f"https://medicarws.sis-colombia.com/api/{endpoint}"
     headers = {'Authorization': f'Bearer {token}',
                'Content-Type': 'application/json'}
-    payload = {"nit_eps": "901543211", "autorizacion": f"{num_aut}"}
     resp = request_api(url, headers, payload)
-    try:
-        if isinstance(resp, dict) and 'error' in resp.keys():
-            if resp.get('error') == 'No se han encontrado registros.':
-                return resp
-            elif resp.get('error') == 'El Nit ingresado no corresponde a ningun convenio.':
-                payload['nit_eps'] = '890102044'
-                resp = request_api(url, headers, payload)
-        return resp[0]
-    except KeyError:
-        # msg = f"{resp}"
-        logger.error('Al consultarse hubo una respuesta inesperada: ', str(resp))
-        return {}
+    return resp
 
 
 def should_i_call_auth():
@@ -364,15 +308,10 @@ def check_med(med: str) -> list:
                f" datos.gov.co: {response.text}")
         return []
 
+
 def check_med_bd(codcum: str):
     try:
-        import pymssql
-        server = config('SQL_SERVER_HOST')
-        database = config('SQL_SERVER_DB')
-        username = config('SQL_SERVER_USER')
-        password = config('SQL_SERVER_PASS')
-        conn = pymssql.connect(server=server, database=database,
-                               user=username, password=password)
+        conn = make_dbconn()
         cursor = conn.cursor()
         logger.info(f'Buscando expediente {codcum} en base de datos.')
         cursor.execute("SELECT codcum_exp as codcum FROM Logifarma2.dbo.articulos01 "
@@ -385,6 +324,51 @@ def check_med_bd(codcum: str):
     finally:
         cursor.close()
         conn.close()
+
+def find_cums(articulos: Tuple) -> Dict[str, str]:
+    """
+    Busca en base de datos todos los articulos con
+    base en el codigo de barra, trayendo su cum.
+    :param articulos: Codigos de barras de articulos
+                 Ej.: ('123', '456', '789')
+    :return: Respuesta de la consulta a base de datos:
+             Ej.:
+              { '9002260013616': '',
+                '9002260016846': '19984812',
+                '33425453456': '0'
+                '76465727645': '123\t'
+                '987654321324': 'N/A',
+                '9867543211': 'NA'
+                '8904159614847' :'20074902'
+              ]
+    """
+    try:
+        conn = make_dbconn()
+        cursor = conn.cursor()
+        cursor.execute("SELECT LTRIM(RTRIM(codigo)) as barra, "
+                       "LTRIM(RTRIM(codcum_exp)) as cum FROM Logifarma2.dbo.articulos01 "
+                       f"WHERE codigo IN {articulos}")
+        res = cursor.fetchall()
+    except Exception as exc:
+        logger.error(f"Error al buscar los cums de articulos. {exc}")
+    else:
+        if not res:
+            return {}
+        return dict(res)
+    finally:
+        cursor.close()
+        conn.close()
+
+def make_dbconn():
+    import pymssql
+    server = config('SQL_SERVER_HOST')
+    database = config('SQL_SERVER_DB')
+    username = config('SQL_SERVER_USER')
+    password = config('SQL_SERVER_PASS')
+    return pymssql.connect(server=server, database=database,
+                           user=username, password=password)
+
+
 
 if __name__ == '__main__':
     ...
