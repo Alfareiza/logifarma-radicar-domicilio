@@ -1,10 +1,17 @@
 from django import forms
 
 from core.apps.base.models import Barrio, Municipio, Radicacion
-from core.apps.base.resources.api_calls import call_api_eps, call_api_medicar
+from core.apps.base.resources.api_calls import call_api_eps
+from core.apps.base.resources.medicar import obtener_datos_formula
 from core.apps.base.resources.tools import read_json
-from core.apps.base.validators import validate_aut_exists, validate_med_controlados, validate_status, validate_status_afiliado, \
-    validate_status_aut, validate_structure
+from core.apps.base.validators import (
+    validate_aut_exists,
+    validate_med_controlados,
+    validate_status,
+    validate_status_afiliado,
+    validate_status_aut,
+    validate_structure
+)
 from core.settings import logger
 
 
@@ -36,7 +43,7 @@ class AutorizacionServicio(forms.Form):
             resp_eps = read_json('resources/fake_file.json')
         elif rad := Radicacion.objects.filter(numero_radicado=num_aut).first():
             # Consulta para verificar si tiene ssc (acta)
-            resp_mcar = call_api_medicar(num_aut)
+            resp_mcar = obtener_datos_formula(num_aut)
             validate_status(resp_mcar, rad)
         else:
             resp_eps = call_api_eps(num_aut)
@@ -63,7 +70,7 @@ class AutorizacionServicio(forms.Form):
         if num_aut in [99_999_999, 99_999_998]:
             resp_mcar = {"error": "No se han encontrado registros."}
         else:
-            resp_mcar = call_api_medicar(num_aut)
+            resp_mcar = obtener_datos_formula(num_aut)
 
         if not resp_mcar:
             logger.info(f"No se pudo obtener información del radicado #{num_aut}.")
