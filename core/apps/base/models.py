@@ -9,7 +9,7 @@ from django.db.models import (
     JSONField,
     Model,
     PositiveBigIntegerField,
-    PositiveIntegerField,
+    PositiveIntegerField, DateField,
 )
 
 
@@ -92,3 +92,20 @@ class Med_Controlado(Model):
 
     def __str__(self):
         return f"{self.cum} - {self.nombre}"
+
+
+class Inventario(Model):
+    created_at = DateTimeField(auto_now_add=True)
+    centro = CharField(max_length=24)
+    cod_mol = IntegerField()
+    cod_barra = CharField(max_length=128)
+    cum = CharField(max_length=64)
+    descripcion = CharField(max_length=250)
+    lote = CharField(max_length=24)
+    fecha_vencimiento = DateField()
+    inventario = IntegerField()
+    costo_promedio = IntegerField()
+    cantidad_empaque = IntegerField()
+
+    def __str__(self):
+        return f"{self.descripcion} ({self.inventario})"
