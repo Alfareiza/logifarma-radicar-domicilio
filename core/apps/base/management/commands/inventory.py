@@ -21,7 +21,7 @@ class Command(BaseCommand):
         all_inv_default = Inventario.objects.using('default').all()
         all_inv_server = Inventario.objects.using('server').all()
 
-        if all_inv_default and all_inv_default:
+        if all_inv_default and all_inv_server:
             all_inv_default.delete()
             all_inv_server.delete()
 
@@ -57,7 +57,7 @@ class Command(BaseCommand):
         :param options:
         :return:
         """
-        log.info(f"{' INICIANDO ACTUALIZACIÓN DE INVENTARIO ':▼^70}")
+        log.info(f"{' INICIANDO ACTUALIZACIÓN DE INVENTARIO ':▼^40}")
         inventory = self.get_all_inventory(920)
         if inventory:
             objs_to_create = [Inventario(centro=art['Centro'], cod_mol=art['CodMol'],
@@ -74,4 +74,4 @@ class Command(BaseCommand):
         else:
             log.warning('Inventario vacío al ser consultado en la API.')
 
-        log.info(f"{' FINALIZANDO ACTUALIZACIÓN DE INVENTARIO ':▲^70}")
+        log.info(f"{' FINALIZANDO ACTUALIZACIÓN DE INVENTARIO ':▲^40}")

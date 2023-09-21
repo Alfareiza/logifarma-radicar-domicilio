@@ -97,9 +97,9 @@ class Med_Controlado(Model):
 class Inventario(Model):
     created_at = DateTimeField(auto_now_add=True)
     centro = CharField(max_length=24)
-    cod_mol = IntegerField()
+    cod_mol = CharField(max_length=24)
     cod_barra = CharField(max_length=128)
-    cum = CharField(max_length=64)
+    cum = CharField(max_length=64, blank=True, null=True)
     descripcion = CharField(max_length=250)
     lote = CharField(max_length=24)
     fecha_vencimiento = DateField()

@@ -6,6 +6,7 @@ from typing import Tuple, List, Dict
 import requests
 from decouple import config
 from django.template.loader import get_template
+from pymssql import Connection
 from requests import Timeout
 
 from core.apps.base.resources.decorators import hash_dict, logtime, \
@@ -346,7 +347,7 @@ def find_cums(articulos: Tuple) -> Dict[str, str]:
         conn = make_dbconn()
         cursor = conn.cursor()
         cursor.execute("SELECT LTRIM(RTRIM(codigo)) as barra, "
-                       "LTRIM(RTRIM(codcum_exp)) as cum FROM Logifarma2.dbo.articulos01 "
+                       "LTRIM(RTRIM(codcum)) as cum FROM Logifarma2.dbo.articulos01 "
                        f"WHERE codigo IN {articulos}")
         res = cursor.fetchall()
     except Exception as exc:
@@ -359,7 +360,7 @@ def find_cums(articulos: Tuple) -> Dict[str, str]:
         cursor.close()
         conn.close()
 
-def make_dbconn():
+def make_dbconn() -> Connection:
     import pymssql
     server = config('SQL_SERVER_HOST')
     database = config('SQL_SERVER_DB')
