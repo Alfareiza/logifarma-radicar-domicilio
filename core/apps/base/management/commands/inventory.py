@@ -57,7 +57,7 @@ class Command(BaseCommand):
         :param options:
         :return:
         """
-        log.info(f"{' INICIANDO ACTUALIZACIÓN DE INVENTARIO ':▼^40}")
+        log.info(f"{' INICIANDO ACTUALIZACIÓN DE INVENTARIO ':▼^50}")
         inventory = self.get_all_inventory(920)
         if inventory:
             objs_to_create = [Inventario(centro=art['Centro'], cod_mol=art['CodMol'],
@@ -74,4 +74,4 @@ class Command(BaseCommand):
         else:
             log.warning('Inventario vacío al ser consultado en la API.')
 
-        log.info(f"{' FINALIZANDO ACTUALIZACIÓN DE INVENTARIO ':▲^40}")
+        log.info(f"{' FINALIZANDO ACTUALIZACIÓN DE INVENTARIO ':▲^50}")
