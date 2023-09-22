@@ -165,7 +165,7 @@ def validate_status_afiliado(resp_eps: dict, num_aut: int) -> ValidationError:
     """
     Valida que el estado del afiliado sea "ACTIVO".
     """
-    if resp_eps.get('ESTADO_AFILIADO') not in ('ACTIVO', 'PROTECCION LABORAL', 'PROCESADA'):
+    if resp_eps.get('ESTADO_AFILIADO') not in ('ACTIVO', 'PROTECCION LABORAL'):
         logger.info(f"El estado del afiliado de radicado #{num_aut} no se encuentra activo."
                     f" Estado={resp_eps.get('ESTADO_AFILIADO')}.")
         raise forms.ValidationError("Afiliado no se encuentra activo.")
@@ -175,6 +175,6 @@ def validate_status_aut(resp_eps: dict, num_aut: int) -> ValidationError:
     """
     Valida que el estado de la autorización sea "PROCESADA"
     """
-    if resp_eps.get('ESTADO_AUTORIZACION') != 'PROCESADA':
+    if resp_eps.get('ESTADO_AUTORIZACION') not in ('PROCESADA', 'ACTIVA'):
         logger.info(f"El estado de la autorización #{num_aut} es diferente de PROCESADA.")
         raise forms.ValidationError("El estado de la autorización no está activa.")
