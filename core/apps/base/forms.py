@@ -10,7 +10,7 @@ from core.apps.base.validators import (
     validate_status,
     validate_status_afiliado,
     validate_status_aut,
-    validate_structure
+    validate_structure, validate_agotados
 )
 from core.settings import logger
 
@@ -87,6 +87,9 @@ class AutorizacionServicio(forms.Form):
                                         f"{radicada_en} con el número de acta: {resp_mcar.get('ssc')}\n\n"
                                         f"Para mayor información te puedes comunicar \n"
                                         f"con nosotros al: 333 033 3124")
+
+        # Revisar si este es el mejor lugar para validar agotados
+        validate_agotados(resp_eps, num_aut)
 
         resp_eps['NUMERO_AUTORIZACION'] = num_aut
         logger.info(f"{num_aut} Número de autorización pasó las validaciones.")

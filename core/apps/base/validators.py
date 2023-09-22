@@ -132,7 +132,8 @@ def validate_med_controlados(resp_eps: dict, num_aut: int) -> ValidationError:
     """
     Valida los cums de los articulos provenientes de la API de Cajacopi
     y en caso de al menos uno encontrarse en la bd, entonces lanzará
-    una excepción que para el usuario será un modal en la vista 2.
+    una excepción que para el usuario será un modal en la vista 2 informando
+    que su autorización no se puede radicar por la app.
     """
     if cums_found := Med_Controlado.objects.filter(
             cum__in=[
@@ -162,9 +163,7 @@ def validate_med_controlados(resp_eps: dict, num_aut: int) -> ValidationError:
 
 
 def validate_status_afiliado(resp_eps: dict, num_aut: int) -> ValidationError:
-    """
-    Valida que el estado del afiliado sea "ACTIVO".
-    """
+    """ Valida que el estado del afiliado sea "ACTIVO"."""
     if resp_eps.get('ESTADO_AFILIADO') not in ('ACTIVO', 'PROTECCION LABORAL'):
         logger.info(f"El estado del afiliado de radicado #{num_aut} no se encuentra activo."
                     f" Estado={resp_eps.get('ESTADO_AFILIADO')}.")
@@ -172,9 +171,14 @@ def validate_status_afiliado(resp_eps: dict, num_aut: int) -> ValidationError:
 
 
 def validate_status_aut(resp_eps: dict, num_aut: int) -> ValidationError:
-    """
-    Valida que el estado de la autorización sea "PROCESADA"
-    """
+    """ Valida que el estado de la autorización sea "PROCESADA"."""
     if resp_eps.get('ESTADO_AUTORIZACION') not in ('PROCESADA', 'ACTIVA'):
         logger.info(f"El estado de la autorización #{num_aut} es diferente de PROCESADA.")
         raise forms.ValidationError("El estado de la autorización no está activa.")
+
+def validate_agotados(resp_eps: dict, num_aut: int) -> ValidationError:
+    """Valida que los articulos no estén agotados."""
+    ...
+    # Valida los agotados del mes actual con relación a los articulos de su autorización
+    # Busca los códigos de barra de los articulos de la autorización en AgotadosProveedor.
+    # que fecha_reportado sea igual al mes actual.
