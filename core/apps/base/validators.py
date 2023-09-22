@@ -165,8 +165,9 @@ def validate_status_afiliado(resp_eps: dict, num_aut: int) -> ValidationError:
     """
     Valida que el estado del afiliado sea "ACTIVO".
     """
-    if resp_eps.get('ESTADO_AFILIADO') not in ('ACTIVO', 'PROTECCION LABORAL'):
-        logger.info(f"EL estado del afiliado de radicado #{num_aut} no se encuentra activo.")
+    if resp_eps.get('ESTADO_AFILIADO') not in ('ACTIVO', 'PROTECCION LABORAL', 'PROCESADA'):
+        logger.info(f"El estado del afiliado de radicado #{num_aut} no se encuentra activo."
+                    f" Estado={resp_eps.get('ESTADO_AFILIADO')}.")
         raise forms.ValidationError("Afiliado no se encuentra activo.")
 
 
