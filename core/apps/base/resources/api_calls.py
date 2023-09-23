@@ -68,6 +68,29 @@ def call_api_eps(num_aut: int) -> dict:
     return request_api(url, headers, payload)
 
 
+def update_status_factura_cajacopi(factura: str, valor_factura: int, num_aut: str) -> dict:
+    """
+    Cambia el estado de una factura.
+    Incialmente llamado desde core.apps.tasks.utils.pipeline.Send2Cajacopi.cajacopi_calls.
+    :param factura: Valor que representa la factura de una autorización.
+    :param valor_factura: Valor total de una factura.
+    :param num_aut: Número de autorización.
+    :return: Respuesta de la api de Cajacopi:
+            Ej.:
+                - {}
+                - {"codigo": "1", "mensaje": "Error!. La autorizacion no tiene detalles. AutProCode:2083"}
+    """
+    url = "https://genesis.cajacopieps.com/api/api_qr.php"
+    payload = {
+        "function": "p_inserta_factura_aut",
+        "factura": factura,
+        "valorFactura": valor_factura,
+        "autorizacion": num_aut
+    }
+    headers = {'Content-Type': 'text/plain'}
+    return request_api(url, headers, payload)
+
+
 @logtime('API')
 def auth_api_medicar():
     """
@@ -326,6 +349,7 @@ def check_med_bd(codcum: str):
         cursor.close()
         conn.close()
 
+
 def find_cums(articulos: Tuple) -> Dict[str, str]:
     """
     Busca en base de datos todos los articulos con
@@ -360,6 +384,7 @@ def find_cums(articulos: Tuple) -> Dict[str, str]:
         cursor.close()
         conn.close()
 
+
 def make_dbconn() -> Connection:
     import pymssql
     server = config('SQL_SERVER_HOST')
@@ -368,7 +393,6 @@ def make_dbconn() -> Connection:
     password = config('SQL_SERVER_PASS')
     return pymssql.connect(server=server, database=database,
                            user=username, password=password)
-
 
 
 if __name__ == '__main__':
