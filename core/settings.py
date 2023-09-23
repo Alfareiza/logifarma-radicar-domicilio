@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'core.apps.base',
     'core.apps.home',
     'core.apps.api',
+    'core.apps.tasks',
     'formtools',
     'django.contrib.admin',
     'django.contrib.auth',
