@@ -293,6 +293,7 @@ def notify(reason: str, subject: str, body: str, to=None, bcc: list = []):
                 'check-datosgov': 'Correo enviado por problema al consultar datos.gov.co.',
                 'expd-no-encontrado': '{} Correo enviado por expediente no encontrado.',
                 'med-control': '{} Correo enviado por medicamento controlado.',
+                'task-fill-data': '{} Correo enviado por facturas no procesadas en rutina.',
             }
     except Exception as e:
         logger.error(f"{rad} Correo de {reason} no fue enviado. Error: {e}")
