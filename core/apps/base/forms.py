@@ -111,7 +111,7 @@ class EligeMunicipio(forms.ModelForm):
         model = Municipio
         exclude = ['name', 'departamento']
 
-    municipio = forms.ModelChoiceField(queryset=Municipio.objects.all(),
+    municipio = forms.ModelChoiceField(queryset=Municipio.objects.filter(activo=True),
                                        empty_label="Seleccione un municipio",
                                        widget=forms.RadioSelect(
                                            attrs={'class': 'select_opt'}

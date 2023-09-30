@@ -16,6 +16,8 @@ from django.db.models import (
 class Municipio(Model):
     name = CharField(max_length=128)
     departamento = CharField(max_length=128)
+    cod_dane = IntegerField(null=True, blank=True)
+    activo = BooleanField(default=False)
 
     class Meta:
         unique_together = ('name', 'departamento')
@@ -109,3 +111,35 @@ class Inventario(Model):
 
     def __str__(self):
         return f"{self.descripcion} ({self.inventario})"
+
+
+class Centro(Model):
+    disp = CharField(max_length=24)
+    bod = CharField(max_length=24)
+    drogueria = CharField(max_length=128)
+    correo_coordinador = CharField(max_length=128, blank=True, null=True)
+    dia_ped = CharField(max_length=24, blank=True, null=True)
+    estado = CharField(max_length=24, blank=True, null=True)
+    modalidad = CharField(max_length=24)
+    poblacion = IntegerField(blank=True, null=True)
+    municipio = ForeignKey(Municipio, on_delete=CASCADE)
+    tipo = CharField(max_length=24)
+    correo_disp = CharField(max_length=128, blank=True, null=True)
+    responsable = CharField(max_length=128, blank=True, null=True)
+    cedula = CharField(max_length=64, blank=True, null=True)
+    celular = CharField(max_length=64, blank=True, null=True)
+    direccion = CharField(max_length=128, blank=True, null=True)
+    medicar = CharField(max_length=8, blank=True, null=True)
+    tent = IntegerField()
+    analista = CharField(max_length=128, blank=True, null=True)
+    ult_fecha_disp = DateTimeField(blank=True, null=True)
+    aux_pqr = CharField(max_length=128, blank=True, null=True)
+    transp_1 = CharField(max_length=128, blank=True, null=True)
+    transp_2 = CharField(max_length=128, blank=True, null=True)
+    correo_contacto_eps = CharField(max_length=128, blank=True, null=True)
+
+    class Meta:
+        db_table = 'base_centros'
+
+    def __str__(self):
+        return f"{self.disp} - {self.drogueria}"
