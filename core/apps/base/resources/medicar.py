@@ -101,14 +101,14 @@ def obtener_inventario(centro: int) -> List[Dict]:
                 [
                     {
                       'Centro': '920',
-                      'CodMol': 38574,
-                      'CodBarra': '7702870071502',
-                      'Descripcion': 'CAFEINA+NAPROXENO 65MG+550MG C*36 TAB (LUMBAL FORTE)',
+                      'CodMol': 13498,
+                      'CodBarra': '77012345667',
+                      'Descripcion': 'Nombre del articulo',
                       'Lote': '23A634',
-                      'FechaVencimiento': '2025-04-30',
-                      'Inventario': 22,
-                      'CostoPromedio': 1366,
-                      'CantidadEmpaque': 36
+                      'FechaVencimiento': '2033-04-30',
+                      'Inventario': 12,
+                      'CostoPromedio': 3456,
+                      'CantidadEmpaque': 78
                     }
                     ...
                 ]
