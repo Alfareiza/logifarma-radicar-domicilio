@@ -190,7 +190,7 @@ def guardar_info_bd(**kwargs):
     try:
         rad = Radicacion(
             numero_radicado=str(rad),
-            municipio=Municipio.objects.get(name__iexact=municipio),
+            municipio=Municipio.objects.get(activo=True, name__iexact=municipio),
             barrio=Barrio.objects.filter(
                 municipio__name__iexact=municipio
             ).get(
