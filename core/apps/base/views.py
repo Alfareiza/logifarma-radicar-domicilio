@@ -201,9 +201,10 @@ class ContactWizard(CustomSessionWizard):
             notify('error-email', f"ERROR ENVIANDO EMAIL- Radicado #{info_email['NUMERO_AUTORIZACION']}",
                    f"JSON_DATA: {info_email}\n\nERROR: {e}")
             if rad := Radicacion.objects.filter(numero_radicado=info_email['NUMERO_AUTORIZACION']).first():
-                rad.delete()
-                logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {rad}"
-                            "Eliminado radicado al no haberse enviado correo.")
+                ...
+                # rad.delete()
+                # logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {rad}"
+                #             "Eliminado radicado al no haberse enviado correo.")
         else:
             if r == 1:
                 if self.foto_fmedica:
