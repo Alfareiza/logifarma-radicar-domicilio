@@ -1,4 +1,6 @@
+import concurrent
 from concurrent.futures import ThreadPoolExecutor
+from itertools import groupby, chain
 from typing import List
 
 from django.core.management import BaseCommand
@@ -11,7 +13,7 @@ from core.settings import logger as log
 
 
 class Command(BaseCommand):
-    help = 'Actualiza el inventario'
+    help = 'Actualiza el inventario con base en API externa.'
 
     def add_arguments(self, parser):
         """
@@ -21,62 +23,84 @@ class Command(BaseCommand):
         """
         parser.add_argument("centros", nargs="+", type=str)
 
-    def get_all_inventory(self, centro):
-        inv = []
-        inv = obtener_inventario(centro)
-        if inv:
-            self.fetch_cums(inv)
-        return inv
+    def update_inventario(self, objs: List[Inventario]) -> None:
+        """
+        Excluye el inventario de determinado centro y enseguida agrega la lista
+        de objetos de Inventario a la base de dados.
+        Esto lo hace en grupos, siendo cada uno un centro.
+        :param objs: Inventario a ser actualizado.
+        """
+        for cod_centro, inventario in groupby(objs, key=lambda obj: obj.centro):
+            # key = '920', list(inventario) = [<Inventario: 1>, <Inventario: 1>]
+            try:
+                self.delete_inventario(cod_centro)
+            except Exception as e:
+                log.error(f"Error al excluir inventario existente de centro {cod_centro}. Error={e}")
+            else:
+                self.register_inventario(cod_centro, (list(inventario)))
 
-    @logtime('')
-    def delete_inventario(self, centro):
-        log.info(f"Eliminando inventario existente {centro}.")
+    @logtime('INV')
+    def delete_inventario(self, centro: str) -> None:
+        """
+        Excluye el Inventario de determinado centro.
+        :param centro: Codigo del centro a ser excluido. Ej.: '404'
+        """
         all_inv_default = Inventario.objects.using('default').filter(centro=centro).all()
-        all_inv_server = Inventario.objects.using('server').filter(centro=centro).all()
-        if all_inv_default and all_inv_server:
+        # all_inv_server = Inventario.objects.using('server').filter(centro=centro).all()
+        if all_inv_default:
+                # and all_inv_server):
             all_inv_default.delete()
-            all_inv_server.delete()
+            # all_inv_server.delete()
+
+    @logtime('INV')
+    def register_inventario(self, centro: str, objs: List[Inventario]) -> None:
+        """
+        Registra masivamente lista de Inventario en base de datos.
+        El campo centro es recibido pero no es utilizado en la función
+        sino en el decorator.
+        :param centro: Codigo del centro a ser agregado. Ej.: '404'
+        :param objs: Inventario a ser agregado.
+        """
+        Inventario.objects.bulk_create(objs)
+        # Inventario.objects.using('server').bulk_create(objs)
 
     @logtime('')
-    def register_inventario(self, objs):
-        log.info(f"Registrando nuevo inventario {objs[0].centro}.")
-        Inventario.objects.bulk_create(objs)
-        Inventario.objects.using('server').bulk_create(objs)
-
-    def fetch_cums(self, inv: List) -> List:
+    def fetch_cums(self, total_inv: List[List[dict]]) -> List:
         """
         A partir de la lista de codigos de barra de articulos
         procedentes de la API, le agrega el cum el cual es buscado
         en otra base de datos a través del 'CodBarra'
-        :param inv: Lista de articulos.
+        :param total_inv: Lista de centros, que a su vez tiene la lista articulos.
         :return: Lista de articulos + la llave 'cum' en cada uno de ellos.
         """
-        barras = [item['CodBarra'] for item in inv]
+        # Crea una lista con los codigos de barra a partir de la lista de listas
+        # logrando 'achatar' total_inv.
+        barras = [art['CodBarra'] for art in list(chain.from_iterable(total_inv))]
         cums = find_cums(tuple(barras))
         if cums:
-            for art in inv:
-                art['cum'] = ''
-                art['cum'] = cums.get(art['CodBarra'], '')
+            for centro in total_inv:
+                for art in centro:
+                    art['cum'] = ''
+                    art['cum'] = cums.get(art['CodBarra'], '')
         else:
             log.warning('No fue posible cargar los cums porque el '
                         'inventario capturado está vacío')
 
-    def process_inventario(self, inv):
-        log.info(f"{' Procesando centro # {}.':.>70}".format(inv))
-        inventory = self.get_all_inventory(inv)
-        if inventory:
-            objs_to_create = [Inventario(centro=art['Centro'], cod_mol=art['CodMol'],
-                                         cod_barra=art['CodBarra'], cum=art['cum'],
-                                         descripcion=art['Descripcion'], lote=art['Lote'],
-                                         fecha_vencimiento=art['FechaVencimiento'],
-                                         inventario=art['Inventario'],
-                                         costo_promedio=art['CostoPromedio'],
-                                         cantidad_empaque=art['CantidadEmpaque'])
-                              for art in inventory]
-            self.delete_inventario(inv)
-            self.register_inventario(objs_to_create)
-        else:
-            log.warning(f"{' Inventario {} vacío al ser consultado en la API ':x^70}".format(inv))
+    def create_objs(self, total_inv: List[List[dict]]) -> List:
+        """
+        Crea una lista general con todos los articulos
+        siendo cada uno de ellos un modelo Inventario.
+        :param total_inv: Lista de centros, que a su vez tiene la lista articulos.
+        :return: Lista de modelos de tipo Inventario.
+        """
+        return [Inventario(centro=art['Centro'], cod_mol=art['CodMol'],
+                           cod_barra=art['CodBarra'], cum=art['cum'],
+                           descripcion=art['Descripcion'], lote=art['Lote'],
+                           fecha_vencimiento=art['FechaVencimiento'],
+                           inventario=art['Inventario'],
+                           costo_promedio=art['CostoPromedio'],
+                           cantidad_empaque=art['CantidadEmpaque'])
+                for inv in total_inv for art in inv]
 
     def handle(self, *args, **options):
         """
@@ -84,11 +108,20 @@ class Command(BaseCommand):
         son eliminados los registros de inventario de la base de datos
         y posteriormente insertados los nuevos capturados de la API.
         :param args:
-        :param options: Dicionario con informacion donde se encuentra la llave 'centros'
+        :param options: Diccionario con informacion donde se encuentra la llave 'centros'
                         que tiene una lista con los parámetros recibidos.
                         Ej.: ['920', '880']
         """
         log.info(f"{' INICIANDO ACTUALIZACIÓN DE INVENTARIO ':▼^50}")
+        total_inventory = []
         with ThreadPoolExecutor(max_workers=4) as executor:
-            [executor.submit(self.process_inventario, inv) for inv in options.get('centros')]
+            future_to_rad = [executor.submit(obtener_inventario, inv) for inv in options.get('centros')]
+            for future in concurrent.futures.as_completed(future_to_rad):
+                total_inventory.append(future.result())
+
+        if total_inventory:
+            self.fetch_cums(total_inventory)
+            objs = self.create_objs(total_inventory)
+            self.update_inventario(objs)
+
         log.info(f"{' FINALIZANDO ACTUALIZACIÓN DE INVENTARIO ':▲^50}")
