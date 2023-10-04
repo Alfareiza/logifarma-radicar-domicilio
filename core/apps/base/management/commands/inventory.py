@@ -16,6 +16,10 @@ from core.settings import logger as log
 class Command(BaseCommand):
     help = 'Actualiza el inventario con base en API externa.'
 
+    def __init__(self):
+        super().__init__()
+        self.centros = {}
+
     def add_arguments(self, parser):
         """
         This allow to send params in the call.
@@ -39,6 +43,12 @@ class Command(BaseCommand):
                 log.error(f"Error al excluir inventario existente de centro {cod_centro}. Error={e}")
             else:
                 self.register_inventario(cod_centro, (list(inventario)))
+                self.centros.remove(cod_centro)
+
+        if self.centros:
+            log.info(f'No hubo inventerio en : {self.centros}')
+            for cod_centro in self.centros:
+                self.delete_inventario(cod_centro)
 
     @logtime('INV')
     def delete_inventario(self, centro: str) -> None:
@@ -49,7 +59,7 @@ class Command(BaseCommand):
         all_inv_default = Inventario.objects.using('default').filter(centro=centro).all()
         # all_inv_server = Inventario.objects.using('server').filter(centro=centro).all()
         if all_inv_default:
-                # and all_inv_server):
+            # and all_inv_server):
             all_inv_default.delete()
             # all_inv_server.delete()
 
@@ -117,6 +127,7 @@ class Command(BaseCommand):
                         Ej.: ['920', '880']
         """
         log.info(f"{' INICIANDO ACTUALIZACIÓN DE INVENTARIO ':▼^50}")
+        self.centros = set(options.get('centros'))
         total_inventory = []
         with ThreadPoolExecutor(max_workers=4) as executor:
             future_to_rad = [executor.submit(obtener_inventario, inv) for inv in options.get('centros')]
