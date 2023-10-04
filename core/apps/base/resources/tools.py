@@ -385,4 +385,13 @@ def update_rad_from_fbase(rad: Radicacion, resp_fbase: dict) -> None:
     rad.factura = resp_fbase['invoice']
 
 
-
+def dt_str_to_date_obj(dt: str) -> datetime.date:
+    """
+    Convierte una fecha de string a un objeto datetime.date.
+    :param dt: Fecha en formato yyyy-mm-dd. Ej.: '2025-06-30'
+    :return:
+    """
+    try:
+        return date.fromisoformat(dt)
+    except ValueError:
+        return date.fromisoformat('2050-12-31')

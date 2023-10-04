@@ -9,6 +9,7 @@ from core.apps.base.models import Inventario
 from core.apps.base.resources.api_calls import find_cums
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.medicar import obtener_inventario
+from core.apps.base.resources.tools import dt_str_to_date_obj
 from core.settings import logger as log
 
 
@@ -75,7 +76,10 @@ class Command(BaseCommand):
         """
         # Crea una lista con los codigos de barra a partir de la lista de listas
         # logrando 'achatar' total_inv.
-        barras = [art['CodBarra'] for art in list(chain.from_iterable(total_inv))]
+        try:
+            barras = [art['CodBarra'] for art in list(chain.from_iterable(total_inv))]
+        except TypeError:
+            print(list(chain.from_iterable(total_inv)))
         cums = find_cums(tuple(barras))
         if cums:
             for centro in total_inv:
@@ -96,7 +100,7 @@ class Command(BaseCommand):
         return [Inventario(centro=art['Centro'], cod_mol=art['CodMol'],
                            cod_barra=art['CodBarra'], cum=art['cum'],
                            descripcion=art['Descripcion'], lote=art['Lote'],
-                           fecha_vencimiento=art['FechaVencimiento'],
+                           fecha_vencimiento=dt_str_to_date_obj(art['FechaVencimiento']),
                            inventario=art['Inventario'],
                            costo_promedio=art['CostoPromedio'],
                            cantidad_empaque=art['CantidadEmpaque'])
