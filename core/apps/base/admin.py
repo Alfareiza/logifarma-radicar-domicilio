@@ -25,13 +25,24 @@ def export_csv(modeladmin, request, queryset):
     return response
 
 
+@admin.action(description="Cambiar estado 'activo' de elementos seleccionados.")
+def toggle_activo(modeladmin, request, queryset):
+    # Loop through selected municipios and toggle the 'activo' attribute
+    for municipio in queryset:
+        municipio.activo = not municipio.activo
+        municipio.save()
+
+    # Display a message to the user
+    modeladmin.message_user(request, "Estado 'activo' de municipio(s) ha(n) sido cambiado con éxito.")
+
+
 @admin.register(Municipio)
 class MunicipioAdmin(admin.ModelAdmin):
-    list_display = ('name', 'departamento')
-    list_filter = ('departamento',)
-    search_fields = ('name',)
+    list_display = ('name', 'cod_dane', 'departamento', 'activo')
+    list_filter = ('departamento', 'activo')
+    search_fields = ('name', 'cod_dane')
     ordering = ('name', 'departamento')
-    actions = [export_csv]
+    actions = [export_csv, toggle_activo]
 
     def save_model(self, request, obj, form, change):
         self.saving_obj(obj)
@@ -64,6 +75,7 @@ class BarrioAdmin(admin.ModelAdmin):
             logger.info("Error al guardar barrio: ", e)
         else:
             obj.save(using='server')
+
 
 @admin.register(Med_Controlado)
 class MedicamentoControladoAdmin(admin.ModelAdmin):
