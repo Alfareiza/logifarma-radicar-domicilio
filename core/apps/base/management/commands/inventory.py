@@ -86,10 +86,17 @@ class Command(BaseCommand):
         """
         # Crea una lista con los codigos de barra a partir de la lista de listas
         # logrando 'achatar' total_inv.
-        try:
-            barras = [art['CodBarra'] for art in list(chain.from_iterable(total_inv))]
-        except TypeError:
-            print(list(chain.from_iterable(total_inv)))
+        # barras = [art['CodBarra'] for art in list(chain.from_iterable(total_inv))]
+        barras = []
+        for i, centro in enumerate(total_inv, 1):
+            for art in centro:
+                try:
+                    barra = art['CodBarra']
+                    barras.append(barra)
+                    print('Ok=', i, f"{art['CodBarra']=}", f"{centro=}")
+                except Exception:
+                    print('Error=', i, f"{centro=}")
+
         cums = find_cums(tuple(barras))
         if cums:
             for centro in total_inv:
@@ -129,7 +136,7 @@ class Command(BaseCommand):
         log.info(f"{' INICIANDO ACTUALIZACIÓN DE INVENTARIO ':▼^50}")
         self.centros = set(options.get('centros'))
         total_inventory = []
-        with ThreadPoolExecutor(max_workers=4) as executor:
+        with ThreadPoolExecutor(max_workers=2) as executor:
             future_to_rad = [executor.submit(obtener_inventario, inv) for inv in options.get('centros')]
             for future in concurrent.futures.as_completed(future_to_rad):
                 total_inventory.append(future.result())

@@ -1,13 +1,12 @@
-import threading
 import urllib.request
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
-import pytz
-from django.core.mail import EmailMessage
+from decouple import config
+from django.conf import settings
+from django.core.mail import EmailMessage, get_connection
 from django.utils.safestring import SafeString
 
-from core import settings
 from core.apps.base.models import Radicacion, Municipio, Barrio
 from core.settings import BASE_DIR, logger
 
@@ -97,26 +96,26 @@ def is_file_valid(url: str, rad: str) -> bool:
         logger.info(f'{rad} URL detectada en radicado: {url}')
         return False
 
-
-def download_file(download_url, filename):
-    """
-    Download a file into the tmp/ folder of the project
-    with the name of the autorization. Ex.: 857300123456789.pdf
-    :param download_url: "https://genesis.cajacopieps.com/temp/XYd1112120fb6a.pdf"
-    :param filename: 857300123456789
-    :return:
-    """
-    try:
-        Path(settings.MEDIA_ROOT).mkdir(parents=True, exist_ok=True)
-        filepath = settings.MEDIA_ROOT / f"{filename}.pdf"
-        response = urllib.request.urlopen(download_url)
-        with open(filepath, 'wb') as file:
-            file.write(response.read())
-    except Exception as e:
-        logger.error('Error descargando archivo:', e)
-        return ''
-    else:
-        return filepath
+# Deprecated 05-Oct-2023
+# def download_file(download_url, filename):
+#     """
+#     Download a file into the tmp/ folder of the project
+#     with the name of the autorization. Ex.: 857300123456789.pdf
+#     :param download_url: "https://genesis.cajacopieps.com/temp/XYd1112120fb6a.pdf"
+#     :param filename: 857300123456789
+#     :return:
+#     """
+#     try:
+#         Path(settings.MEDIA_ROOT).mkdir(parents=True, exist_ok=True)
+#         filepath = settings.MEDIA_ROOT / f"{filename}.pdf"
+#         response = urllib.request.urlopen(download_url)
+#         with open(filepath, 'wb') as file:
+#             file.write(response.read())
+#     except Exception as e:
+#         logger.error('Error descargando archivo:', e)
+#         return ''
+#     else:
+#         return filepath
 
 
 def clean_ip(ip):
@@ -247,12 +246,19 @@ def make_email(subject: str, body: str, to=None, bcc: list = []) -> EmailMessage
     """
     if to is None:
         to = ['alfareiza@gmail.com', 'logistica@logifarma.co']
+
+    connection = get_connection(
+        username=config('EMAIL_LOG_USER'),
+        password=config('EMAIL_LOG_PASSWORD'),
+        fail_silently=False,
+    )
     email = EmailMessage(
         subject=subject,
         body=body,
-        from_email=f"Logs Domicilios Logifarma <{settings.EMAIL_HOST_USER}>",
+        from_email=f"Logs Logifarma <{settings.EMAIL_HOST_USER}>",
         to=to,
-        bcc=bcc
+        bcc=bcc,
+        connection=connection
     )
 
     from django.utils.safestring import SafeString

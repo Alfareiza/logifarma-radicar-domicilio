@@ -307,30 +307,30 @@ def check_meds(info_email: dict):
                 bcc=['alfareiza@gmail.com']
             )
 
-
-def check_med(med: str) -> list:
-    """
-    Consulta el expediente de un medicamento y retorna la respuesta.
-    :param med: 20110698
-    :return: Si existe, retorna una lista con al menos un dicionário
-             Sino, una lista vacía.
-    """
-    try:
-        url = f"https://www.datos.gov.co/resource/i7cb-raxc.json?expediente={med}"
-        response = requests.request('GET', url)
-        if response.status_code != 200:
-            raise Exception(response.text)
-        else:
-            return json.loads(response.text.encode('utf-8'), strict=False)
-    except Timeout as e:
-        notify('check-datosgov', f'ERROR CONSULTANDO EXPEDIENTE {med}',
-               f"ERROR: {e}.\nNo hubo respuesta de datos.gov.co")
-        return []
-    except Exception as e:
-        notify('check-datosgov', f'ERROR CONSULTANDO EXPEDIENTE #c{med}',
-               f"URL: {url}\nERROR: {e}\n\nNo se pudo procesar la respuesta de"
-               f" datos.gov.co: {response.text}")
-        return []
+# Deprecated 05-Oct-2023
+# def check_med(med: str) -> list:
+#     """
+#     Consulta el expediente de un medicamento y retorna la respuesta.
+#     :param med: 20110698
+#     :return: Si existe, retorna una lista con al menos un dicionário
+#              Sino, una lista vacía.
+#     """
+#     try:
+#         url = f"https://www.datos.gov.co/resource/i7cb-raxc.json?expediente={med}"
+#         response = requests.request('GET', url)
+#         if response.status_code != 200:
+#             raise Exception(response.text)
+#         else:
+#             return json.loads(response.text.encode('utf-8'), strict=False)
+#     except Timeout as e:
+#         notify('check-datosgov', f'ERROR CONSULTANDO EXPEDIENTE {med}',
+#                f"ERROR: {e}.\nNo hubo respuesta de datos.gov.co")
+#         return []
+#     except Exception as e:
+#         notify('check-datosgov', f'ERROR CONSULTANDO EXPEDIENTE #c{med}',
+#                f"URL: {url}\nERROR: {e}\n\nNo se pudo procesar la respuesta de"
+#                f" datos.gov.co: {response.text}")
+#         return []
 
 
 def check_med_bd(codcum: str):
