@@ -93,7 +93,7 @@ class Command(BaseCommand):
                 try:
                     barra = art['CodBarra']
                     barras.append(barra)
-                    print('Ok=', i, f"{art['CodBarra']=}", f"{centro=}")
+                    # print('Ok=', i, f"{art['CodBarra']=}", f"{centro=}")
                 except Exception:
                     print('Error=', i, f"{centro=}")
 
