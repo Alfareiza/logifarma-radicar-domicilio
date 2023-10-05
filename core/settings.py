@@ -229,3 +229,11 @@ SPECTACULAR_SETTINGS = {
         'supportedSubmitMethods': ['']
     },
 }
+
+# settings.py
+
+# Use the default database-backed session engine
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+# Set SESSION_COOKIE_SECURE to True if using HTTPS
+SESSION_COOKIE_SECURE = True

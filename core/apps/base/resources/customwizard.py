@@ -1,9 +1,11 @@
 from collections import OrderedDict
 
+from django.contrib import messages
 from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_protect
 from formtools.wizard.forms import ManagementForm
@@ -111,6 +113,15 @@ class CustomSessionWizard(SessionWizardView):
                 >
         """
         idx_view = list(self.form_list).index(self.steps.current)
+        if self.steps.current == 'home' and self.request.session.get('message_shown') < 3:
+            messages.info(self.request,
+                          mark_safe("""
+                          Lamentamos informarles que los domicilios en los departamentos de <b>Boyacá</b> y
+                          <b>Meta</b> están suspendidos temporalmente. <br><br>Agradecemos su comprensión y paciencia. 
+                          ¡Estamos trabajando para servirles mejor!.<br><br>
+                          Para mayor información te puedes comunicar con nosotros al: 333 033 3124.
+                          """))
+            self.request.session['message_shown'] += 1
         if not form.cleaned_data:
             logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} No fue capturado "
                         f"nada en vista{idx_view}={self.steps.current}")

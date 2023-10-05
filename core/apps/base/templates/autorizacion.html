@@ -17,7 +17,7 @@
 
         {% include "base/logo.html" %}
 
-        {% if form.errors %}
+        {% if form.errors or messages %}
             <script src="{% static 'js/modal.js' %}"></script>
             <div class="modal" id="modal_vist">
                 <div class="conten" id="cont_mod">
@@ -27,7 +27,11 @@
                     </div>
                     <div class="contenido">
                         <p class="texto">
-                           {{ form.errors.num_autorizacion.as_text|cut:"* "|linebreaksbr }}
+                            {% if form.errors.num_autorizacion %}
+                                {{ form.errors.num_autorizacion.as_text|cut:"* "|linebreaksbr }}
+                            {% else %}
+                                {% include "base/messages.html" %}
+                            {% endif %}
                         </p>
                     </div>
                 </div>
