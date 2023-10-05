@@ -89,13 +89,15 @@ class Command(BaseCommand):
         # barras = [art['CodBarra'] for art in list(chain.from_iterable(total_inv))]
         barras = []
         for i, centro in enumerate(total_inv, 1):
+            print('to_work=', i)
             for art in centro:
                 try:
                     barra = art['CodBarra']
                     barras.append(barra)
-                    # print('Ok=', i, f"{art['CodBarra']=}", f"{centro=}")
-                except Exception:
-                    print('Error=', i, f"{centro=}")
+                except Exception as e:
+                    print(f'Error={e};', i, f"{centro=}")
+                    break
+            print('Ok=', i)
 
         cums = find_cums(tuple(barras))
         if cums:
