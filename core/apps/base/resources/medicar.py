@@ -93,11 +93,12 @@ def obtener_inventario(centro: int) -> List[Dict]:
     """
     Consulta el inventario a partir de un 'Centro'
     :param centro: Número de bodega a ser consultada (centro).
-    :return: Lista de diccionaários donde cada uno representa
+    :return: Lista de diccionários donde cada uno representa
              un articulo con informacion relacionada a el.
              Se asume que si el artículo se encuentra en la lista
              es porque hay inventario de este.
              Ex.:
+             Si no hubo problemas con la API la respuesta podría ser así:
                 [
                     {
                       'Centro': '920',
@@ -112,6 +113,13 @@ def obtener_inventario(centro: int) -> List[Dict]:
                     }
                     ...
                 ]
+            Si hubo problemas con la API la respuesta podría ser así:
+            - {'error': 'No se han encontrado registros.', 'codigo': '1'}
+            - {}
+
     """
-    return call_api_medicar({'Centro': centro}, 'list-inventory/client/6')
+    resp = call_api_medicar({'Centro': centro}, 'list-inventory/client/6')
+    if isinstance(resp, list):
+        return resp
+    return []
 

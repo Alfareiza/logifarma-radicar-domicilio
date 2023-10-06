@@ -141,7 +141,8 @@ class Command(BaseCommand):
         with ThreadPoolExecutor(max_workers=2) as executor:
             future_to_rad = [executor.submit(obtener_inventario, inv) for inv in options.get('centros')]
             for future in concurrent.futures.as_completed(future_to_rad):
-                total_inventory.append(future.result())
+                if result := future.result():
+                    total_inventory.append(result)
 
         if total_inventory:
             self.fetch_cums(total_inventory)
