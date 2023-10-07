@@ -8,6 +8,22 @@ from decouple import config, Csv
 from core.settings import logger
 
 
+def get_complement_subject(payload: dict) -> str:
+    """
+    A partir del payload verifica si se trata de una
+    radicación o un centro (inventario).
+    """
+    num_aut = payload.get('autorizacion') or payload.get('serial') or payload.get('Centro')
+    if num_aut:
+        if len(num_aut) < 4:
+            num_aut = f"- Centro # {num_aut}"
+        else:
+            num_aut = f"- Radicado # {num_aut}"
+    else:
+        num_aut = ''
+    return num_aut
+
+
 def make_subject_and_cco(info_email) -> tuple:
     """
     Create the subject and establish the CCO.
@@ -36,7 +52,6 @@ def purge_email(email) -> str:
     if email in ('notiene@gmail.com'):
         return ''
     return email
-
 
 
 def make_destinatary(info_email) -> list:

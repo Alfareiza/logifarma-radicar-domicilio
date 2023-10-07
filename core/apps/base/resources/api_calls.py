@@ -11,6 +11,7 @@ from requests import Timeout
 
 from core.apps.base.resources.decorators import hash_dict, logtime, \
     timed_lru_cache
+from core.apps.base.resources.email_helpers import get_complement_subject
 from core.apps.base.resources.tools import notify
 from core.settings import BASE_DIR
 from core.settings import logger
@@ -122,7 +123,7 @@ def auth_api_medicar():
 @logtime('API')
 @timed_lru_cache(300)
 def request_api(url, headers, payload, method='POST') -> dict:
-    num_aut = payload.get('autorizacion') or payload.get('serial')
+    complement_subject = get_complement_subject(payload)
     payload = json.dumps(payload)
     # logger.info(f'API Llamando [{method}]: {url}')
     # logger.info(f'API Header: {headers}')
@@ -133,7 +134,7 @@ def request_api(url, headers, payload, method='POST') -> dict:
         if response.status_code != 200:
             res = requests.request('GET', 'https://httpbin.org/ip')
             ip = json.loads(res.text.encode('utf8'))
-            notify('error-api', f'ERROR EN API - Radicado #{num_aut}',
+            notify('error-api', f'ERROR EN API {complement_subject}',
                    f"STATUS CODE: {response.status_code}\n\n"
                    f"IP: {ip.get('origin')}\n\n"
                    f"URL: {url}\n\nHeader: {headers}\n\n"
@@ -142,15 +143,15 @@ def request_api(url, headers, payload, method='POST') -> dict:
         else:
             return json.loads(response.text.encode('utf-8'), strict=False)
     except Timeout as e:
-        notify('error-api', f'ERROR EN API - Radicado #{num_aut}',
+        notify('error-api', f'ERROR TIMEOUT EN API {complement_subject}',
                f"ERROR: {e}.\nNo hubo respuesta de la API en 20 segundos")
         return {}
     except requests.exceptions.SSLError as e:
-        notify('error-api', f'ERROR SSL en API - Radicado #{num_aut}',
+        notify('error-api', f'ERROR SSL en API {complement_subject}',
                f"ERROR: {e}")
         return {}
     except Exception as e:
-        notify('error-api', f'ERROR EN API - Radicado #{num_aut}',
+        notify('error-api', f'ERROR EN API {complement_subject}',
                f"ERROR: {e}\n\nRESPUESTA DE API: {response.text}")
         return {}
 

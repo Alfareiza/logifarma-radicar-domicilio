@@ -86,19 +86,7 @@ class Command(BaseCommand):
         """
         # Crea una lista con los codigos de barra a partir de la lista de listas
         # logrando 'achatar' total_inv.
-        # barras = [art['CodBarra'] for art in list(chain.from_iterable(total_inv))]
-        barras = []
-        for i, centro in enumerate(total_inv, 1):
-            print('to_work=', i)
-            for art in centro:
-                try:
-                    barra = art['CodBarra']
-                    barras.append(barra)
-                except Exception as e:
-                    print(f'Error={e};', i, f"{centro=}")
-                    break
-            print('Ok=', i)
-
+        barras = [art['CodBarra'] for art in list(chain.from_iterable(total_inv))]
         cums = find_cums(tuple(barras))
         if cums:
             for centro in total_inv:
