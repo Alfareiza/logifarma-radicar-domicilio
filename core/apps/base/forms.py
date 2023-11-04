@@ -1,7 +1,9 @@
 from django import forms
+from django.utils.safestring import mark_safe
 
 from core.apps.base.models import Barrio, Municipio, Radicacion
 from core.apps.base.resources.api_calls import call_api_eps
+from core.apps.base.resources.cajacopi import obtener_datos_identificacion
 from core.apps.base.resources.medicar import obtener_datos_formula
 from core.apps.base.resources.tools import read_json
 from core.apps.base.validators import (
@@ -10,7 +12,7 @@ from core.apps.base.validators import (
     validate_status,
     validate_status_afiliado,
     validate_status_aut,
-    validate_structure
+    validate_structure, validate_identificacion_exists
 )
 from core.settings import logger
 
@@ -22,9 +24,73 @@ class Home(forms.Form):
     ...
 
 
+class SinAutorizacion(forms.Form):
+    """
+    Vista 2 (Flujo sin autorización):
+    Página que recibe núnero de cedula y
+    verifica en API externas.
+    Si la respuesta es positiva, se dirigirá a la
+    vista FotoFormulaMedica, sino  responderá con un
+    mensaje (modal) de error.
+    """
+    IDENTIFICACIONES = (
+        ("CC", "CC"),  # Cédula de ciudadanía
+        ("TI", "TI"),  # Tarjeta de identidad
+        ("RC", "RC"),  # Registro civil
+        ("CN", "CN"),  # Certificado de nacido vivo
+        ("CD", "CD"),  # Carné diplomático
+        ("PA", "PA"),  # Pasaporte
+        ("PE", "PE"),  # Permiso especial de pernamencia
+        ("PT", "PT"),  # Permiso por protección temporal
+        ("SC", "SC"),  # Salvo conducto
+        ("CE", "CE"),  # Cedula de extranjería
+        ("MS", "MS"),  # Menor sin ID
+        ("AS", "AS"),  # Adulto sin ID
+    )
+    tipo_identificacion = forms.ChoiceField(
+        choices=IDENTIFICACIONES, label='Tipo de identificación',
+        widget=forms.Select(attrs={'class': 'custom-select'})
+    )
+    identificacion = forms.CharField(
+        min_length=6, max_length=20, label='Identificación',
+        widget=forms.TextInput(attrs={'class': 'effect-16'})
+    )
+
+    def clean(self):
+        tipo = self.cleaned_data.get('tipo_identificacion')
+        value = self.cleaned_data.get('identificacion')
+
+        resp = {'documento': f"{tipo}{value}"}
+
+        if value == "99999999":
+            resp_eps = read_json('resources/fake_sin_autorizacion.json')
+        else:
+            resp_eps = obtener_datos_identificacion(tipo, value)
+
+            if not resp_eps:
+                logger.info(f"No se pudo obtener información del usuario {resp['documento']}.")
+                raise forms.ValidationError(mark_safe("Pedimos disculpas, pero no pudimos obtener información<br>"
+                                            f"con esta identificación: <br>{resp['documento'][:2]} {resp['documento'][2:]}<br><br>"
+                                            "Puedes esperar unos minutos e intentar de nuevo<br>"
+                                            "o comunícarte con nosotros al <br>333 033 3124"))
+
+            validate_identificacion_exists(resp_eps, f"{tipo}:{value}")
+            validate_status_afiliado(resp_eps, 'ESTADO', f"{tipo}:{value}")
+
+        resp.update(
+            {'AFILIADO': resp_eps['NOMBRE'],
+             'NOMBRE': f"{resp_eps['PRIMER_NOMBRE']} {resp_eps['PRIMER_APELLIDO']}",
+             'P_NOMBRE': resp_eps['PRIMER_NOMBRE'],
+             'TIPO_IDENTIFICACION': tipo,
+             'DOCUMENTO_ID': value}
+        )
+        return resp
+
+
+
 class AutorizacionServicio(forms.Form):
     """
-    Vista 3:
+    Vista 2:
     Página que recibe autorización de servicio y
     la verifica en 2 APIs externas.
     Si la respuesta es positiva, hará un redirect
@@ -58,7 +124,7 @@ class AutorizacionServicio(forms.Form):
         validate_med_controlados(resp_eps, num_aut)
 
         # Validación de status de afiliado
-        validate_status_afiliado(resp_eps, num_aut)
+        validate_status_afiliado(resp_eps, 'ESTADO_AFILIADO', str(num_aut))
 
         # Validación de status de autorización
         validate_status_aut(resp_eps, num_aut)
@@ -95,7 +161,7 @@ class AutorizacionServicio(forms.Form):
 
 class FotoFormulaMedica(forms.Form):
     """
-    Vista 4:
+    Vista 3 (Opcional):
     Página donde el usuário toma una foto o la escoje
     de su celular.
     """
@@ -104,7 +170,7 @@ class FotoFormulaMedica(forms.Form):
 
 class EligeMunicipio(forms.ModelForm):
     """
-    Vista 6:
+    Vista 4:
     """
 
     class Meta:
@@ -122,7 +188,7 @@ class EligeMunicipio(forms.ModelForm):
 
 class DireccionBarrio(forms.Form):
     """
-    Vista 7:
+    Vista 5:
     """
     barrio = forms.ChoiceField(widget=forms.RadioSelect(attrs={'class': 'select_opt'}))
     direccion = forms.CharField(max_length=40)
@@ -137,7 +203,7 @@ class DireccionBarrio(forms.Form):
 
 class DigitaCelular(forms.Form):
     """
-    Vista 8:
+    Vista 6:
     """
     celular = forms.IntegerField()
     whatsapp = forms.IntegerField(required=False)
@@ -163,7 +229,7 @@ class DigitaCelular(forms.Form):
 
 class DigitaCorreo(forms.Form):
     """
-    Vista 9:
+    Vista 7:
     """
     email = forms.CharField(required=False, max_length=255)
 
@@ -178,4 +244,3 @@ class DigitaCorreo(forms.Form):
             return list(map(lambda n: n.strip(), emails))
 
         return [email]
-

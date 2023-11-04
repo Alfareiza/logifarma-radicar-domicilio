@@ -1,0 +1,107 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Autorización de servicio{% endblock %}
+
+{% block content %}
+<section class="vista3">
+    <form id="form-id" action="" method="post">
+
+        <button class="continuar" formnovalidate name=""
+            type="submit" value="" onclick="animabotoncarga_autorizacion()">
+            <p class="text_continuar">Continuar <i class="fa-solid fa-chevron-right"></i></p>
+        </button>
+
+        {% csrf_token %}
+        {{ wizard.management_form }}
+
+        {% include "base/logo.html" %}
+
+        {% if form.errors %}
+            <script src="{% static 'js/modal.js' %}"></script>
+            <div class="modal" id="modal_vist">
+                <div class="conten" id="cont_mod">
+                    <header></header>
+                    <div class="modal_btn">
+                        <button type="button" id="btn_modal" class="close">X</button>
+                    </div>
+                    <div class="contenido">
+                        <p class="texto">
+                           {{ form.non_field_errors.as_text|cut:"* " }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- <div class="vist3_text">
+            <p class="vist3">Ingresa el número de</p>
+            <h1 class="vist3">Autorización de servicio</h1>
+        </div> -->
+
+        {% if wizard.form.forms %}
+            <!--NOTHING-->
+            {{ wizard.form.management_form }}
+                {% for form in wizard.form.forms %}
+                    {{ form.as_table }}
+                {% endfor %}
+        {% else %}
+        <div style="display:flex;justify-content:center;align-items: center;margin-top:3rem">
+            {{ wizard.form.tipo_identificacion }}
+            <div style="margin-left:1rem;" class="input-effect">
+                {{ wizard.form.identificacion }}
+                <label>{{wizard.form.identificacion.label}}</label>
+            </div>
+        </div>
+            <!--<div class="cont_inpu_auto">
+                    <input type="number" inputmode="numeric" class="inp_vist3"
+                       name="autorizacionServicio-num_autorizacion"
+                       min="" id="id_autorizacionServicio-num_autorizacion" autofocus>
+
+                   <p class="inputext_auto">Ingresa el número de identificación</p>
+                </div>-->
+        {% endif %}
+        <p class="vist3_t">Validaremos que su identificación conste en nuestro sistema </p><br>
+        <!--<div class="vist3_img">
+            {% comment %}
+            <img class="vist3" src="{% static 'img/img_autorizacion.gif' %}" alt="">
+            {% endcomment %}
+        </div>-->
+
+        <p class="vist3_t2">
+            Si se ha presentado algún inconveniente validando su identificación<br>
+            comunícate con Cajacopi-EPS para mayor información:
+        </p>
+        <div class="tet">
+            <a class="vist3" href="tel:018000111446">018000 111 446</a>
+        </div>
+
+        <button class="btn" id="btn_conti" type="submit" onclick="animabotoncarga_sin_autorizacion()">
+        Continuar
+        <div id="btn_carga" class="conten_carga">
+                <div class="carga"></div>
+        </div>
+        </button>
+
+
+
+    </form>
+
+    
+    <div class="conten-progreso-global">
+        <div class="pagina">Paso {{ wizard.steps.step1 }} de 7</div>
+        <div class="contenedor">
+            <div class="progreso-contenedor">
+               <div class="progreso" id="progreso"></div>
+               <div class="circulo active"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+            </div>
+        </div>
+      </div>
+
+</section>
+{% endblock %}

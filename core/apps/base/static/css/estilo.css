@@ -5611,7 +5611,7 @@ main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
 main section.vista3 p.vist3_t { position: relative;
-    text-align: left;
+    text-align: center;
     margin: 1% auto;
     font-size: 0.8em;
     width: 85%;
@@ -7573,4 +7573,52 @@ main section.vista10 p.vist10 {position: relative;
 @media only screen and (max-width: 342px){
 
 main section#vist2 nav#vist2 div#img p#vist2 {font-size: 0.8em;}
+}
+
+.input-effect {
+  position: relative;
+  margin-bottom: 0rem;
+}
+
+.input-effect label {
+  position: absolute;
+  color: gray;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+.input-effect input:focus + label,
+.input-effect input:valid + label {
+  top: -1.5rem;
+  font-size: 1.2em;
+  color: #007BFF; /* You can adjust the color to your preference */
+}
+
+.input-effect input {
+  padding: 0rem 0rem;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  outline: none;
+  font-size: 1.2em;
+}
+
+/* Optional: Add a transition for smoother animation */
+.input-effect input {
+  transition: border-bottom 0.2s ease, font-size 0.2s ease;
+}
+:root {
+  --arrow-bg: rgba(255, 255, 255, 0.3);
+  --arrow-icon: url(https://upload.wikimedia.org/wikipedia/commons/9/9d/Caret_down_font_awesome_whitevariation.svg);
+  --option-bg: white;
+  --select-bg: rgba(255, 255, 255, 0.2);
+}
+.custom-select{
+    background-color: white;
+    width: 4rem;
+    border: none;
+     outline: 0;
+    font-size: 1.2em;
 }

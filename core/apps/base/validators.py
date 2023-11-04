@@ -161,13 +161,24 @@ def validate_med_controlados(resp_eps: dict, num_aut: int) -> ValidationError:
         raise forms.ValidationError(mark_safe(text_resp))
 
 
-def validate_status_afiliado(resp_eps: dict, num_aut: int) -> ValidationError:
+def validate_status_afiliado(resp_eps: dict, name_key: str, id_transaction: str) -> ValidationError:
     """
-    Valida que el estado del afiliado sea "ACTIVO".
+    Valida que el estado del usuario sea 'ACTIVO' o 'PROTECCION LABORAL'.
+    Esta función es llamada para cuando el usuario está en el flujo con
+    número de autorización o sin.
+    :param resp_eps: Respuesta de API (flujo con autorización) o de medicar o
+                     de cajacopi (flujo sin autorización).
+    :param name_key: Nombre de la llave en el diccionario, que es la respuesta de la API.
+                    Ej.: 'ESTADO_AFILIADO' o 'ESTADO'
+    :param id_transaction: Representa la identificación en la transacción.
+                            - En el caso del flujo CON autorización es el número de la
+                             autorización.
+                            - En el caso del flujo SIN autorización es el
+                              {tipo_identificacion}{valor_identificacion}.
     """
-    if resp_eps.get('ESTADO_AFILIADO') not in ('ACTIVO', 'PROTECCION LABORAL'):
-        logger.info(f"El estado del afiliado de radicado #{num_aut} no se encuentra activo."
-                    f" Estado={resp_eps.get('ESTADO_AFILIADO')}.")
+    if resp_eps.get(name_key) not in ('ACTIVO', 'PROTECCION LABORAL'):
+        logger.info(f"El estado del afiliado #{id_transaction} no se encuentra activo."
+                    f" Estado={resp_eps.get(name_key)}.")
         raise forms.ValidationError("Afiliado no se encuentra activo.")
 
 
@@ -178,3 +189,16 @@ def validate_status_aut(resp_eps: dict, num_aut: int) -> ValidationError:
     if resp_eps.get('ESTADO_AUTORIZACION') not in ('PROCESADA', 'ACTIVA'):
         logger.info(f"El estado de la autorización #{num_aut} es diferente de PROCESADA.")
         raise forms.ValidationError("El estado de la autorización no está activa.")
+
+
+def validate_identificacion_exists(resp: dict, info: str) -> ValidationError:
+    """
+    Valida que la identificacion existe, considerando la respuesta
+    de la API.
+    :param resp: Respuesta de la API al ser consultada.
+    :param info: Representación del tipo de identificación y su valor.
+                Ej: 'CC:123456789'
+    """
+    if resp.get('NOMBRE') and 'no existe' in resp['NOMBRE']:
+        logger.info(f"El afiliado {info} no fue encontrado.")
+        raise forms.ValidationError("Afiliado no encontrado.")

@@ -1,0 +1,60 @@
+{
+    "CODIGO": "CC",
+    "TIPODOCUMENTO": "CC",
+    "DOCUMENTO": "123445678",
+    "NOMBRE": "DA SILVA RODRIQUEZ MARCELO SOUZA",
+    "NIVEL": "",
+    "DEPARTAMENTO_DANE": "20000",
+    "DEPARTAMENTO": "CESAR",
+    "MUNICIPIO_DANE": "20001",
+    "MUNICIPIO": "VALLEDUPAR",
+    "CELULAR": "",
+    "DIRECCION": "",
+    "FECHAAFILIACION": "08/11/2021",
+    "ESTADO": "ACTIVO",
+    "REGIMEN": "SUBSIDIADO",
+    "IPSC": "",
+    "IPSM": "",
+    "IPSP": "",
+    "PRIMER_NOMBRE": "MARCELO",
+    "SEGUNDO_NOMBRE": "SOUZA",
+    "PRIMER_APELLIDO": "DA SILVA",
+    "SEGUNDO_APELLIDO": "RODRIGUEZ",
+    "FECHA_NACIMIENTO": "31/07/1966",
+    "EDAD": "",
+    "NIVEL_CONTRIBUTIVO": "",
+    "ZONA": "",
+    "GRUPO_POBLACIONAL": "",
+    "CELULAR2": "",
+    "DISCAPACIDAD": "",
+    "FICHA_SISBEN": "",
+    "PARENTEZCO": "",
+    "ESTADO_BDUA": "",
+    "ESTADO_AFI": "",
+    "IPS_BASICAS": [
+        {
+            "TIPO": "",
+            "NIT": "",
+            "RAZON_SOCIAL": ""
+        },
+        {
+            "TIPO": "",
+            "NIT": "",
+            "RAZON_SOCIAL": ""
+        },
+        {
+            "TIPO": "",
+            "NIT": "",
+            "RAZON_SOCIAL": ""
+        }
+    ],
+    "CORTE": [
+        {
+            "CONCEPTO": "",
+            "NOMBRE": ""
+        }
+    ],
+    "PORTABILIDAD": "N",
+    "FECHA_RETIRO": "",
+    "SEXO": "MASCULINO"
+}

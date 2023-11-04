@@ -32,12 +32,18 @@ def make_subject_and_cco(info_email) -> tuple:
                 0 -> subject (str)
                 1 -> copia_oculta (list)
     """
+
     copia_oculta = config('EMAIL_BCC', cast=Csv())
 
-    subject = f"{info_email['NUMERO_AUTORIZACION']} - Este es el " \
-              f"número de radicación de tu domicilio en Logifarma"
+    # Definiendo asunto
+    if info_email.get('documento'):
+        subject = f"{info_email['NOMBRE'].title()} - Este es el " \
+                  f"soporte de la radicación de tu domicilio en Logifarma"
+    else:
+        subject = f"{info_email['NUMERO_AUTORIZACION']} - Este es el " \
+                  f"número de radicación de tu domicilio en Logifarma"
 
-    if info_email['NUMERO_AUTORIZACION'] in [99_999_999, 99_999_998]:
+    if info_email.get('documento') in ('CC99999999', ) or info_email.get('NUMERO_AUTORIZACION') in (99_999_999, 99_999_998):
         subject = '[OMITIR] CORREO DE PRUEBA'
         with contextlib.suppress(Exception):
             copia_oculta.remove('radicacion.domicilios@logifarma.co')

@@ -96,6 +96,7 @@ def is_file_valid(url: str, rad: str) -> bool:
         logger.info(f'{rad} URL detectada en radicado: {url}')
         return False
 
+
 # Deprecated 05-Oct-2023
 # def download_file(download_url, filename):
 #     """
@@ -222,6 +223,71 @@ def guardar_info_bd(**kwargs):
                f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", e)
 
 
+def guardar_short_info_bd(**kwargs):
+    """
+    Guarda radicado en base de datos
+    :param kwargs: Información final del wizard + ip:
+            Ejemplo:
+            {'sinAutorizacion': '99999999', 'fotoFormulaMedica': {'src': <UploadedFile: chat.png (image/png)>}, 'eligeMunicipio': {'cod_dane': None, 'activo': False, 'municipio': <Municipio: Valledupar, Cesar>}, 'digitaDireccionBarrio': {'barrio': 'Barrio 1', 'direccion': '213'}, 'digitaCelular': {'celular': 3213213211, 'whatsapp': None}, 'digitaCorreo': ['']}
+    :return:
+    """
+    municipio = kwargs.pop('municipio').name.lower()
+
+    email = kwargs.pop('email', None)
+    if email and email[0]:
+        email = email[0]
+    else:
+        email = ', '.join(email)
+
+    ip = clean_ip(kwargs.pop('ip'))
+
+    logger.info(f"Guardando radicación de las nuevas.")
+    # crear id para numero radicado
+    try:
+        rad = Radicacion(
+            numero_radicado=datetime_id(),
+            municipio=Municipio.objects.get(activo=True, name__iexact=municipio),
+            barrio=Barrio.objects.filter(
+                municipio__name__iexact=municipio
+            ).get(
+                name=kwargs.pop('barrio', None).lower()),
+            cel_uno=kwargs.pop('celular', None),
+            cel_dos=kwargs.pop('whatsapp', None),
+            email=email,
+            direccion=kwargs.pop('direccion', None),
+            ip=ip,
+            paciente_nombre=kwargs.pop('AFILIADO', None),
+            paciente_cc=f"{kwargs['documento']}",
+            paciente_data=dict(),
+        )
+
+        try:
+            rad.save(using='default')
+        except Exception as e:
+            logger.error(f"No fue posible guardar radicado {rad} en postgres")
+            logger.error(e)
+        else:
+            logger.info(f"Radicación guardada con éxito! {rad.id=}")
+
+        try:
+            rad.id = None
+            rad.save(using='server')
+        except Exception as e:
+            logger.error(f"No fue posible guardar radicado {rad} en server. {rad.barrio.id=}, {rad.municipio.id=}")
+            logger.error(e)
+        else:
+            logger.info(f"Radicación guardada con éxito!. {rad.id=}")
+
+    except Exception as e:
+        logger.error(
+            f"{kwargs.get('NUMERO_AUTORIZACION', '<sin NUMERO_AUTORIZACION>')} Error guardando radicación: {e}")
+        notify('error-bd',
+               f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", e)
+    else:
+        logger.info(f"Radicación guardada con éxito!")
+        return rad
+
+
 def discover_rad(body) -> str:
     """
     Busca el radicado en el cuerpo del correo.
@@ -266,6 +332,7 @@ def make_email(subject: str, body: str, to=None, bcc: list = []) -> EmailMessage
         email.content_subtype = "html"
 
     return email
+
 
 def notify(reason: str, subject: str, body: str, to=None, bcc: list = []):
     """
@@ -401,3 +468,25 @@ def dt_str_to_date_obj(dt: str) -> datetime.date:
         return date.fromisoformat(dt)
     except ValueError:
         return date.fromisoformat('2050-12-31')
+
+
+def datetime_id():
+    """
+    Crea un numero único basado en el timestamp
+    :return:
+    """
+    last_datetime_id = None
+    prev_datetime_ids = set()
+    result = int(datetime.now().timestamp() * 1000000)
+    num_try = 0
+    while result in prev_datetime_ids and num_try < 10:
+        result = int(datetime.now().timestamp() * 1000000)
+        num_try += 1
+
+    if num_try >= 10:
+        result = last_datetime_id + 1
+
+    prev_datetime_ids.add(result)
+    last_datetime_id = result
+
+    return str(result)

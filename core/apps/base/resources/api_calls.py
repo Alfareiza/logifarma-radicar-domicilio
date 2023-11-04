@@ -19,52 +19,7 @@ from core.settings import logger
 pickle_path = BASE_DIR / "core/apps/base/resources/stored.pickle"
 
 
-def call_api_eps(num_aut: int) -> dict:
-    """
-    Solicita información del numero de la autorización a la API de la EPS.
-    :param num_aut: Número de autorización digitado por el usuario en el front.
-                Ej: 875800731698
-    :return: Dict
-            Ej: En caso de no tener datos
-            { "codigo":"1","mensaje":"Datos no encontrados!2" }
-            Ej: En caso de tener datos
-            {
-                "TIPO_IDENTIFICACION": "CC",
-                "DOCUMENTO_ID": "14988099",
-                "AFILIADO": "COLLAZOS ROJAS GUILLERMO ",
-                "P_NOMBRE":"PEDRO","S_NOMBRE":"MANUEL",
-                "P_APELLIDO":"PACHECO","S_APELLIDO":"EFROS",
-                "ESTADO_AFILIADO": "ACTIVO",
-                "SEDE_AFILIADO": "SOLEDAD",
-                "REGIMEN": "SUBSIDIADO",
-                "DIRECCION": "CRA 30 NO 56 - 30",
-                "CORREO": "",
-                "TELEFONO": "",
-                "CELULAR": "3022458917",
-                "ESTADO_AUTORIZACION": "PROCESADA",
-                "FECHA_AUTORIZACION": "11/11/2022",
-                "MEDICO_TRATANTE": "omar valle",
-                "MIPRES": "0",
-                "DIAGNOSTICO": "I10X-HIPERTENSION ESENCIAL (PRIMARIA)",
-                "ARCHIVO": "https://genesis.cajacopieps.com/temp/63dcxy1234560fa.pdf",
-                "DETALLE_AUTORIZACION": [
-                    {
-                        "CUMS": "20059406-1",
-                        "NOMBRE_PRODUCTO": "FOSFOMICINA 3GR POLVO PARA RECONSTRUIR",
-                        "CANTIDAD": "4"
-                    },
-                    {
-                        "CUMS": "19938870-7",
-                        "NOMBRE_PRODUCTO": "ACIDO FOLICO 1MG + HIERRO 100MG TABLETA RECUBIERTA",
-                        "CANTIDAD": "30"
-                    }
-                ]
-            }
-    """
-    url = "https://genesis.cajacopieps.com/api/api_qr.php"
-    payload = {"function": "p_mostrar_autorizacion",
-               "serial": str(num_aut),
-               "nit": "900073223"}
+def call_api_eps(url: str, payload: dict) -> dict:
     headers = {'Content-Type': 'text/plain'}
     return request_api(url, headers, payload)
 
