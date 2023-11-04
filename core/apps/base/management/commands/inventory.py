@@ -46,7 +46,7 @@ class Command(BaseCommand):
                 self.centros.remove(cod_centro)
 
         if self.centros:
-            log.info(f'No hubo inventerio en : {self.centros}')
+            log.info(f'No hubo inventario en : {self.centros}')
             for cod_centro in self.centros:
                 self.delete_inventario(cod_centro)
 
