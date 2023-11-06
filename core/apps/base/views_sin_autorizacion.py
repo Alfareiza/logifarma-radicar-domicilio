@@ -94,13 +94,14 @@ class SinAutorizacion(CustomSessionWizard):
 
         # Guardará en BD cuando DEBUG sean números reales
         ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
-        if info_email['documento'][2:] not in ('99999999', ):
+        if info_email['documento'][2:] not in ('99999999',):
             rad = guardar_short_info_bd(**info_email, ip=ip)
             rad_id = rad.numero_radicado
             info_email['NUMERO_RADICACION'] = rad_id
             info_email['FECHA_RADICACION'] = rad.datetime
         else:
             rad_id = '1'
+            info_email['NUMERO_RADICACION'] = rad_id
 
         # rad_id = guardar_short_info_bd(**info_email, ip=ip)
 
@@ -113,9 +114,14 @@ class SinAutorizacion(CustomSessionWizard):
 
             self.send_mail(info_email)
 
-        # Se usa NUMERO_AUTORIZACION porque es el valor que /finalizado espera
-        return {'NUMERO_AUTORIZACION': info_email['NOMBRE']}
+            # todo cargar imagen en el drive
 
+            # todo colocar id de imagen en campo paciente_data
+
+        # Se usa NUMERO_AUTORIZACION porque es el valor que /finalizado espera
+        resp = form_data['sinAutorizacion']
+        resp.update({'NUMERO_AUTORIZACION': rad_id})
+        return resp
 
     def prepare_email(self, info_email) -> EmailMessage:
         subject, copia_oculta = make_subject_and_cco(info_email)
@@ -128,14 +134,15 @@ class SinAutorizacion(CustomSessionWizard):
         email.content_subtype = "html"
 
         if self.foto_fmedica:
-            uploaded = settings.MEDIA_ROOT / self.foto_fmedica.name
-            logger.info(f"{self.log_text} adjuntando imagen {str(uploaded)}")
-            email.attach_file(str(uploaded))
-            if email.attachments:
-                logger.info(f"{self.log_text} Imagen adjuntada con éxito.")
-            else:
-                logger.error(f"{self.log_text} No se adjuntó la imagen. "
-                             f"email.attachments={email.attachments}")
+            email.attach(self.foto_fmedica.name, self.foto_fmedica.file.file.read(), self.foto_fmedica.content_type)
+        #     uploaded = settings.MEDIA_ROOT / self.foto_fmedica.name
+        #     logger.info(f"{self.log_text} adjuntando imagen {str(uploaded)}")
+        #     email.attach_file(str(uploaded))
+        #     if email.attachments:
+        #         logger.info(f"{self.log_text} Imagen adjuntada con éxito.")
+        #     else:
+        #         logger.error(f"{self.log_text} No se adjuntó la imagen. "
+        #                      f"email.attachments={email.attachments}")
 
         return email
 
@@ -152,7 +159,8 @@ class SinAutorizacion(CustomSessionWizard):
                 logger.error(f"{self.log_text} Perdida la referencia de imagen adjunta.")
             r = email.send(fail_silently=False)
         except Exception as e:
-            notify('error-email', f"ERROR ENVIANDO EMAIL- Radicado #{info_email['rad_id']} {info_email['documento']}",
+            notify('error-email',
+                   f"ERROR ENVIANDO EMAIL- Radicado #{info_email['NUMERO_RADICACION']} {info_email['documento']}",
                    f"JSON_DATA: {info_email}\n\nERROR: {e}")
             if rad := Radicacion.objects.filter(numero_radicado=info_email['documento']).first():
                 ...
@@ -162,14 +170,14 @@ class SinAutorizacion(CustomSessionWizard):
         else:
             if r == 1:
                 if self.foto_fmedica:
-                    logger.info(
-                        f"{self.log_text} Correo enviado a {info_email['email']} con imagen"
-                        f" adjunta de {convert_bytes(self.foto_fmedica.size)}.")
+                    logger.info(f"{self.log_text} Correo enviado a {info_email['email']} con imagen adjunta de "
+                                 f"{convert_bytes(self.foto_fmedica.size)}.")
                 else:
                     logger.info(
                         f"{self.log_text} correo enviado a {info_email['email']} sin imagem")
             else:
-                notify('error-email', f"ERROR ENVIANDO EMAIL- Radicado #{info_email['documento']}",
+                # E-mail enviado pero r != 1
+                notify('error-email', f"ERROR ENVIANDO EMAIL - Radicado #{info_email['documento']}",
                        f"JSON_DATA: {info_email}")
         # finally:
         #     if self.foto_fmedica:
