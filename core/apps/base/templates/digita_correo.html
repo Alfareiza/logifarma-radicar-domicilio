@@ -31,7 +31,7 @@
                     </div>
                     <div class="contenido">
                         <p class="texto">
-                           {{ form.errors.correo.as_text|cut:"* "|linebreaksbr }}
+                           {{ form.non_field_errors.as_text|cut:"* " }}
                         </p>
                     </div>
                 </div>
