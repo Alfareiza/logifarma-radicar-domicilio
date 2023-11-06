@@ -70,7 +70,8 @@ function animabotoncarga_sin_autorizacion() {
     let carga = document.getElementById("btn_carga") ;
     let camp = document.getElementById("id_sinAutorizacion-identificacion").value;
 
-    if($('#id_sinAutorizacion-identificacion').val().length != 0){
+    if($('#id_sinAutorizacion-identificacion').val().length >= 6){
+    console.log('adlkfajsh;ljs')
         carga.style.display = "block";
     }else{
 
