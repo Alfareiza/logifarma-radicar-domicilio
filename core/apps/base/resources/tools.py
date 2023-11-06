@@ -1,3 +1,4 @@
+import unicodedata
 import urllib.request
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -9,6 +10,24 @@ from django.utils.safestring import SafeString
 
 from core.apps.base.models import Radicacion, Municipio, Barrio
 from core.settings import BASE_DIR, logger
+
+
+def has_accent(word: str) -> bool:
+    """Determines if a word has accent
+    >>> has_accent('a@a.com')
+    False
+    >>> has_accent('jane@doe.com')
+    False
+    >>> has_accent('a@456.com')
+    False
+    """
+    username = word.split('@')[0]
+    if not username:
+        return True
+    for char in username:
+        if unicodedata.combining(char) != 0:
+            return True
+    return False
 
 
 def convert_bytes(size):
@@ -181,8 +200,10 @@ def guardar_info_bd(**kwargs):
     municipio = kwargs.pop('municipio').name.lower()
 
     email = kwargs.pop('email', None)
-    if email:
+    if email and email[0]:
         email = email[0]
+    else:
+        email = ', '.join(email)
 
     ip = clean_ip(kwargs.pop('ip'))
 
@@ -203,24 +224,30 @@ def guardar_info_bd(**kwargs):
             paciente_nombre=kwargs.pop('AFILIADO', None),
             paciente_cc=kwargs.pop('DOCUMENTO_ID', None),
             paciente_data=kwargs)
-        try:
-            rad.save(using='default')
-        except Exception as e:
-            logger.error(f"No fue posible guardar radicado {rad} en postgres")
-            logger.error(e)
-
-        try:
-            rad.save(using='server')
-        except Exception as e:
-            logger.error(f"No fue posible guardar radicado {rad} en server. {rad.barrio.id=}, {rad.municipio.id=}")
-            logger.error(e)
-
-        logger.info(f"{rad} Radicación guardada con éxito!")
+        save_in_bd('default', rad)
+        rad.id = None
+        save_in_bd('server', rad)
     except Exception as e:
-        logger.error(
-            f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación: {e}")
+        logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación: {e}")
         notify('error-bd',
                f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", e)
+    else:
+        logger.info(f"{rad} Radicación guardada con éxito!")
+
+
+def save_in_bd(name_bd: str, rad: Radicacion):
+    """
+    Guarda una instancia de Radicacion en la base de datos informada en name_bd
+    :param name_bd: Puede ser 'default' o 'server' que son las bases configuradas en settings.
+    :return:
+    """
+    try:
+        rad.save(using=name_bd)
+    except Exception as e:
+        logger.error(e)
+        raise Exception(f"No fue posible guardar radicado {rad} en {name_bd}") from e
+    else:
+        logger.info(f"Radicación guardada con éxito en {name_bd} {rad.numero_radicado} {rad.id=}")
 
 
 def guardar_short_info_bd(**kwargs):
@@ -241,16 +268,15 @@ def guardar_short_info_bd(**kwargs):
 
     ip = clean_ip(kwargs.pop('ip'))
 
-    logger.info(f"Guardando radicación de las nuevas.")
-    # crear id para numero radicado
+    numero_radicado = datetime_id()
+    logger.info(f"{numero_radicado} Guardando radicación de {kwargs['documento']}.")
     try:
         rad = Radicacion(
-            numero_radicado=datetime_id(),
+            numero_radicado=numero_radicado,
             municipio=Municipio.objects.get(activo=True, name__iexact=municipio),
             barrio=Barrio.objects.filter(
                 municipio__name__iexact=municipio
-            ).get(
-                name=kwargs.pop('barrio', None).lower()),
+            ).get(name=kwargs.pop('barrio', None).lower()),
             cel_uno=kwargs.pop('celular', None),
             cel_dos=kwargs.pop('whatsapp', None),
             email=email,
@@ -261,31 +287,17 @@ def guardar_short_info_bd(**kwargs):
             paciente_data=dict(),
         )
 
-        try:
-            rad.save(using='default')
-        except Exception as e:
-            logger.error(f"No fue posible guardar radicado {rad} en postgres")
-            logger.error(e)
-        else:
-            logger.info(f"Radicación guardada con éxito! {rad.id=}")
-
-        try:
-            rad.id = None
-            rad.save(using='server')
-        except Exception as e:
-            logger.error(f"No fue posible guardar radicado {rad} en server. {rad.barrio.id=}, {rad.municipio.id=}")
-            logger.error(e)
-        else:
-            logger.info(f"Radicación guardada con éxito!. {rad.id=}")
+        save_in_bd('default', rad)
+        rad.id = None
+        save_in_bd('server', rad)
 
     except Exception as e:
-        logger.error(
-            f"{kwargs.get('NUMERO_AUTORIZACION', '<sin NUMERO_AUTORIZACION>')} Error guardando radicación: {e}")
+        logger.error(f"{numero_radicado} Error guardando radicación: {e}")
         notify('error-bd',
                f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", e)
     else:
-        logger.info(f"Radicación guardada con éxito!")
-        return rad
+        logger.info(f"Radicación guardada con éxito {rad.numero_radicado}")
+    return rad
 
 
 def discover_rad(body) -> str:
