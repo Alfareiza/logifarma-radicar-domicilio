@@ -54,6 +54,7 @@ def make_subject_and_cco(info_email) -> tuple:
 def purge_email(email) -> str:
     email = email.replace('gamil', 'gmail')
     email = email.replace('gemail', 'gmail')
+    email = email.replace('gemaul', 'gmail')
     email = email.replace('logimarga', 'logifarma')
     if email in ('notiene@gmail.com'):
         return ''
