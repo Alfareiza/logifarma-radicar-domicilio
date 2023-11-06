@@ -2,17 +2,16 @@ from django import forms
 from django.utils.safestring import mark_safe
 
 from core.apps.base.models import Barrio, Municipio, Radicacion
-from core.apps.base.resources.api_calls import call_api_eps
-from core.apps.base.resources.cajacopi import obtener_datos_identificacion
+from core.apps.base.resources.cajacopi import obtener_datos_identificacion, obtener_datos_autorizacion
 from core.apps.base.resources.medicar import obtener_datos_formula
-from core.apps.base.resources.tools import read_json
+from core.apps.base.resources.tools import read_json, has_accent
 from core.apps.base.validators import (
     validate_aut_exists,
     validate_med_controlados,
     validate_status,
     validate_status_afiliado,
     validate_status_aut,
-    validate_structure, validate_identificacion_exists
+    validate_structure, validate_identificacion_exists, validate_email
 )
 from core.settings import logger
 
@@ -34,18 +33,18 @@ class SinAutorizacion(forms.Form):
     mensaje (modal) de error.
     """
     IDENTIFICACIONES = (
-        ("CC", "CC"),  # Cédula de ciudadanía
-        ("TI", "TI"),  # Tarjeta de identidad
-        ("RC", "RC"),  # Registro civil
-        ("CN", "CN"),  # Certificado de nacido vivo
-        ("CD", "CD"),  # Carné diplomático
-        ("PA", "PA"),  # Pasaporte
-        ("PE", "PE"),  # Permiso especial de pernamencia
-        ("PT", "PT"),  # Permiso por protección temporal
-        ("SC", "SC"),  # Salvo conducto
-        ("CE", "CE"),  # Cedula de extranjería
-        ("MS", "MS"),  # Menor sin ID
-        ("AS", "AS"),  # Adulto sin ID
+        ("CC", "CC - Cédula de ciudadanía"),  # Cédula de ciudadanía
+        ("TI", "TI - Tarjeta de identidad"),  # Tarjeta de identidad
+        ("RC", "RC - Registro civil"),  # Registro civil
+        ("CN", "CN - Certificado de nacido vivo"),  # Certificado de nacido vivo
+        ("CD", "CD - Carné diplomático"),  # Carné diplomático
+        ("PA", "PA - Pasaporte"),  # Pasaporte
+        ("PE", "PE - Permiso especial de pernamencia"),  # Permiso especial de pernamencia
+        ("PT", "PT - Permiso por protección temporal"),  # Permiso por protección temporal
+        ("SC", "SC - Salvo conducto"),  # Salvo conducto
+        ("CE", "CE - Cedula de extranjería"),  # Cedula de extranjería
+        ("MS", "MS - Menor sin ID"),  # Menor sin ID
+        ("AS", "AS - Adulto sin ID"),  # Adulto sin ID
     )
     tipo_identificacion = forms.ChoiceField(
         choices=IDENTIFICACIONES, label='Tipo de identificación',
@@ -70,9 +69,9 @@ class SinAutorizacion(forms.Form):
             if not resp_eps:
                 logger.info(f"No se pudo obtener información del usuario {resp['documento']}.")
                 raise forms.ValidationError(mark_safe("Pedimos disculpas, pero no pudimos obtener información<br>"
-                                            f"con esta identificación: <br>{resp['documento'][:2]} {resp['documento'][2:]}<br><br>"
-                                            "Puedes esperar unos minutos e intentar de nuevo<br>"
-                                            "o comunícarte con nosotros al <br>333 033 3124"))
+                                                      f"con esta identificación: <br>{resp['documento'][:2]} {resp['documento'][2:]}<br><br>"
+                                                      "Puedes esperar unos minutos e intentar de nuevo<br>"
+                                                      "o comunícarte con nosotros al <br>333 033 3124"))
 
             validate_identificacion_exists(resp_eps, f"{tipo}:{value}")
             validate_status_afiliado(resp_eps, 'ESTADO', f"{tipo}:{value}")
@@ -85,7 +84,6 @@ class SinAutorizacion(forms.Form):
              'DOCUMENTO_ID': value}
         )
         return resp
-
 
 
 class AutorizacionServicio(forms.Form):
@@ -112,7 +110,7 @@ class AutorizacionServicio(forms.Form):
             resp_mcar = obtener_datos_formula(num_aut)
             validate_status(resp_mcar, rad)
         else:
-            resp_eps = call_api_eps(num_aut)
+            resp_eps = obtener_datos_autorizacion(num_aut)
 
         # Validación de numero de autorización encontrado en API de Cajacopi
         validate_aut_exists(resp_eps, num_aut)
@@ -237,10 +235,15 @@ class DigitaCorreo(forms.Form):
         if email := self.cleaned_data.get('email'):
             email = email.lower()
             emails = email.split(',') if ',' in email else [email]
+
+            for email in emails:
+                validate_email(email.strip())
+
             if 0 < len(email) < 5:
                 logger.error(
                     f"Usuario ingresó {self.cleaned_data.get('email')} pero "
                     f"se procesó {email}")
+
             return list(map(lambda n: n.strip(), emails))
 
         return [email]

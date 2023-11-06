@@ -11,7 +11,7 @@ from django.utils.safestring import mark_safe
 from core.apps.base.models import Med_Controlado, Radicacion
 from core.apps.base.resources.api_calls import get_firebase_acta
 from core.apps.base.resources.tools import encrypt, notify, pretty_date, \
-    update_rad_from_fbase
+    update_rad_from_fbase, has_accent
 from core.settings import BASE_DIR, logger
 
 
@@ -202,3 +202,13 @@ def validate_identificacion_exists(resp: dict, info: str) -> ValidationError:
     if resp.get('NOMBRE') and 'no existe' in resp['NOMBRE']:
         logger.info(f"El afiliado {info} no fue encontrado.")
         raise forms.ValidationError("Afiliado no encontrado.")
+
+def validate_email(email: str)-> ValidationError:
+    """ Valida que el e-mail esté correcto. """
+    if has_accent(email):
+        raise forms.ValidationError(mark_safe("E-mail inválido."))
+
+    import re
+    regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+    if not re.fullmatch(regex, email):
+        raise forms.ValidationError(mark_safe("E-mail inválido."))
