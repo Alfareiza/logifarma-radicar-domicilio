@@ -10,6 +10,7 @@ from django.template.loader import get_template
 
 from core.apps.base.models import Radicacion, Municipio, Barrio
 from core.apps.base.resources.api_calls import get_firebase_acta, should_i_call_auth, call_api_eps
+from core.apps.base.resources.cajacopi import obtener_datos_autorizacion
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.medicar import obtener_datos_formula
 from core.apps.base.resources.tools import (
@@ -127,7 +128,7 @@ class Command(BaseCommand):
         else:
             logger.info(f"{rad.numero_radicado} sin \'SSC\' en API Medicar, validando estados en API Cajacopi.")
             try:
-                resp_eps = call_api_eps(rad.numero_radicado)
+                resp_eps = obtener_datos_autorizacion(rad.numero_radicado)
                 if 'ESTADO_AUTORIZACION' in resp_eps and resp_eps['ESTADO_AUTORIZACION'] in ['RECHAZADA', 'ANULADA']:
                     self.update_acta_entrega(rad, f"{resp_eps['ESTADO_AUTORIZACION'].lower()} por cajacopi")
                 elif 'ESTADO_AFILIADO' in resp_eps and resp_eps['ESTADO_AFILIADO'] == 'FALLECIDO':
