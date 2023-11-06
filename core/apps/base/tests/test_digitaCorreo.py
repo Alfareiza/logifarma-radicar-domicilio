@@ -68,15 +68,18 @@ class DigitaCorreoWizardTests(TestCase):
 
 
 class DigitaCorreoFormTests(TestCase):
-    @unittest.skip("Is not working until a regex for validation email is implemented")
+    # @unittest.skip("Is not working until a regex for validation email is implemented")
     def test_invalid_emails(self):
-        for email in [-123456, 'google.com', 'google@.com', '123', 'a@a', '@456.com']:
+        for email in (-123456, 'google.com', 'google@.com', '123', 'a@a', '@456.com', 'calderón cadlo@gmail.com',
+                      'añoñi@hotmail.com'):
             with self.subTest(i=email):
                 form = DigitaCorreo(data={'email': email})
                 self.assertFalse(form.is_valid())
+                self.assertEqual(form.errors.get_json_data()['__all__'][0]['message'],
+                                 'E-mail inválido.')
 
     def test_valid_emails(self):
-        for email in ['a@a.com', 'jane@doe.com', 'a@456.com']:
+        for email in ('a@a.com', 'jane@doe.com', 'a@456.com', 'foobar@gmaul.com', '1@a.com, 2@b.com'):
             with self.subTest(i=email):
                 form = DigitaCorreo(data={'email': email})
                 self.assertTrue(form.is_valid())
