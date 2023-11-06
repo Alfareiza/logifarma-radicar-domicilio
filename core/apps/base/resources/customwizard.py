@@ -10,6 +10,7 @@ from formtools.wizard.forms import ManagementForm
 from formtools.wizard.views import SessionWizardView
 
 from core.apps.base.models import Barrio
+from core.apps.base.resources.tools import notify
 from core.settings import logger
 
 
@@ -179,13 +180,21 @@ class CustomSessionWizard(SessionWizardView):
         final_forms = OrderedDict()
         # walk through the form list and try to validate the data again.
         for form_key in self.get_form_list():
-            files = self.storage.get_step_files(form_key)
+            try:
+                files = self.storage.get_step_files(form_key)
+            except FileNotFoundError:
+                logger.info(f"tmp/ -> {list(self.file_storage.base_location.iterdir())}")
+                logger.info(f"IMAGEN ELIMINADA... NO EXISTE MAS !!!!")
+                notify('error-email', f"EMAIL ENVIADO SIN IMAGEN",
+                       "Revisa los logs de la app en heroku.")
+
             form_obj = self.get_form(
                 step=form_key,
                 data=self.storage.get_step_data(form_key),
                 files=files
             )
             if files:
+                logger.info(f"tmp/ -> {list(self.file_storage.base_location.iterdir())}")
                 logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} "
                             f"files => {files}")
             if form_obj.is_valid():
