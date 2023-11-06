@@ -224,10 +224,39 @@ class ContactWizard(CustomSessionWizard):
 
 
 def finalizado(request):
+    """
+    Vista exhibida cuando el wizard es finalizado.
+    :param request:
+    Caso venga del flujo con cédula:
+        - {'AFILIADO': 'DA SILVA RODRIQUEZ MARCELO SOUZA', 'DOCUMENTO_ID': '99999999',
+         'NOMBRE': 'MARCELO DA SILVA', 'NUMERO_AUTORIZACION': '1',
+         'P_NOMBRE': 'MARCELO',
+         'TIPO_IDENTIFICACION': 'CC', 'documento': 'CC99999999'}
+    Caso venga del flujo con número de autorización:
+        - {'TIPO_IDENTIFICACION': 'CC', 'DOCUMENTO_ID': '12340316',
+            'AFILIADO': 'GUTIERREZ TEIXEIRA JACKSON WOH',
+            'P_NOMBRE': 'JACKSON',
+            'S_NOMBRE': 'WOH', 'P_APELLIDO': 'GUTIERREZ',
+            'S_APELLIDO': 'TEIXEIRA', 'ESTADO_AFILIADO': 'ACTIVO',
+            'SEDE_AFILIADO': 'BARRANCABERMEJA', 'REGIMEN': 'SUBSIDIADO',
+            'DIRECCION': 'CL 123  45 678',
+            'CORREO': 'jackson.gutierrez.teixeira123456789@gmail.com',
+            'TELEFONO': '4019255', 'CELULAR': '4014652512',
+            'ESTADO_AUTORIZACION': 'PROCESADA', 'FECHA_AUTORIZACION': '15/11/2022',
+            'MEDICO_TRATANTE': 'FRANK LAMPARD', 'MIPRES': '0',
+            'DIAGNOSTICO': 'D571-ANEMIA FALCIFORME SIN CRISIS',
+            'ARCHIVO': 'https://archivos-alfonso.s3.sa-east-1.amazonaws.com/doc1.pdf',
+            'DETALLE_AUTORIZACION': [{'CUMS': '20158642-1', '
+            NOMBRE_PRODUCTO': 'RIVAROXABAN 20MG TABLETA RECUBIERTA', 'CANTIDAD': '30'},
+            {'CUMS': '42034-1', 'NOMBRE_PRODUCTO': 'HIDROXIUREA 500MG CAPSULA', 'CANTIDAD': '60'}],
+            'municipio': 'Barrancamerbeja, Santander', 'barrio': 'Any Neighbor, Florida',
+            'direccion': '321654987654', 'celular': 9151234567, 'email': '23131@gmail.com',
+             'NUMERO_AUTORIZACION': 99999998}
+    :return:
+    """
     if ctx := request.session.get('ctx', {}):
-        logger.info(
-            f"{request.COOKIES.get('sessionid')[:6]} {ctx['NUMERO_AUTORIZACION']} acessando a vista /finalizado"
-            f" al haber terminado el wizard.")
+        logger.info(f"{request.COOKIES.get('sessionid')[:6]} {ctx['NUMERO_AUTORIZACION']} "
+                    f"acessando a vista /finalizado al haber terminado el wizard.")
         return render(request, 'done.html', ctx)
     else:
         logger.info("Se ha intentado acceder a vista /finalizado directamente")
