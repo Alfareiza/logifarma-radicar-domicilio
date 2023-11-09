@@ -1,23 +1,27 @@
 import os
+from collections import OrderedDict
 from importlib import import_module
 
+import undetected_chromedriver as uc
 from django import http
 from django.conf import settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core.files.storage import DefaultStorage
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from formtools.wizard.views import WizardView
-from selenium import webdriver
 from selenium.webdriver import Keys, ActionChains
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
 from core.apps.base.forms import Home, AutorizacionServicio, FotoFormulaMedica, \
     EligeMunicipio, DireccionBarrio, DigitaCelular, DigitaCorreo
 from core.apps.base.models import Municipio, Barrio
-from core.apps.base.views import FORMS, TEMPLATES
-from core.settings import BASE_DIR
-import undetected_chromedriver as uc
+from core.apps.base.pipelines import NotifyEmail, NotifySMS, Drive, UpdateDB
+from core.apps.base.resources.decorators import logtime
+from core.apps.base.resources.img_helpers import ImgHelper
+from core.apps.base.views import FORMS, TEMPLATES, MANDATORIES_STEPS
+from core.apps.base.views_sin_autorizacion import TEMPLATES_SIN_AUTORIZACION, MANDATORIES_STEPS_SIN_AUTORIZACION
+from core.settings import BASE_DIR, logger
 
 os.environ["PATH"] += f'{os.pathsep}/usr/local/bin'
 
@@ -217,8 +221,77 @@ class TestWizard(WizardView):
                 form.fields['barrio'].choices.insert(0, ('X', 'Seleccione el barrio'))
         return form
 
+    def render_done(self, form, **kwargs):
+        """
+        This method gets called when all forms passed. The method should also
+        re-validate all steps to prevent manipulation. If any form fails to
+        validate, `render_revalidation_failure` should get called.
+        If everything is fine call `done`.
+        """
+
+        # logger.info(f'Entrando en render_done {CustomSessionWizard.new_form_list=}')
+        final_forms = OrderedDict()
+        # walk through the form list and try to validate the data again.
+        for form_key in self.get_form_list():
+            files = self.storage.get_step_files(form_key)
+            form_obj = self.get_form(
+                step=form_key,
+                data=self.storage.get_step_data(form_key),
+                files=files
+            )
+            if form_obj.is_valid():
+                final_forms[form_key] = form_obj
+                # return self.render_revalidation_failure(form_key, form_obj, **kwargs)
+        # self.storage.reset()
+        return self.done(list(final_forms.values()), form_dict=final_forms, **kwargs)
+
     def done(self, form_list, **kwargs):
-        return render(self.request)
+        # logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Entrando en done {form_list=}")
+
+        if self.steps_completed(**kwargs):
+            form_data = self.process_from_data(form_list, **kwargs)
+            self.request.session['ctx'] = form_data
+            return HttpResponseRedirect(reverse('base:done'))
+
+        self.request.session['ctx'] = {}
+        logger.warning(f"redireccionando a err_multitabs por multipestañas.")
+        return HttpResponseRedirect(reverse('base:err_multitabs'))
+
+    def steps_completed(self, **kwargs) -> bool:
+        """Valida si todos los pasos obligatorios llegan al \'done\'"""
+        return not bool(set(MANDATORIES_STEPS).difference(kwargs['form_dict']))
+
+    @logtime('CORE')
+    def process_from_data(self, form_list, **kwargs):
+        """
+        Guarda en base de datos y envía el correo con la información capturada
+        en el paso autorizacionServicio.
+        A partir de algunos datos de la API de la EPS.
+            - form_data[1] posee la información de la API de la EPS
+            - form_data[2] (opcional) posee la información de la imagen.
+        :param form_list: List de diccionarios donde cada index es el
+                          resultado de lo capturado en cada formulario.
+                          Cada key es el declarado en cada form.
+        :return: Información capturada en el paso autorizacionServicio.
+                En caso de querer mostrar alguna información en el done.html
+                se debe retonar en esta función.
+        """
+        # form_data = [form.cleaned_data for form in form_list]
+        form_data = {k: v.cleaned_data for k, v in kwargs['form_dict'].items()}
+
+        if 'fotoFormulaMedica' in form_data:
+            self.foto_fmedica = form_data['fotoFormulaMedica']['src']
+
+        # Construye las variables que serán enviadas al template
+        info_email = {
+            **form_data['autorizacionServicio']['num_autorizacion'],
+            **form_data['eligeMunicipio'],
+            **form_data['digitaDireccionBarrio'],
+            **form_data['digitaCelular'],
+            'email': [*form_data['digitaCorreo']]
+        }
+
+        return form_data['autorizacionServicio']['num_autorizacion']
 
 
 vistas = [Home, AutorizacionServicio, FotoFormulaMedica,
@@ -228,3 +301,87 @@ vistas = [Home, AutorizacionServicio, FotoFormulaMedica,
 
 class TestWizardWithInitAttrs(TestWizard):
     form_list = vistas
+
+
+class TestWizardSinAutorizacion(TestWizard):
+    post_wizard = [
+        NotifyEmail,
+        NotifySMS,
+        Drive,
+        UpdateDB
+    ]
+
+    def get_template_names(self) -> list:
+        return [TEMPLATES_SIN_AUTORIZACION[self.steps.current]]
+
+    def steps_completed(self, **kwargs) -> bool:
+        """Valida si todos los pasos obligatorios llegan al \'done\'"""
+        return not bool(set(MANDATORIES_STEPS_SIN_AUTORIZACION).difference(kwargs['form_dict']))
+
+    @logtime('CORE')
+    def process_from_data(self, form_list, **kwargs):
+        """
+        Guarda en base de datos y envía el correo con la información capturada
+        en el paso autorizacionServicio.
+        A partir de algunos datos de la API de la EPS.
+            - form_data[1] posee la información de la API de la EPS
+            - form_data[2] (opcional) posee la información de la imagen.
+        :param form_list: List de diccionarios donde cada index es el
+                          resultado de lo capturado en cada formulario.
+                          Cada key es el declarado en cada form.
+        :return: Información capturada en el paso autorizacionServicio.
+                En caso de querer mostrar alguna información en el done.html
+                se debe retonar en esta función.
+        """
+        # form_data = [form.cleaned_data for form in form_list]
+        form_data = {k: v.cleaned_data for k, v in kwargs['form_dict'].items()}
+
+        # Construye las variables que serán enviadas al template
+        info_email = {
+            **form_data['sinAutorizacion'],
+            **form_data['eligeMunicipio'],
+            **form_data['digitaDireccionBarrio'],
+            **form_data['digitaCelular'],
+            'email': [*form_data['digitaCorreo']]
+        }
+
+        if 'fotoFormulaMedica' in form_data:
+            self.foto_fmedica = form_data['fotoFormulaMedica']['src']
+            info_email.update({'foto': self.foto_fmedica})
+
+        rad_id = '1'
+        info_email['NUMERO_RADICACION'] = rad_id
+        info_email.update({'log_text': '... ...'})
+
+        self.run_post_wizard(info_email, rad_id)
+
+        resp = form_data['sinAutorizacion']
+        resp.update({'NUMERO_AUTORIZACION': rad_id})
+        return resp
+
+    def run_post_wizard(self, info_email: dict, rad_id: str) -> None:
+        """Ejecuta la función run de cada clase listada en post_wizard"""
+
+        # Substituye imagen existente con imagen más leve y B&W
+        if self.foto_fmedica:
+            self.treat_img(self.foto_fmedica.file.name)
+
+        result = []
+        for step in self.post_wizard:
+            check, info_email = step().proceed(info_email, rad_id)
+            if not check:
+                logger.warning(f"{step} presentó fallas al ser ejecutado.")
+        result.extend(info_email)
+
+        return result
+
+    @staticmethod
+    @logtime('IMG CONVERT')
+    def treat_img(filepath_img: str) -> None:
+        """
+        Trata imagen disminuyendo su peso y conviertiéndola a blanco y negro.
+        :param filepath_img: Ruta de imagen.
+        """
+        img = ImgHelper(filepath_img)
+        img.convert_to_grayscale()
+        img.save(filepath_img)
