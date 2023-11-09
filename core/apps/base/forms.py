@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 from core.apps.base.models import Barrio, Municipio, Radicacion
 from core.apps.base.resources.cajacopi import obtener_datos_identificacion, obtener_datos_autorizacion
 from core.apps.base.resources.medicar import obtener_datos_formula
-from core.apps.base.resources.tools import read_json, has_accent
+from core.apps.base.resources.tools import read_json
 from core.apps.base.validators import (
     validate_aut_exists,
     validate_med_controlados,
