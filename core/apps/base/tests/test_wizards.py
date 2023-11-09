@@ -41,7 +41,6 @@ class FormTests(TestCase):
         response, instance = testform(request)
         self.assertEqual(instance.steps.current, 'autorizacionServicio')
 
-
     def test_form_prefix(self):
         request = get_request()
         testform = TestWizard.as_view(FORMS)

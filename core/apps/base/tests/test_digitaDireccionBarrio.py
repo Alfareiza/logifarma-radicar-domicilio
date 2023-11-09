@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.utils.datastructures import MultiValueDict
 
 from core import settings
-from core.apps.base.models import Municipio, Barrio
+from core.apps.base.models import Barrio
 from core.apps.base.tests.test_fotoFormulaMedica import upload_foto
 from core.apps.base.tests.utilities import get_request, TestWizard
 from core.apps.base.views import FORMS
@@ -11,10 +11,10 @@ from core.apps.base.views import FORMS
 class DigitaDireccionBarrioWizardTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.mun = Municipio.objects.create(name='barranquilla', departamento='atlantico')
-        cls.barr = Barrio.objects.create(name='el recreo', municipio=cls.mun,
-                                         zona='norte', cod_zona=109,
-                                         status=1)
+        barrios = Barrio.objects.all()
+        if barrios:
+            cls.barrio_id = str(barrios[0].id)
+            cls.municipio_id = str(barrios[0].municipio.id)
 
     def setUp(self):
         self.testform = TestWizard.as_view(FORMS)
@@ -27,8 +27,9 @@ class DigitaDireccionBarrioWizardTests(TestCase):
         self.request.POST = {'test_wizard-current_step': 'fotoFormulaMedica'}
         self.request.FILES = MultiValueDict({'fotoFormulaMedica-src': [image['src']]})
         self.response, self.instance = self.testform(self.request)
+
         self.request.POST = {'test_wizard-current_step': 'eligeMunicipio',
-                             'eligeMunicipio-municipio': '1'}
+                             'eligeMunicipio-municipio': DigitaDireccionBarrioWizardTests.municipio_id}
         self.response, self.instance = self.testform(self.request)
 
     @classmethod
@@ -36,19 +37,19 @@ class DigitaDireccionBarrioWizardTests(TestCase):
         for file in settings.MEDIA_ROOT.iterdir():
             file.unlink()
 
-    def test_step_name_is_eligeMunicipio(self):
+    def test_01_step_name_is_eligeMunicipio(self):
         self.assertEqual(self.instance.steps.current, 'digitaDireccionBarrio')
 
-    def test_template_name_is_direccion_barrio_html(self):
+    def test_02_template_name_is_direccion_barrio_html(self):
         self.assertEqual(self.instance.get_template_names()[0], 'direccion_barrio.html')
 
-    def test_nextstep_is_digitaCelular(self):
+    def test_03_nextstep_is_digitaCelular(self):
         self.assertEqual(self.instance.get_next_step(), 'digitaCelular')
 
-    def test_going_to_next_step(self):
+    def test_04_going_to_next_step(self):
         self.request.POST = {'test_wizard-current_step': 'digitaDireccionBarrio',
                              'digitaDireccionBarrio-direccion': 'AV MURILLO, 123456',
-                             'digitaDireccionBarrio-barrio': str(DigitaDireccionBarrioWizardTests.barr.id)}
+                             'digitaDireccionBarrio-barrio': DigitaDireccionBarrioWizardTests.barrio_id}
         response, instance = self.testform(self.request)
 
         #  Al ser realizado el POST, deberá entrar en la siguiente vista

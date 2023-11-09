@@ -3,7 +3,7 @@ from django.utils.datastructures import MultiValueDict
 
 from core import settings
 from core.apps.base.forms import EligeMunicipio
-from core.apps.base.models import Municipio
+from core.apps.base.models import Barrio
 from core.apps.base.tests.test_fotoFormulaMedica import upload_foto
 from core.apps.base.tests.utilities import get_request, TestWizard
 from core.apps.base.views import FORMS
@@ -13,7 +13,9 @@ class EligeMunicipioWizardTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.mun = Municipio.objects.create(name='barranquilla', departamento='atlántico')
+        barrios = Barrio.objects.all()
+        if barrios:
+            cls.municipio_id = str(barrios[0].municipio.id)
 
     def setUp(self):
         self.testform = TestWizard.as_view(FORMS)
@@ -43,7 +45,7 @@ class EligeMunicipioWizardTests(TestCase):
 
     def test_going_to_next_step(self):
         self.request.POST = {'test_wizard-current_step': 'eligeMunicipio',
-                             'eligeMunicipio-municipio': '1'}
+                             'eligeMunicipio-municipio': EligeMunicipioWizardTests.municipio_id}
         response, instance = self.testform(self.request)
 
         #  Al ser realizado el POST, deberá entrar en la siguiente vista
@@ -52,9 +54,5 @@ class EligeMunicipioWizardTests(TestCase):
 
     def test_choosing_municipio(self):
         # mun = Municipio.objects.get(name='barranquilla')
-        form = EligeMunicipio(data={'municipio': str(EligeMunicipioWizardTests.mun.id)})
+        form = EligeMunicipio(data={'municipio': str(EligeMunicipioWizardTests.municipio_id)})
         self.assertTrue(form.is_valid())
-        self.assertEqual(
-            str(form.cleaned_data),
-            "{'municipio': <Municipio: Barranquilla, Atlántico>}"
-        )

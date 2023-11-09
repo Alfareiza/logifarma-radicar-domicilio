@@ -3,7 +3,7 @@ from django.utils.datastructures import MultiValueDict
 
 from core import settings
 from core.apps.base.forms import DigitaCelular
-from core.apps.base.models import Municipio, Barrio
+from core.apps.base.models import Barrio
 from core.apps.base.tests.test_fotoFormulaMedica import upload_foto
 from core.apps.base.tests.utilities import get_request, TestWizard
 from core.apps.base.views import FORMS
@@ -12,10 +12,10 @@ from core.apps.base.views import FORMS
 class DigitaCelularWizardTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.mun = Municipio.objects.create(name='barranquilla', departamento='atlantico')
-        cls.barr = Barrio.objects.create(name='el recreo', municipio=cls.mun,
-                                         zona='norte', cod_zona=109,
-                                         status=1)
+        barrios = Barrio.objects.all()
+        if barrios:
+            cls.barrio_id = str(barrios[0].id)
+            cls.municipio_id = str(barrios[0].municipio.id)
 
     def setUp(self):
         self.testform = TestWizard.as_view(FORMS)
@@ -29,11 +29,11 @@ class DigitaCelularWizardTests(TestCase):
         self.request.FILES = MultiValueDict({'fotoFormulaMedica-src': [image['src']]})
         self.response, self.instance = self.testform(self.request)
         self.request.POST = {'test_wizard-current_step': 'eligeMunicipio',
-                             'eligeMunicipio-municipio': '1'}
+                             'eligeMunicipio-municipio': DigitaCelularWizardTests.municipio_id}
         self.response, self.instance = self.testform(self.request)
         self.request.POST = {'test_wizard-current_step': 'digitaDireccionBarrio',
                              'digitaDireccionBarrio-direccion': 'AV MURILLO, 123456',
-                             'digitaDireccionBarrio-barrio': str(DigitaCelularWizardTests.barr.id)}
+                             'digitaDireccionBarrio-barrio': DigitaCelularWizardTests.barrio_id}
         self.response, self.instance = self.testform(self.request)
 
     @classmethod
@@ -44,7 +44,7 @@ class DigitaCelularWizardTests(TestCase):
     def test_step_name_is_digitaCelular(self):
         self.assertEqual(self.instance.steps.current, 'digitaCelular')
 
-    def test_template_name_is_elige_municipio_html(self):
+    def test_template_name_is_digita_celular_html(self):
         self.assertEqual(self.instance.get_template_names()[0], 'digita_celular.html')
 
     def test_nextstep_is_digitaCorreo(self):

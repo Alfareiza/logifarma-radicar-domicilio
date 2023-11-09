@@ -1,4 +1,5 @@
 import mimetypes
+from pathlib import Path
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
@@ -13,7 +14,7 @@ from core.settings import BASE_DIR
 
 def upload_foto(filepath=None):
     if filepath is None:
-        filepath = BASE_DIR / 'core/apps/base/tests/resources/image_1.jpg'
+        filepath: Path = BASE_DIR / 'core/apps/base/tests/resources/image_1.jpg'
     return {
         'src': SimpleUploadedFile(
             filepath.name,
