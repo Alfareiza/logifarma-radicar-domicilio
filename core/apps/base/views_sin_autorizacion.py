@@ -1,15 +1,17 @@
+import threading
+
 from django.core.files.storage import FileSystemStorage
-from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
 from django.template.loader import get_template
 from django.urls import reverse
 
 from core import settings
 from core.apps.base.forms import *
+from core.apps.base.pipelines import NotifyEmail, NotifySMS, Drive, UpdateDB
 from core.apps.base.resources.customwizard import CustomSessionWizard
 from core.apps.base.resources.decorators import logtime
-from core.apps.base.resources.email_helpers import make_subject_and_cco, make_destinatary
-from core.apps.base.resources.tools import convert_bytes, notify, guardar_short_info_bd
+from core.apps.base.resources.img_helpers import ImgHelper
+from core.apps.base.resources.tools import guardar_short_info_bd
 from core.settings import logger, BASE_DIR
 
 FORMS = [
@@ -21,10 +23,10 @@ FORMS = [
     ("digitaCorreo", DigitaCorreo)
 ]
 
-MANDATORIES_STEPS = ("sinAutorizacion", "eligeMunicipio",
-                     "digitaDireccionBarrio", "digitaCelular", "digitaCorreo")
+MANDATORIES_STEPS_SIN_AUTORIZACION = ("sinAutorizacion", "eligeMunicipio",
+                                      "digitaDireccionBarrio", "digitaCelular", "digitaCorreo")
 
-TEMPLATES = {
+TEMPLATES_SIN_AUTORIZACION = {
     "sinAutorizacion": "sin_autorizacion.html",
     "fotoFormulaMedica": "foto.html",
     "eligeMunicipio": "elige_municipio.html",
@@ -39,9 +41,10 @@ class SinAutorizacion(CustomSessionWizard):
     # template_name = 'start.html'
     form_list = FORMS
     file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
+    post_wizard = [NotifyEmail, NotifySMS, Drive, UpdateDB]
 
     def get_template_names(self):
-        return [TEMPLATES[self.steps.current]]
+        return [TEMPLATES_SIN_AUTORIZACION[self.steps.current]]
 
     def done(self, form_list, **kwargs):
         # logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Entrando en done {form_list=}")
@@ -58,10 +61,10 @@ class SinAutorizacion(CustomSessionWizard):
 
     def steps_completed(self, **kwargs) -> bool:
         """Valida si todos los pasos obligatorios llegan al \'done\'"""
-        return not bool(set(MANDATORIES_STEPS).difference(kwargs['form_dict']))
+        return not bool(set(MANDATORIES_STEPS_SIN_AUTORIZACION).difference(kwargs['form_dict']))
 
     @logtime('CORE')
-    def process_from_data(self, form_list, **kwargs):
+    def process_from_data(self, form_list, **kwargs) -> dict:
         """
         Guarda en base de datos y envía el correo con la información capturada
         en el paso sinAutorizacion.
@@ -78,11 +81,6 @@ class SinAutorizacion(CustomSessionWizard):
         # form_data = [form.cleaned_data for form in form_list]
         form_data = {k: v.cleaned_data for k, v in kwargs['form_dict'].items()}
 
-        if 'fotoFormulaMedica' in form_data:
-            self.foto_fmedica = form_data['fotoFormulaMedica']['src']
-            logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} "
-                        f"self.foto_fmedica={self.foto_fmedica}")
-
         # Construye las variables que serán enviadas al template
         info_email = {
             **form_data['sinAutorizacion'],
@@ -92,9 +90,15 @@ class SinAutorizacion(CustomSessionWizard):
             'email': [*form_data['digitaCorreo']]
         }
 
+        if 'fotoFormulaMedica' in form_data:
+            self.foto_fmedica = form_data['fotoFormulaMedica']['src']
+            info_email.update({'foto': self.foto_fmedica})
+
         # Guardará en BD cuando DEBUG sean números reales
         ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
-        if info_email['documento'][2:] not in ('99999999',):
+
+        # if info_email['documento'][2:] not in ('99999999',):
+        if True:  # Testando inserción en producción temporalmente
             rad = guardar_short_info_bd(**info_email, ip=ip)
             rad_id = rad.numero_radicado
             info_email['NUMERO_RADICACION'] = rad_id
@@ -103,82 +107,49 @@ class SinAutorizacion(CustomSessionWizard):
             rad_id = '1'
             info_email['NUMERO_RADICACION'] = rad_id
 
-        # rad_id = guardar_short_info_bd(**info_email, ip=ip)
-
-        # Envía e-mail
         if rad_id:
             self.log_text = f"{self.request.COOKIES.get('sessionid')[:6]} {rad_id=} {info_email['documento']}"
+            info_email.update({'log_text': self.log_text})
 
             logger.info(f"{self.log_text} {info_email['NOMBRE']} Radicación finalizada. "
                         f"E-mail de confirmación será enviado a {form_data['digitaCorreo']}")
 
-            self.send_mail(info_email)
-
-            # todo cargar imagen en el drive
-
-            # todo colocar id de imagen en campo paciente_data
+            if not settings.DEBUG:
+                # En producción esto se realiza así para liberar al usuario en el front
+                x = threading.Thread(target=self.run_post_wizard, args=(info_email, rad_id))
+                x.start()
+            else:
+                self.run_post_wizard(info_email, rad_id)
 
         # Se usa NUMERO_AUTORIZACION porque es el valor que /finalizado espera
         resp = form_data['sinAutorizacion']
         resp.update({'NUMERO_AUTORIZACION': rad_id})
         return resp
 
-    def prepare_email(self, info_email) -> EmailMessage:
-        subject, copia_oculta = make_subject_and_cco(info_email)
-        destinatary = make_destinatary(info_email)
-        html_content = htmly.render(info_email)
-        email = EmailMessage(
-            subject, html_content, to=destinatary, bcc=copia_oculta,
-            from_email=f"Domicilios Logifarma <{settings.EMAIL_HOST_USER}>"
-        )
-        email.content_subtype = "html"
+    def run_post_wizard(self, info_email, rad_id) -> None:
+        """Ejecuta la función run de cada clase listada en post_wizard"""
 
+        # Substituye imagen existente con imagen más leve y B&W
         if self.foto_fmedica:
-            email.attach(self.foto_fmedica.name, self.foto_fmedica.file.file.read(), self.foto_fmedica.content_type)
-        #     uploaded = settings.MEDIA_ROOT / self.foto_fmedica.name
-        #     logger.info(f"{self.log_text} adjuntando imagen {str(uploaded)}")
-        #     email.attach_file(str(uploaded))
-        #     if email.attachments:
-        #         logger.info(f"{self.log_text} Imagen adjuntada con éxito.")
-        #     else:
-        #         logger.error(f"{self.log_text} No se adjuntó la imagen. "
-        #                      f"email.attachments={email.attachments}")
+            self.treat_img(self.foto_fmedica.file.name)
 
-        return email
+        result = []
+        for step in self.post_wizard:
+            check, info_email = step().proceed(info_email, rad_id)
+            if not check:
+                logger.warning(f"{step} presentó fallas al ser ejecutado.")
+        result.extend(info_email)
 
-    @logtime('EMAIL')
-    def send_mail(self, info_email):
+        return result
+
+    @staticmethod
+    @logtime('IMG CONVERT')
+    def treat_img(filepath_img: str) -> None:
+        """Trata imagen disminuyendo su peso y conviertiéndola a blanco y negro.
+        Posteriormente queda guardada en substitución de la imagen referenciada
+        en la ruta recibida como argumento.
+        :param filepath_img: Ruta de imagen.
         """
-        Envía email donde la imagen puede estar adjunta.
-        :param info_email: Información enviada en el cuerpo del correo.
-        :return: None
-        """
-        try:
-            email = self.prepare_email(info_email)
-            if self.foto_fmedica and not email.attachments:
-                logger.error(f"{self.log_text} Perdida la referencia de imagen adjunta.")
-            r = email.send(fail_silently=False)
-        except Exception as e:
-            notify('error-email',
-                   f"ERROR ENVIANDO EMAIL- Radicado #{info_email['NUMERO_RADICACION']} {info_email['documento']}",
-                   f"JSON_DATA: {info_email}\n\nERROR: {e}")
-            if rad := Radicacion.objects.filter(numero_radicado=info_email['documento']).first():
-                ...
-                # rad.delete()
-                # logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {rad}"
-                #             "Eliminado radicado al no haberse enviado correo.")
-        else:
-            if r == 1:
-                if self.foto_fmedica:
-                    logger.info(f"{self.log_text} Correo enviado a {info_email['email']} con imagen adjunta de "
-                                 f"{convert_bytes(self.foto_fmedica.size)}.")
-                else:
-                    logger.info(
-                        f"{self.log_text} correo enviado a {info_email['email']} sin imagem")
-            else:
-                # E-mail enviado pero r != 1
-                notify('error-email', f"ERROR ENVIANDO EMAIL - Radicado #{info_email['documento']}",
-                       f"JSON_DATA: {info_email}")
-        # finally:
-        #     if self.foto_fmedica:
-        #         del_file(self.foto_fmedica.file.file.name)
+        img = ImgHelper(filepath_img)
+        img.convert_to_grayscale()
+        img.save(filepath_img)
