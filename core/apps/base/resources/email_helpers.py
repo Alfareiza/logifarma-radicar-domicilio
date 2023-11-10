@@ -187,7 +187,7 @@ class Email:
         else:
             if r == 1:
                 if self.foto:
-                    logger.info(f"{self.log_text} Correo enviado a {info['email']} con imagen adjunta")
+                    logger.info(f"{self.log_text} Correo enviado a {', '.join(info['email'])} con imagen adjunta")
                 else:
                     logger.info(
                         f"{self.log_text} correo enviado a {info['email']} sin imagem")
@@ -215,11 +215,11 @@ class Email:
 
         # Definiendo asunto
         if info.get('documento'):
-            subject = f"{info['NOMBRE'].title()} - Este es el " \
-                      f"soporte de la radicación de tu domicilio en Logifarma"
+            subject = (f"{info['NUMERO_RADICACION']} - Este es el "
+                       "número de radicación de tu domicilio en Logifarma")
         else:
-            subject = f"{info['NUMERO_AUTORIZACION']} - Este es el " \
-                      f"número de radicación de tu domicilio en Logifarma"
+            subject = (f"{info['NUMERO_AUTORIZACION']} - Este es el "
+                       f"número de radicación de tu domicilio en Logifarma")
 
         if info.get('documento') in ('CC99999999',) or info.get('NUMERO_AUTORIZACION') in (
                 99_999_999, 99_999_998):
