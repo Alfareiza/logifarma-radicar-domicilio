@@ -97,8 +97,8 @@ class SinAutorizacion(CustomSessionWizard):
         # Guardará en BD cuando DEBUG sean números reales
         ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
 
-        # if info_email['documento'][2:] not in ('99999999',):
-        if True:  # Testando inserción en producción temporalmente
+        if info_email['documento'][2:] not in ('99999999',):
+        # if True:  # Testando inserción en producción temporalmente
             rad = guardar_short_info_bd(**info_email, ip=ip)
             rad_id = rad.numero_radicado
             info_email['NUMERO_RADICACION'] = rad_id
@@ -114,12 +114,12 @@ class SinAutorizacion(CustomSessionWizard):
             logger.info(f"{self.log_text} {info_email['NOMBRE']} Radicación finalizada. "
                         f"E-mail de confirmación será enviado a {form_data['digitaCorreo']}")
 
-            if not settings.DEBUG:
-                # En producción esto se realiza así para liberar al usuario en el front
-                x = threading.Thread(target=self.run_post_wizard, args=(info_email, rad_id))
-                x.start()
-            else:
-                self.run_post_wizard(info_email, rad_id)
+            # if not settings.DEBUG:
+            #     En producción esto se realiza así para liberar al usuario en el front
+                # x = threading.Thread(target=self.run_post_wizard, args=(info_email, rad_id))
+                # x.start()
+            # else:
+            self.run_post_wizard(info_email, rad_id)
 
         # Se usa NUMERO_AUTORIZACION porque es el valor que /finalizado espera
         resp = form_data['sinAutorizacion']
