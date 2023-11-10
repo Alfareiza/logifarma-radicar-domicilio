@@ -38,17 +38,17 @@ class Drive(PostStep):
         log.info(f"{info_email['log_text']} ...cargando imagen en GDrive.")
         check = False
         foto = info_email.get('foto')
-        ext = foto.name.split('.')[-1]
-        name = f"{rad_id}.{ext}"
-        file_id = GDriveHandler().create_file_in_drive(name,
-                                                       foto.file,
-                                                       foto.content_type,
-                                                       folder_id='1ipWRq4xESIomlxPmDxIGMKLGzJRShUb_')
+        if foto:
+            ext = foto.name.split('.')[-1]
+            name = f"{rad_id}.{ext}"
+            file_id = GDriveHandler().create_file_in_drive(name,
+                                                           foto.file,
+                                                           foto.content_type,
+                                                           folder_id='1ipWRq4xESIomlxPmDxIGMKLGzJRShUb_')
+            if file_id:
+                info_email.update({'file_id': file_id, 'img_name': name})
+                check = True
 
-        if file_id:
-            check = True
-
-        info_email.update({'file_id': file_id})
         return check, info_email
 
 
@@ -57,19 +57,24 @@ class UpdateDB(PostStep):
         log.info(f"{info_email['log_text']} ...actualizando radicados en DB con id de imagen en GDrive.")
         check = False
         file_id: str = info_email.get('file_id')
+        img_name: str = info_email.get('img_name')
         rad_default = Radicacion.objects.filter(numero_radicado=rad_id).first()
         rad_server = Radicacion.objects.using('server').filter(numero_radicado=rad_id).first()
 
-        if rad_default and isinstance(rad_default.paciente_data, dict):
-            rad_default.paciente_data.update({'FILE_ID': file_id})
+        if not rad_default:
+            log.info(f"{info_email['log_text']} ...no fue encontrado {rad_id=} en postgres.")
+        elif isinstance(rad_default.paciente_data, dict):
+            rad_default.paciente_data.update({'IMG_ID': file_id, 'IMG_NAME': img_name})
+            rad_default.save()
             check = True
-            log.info(f"{info_email['log_text']} ...actualizando radicado en postgres.")
+            log.info(f"{info_email['log_text']} ...actualizado radicado en postgres.")
 
-        if rad_server and isinstance(rad_server.paciente_data, str):
-            rad_server.paciente_data = {'FILE_ID': file_id}
+        if not rad_default:
+            log.info(f"{info_email['log_text']} ...no fue encontrado {rad_id=} en server.")
+        elif isinstance(rad_server.paciente_data, str):
+            rad_server.paciente_data = {'IMG_ID': file_id, 'IMG_NAME': img_name}
+            rad_server.save()
             check = True
-            log.info(f"{info_email['log_text']} ...actualizando radicado en server.")
+            log.info(f"{info_email['log_text']} ...actualizado radicado en server.")
 
-        rad_default.save()
-        rad_server.save()
         return check, info_email
