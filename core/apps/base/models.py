@@ -74,7 +74,7 @@ class Radicacion(Model):
     factura = CharField(max_length=150, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.numero_radicado} {self.paciente_cc}"
+        return f"{self.id}"
 
 
 
