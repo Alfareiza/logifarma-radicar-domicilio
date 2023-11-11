@@ -1,5 +1,3 @@
-import threading
-
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseRedirect
 from django.template.loader import get_template
@@ -9,6 +7,7 @@ from core import settings
 from core.apps.base.forms import *
 from core.apps.base.pipelines import NotifyEmail, NotifySMS, Drive, UpdateDB
 from core.apps.base.resources.customwizard import CustomSessionWizard
+from core.apps.base.views import TEMPLATES
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.img_helpers import ImgHelper
 from core.apps.base.resources.tools import guardar_short_info_bd
@@ -26,14 +25,6 @@ FORMS = [
 MANDATORIES_STEPS_SIN_AUTORIZACION = ("sinAutorizacion", "eligeMunicipio",
                                       "digitaDireccionBarrio", "digitaCelular", "digitaCorreo")
 
-TEMPLATES_SIN_AUTORIZACION = {
-    "sinAutorizacion": "sin_autorizacion.html",
-    "fotoFormulaMedica": "foto.html",
-    "eligeMunicipio": "elige_municipio.html",
-    "digitaDireccionBarrio": "direccion_barrio.html",
-    "digitaCelular": "digita_celular.html",
-    "digitaCorreo": "digita_correo.html"}
-
 htmly = get_template(BASE_DIR / "core/apps/base/templates/notifiers/correo_sin_autorizacion.html")
 
 
@@ -44,7 +35,7 @@ class SinAutorizacion(CustomSessionWizard):
     post_wizard = [NotifyEmail, NotifySMS, Drive, UpdateDB]
 
     def get_template_names(self):
-        return [TEMPLATES_SIN_AUTORIZACION[self.steps.current]]
+        return [TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
         # logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Entrando en done {form_list=}")
@@ -100,9 +91,8 @@ class SinAutorizacion(CustomSessionWizard):
         if info_email['documento'][2:] not in ('99999999',):
         # if True:  # Testando inserción en producción temporalmente
             rad = guardar_short_info_bd(**info_email, ip=ip)
-            rad_id = rad.numero_radicado
-            info_email['NUMERO_RADICACION'] = rad_id
-            info_email['FECHA_RADICACION'] = rad.datetime
+            info_email['ref_id'], info_email['NUMERO_RADICACION'], info_email['FECHA_RADICACION'] = rad
+            rad_id = info_email['NUMERO_RADICACION']
         else:
             rad_id = '1'
             info_email['NUMERO_RADICACION'] = rad_id
@@ -116,8 +106,8 @@ class SinAutorizacion(CustomSessionWizard):
 
             # if not settings.DEBUG:
             #     En producción esto se realiza así para liberar al usuario en el front
-                # x = threading.Thread(target=self.run_post_wizard, args=(info_email, rad_id))
-                # x.start()
+            # x = threading.Thread(target=self.run_post_wizard, args=(info_email, rad_id))
+            # x.start()
             # else:
             self.run_post_wizard(info_email, rad_id)
 
