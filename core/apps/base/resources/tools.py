@@ -1,7 +1,6 @@
 import unicodedata
-import urllib.request
 from datetime import date, datetime, timedelta
-from pathlib import Path
+from typing import Tuple
 
 from decouple import config
 from django.conf import settings
@@ -250,7 +249,7 @@ def save_in_bd(name_bd: str, rad: Radicacion):
         logger.info(f"Radicación guardada con éxito en {name_bd} {rad.numero_radicado} {rad.id=}")
 
 
-def guardar_short_info_bd(**kwargs):
+def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
     """
     Guarda radicado en base de datos
     :param kwargs: Información final del wizard + ip:
@@ -258,6 +257,7 @@ def guardar_short_info_bd(**kwargs):
             {'sinAutorizacion': '99999999', 'fotoFormulaMedica': {'src': <UploadedFile: chat.png (image/png)>}, 'eligeMunicipio': {'cod_dane': None, 'activo': False, 'municipio': <Municipio: Valledupar, Cesar>}, 'digitaDireccionBarrio': {'barrio': 'Barrio 1', 'direccion': '213'}, 'digitaCelular': {'celular': 3213213211, 'whatsapp': None}, 'digitaCorreo': ['']}
     :return:
     """
+    resp = ('', '', '')
     municipio = kwargs.pop('municipio').name.lower()
 
     email = kwargs.pop('email', None)
@@ -288,6 +288,7 @@ def guardar_short_info_bd(**kwargs):
         )
 
         save_in_bd('default', rad)
+        resp = numero_radicado, rad.id, rad.datetime,
         rad.id = None
         save_in_bd('server', rad)
 
@@ -297,7 +298,8 @@ def guardar_short_info_bd(**kwargs):
                f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", e)
     else:
         logger.info(f"Radicación guardada con éxito {rad.numero_radicado}")
-    return rad
+
+    return resp
 
 
 def discover_rad(body) -> str:
