@@ -1,4 +1,5 @@
 import os
+import threading
 from collections import OrderedDict
 from importlib import import_module
 
@@ -19,9 +20,10 @@ from core.apps.base.models import Municipio, Barrio
 from core.apps.base.pipelines import NotifyEmail, NotifySMS, Drive, UpdateDB
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.img_helpers import ImgHelper
+from core.apps.base.resources.tools import guardar_short_info_bd
 from core.apps.base.views import FORMS, TEMPLATES, MANDATORIES_STEPS
-from core.apps.base.views_sin_autorizacion import TEMPLATES_SIN_AUTORIZACION, MANDATORIES_STEPS_SIN_AUTORIZACION
-from core.settings import BASE_DIR, logger
+from core.apps.base.views_sin_autorizacion import MANDATORIES_STEPS_SIN_AUTORIZACION
+from core.settings import BASE_DIR, logger, DATABASES
 
 os.environ["PATH"] += f'{os.pathsep}/usr/local/bin'
 
@@ -304,15 +306,10 @@ class TestWizardWithInitAttrs(TestWizard):
 
 
 class TestWizardSinAutorizacion(TestWizard):
-    post_wizard = [
-        NotifyEmail,
-        NotifySMS,
-        Drive,
-        UpdateDB
-    ]
+    post_wizard = [NotifyEmail, NotifySMS, Drive, UpdateDB]
 
     def get_template_names(self) -> list:
-        return [TEMPLATES_SIN_AUTORIZACION[self.steps.current]]
+        return [TEMPLATES[self.steps.current]]
 
     def steps_completed(self, **kwargs) -> bool:
         """Valida si todos los pasos obligatorios llegan al \'done\'"""
@@ -349,10 +346,17 @@ class TestWizardSinAutorizacion(TestWizard):
             self.foto_fmedica = form_data['fotoFormulaMedica']['src']
             info_email.update({'foto': self.foto_fmedica})
 
-        rad_id = '1'
-        info_email['NUMERO_RADICACION'] = rad_id
+        rad = guardar_short_info_bd(**info_email, ip='0.0.0.0')
+        info_email['ref_id'], info_email['NUMERO_RADICACION'], info_email['FECHA_RADICACION'] = rad
+        rad_id = info_email['NUMERO_RADICACION']
+
         info_email.update({'log_text': '... ...'})
 
+        # if not settings.DEBUG:
+        # En producción esto se realiza así para liberar al usuario en el front
+        # x = threading.Thread(target=self.run_post_wizard, args=(info_email, rad_id))
+        # x.start()
+        # else:
         self.run_post_wizard(info_email, rad_id)
 
         resp = form_data['sinAutorizacion']
