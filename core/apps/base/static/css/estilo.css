@@ -1268,6 +1268,26 @@ main section.vista10 p.vist10 {position: relative;
     color: #468bc4;
 }
 
+.box-select-input{
+    display:flex;
+    justify-content:center;
+    align-items: end;
+    padding: 0rem .5rem;
+    margin: 2rem 0rem;
+}
+.label-and-select{
+    align-items: start;
+    display: flex;
+    flex-direction: column;
+}
+.label-and-select label{
+    margin-bottom: .5rem;
+    color: #007BFF;
+}
+.mt-3 { margin-top:3rem }
+
+
+
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 @media only screen and (max-width: 1899px){
@@ -1293,7 +1313,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     border: 0px;
     background: #ffff;
     top: 2%;
-    z-index: 9;}
+    z-index: 9;
+    text-decoration:none;}
 
 .b_atras {
     position: relative;
@@ -2495,6 +2516,150 @@ main section.vista10 p.vist10 {position: relative;
     font-weight: 200;
     margin: 0% auto;}
 
+    .button_modal {
+      border: none;
+      border-radius: .4rem;
+      background-color: inherit;
+      padding: 14px 28px;
+      font-size: 1.2em;
+      cursor: pointer;
+      display: inline-block;
+      color: white;
+      width: 72%;
+      text-align: center;
+    }
+
+    /* On mouse-over */
+    .button_modal:hover {background: #eee;}
+
+    .btn_success {background: #2a57a9;}
+    .btn_success:hover {background: #023798;}
+    .btn_info {background: #3bb227;}
+    .btn_info:hover {background: #157a05;}
+
+    .hvr-float {
+      display: inline-block;
+      vertical-align: middle;
+      transform: translateZ(0);
+      box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+      backface-visibility: hidden;
+      -moz-osx-font-smoothing: grayscale;
+      transition-duration: 0.3s;
+      transition-property: transform;
+      transition-timing-function: ease-out;
+    }
+    .hvr-float:hover,
+    .hvr-float:focus,
+    .hvr-float:active {
+      transform: translateY(-8px);
+    }
+
+   .btn_and_text{
+       margin-top: 3rem;
+       width: 25rem;
+       text-align: center;
+   }
+
+    .input-effect {
+      position: relative;
+      margin-bottom: 0rem;
+      margin-left: 1rem;
+      width: 28%;
+    }
+
+    .input-effect label {
+      position: absolute;
+      color: gray;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      transition: 0.2s ease all;
+    }
+
+    .input-effect input:focus + label,
+    .input-effect input:valid + label {
+      top: -1.5rem;
+      font-size: 1.2em;
+      color: #007BFF; /* You can adjust the color to your preference */
+    }
+
+    .input-effect input {
+      padding: 0.2rem 0rem;
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #ccc;
+      outline: none;
+      font-size: 1.2em;
+    }
+
+    /* Optional: Add a transition for smoother animation */
+    .input-effect input {
+      transition: border-bottom 0.2s ease, font-size 0.2s ease;
+    }
+    :root {
+      --arrow-bg: rgba(255, 255, 255, 0.3);
+      --arrow-icon: url(https://upload.wikimedia.org/wikipedia/commons/9/9d/Caret_down_font_awesome_whitevariation.svg);
+      --option-bg: white;
+      --select-bg: rgba(255, 255, 255, 0.2);
+    }
+    .custom-select{
+        background-color: white;
+        width: 23rem;
+        border: none;
+         outline: 0;
+        font-size: 1.2em;
+    }
+
+    .input-effect {
+      position: relative;
+      margin-bottom: 0rem;
+      margin-left: 1rem;
+      width: 28%;
+    }
+
+    .input-effect label {
+      position: absolute;
+      color: gray;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      transition: 0.2s ease all;
+    }
+
+    .input-effect input:focus + label,
+    .input-effect input:valid + label {
+      top: -1.5rem;
+      font-size: 1.2em;
+      color: #007BFF; /* You can adjust the color to your preference */
+    }
+
+    .input-effect input {
+      padding: 0.2rem 0rem;
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #ccc;
+      outline: none;
+      font-size: 1.2em;
+    }
+
+    /* Optional: Add a transition for smoother animation */
+    .input-effect input {
+      transition: border-bottom 0.2s ease, font-size 0.2s ease;
+    }
+    :root {
+      --arrow-bg: rgba(255, 255, 255, 0.3);
+      --arrow-icon: url(https://upload.wikimedia.org/wikipedia/commons/9/9d/Caret_down_font_awesome_whitevariation.svg);
+      --option-bg: white;
+      --select-bg: rgba(255, 255, 255, 0.2);
+    }
+    .custom-select{
+        background-color: white;
+        width: 22.1rem;
+        border: none;
+         outline: 0;
+        font-size: 1.2em;
+    }
+
 }
 
 .home {text-decoration: none;
@@ -2515,8 +2680,6 @@ main section.vista10 p.vist10 {position: relative;
 .
 .
  */
-
-    
 
 @media only screen and (max-width:1024px) and (max-height:1366px){
 
@@ -4987,6 +5150,27 @@ main section.vista10 p.vist10 {position: relative;
     color: #468bc4;
 }
 
+    .box-select-input {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .custom-select {
+        font-size: 1em;
+    }
+
+    .input-effect {
+        margin: 2rem 0rem;
+        margin-left: 0rem;
+        width: 22rem;
+    }
+
+    .label-and-select{
+        margin-bottom: 1rem;
+    }
+
+
+
 }
 
 
@@ -6289,6 +6473,10 @@ main section.vista10 p.vist10 {position: relative;
     color: #468bc4;
     }
 
+    .button_modal{
+    font-size: 1em;
+    }
+
 }
 
 
@@ -7575,50 +7763,3 @@ main section.vista10 p.vist10 {position: relative;
 main section#vist2 nav#vist2 div#img p#vist2 {font-size: 0.8em;}
 }
 
-.input-effect {
-  position: relative;
-  margin-bottom: 0rem;
-}
-
-.input-effect label {
-  position: absolute;
-  color: gray;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  transition: 0.2s ease all;
-}
-
-.input-effect input:focus + label,
-.input-effect input:valid + label {
-  top: -1.5rem;
-  font-size: 1.2em;
-  color: #007BFF; /* You can adjust the color to your preference */
-}
-
-.input-effect input {
-  padding: 0rem 0rem;
-  width: 100%;
-  border: none;
-  border-bottom: 1px solid #ccc;
-  outline: none;
-  font-size: 1.2em;
-}
-
-/* Optional: Add a transition for smoother animation */
-.input-effect input {
-  transition: border-bottom 0.2s ease, font-size 0.2s ease;
-}
-:root {
-  --arrow-bg: rgba(255, 255, 255, 0.3);
-  --arrow-icon: url(https://upload.wikimedia.org/wikipedia/commons/9/9d/Caret_down_font_awesome_whitevariation.svg);
-  --option-bg: white;
-  --select-bg: rgba(255, 255, 255, 0.2);
-}
-.custom-select{
-    background-color: white;
-    width: 23rem;
-    border: none;
-     outline: 0;
-    font-size: 1.2em;
-}

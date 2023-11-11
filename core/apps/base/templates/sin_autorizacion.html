@@ -15,7 +15,12 @@
         {% csrf_token %}
         {{ wizard.management_form }}
 
-        {% include "base/logo.html" %}
+        <a href="/" class="atras">
+                <p class="b_atras"><i class="fa-solid fa-chevron-left"></i> Atrás</p>
+        </a>
+        <div class="vist1">
+            <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
+        </div>
 
         {% if form.errors %}
             <script src="{% static 'js/modal.js' %}"></script>
@@ -34,11 +39,6 @@
             </div>
         {% endif %}
 
-        <!-- <div class="vist3_text">
-            <p class="vist3">Ingresa el número de</p>
-            <h1 class="vist3">Autorización de servicio</h1>
-        </div> -->
-
         {% if wizard.form.forms %}
             <!--NOTHING-->
             {{ wizard.form.management_form }}
@@ -46,35 +46,17 @@
                     {{ form.as_table }}
                 {% endfor %}
         {% else %}
-        <div style="display:flex;justify-content:center;align-items: center;margin-top:3rem">
-            {{ wizard.form.tipo_identificacion }}
-            <div style="margin-left:1rem;" class="input-effect">
-                {{ wizard.form.identificacion }}
-                <label>{{wizard.form.identificacion.label}}</label>
+            <div class="box-select-input">
+                <div class="label-and-select">
+                    <label>{{wizard.form.tipo_identificacion.label}}</label>
+                    {{ wizard.form.tipo_identificacion }}
+                </div>
+                <div class="input-effect">
+                    {{ wizard.form.identificacion }}
+                    <label>{{wizard.form.identificacion.label}}</label>
+                </div>
             </div>
-        </div>
-            <!--<div class="cont_inpu_auto">
-                    <input type="number" inputmode="numeric" class="inp_vist3"
-                       name="autorizacionServicio-num_autorizacion"
-                       min="" id="id_autorizacionServicio-num_autorizacion" autofocus>
-
-                   <p class="inputext_auto">Ingresa el número de identificación</p>
-                </div>-->
         {% endif %}
-        <p class="vist3_t">Validaremos que su identificación conste en nuestro sistema </p><br>
-        <!--<div class="vist3_img">
-            {% comment %}
-            <img class="vist3" src="{% static 'img/img_autorizacion.gif' %}" alt="">
-            {% endcomment %}
-        </div>-->
-
-        <p class="vist3_t2">
-            Si se ha presentado algún inconveniente validando su identificación<br>
-            comunícate con Cajacopi-EPS para mayor información:
-        </p>
-        <div class="tet">
-            <a class="vist3" href="tel:018000111446">018000 111 446</a>
-        </div>
 
         <button class="btn" id="btn_conti" type="submit" onclick="animabotoncarga_sin_autorizacion()">
         Continuar

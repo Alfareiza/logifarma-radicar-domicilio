@@ -21,7 +21,11 @@ class Home(forms.Form):
     Vista 1: Página inicial de la aplicación
     """
     ...
-
+class AutorizadoONo(forms.Form):
+    """
+    Vista : Usuario decide si tiene o no autorización
+    """
+    ...
 
 class SinAutorizacion(forms.Form):
     """
@@ -52,7 +56,7 @@ class SinAutorizacion(forms.Form):
     )
     identificacion = forms.CharField(
         min_length=6, max_length=20, label='Identificación',
-        widget=forms.TextInput(attrs={'class': 'effect-16'})
+        widget=forms.TextInput(attrs={'class': 'effect-16', 'autofocus': True})
     )
 
     def clean(self):

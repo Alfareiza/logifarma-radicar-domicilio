@@ -1,0 +1,66 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Tipo de trámite{% endblock %}
+
+{% block content %}
+<section class="vista3">
+    <form id="form-id" action="" method="post">
+
+        {% csrf_token %}
+        {{ wizard.management_form }}
+
+        <a href="/" class="atras">
+                <p class="b_atras"><i class="fa-solid fa-chevron-left"></i> Atrás</p>
+        </a>
+        <div class="vist1">
+            <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
+        </div>
+
+
+        {% if wizard.form.forms %}
+            <!--NOTHING-->
+            {{ wizard.form.management_form }}
+                {% for form in wizard.form.forms %}
+                    {{ form.as_table }}
+                {% endfor %}
+        {% else %}
+            <div>
+                <div style="display:flex;flex-direction: column; justify-content:center; align-items:center">
+                    <div style="margin-top:2rem">
+                      <p style="margin-bottom: 1rem;margin-bottom: 1rem;font-size: x-large;font-weight: 700;color:#2a57a9">Seleccione el tipo de trámite</p>
+                    </div>
+                    <div class="btn_and_text" style="margin-top:2rem;">
+                            <button type="submit" class='button_modal btn_success hvr-float'>Medicamento Autorizado</button>
+                            <div style="margin-top: .5rem;padding-left: 1rem;padding-right: 1rem;"><p style="font-size: .9em;font-style: italic;">Aplica para medicamentos que requieren autorizacion
+                             como los NO PBS y medicamentos excluidos (No capitados).</p></div>
+                    </div>
+                    <div class="btn_and_text mt-3">
+                        <a href='/sin-autorizacion'><div class='button_modal btn_success hvr-float'>Medicamento No Autorizado</div></a>
+                        <div style="margin-top: .5rem;padding-left: 1rem;padding-right: 1rem;"><p style="font-size: .9em;font-style: italic;">Aplica para medicamentos que No requieren autorización
+                            como los PBS y <u>que antes necesitaban autorización (incluidos en la <span style="color:#2a57a9"><b>Cápita complementaria</b></span>).</u></p></div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    </form>
+
+    
+    <div class="conten-progreso-global">
+        <div class="pagina">Paso {{ wizard.steps.step1 }} de 7</div>
+        <div class="contenedor">
+            <div class="progreso-contenedor">
+               <div class="progreso" id="progreso"></div>
+               <div class="circulo active"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+            </div>
+        </div>
+      </div>
+
+</section>
+{% endblock %}
