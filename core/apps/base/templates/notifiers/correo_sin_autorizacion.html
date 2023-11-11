@@ -31,7 +31,7 @@
                                                 <div style="font-family: Ubuntu, Helvetica, Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 22px; text-align: left; color: #55575d;">
                                                     <p>
                                                         <span style="color: #55575d; font-family: Arial; font-size: 13px;">
-                                                            Tu radicación de domicilio ya está en proceso. Te informaremos por este medio y/o WhatsApp la confirmación del envío en las próximas horas hábiles.
+                                                            Tu radicación de domicilio Nº {% if NUMERO_RADICACION %} F{{NUMERO_RADICACION}} {% else %}  {% endif %} ya está en proceso. . Te informaremos por este medio y/o WhatsApp la confirmación del envío en las próximas horas hábiles.
                                                         </span>
                                                     </p>
                                                     <p><span style="color: #55575d; font-family: Arial; font-size: 13px;">Recuerda que al realizarte la entrega de los artículos debes:</span></p>
@@ -159,7 +159,7 @@
                                             <tr>
                                                 <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
                                                     <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
-                                                        <p><span style="color: #55575d;">{{NUMERO_RADICACION|default:""}}</span></p>
+                                                        <p><span style="color: #55575d;">{% if NUMERO_RADICACION %} F{{NUMERO_RADICACION}} {% else %} {% endif %}</span></p>
                                                     </div>
                                                 </td>
                                             </tr>
