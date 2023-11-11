@@ -33,6 +33,7 @@ MANDATORIES_STEPS = ("home", "autorizacionServicio", "eligeMunicipio",
 
 TEMPLATES = {
     "home": "home.html",
+    "autorizado_o_no": "autorizado_o_no.html",
     "autorizacionServicio": "autorizacion.html",
     "fotoFormulaMedica": "foto.html",
     "eligeMunicipio": "elige_municipio.html",
