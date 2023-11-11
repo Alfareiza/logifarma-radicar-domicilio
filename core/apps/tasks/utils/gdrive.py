@@ -211,7 +211,7 @@ class GDriveHandler:
         file = self.service.files().create(body=body,
                                            media_body=media_body,
                                            fields='id').execute()
-        log.info(f"{name!r} creado en Gdrive con ID: {file['id']!r}")
+        log.info(f"{name!r} creado en Gdrive con id={file['id']!r}")
         if file:
             return file['id']
         return ''
