@@ -1,9 +1,10 @@
 from abc import abstractmethod, ABC
+from typing import Tuple
 
 from core.apps.base.models import Radicacion
 from core.apps.base.resources.email_helpers import Email
 from core.apps.tasks.utils.gdrive import GDriveHandler
-from core.settings import logger as log
+from core.settings import logger as log, DEBUG
 
 
 class PostStep(ABC):
@@ -14,7 +15,7 @@ class PostStep(ABC):
 
 
 class NotifyEmail(PostStep, Email):
-    def proceed(self, info_email: dict, rad_id: str):
+    def proceed(self, info_email: dict, rad_id: str) -> Tuple[bool, dict]:
         log.info(f"{info_email['log_text']} ...enviando e-mail.")
         check = False
         self.foto = info_email.get('foto', '')
@@ -26,7 +27,7 @@ class NotifyEmail(PostStep, Email):
 
 
 class NotifySMS(PostStep):
-    def proceed(self, info_email: dict, rad_id: str):
+    def proceed(self, info_email: dict, rad_id: str) -> Tuple[bool, dict]:
         log.info(f"{info_email['log_text']} ...enviando SMS.")
         check = True
         # TODO Pendiente de implementar
@@ -34,11 +35,11 @@ class NotifySMS(PostStep):
 
 
 class Drive(PostStep):
-    def proceed(self, info_email: dict, rad_id: str):
+    def proceed(self, info_email: dict, rad_id: str) -> Tuple[bool, dict]:
         log.info(f"{info_email['log_text']} ...cargando imagen en GDrive.")
         check = False
         foto = info_email.get('foto')
-        if foto:
+        if foto and rad_id:
             ext = foto.name.split('.')[-1]
             name = f"{rad_id}.{ext}"
             file_id = GDriveHandler().create_file_in_drive(name,
@@ -53,14 +54,16 @@ class Drive(PostStep):
 
 
 class UpdateDB(PostStep):
-    def proceed(self, info_email: dict, rad_id: str):
+
+    def proceed(self, info_email: dict, rad_id: str) -> Tuple[bool, dict]:
         log.info(f"{info_email['log_text']} ...actualizando radicados en DB con id de imagen en GDrive.")
         check = False
+
+        rad_id: str = info_email.get('ref_id')
         file_id: str = info_email.get('file_id')
         img_name: str = info_email.get('img_name')
-        rad_default = Radicacion.objects.filter(numero_radicado=rad_id).first()
-        rad_server = Radicacion.objects.using('server').filter(numero_radicado=rad_id).first()
 
+        rad_default = Radicacion.objects.filter(numero_radicado=rad_id).first()
         if not rad_default:
             log.info(f"{info_email['log_text']} ...no fue encontrado {rad_id=} en postgres.")
         elif isinstance(rad_default.paciente_data, dict):
@@ -69,12 +72,14 @@ class UpdateDB(PostStep):
             check = True
             log.info(f"{info_email['log_text']} ...actualizado radicado en postgres.")
 
-        if not rad_default:
-            log.info(f"{info_email['log_text']} ...no fue encontrado {rad_id=} en server.")
-        elif isinstance(rad_server.paciente_data, str):
-            rad_server.paciente_data = {'IMG_ID': file_id, 'IMG_NAME': img_name}
-            rad_server.save()
-            check = True
-            log.info(f"{info_email['log_text']} ...actualizado radicado en server.")
+        if not DEBUG:
+            rad_server = Radicacion.objects.using('server').filter(numero_radicado=rad_id).first()
+            if not rad_default:
+                log.info(f"{info_email['log_text']} ...no fue encontrado {rad_id=} en server.")
+            elif isinstance(rad_server.paciente_data, str):
+                rad_server.paciente_data = {'IMG_ID': file_id, 'IMG_NAME': img_name}
+                rad_server.save()
+                check = True
+                log.info(f"{info_email['log_text']} ...actualizado radicado en server.")
 
         return check, info_email
