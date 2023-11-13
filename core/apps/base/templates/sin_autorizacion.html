@@ -23,20 +23,23 @@
         </div>
 
         {% if form.errors %}
+            <!-- Es usado non_field_errors porque se implementó el método clean en el form y no clean_field-->
+            {% with txt_error=form.non_field_errors.as_text|cut:"* " %}
             <script src="{% static 'js/modal.js' %}"></script>
             <div class="modal" id="modal_vist">
-                <div class="conten" id="cont_mod">
+                <div class="conten" id="cont_mod" {% if txt_error|length < 130 %} style="height: 22%;" {% endif %}>
                     <header></header>
                     <div class="modal_btn">
                         <button type="button" id="btn_modal" class="close">X</button>
                     </div>
                     <div class="contenido">
                         <p class="texto" style="margin: 0rem 1rem;">
-                           {{ form.non_field_errors.as_text|cut:"* " }}
+                           {{ txt_error }}
                         </p>
                     </div>
                 </div>
             </div>
+            {% endwith %}
         {% endif %}
 
         {% if wizard.form.forms %}
