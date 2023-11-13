@@ -68,18 +68,22 @@ class UpdateDB(PostStep):
             log.info(f"{info_email['log_text']} ...no fue encontrado {rad_id=} en postgres.")
         elif isinstance(rad_default.paciente_data, dict):
             rad_default.paciente_data.update({'IMG_ID': file_id, 'IMG_NAME': img_name})
-            rad_default.save()
-            check = True
-            log.info(f"{info_email['log_text']} ...actualizado radicado en postgres.")
-
+            check = self.save_rad(
+                rad_default, info_email, 'actualizado radicado en postgres.'
+            )
         if not DEBUG:
             rad_server = Radicacion.objects.using('server').filter(numero_radicado=rad_id).first()
-            if not rad_default:
+            if not rad_server:
                 log.info(f"{info_email['log_text']} ...no fue encontrado {rad_id=} en server.")
             elif isinstance(rad_server.paciente_data, str):
                 rad_server.paciente_data = {'IMG_ID': file_id, 'IMG_NAME': img_name}
-                rad_server.save()
-                check = True
-                log.info(f"{info_email['log_text']} ...actualizado radicado en server.")
-
+                check = self.save_rad(
+                    rad_server, info_email, 'actualizado radicado en server.'
+                )
         return check, info_email
+
+    def save_rad(self, radicacion, info_email, log_msg):
+        radicacion.save()
+        log.info(f"{info_email['log_text']} ...{log_msg}")
+
+        return True
