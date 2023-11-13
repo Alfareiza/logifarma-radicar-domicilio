@@ -1306,13 +1306,16 @@ main section.vista10 p.vist10 {position: relative;
       border: none;
       border-radius: .4rem;
       background-color: inherit;
-      padding: 14px 28px;
+      /*padding: 14px 28px;*/
       font-size: 1.2em;
       cursor: pointer;
       display: inline-block;
       color: white;
-      width: 72%;
+      width: 92%;
       text-align: center;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      box-shadow: 16px 14px 15px -3px rgb(0 0 0 / 26%);
     }
 
     /* On mouse-over */
@@ -1446,7 +1449,15 @@ main section.vista10 p.vist10 {position: relative;
         font-size: 1.2em;
     }
 .atras {
-    text-decoration:none;}
+    text-decoration:none;
+    }
+    div.boxItem {
+      display: inline-block;
+      border: 1px solid black;
+      padding: 1em;
+      margin-right: 5em;
+      position:relative
+    }
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
@@ -3204,7 +3215,7 @@ visibility: visible;
 
 .texto {position: relative;
     margin: 3%;
-    font-size: 1.5em;
+    font-size: 1.3em;
     text-align: center;
 }
 
@@ -4448,7 +4459,7 @@ visibility: visible;
 
 .texto {position: relative;
     margin: 3%;
-    font-size: 1.5em;
+    font-size: 1em;
     text-align: center;
 }
 
@@ -6461,7 +6472,8 @@ main section.vista10 p.vist10 {position: relative;
     }
 
     .button_modal{
-    font-size: 1em;
+        font-size: 1.3em;
+        box-shadow: 16px 14px 15px -3px rgb(0 0 0 / 26%);
     }
 
 }
@@ -7019,7 +7031,7 @@ visibility: visible;
 
 .texto {position: relative;
     margin: 3%;
-    font-size: 1em;
+    font-size: .9em;
     text-align: center;
 }
 
