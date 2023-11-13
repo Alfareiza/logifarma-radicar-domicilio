@@ -179,7 +179,8 @@ def validate_status_afiliado(resp_eps: dict, name_key: str, id_transaction: str)
     if resp_eps.get(name_key) not in ('ACTIVO', 'PROTECCION LABORAL'):
         logger.info(f"El estado del afiliado #{id_transaction} no se encuentra activo."
                     f" Estado={resp_eps.get(name_key)}.")
-        raise forms.ValidationError("Afiliado no se encuentra activo.")
+        raise forms.ValidationError("Disculpa, no hemos podido encontrar información con ese documento.<br><br>"
+                                    "Por favor verifica e intenta nuevamente.")
 
 
 def validate_status_aut(resp_eps: dict, num_aut: int) -> ValidationError:
