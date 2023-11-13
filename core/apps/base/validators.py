@@ -179,8 +179,9 @@ def validate_status_afiliado(resp_eps: dict, name_key: str, id_transaction: str)
     if resp_eps.get(name_key) not in ('ACTIVO', 'PROTECCION LABORAL'):
         logger.info(f"El estado del afiliado #{id_transaction} no se encuentra activo."
                     f" Estado={resp_eps.get(name_key)}.")
-        raise forms.ValidationError("Disculpa, no hemos podido encontrar información con ese documento.<br><br>"
-                                    "Por favor verifica e intenta nuevamente.")
+        raise forms.ValidationError(
+            mark_safe("Disculpa, el estado del afiliado no es el esperado.<br><br>"
+                      "Por favor verifica e intenta nuevamente."))
 
 
 def validate_status_aut(resp_eps: dict, num_aut: int) -> ValidationError:
@@ -202,9 +203,12 @@ def validate_identificacion_exists(resp: dict, info: str) -> ValidationError:
     """
     if resp.get('NOMBRE') and 'no existe' in resp['NOMBRE']:
         logger.info(f"El afiliado {info} no fue encontrado.")
-        raise forms.ValidationError("Afiliado no encontrado.")
+        raise forms.ValidationError(
+            mark_safe("Disculpa, no hemos podido encontrar información con ese documento.<br><br>"
+                      "Por favor verifica e intenta nuevamente."))
 
-def validate_email(email: str)-> ValidationError:
+
+def validate_email(email: str) -> ValidationError:
     """ Valida que el e-mail esté correcto. """
     if has_accent(email):
         raise forms.ValidationError(mark_safe("E-mail inválido."))
