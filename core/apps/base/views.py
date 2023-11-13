@@ -20,6 +20,7 @@ from core.settings import logger, BASE_DIR
 
 FORMS = [
     ("home", Home),
+    ("autorizado_o_no", AutorizadoONo),
     ("autorizacionServicio", AutorizacionServicio),
     ("fotoFormulaMedica", FotoFormulaMedica),
     ("eligeMunicipio", EligeMunicipio),
@@ -28,7 +29,7 @@ FORMS = [
     ("digitaCorreo", DigitaCorreo)
 ]
 
-MANDATORIES_STEPS = ("home", "autorizacionServicio", "eligeMunicipio",
+MANDATORIES_STEPS = ("home", "autorizado_o_no", "autorizacionServicio", "eligeMunicipio",
                      "digitaDireccionBarrio", "digitaCelular", "digitaCorreo")
 
 TEMPLATES = {
