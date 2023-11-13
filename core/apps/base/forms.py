@@ -21,11 +21,14 @@ class Home(forms.Form):
     Vista 1: Página inicial de la aplicación
     """
     ...
+
+
 class AutorizadoONo(forms.Form):
     """
     Vista : Usuario decide si tiene o no autorización
     """
     ...
+
 
 class SinAutorizacion(forms.Form):
     """
@@ -72,10 +75,9 @@ class SinAutorizacion(forms.Form):
 
             if not resp_eps:
                 logger.info(f"No se pudo obtener información del usuario {resp['documento']}.")
-                raise forms.ValidationError(mark_safe("Pedimos disculpas, pero no pudimos obtener información<br>"
-                                                      f"con esta identificación: <br>{resp['documento'][:2]} {resp['documento'][2:]}<br><br>"
-                                                      "Puedes esperar unos minutos e intentar de nuevo<br>"
-                                                      "o comunícarte con nosotros al <br>333 033 3124"))
+                raise forms.ValidationError(mark_safe("Disculpa, en estos momentos no tenemos conexión<br>"
+                                                      "Por favor intentalo más tarde o en caso de dudas, <br>"
+                                                      "comunícate con nosotros al <br>333 033 3124"))
 
             validate_identificacion_exists(resp_eps, f"{tipo}:{value}")
             validate_status_afiliado(resp_eps, 'ESTADO', f"{tipo}:{value}")
