@@ -235,21 +235,21 @@ class DigitaCorreo(forms.Form):
     """
     Vista 7:
     """
-    email = forms.CharField(required=False, max_length=255)
+    email = forms.CharField(max_length=255)
 
     def clean(self):
-        if email := self.cleaned_data.get('email'):
-            email = email.lower()
-            emails = email.split(',') if ',' in email else [email]
+        if not (email := self.cleaned_data.get('email')):
+            raise forms.ValidationError('Por favor ingrese un correo electrónico '
+                                        'válido e intente nuevamente.')
 
-            for email in emails:
-                validate_email(email.strip())
+        email = email.lower()
+        emails = email.split(',') if ',' in email else [email]
 
-            if 0 < len(email) < 5:
-                logger.error(
-                    f"Usuario ingresó {self.cleaned_data.get('email')} pero "
-                    f"se procesó {email}")
+        for email in emails:
+            validate_email(email.strip())
 
-            return list(map(lambda n: n.strip(), emails))
+        if 0 < len(email) < 5:
+            logger.error(f"Usuario ingresó {self.cleaned_data.get('email')} "
+                         f"pero se procesó {email}")
 
-        return [email]
+        return list(map(lambda n: n.strip(), emails))
