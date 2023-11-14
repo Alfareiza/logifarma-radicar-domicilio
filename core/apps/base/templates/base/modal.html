@@ -1,0 +1,15 @@
+{% load static %}
+<script src="{% static 'js/modal.js' %}"></script>
+<div class="modal" id="modal_vist">
+    <div class="conten" id="cont_mod" {% if txt|length < 130 %} style="height: 22%;" {% endif %}>
+        <header></header>
+        <div class="modal_btn">
+            <button type="button" id="btn_modal" class="close">X</button>
+        </div>
+        <div class="contenido">
+            <p class="texto">
+                {{ txt }}
+            </p>
+        </div>
+    </div>
+</div>

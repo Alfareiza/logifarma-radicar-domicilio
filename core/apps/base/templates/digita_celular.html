@@ -17,20 +17,7 @@
         {% include "base/logo.html" %}
 
         {% if form.errors %}
-            <script src="{% static 'js/modal.js' %}"></script>
-            <div class="modal" id="modal_vist">
-                <div class="conten" id="cont_mod">
-                    <header></header>
-                    <div class="modal_btn">
-                        <button type="button" id="btn_modal" class="close">X</button>
-                    </div>
-                    <div class="contenido">
-                        <p class="texto">
-                            {{ form.non_field_errors.as_text|cut:"* "|linebreaksbr }}
-                        </p>
-                    </div>
-                </div>
-            </div>
+            {% include "base/modal.html" with txt=form.non_field_errors.as_text|cut:"* "|linebreaksbr %}
         {% endif %}
 
 

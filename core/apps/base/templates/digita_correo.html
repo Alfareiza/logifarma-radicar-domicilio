@@ -22,20 +22,7 @@
         {% include "base/logo.html" %}
 
         {% if form.errors %}
-            <script src="{% static 'js/modal.js' %}"></script>
-            <div class="modal" id="modal_vist">
-                <div class="conten" id="cont_mod">
-                    <header></header>
-                    <div class="modal_btn">
-                        <button type="button" id="btn_modal" class="close">X</button>
-                    </div>
-                    <div class="contenido">
-                        <p class="texto">
-                           {{ form.non_field_errors.as_text|cut:"* " }}
-                        </p>
-                    </div>
-                </div>
-            </div>
+            {% include "base/modal.html" with txt=form.non_field_errors.as_text|cut:"* "|linebreaksbr %}
         {% endif %}
 
         {% if wizard.form.forms %}
@@ -52,7 +39,7 @@
                     <span class="icon1 fas fa-exclamation"></span>
                     <span class="icon2 fas fa-check"></span>
                 </div>
-                <input class="inp_vist9" type="text" placeholder="ejemplo@gmail.com, ejemplo2@gmail.com (Opcional)." name="digitaCorreo-email" id="id_digitaCorreo-email">
+                <input class="inp_vist9" type="text" placeholder="ejemplo@gmail.com, ejemplo2@gmail.com" name="digitaCorreo-email" id="id_digitaCorreo-email">
 
                <div class="text-error">Uno de los correos ingresados no es válido.</div>
             </div>
