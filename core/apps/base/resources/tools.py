@@ -279,7 +279,7 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
             direccion=kwargs.pop('direccion', None),
             ip=ip,
             paciente_nombre=kwargs.pop('AFILIADO', None),
-            paciente_cc=f"{kwargs['DOCUMENTO_ID']}",
+            paciente_cc=f"{kwargs['documento']}",
             paciente_data={},
         )
 
