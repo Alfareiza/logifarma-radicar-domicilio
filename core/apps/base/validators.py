@@ -11,7 +11,7 @@ from django.utils.safestring import mark_safe
 from core.apps.base.models import Med_Controlado, Radicacion
 from core.apps.base.resources.api_calls import get_firebase_acta
 from core.apps.base.resources.tools import encrypt, notify, pretty_date, \
-    update_rad_from_fbase, has_accent, update_rad
+    update_rad_from_fbase, has_accent
 from core.settings import BASE_DIR, logger
 
 
