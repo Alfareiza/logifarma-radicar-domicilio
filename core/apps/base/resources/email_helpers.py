@@ -215,7 +215,7 @@ class Email:
 
         # Definiendo asunto
         if info.get('documento'):
-            subject = (f"{info['NUMERO_RADICACION']} - Este es el "
+            subject = (f"F{info['NUMERO_RADICACION']} - Este es el "
                        "número de radicación de tu domicilio en Logifarma")
         else:
             subject = (f"{info['NUMERO_AUTORIZACION']} - Este es el "
