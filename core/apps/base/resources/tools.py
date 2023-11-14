@@ -1,6 +1,6 @@
 import unicodedata
 from datetime import date, datetime, timedelta
-from typing import Tuple
+from typing import Tuple, Any
 
 from decouple import config
 from django.conf import settings
@@ -261,11 +261,7 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
     municipio = kwargs.pop('municipio').name.lower()
 
     email = kwargs.pop('email', None)
-    if email and email[0]:
-        email = email[0]
-    else:
-        email = ', '.join(email)
-
+    email = email[0] if email and email[0] else ', '.join(email)
     ip = clean_ip(kwargs.pop('ip'))
 
     numero_radicado = datetime_id()
@@ -283,8 +279,8 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
             direccion=kwargs.pop('direccion', None),
             ip=ip,
             paciente_nombre=kwargs.pop('AFILIADO', None),
-            paciente_cc=f"{kwargs['documento']}",
-            paciente_data=dict(),
+            paciente_cc=f"{kwargs['DOCUMENTO_ID']}",
+            paciente_data={},
         )
 
         save_in_bd('default', rad)
@@ -470,6 +466,7 @@ def update_rad_from_fbase(rad: Radicacion, resp_fbase: dict) -> None:
     rad.domiciliario_empresa = resp_fbase['empDomi']
     rad.estado = resp_fbase['state']
     rad.factura = resp_fbase['invoice']
+    rad.save()
 
 
 def dt_str_to_date_obj(dt: str) -> datetime.date:
