@@ -11,11 +11,11 @@ from django.utils.safestring import mark_safe
 from core.apps.base.models import Med_Controlado, Radicacion
 from core.apps.base.resources.api_calls import get_firebase_acta
 from core.apps.base.resources.tools import encrypt, notify, pretty_date, \
-    update_rad_from_fbase, has_accent
+    update_rad_from_fbase, has_accent, update_rad
 from core.settings import BASE_DIR, logger
 
 
-def validate_status(resp_mcar: dict, rad: Radicacion) -> ValidationError:
+def validate_status(resp_mcar: dict, rad_default: Radicacion) -> ValidationError:
     """
     Una vez validado que el radicado existe en la base de datos, entonces
     realiza las siguientes validaciones:
@@ -29,40 +29,42 @@ def validate_status(resp_mcar: dict, rad: Radicacion) -> ValidationError:
         - Caso no, notifica simplemente que ya fue radicado.
     """
     radicado_dt = pretty_date(
-        rad.datetime.astimezone(timezone.get_current_timezone())
+        rad_default.datetime.astimezone(timezone.get_current_timezone())
     )
-    logger.info(f"{rad.numero_radicado} radicado {radicado_dt}.")
+    logger.info(f"{rad_default.numero_radicado} radicado {radicado_dt}.")
     text_resp = ''
+    rad_server = Radicacion.objects.using('server').filter(numero_radicado=rad_default.numero_radicado).first()
     if ssc := resp_mcar.get('ssc'):
-        if not rad.acta_entrega:
-            rad.acta_entrega = ssc
-            rad.save(using='default')
-            rad.save(using='server')
+        if not rad_default.acta_entrega:
+            rad_default.acta_entrega = ssc
+            rad_default.save()
+            rad_server.acta_entrega = ssc
+            rad_server.save()
         if factura := resp_mcar.get('factura'):
             # Radicado  tiene SSC, factura y está por confirmar si está firebase
-            logger.info(f"{rad.numero_radicado} radicado con factura detectada.")
-            if not rad.factura:
-                rad.factura = factura
-                rad.save(using='default')
-                rad.save(using='server')
-            text_resp = f'Número de autorización {rad.numero_radicado} radicado ' \
+            logger.info(f"{rad_default.numero_radicado} radicado con factura detectada.")
+            if not rad_default.factura:
+                rad_default.factura = factura
+                rad_default.save()
+                rad_server.factura = factura
+                rad_server.save()
+            text_resp = f'Número de autorización {rad_default.numero_radicado} radicado ' \
                         f'{radicado_dt}.<br><br>Este domicilio se encuentra en reparto<br><br>' \
                         f'Si tiene alguna duda se puede comunicar con nosotros ' \
                         'al 3330333124 <br><br>'
             resp_fbase = get_firebase_acta(ssc)
             if resp_fbase and resp_fbase['state'] == 'Completed':
                 # Radicado  tiene SSC, factura y está en firebase
-                update_rad_from_fbase(rad, resp_fbase)
-                rad.save(using='default')
-                rad.save(using='server')
+                update_rad_from_fbase(rad_default, resp_fbase)
+                update_rad_from_fbase(rad_server, resp_fbase)
                 entregado_dt = pretty_date(
-                    rad.despachado.astimezone(timezone.get_current_timezone())
+                    rad_default.despachado.astimezone(timezone.get_current_timezone())
                 )
-                logger.info(f"{rad.numero_radicado} actualizado,"
+                logger.info(f"{rad_default.numero_radicado} actualizado,"
                             f" entregado {entregado_dt} (acta #{ssc}).")
-                value = f"{encrypt(rad.numero_radicado)}aCmG{resp_fbase['actFileId'][::-1]}aCmG{encrypt(ssc)}"
+                value = f"{encrypt(rad_default.numero_radicado)}aCmG{resp_fbase['actFileId'][::-1]}aCmG{encrypt(ssc)}"
                 text_resp = (
-                    f'Número de autorización {rad.numero_radicado} radicado '
+                    f'Número de autorización {rad_default.numero_radicado} radicado '
                     f'{radicado_dt} y entregado {entregado_dt}<br><br>'
                     '<a style="text-decoration:none" href="{0}"">Ver soporte</a><br>'
                     '(Solo para personal autorizado)<br><br>'
@@ -71,15 +73,15 @@ def validate_status(resp_mcar: dict, rad: Radicacion) -> ValidationError:
 
         else:
             # Radicado  tiene SSC pero no tiene factura y por eso se asume que no está en firebase
-            logger.info(f"{rad.numero_radicado} radicado en preparación, acta #{ssc}.")
-            text_resp = f'Número de autorización {rad.numero_radicado} radicado ' \
+            logger.info(f"{rad_default.numero_radicado} radicado en preparación, acta #{ssc}.")
+            text_resp = f'Número de autorización {rad_default.numero_radicado} radicado ' \
                         f'{radicado_dt}.<br><br>Este domicilio se encuentra en preparación<br><br>' \
                         'Si tiene alguna duda se puede comunicar con nosotros ' \
                         'al 3330333124 <br><br>'
     else:
         # Radicado no tiene SSC, se asume que no tiene factura ni está en firebase
-        logger.info(f"{rad.numero_radicado} radicado sin acta aún.")
-        text_resp = f'Número de autorización {rad.numero_radicado} radicado ' \
+        logger.info(f"{rad_default.numero_radicado} radicado sin acta aún.")
+        text_resp = f'Número de autorización {rad_default.numero_radicado} radicado ' \
                     f'{radicado_dt}.\n\n Si tiene alguna duda se puede ' \
                     'comunicar con nosotros al 3330333124'
     raise forms.ValidationError(mark_safe(text_resp))
