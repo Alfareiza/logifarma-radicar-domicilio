@@ -88,14 +88,17 @@ class Command(BaseCommand):
         self.alert.sort(key=lambda r: r.datetime)
         self.make_str(self.errs, self.alert)
 
-    @staticmethod
-    def make_str(*args):
+    # @staticmethod
+    def make_str(self, *args):
         for lst in args:
             for i, rad in enumerate(lst):
                 try:
-                    lst[i] = f"\t• {rad.numero_radicado} radicado el " \
-                             f"{day_slash_month_year(rad.datetime)} y autorizado" \
-                             f" el {rad.paciente_data['FECHA_AUTORIZACION']}.\n"
+                    if self.is_autorizacion_con_medicamento_autorizado(rad):
+                        lst[i] = f"\t• {rad.numero_radicado} radicado el " \
+                                 f"{day_slash_month_year(rad.datetime)} y autorizado" \
+                                 f" el {rad.paciente_data['FECHA_AUTORIZACION']}.\n"
+                    else:
+                        lst[i] = f"\t• F{rad.id} radicado el {day_slash_month_year(rad.datetime)}.\n"
                 except Exception as exc:
                     logger.error(f"{rad.numero_radicado} ERROR: {exc}")
 
@@ -144,11 +147,12 @@ class Command(BaseCommand):
     def update_radicacion(self, rad: Radicacion, acta_entrega: int):
         logger.info(f"{rad.numero_radicado} consultando información en Firebase.")
         resp_fbase = get_firebase_acta(acta_entrega)
+        rad_server = Radicacion.objects.using('server').get(numero_radicado=rad.numero_radicado)
         if resp_fbase.get('act'):
-            update_rad_from_fbase(rad, resp_fbase)
             try:
-                rad.save(using='default')
-                rad.save(using='server')
+                update_rad_from_fbase(rad, resp_fbase)
+                if rad_server:
+                    update_rad_from_fbase(rad_server, resp_fbase)
             except Exception as e:
                 logger.error(f"{rad.numero_radicado} No fue posible guardar, ERROR={e}")
                 self.errs.append(rad)
@@ -158,6 +162,8 @@ class Command(BaseCommand):
             logger.info(f"{rad.numero_radicado} tiene acta pero aún no tiene "
                         f"información en Firebase.")
             self.update_acta_entrega(rad, str(acta_entrega))
+            if rad_server:
+                self.update_acta_entrega(rad_server, str(acta_entrega))
         self.updated.append(rad.numero_radicado)
 
     def update_acta_entrega(self, rad, new_value):
@@ -165,8 +171,7 @@ class Command(BaseCommand):
         try:
             logger.info(f"{rad.numero_radicado} Actualizando "
                         f"acta_entrega para \"{new_value}\".")
-            rad.save(using='default')
-            rad.save(using='server')
+            rad.save()
         except Exception as e:
             logger.error(f"{rad.numero_radicado} No fue posible guardar, ERROR={e}")
             self.errs.append(rad)
@@ -245,3 +250,6 @@ class Command(BaseCommand):
         )
 
         self.emails.append(email)
+
+    def is_autorizacion_con_medicamento_autorizado(self, rad):
+        return 'FECHA_AUTORIZACION' in rad.paciente_data

@@ -163,7 +163,8 @@ class CustomSessionWizard(SessionWizardView):
         if step == 'digitaDireccionBarrio':
             if form1_cleaned_data := self.get_cleaned_data_for_step('eligeMunicipio'):
                 barrios_mun = Barrio.objects.filter(
-                    municipio__id=form1_cleaned_data['municipio'].id
+                    municipio__id=form1_cleaned_data['municipio'].id,
+                    status=1
                 ).order_by('name')
                 form.fields['barrio'].choices = [(str(b.id), b.name.title()) for b in barrios_mun]
         return form
