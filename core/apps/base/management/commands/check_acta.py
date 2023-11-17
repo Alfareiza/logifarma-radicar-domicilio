@@ -3,13 +3,15 @@ import datetime
 import random
 import time
 from concurrent.futures import ThreadPoolExecutor
+from typing import List
 
 from django.core import mail
 from django.core.management.base import BaseCommand
+from django.db.models.functions import Length
 from django.template.loader import get_template
 
 from core.apps.base.models import Radicacion, Municipio, Barrio
-from core.apps.base.resources.api_calls import get_firebase_acta, should_i_call_auth, call_api_eps
+from core.apps.base.resources.api_calls import get_firebase_acta, should_i_call_auth
 from core.apps.base.resources.cajacopi import obtener_datos_autorizacion
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.medicar import obtener_datos_formula
@@ -42,10 +44,16 @@ class Command(BaseCommand):
         self.end = pretty_date(end)
         return start, end
 
+    def get_all_radicados(self, start, end) -> List[Radicacion]:
+        return Radicacion.objects.annotate(
+            text_len=Length('numero_radicado')
+        ).filter(
+            datetime__lte=end, acta_entrega=None, text_len__lt=15).order_by('datetime')
+
     @logtime('SCRIPT')
     def handle(self, *args, **options):
         start, end = self.calc_interval_dates()
-        rads = Radicacion.objects.filter(datetime__lte=end, acta_entrega=None).order_by('datetime')
+        rads = self.get_all_radicados(start, end)
         logger.info('Ejecutando script de chequeo de actas.')
         connection = mail.get_connection()
         connection.open()
@@ -100,7 +108,7 @@ class Command(BaseCommand):
                     else:
                         lst[i] = f"\t• F{rad.id} radicado el {day_slash_month_year(rad.datetime)}.\n"
                 except Exception as exc:
-                    logger.error(f"{rad.numero_radicado} ERROR: {exc}")
+                    logger.error(f"{self.get_numero_autorizacion(rad)} ERROR: {exc}")
 
     def validate(self, resp, rad):
         """
@@ -126,57 +134,58 @@ class Command(BaseCommand):
             else:
                 # Nunca debería entrar aquí. Cuando el radicado no tiene # de acta, retorna:
                 # { "error": "No se han encontrado registros." }
-                logger.info(f'{rad.numero_radicado} Radicado no tiene aún número de acta. {rad.datetime}.')
+                logger.info(f'{self.get_numero_autorizacion(rad)} Radicado no tiene aún número de acta. {rad.datetime}.')
                 self.alert.append(rad)
         else:
-            logger.info(f"{rad.numero_radicado} sin \'SSC\' en API Medicar, validando estados en API Cajacopi.")
+            logger.info(f"{self.get_numero_autorizacion(rad)} sin \'SSC\' en API Medicar, validando estados en API Cajacopi.")
             try:
-                resp_eps = obtener_datos_autorizacion(rad.numero_radicado)
-                if 'ESTADO_AUTORIZACION' in resp_eps and resp_eps['ESTADO_AUTORIZACION'] in ['RECHAZADA', 'ANULADA']:
-                    self.update_acta_entrega(rad, f"{resp_eps['ESTADO_AUTORIZACION'].lower()} por cajacopi")
-                elif 'ESTADO_AFILIADO' in resp_eps and resp_eps['ESTADO_AFILIADO'] == 'FALLECIDO':
-                    self.update_acta_entrega(rad, 'afiliado fallecido')
-                else:
-                    logger.info(f"{rad.numero_radicado} Radicado sin acta.")
-                    self.errs.append(rad)
-                    self.add_alert_email(rad, resp_eps)
+                if self.is_autorizacion_con_medicamento_autorizado(rad):
+                    resp_eps = obtener_datos_autorizacion(rad.numero_radicado)
+                    if 'ESTADO_AUTORIZACION' in resp_eps and resp_eps['ESTADO_AUTORIZACION'] in ['RECHAZADA', 'ANULADA']:
+                        self.update_acta_entrega(rad, f"{resp_eps['ESTADO_AUTORIZACION'].lower()} por cajacopi")
+                    elif 'ESTADO_AFILIADO' in resp_eps and resp_eps['ESTADO_AFILIADO'] == 'FALLECIDO':
+                        self.update_acta_entrega(rad, 'afiliado fallecido')
+                    else:
+                        logger.info(f"{self.get_numero_autorizacion(rad)} Radicado sin acta.")
+                        self.errs.append(rad)
+                        self.add_alert_email(rad, resp_eps)
             except Exception as e:
-                notify('error-api', f"ERROR EN API - Radicado #{rad.numero_radicado}", f"ERROR : \n{e}")
+                notify('error-api', f"ERROR EN API - Radicado #{self.get_numero_autorizacion(rad)}", f"ERROR : \n{e}")
                 self.errs.append(rad)
 
     def update_radicacion(self, rad: Radicacion, acta_entrega: int):
-        logger.info(f"{rad.numero_radicado} consultando información en Firebase.")
+        logger.info(f"{self.get_numero_autorizacion(rad)} consultando información en Firebase.")
         resp_fbase = get_firebase_acta(acta_entrega)
-        rad_server = Radicacion.objects.using('server').get(numero_radicado=rad.numero_radicado)
+        rad_server = Radicacion.objects.using('server').get(numero_radicado=self.get_numero_autorizacion(rad))
         if resp_fbase.get('act'):
             try:
                 update_rad_from_fbase(rad, resp_fbase)
                 if rad_server:
                     update_rad_from_fbase(rad_server, resp_fbase)
             except Exception as e:
-                logger.error(f"{rad.numero_radicado} No fue posible guardar, ERROR={e}")
+                logger.error(f"{self.get_numero_autorizacion(rad)} No fue posible guardar, ERROR={e}")
                 self.errs.append(rad)
             else:
                 self.updated.append(rad)
         else:
-            logger.info(f"{rad.numero_radicado} tiene acta pero aún no tiene "
+            logger.info(f"{self.get_numero_autorizacion(rad)} tiene acta pero aún no tiene "
                         f"información en Firebase.")
             self.update_acta_entrega(rad, str(acta_entrega))
             if rad_server:
                 self.update_acta_entrega(rad_server, str(acta_entrega))
-        self.updated.append(rad.numero_radicado)
+        self.updated.append(self.get_numero_autorizacion(rad))
 
     def update_acta_entrega(self, rad, new_value):
         rad.acta_entrega = new_value
         try:
-            logger.info(f"{rad.numero_radicado} Actualizando "
+            logger.info(f"{self.get_numero_autorizacion(rad)} Actualizando "
                         f"acta_entrega para \"{new_value}\".")
             rad.save()
         except Exception as e:
-            logger.error(f"{rad.numero_radicado} No fue posible guardar, ERROR={e}")
+            logger.error(f"{self.get_numero_autorizacion(rad)} No fue posible guardar, ERROR={e}")
             self.errs.append(rad)
         else:
-            self.updated.append(rad.numero_radicado)
+            self.updated.append(self.get_numero_autorizacion(rad))
 
     def add_alert_email(self, rad, info):
         """
@@ -230,7 +239,7 @@ class Command(BaseCommand):
         barr_str = barr.name.title()
         info_email = {
             **info,
-            'NUMERO_AUTORIZACION': rad.numero_radicado,
+            'NUMERO_AUTORIZACION': self.get_numero_autorizacion(rad),
             'municipio': municipio_str,
             'barrio': barr_str,
             'direccion': rad.direccion,
@@ -242,7 +251,7 @@ class Command(BaseCommand):
         html_content = htmly.render(info_email)
 
         email = make_email(
-            f'Autorización: {rad.numero_radicado} No radicada',
+            f'Autorización: {self.get_numero_autorizacion(rad)} No radicada',
             html_content,
             # to=['alfareiza@gmail.com'],
             to=['logistica@logifarma.co', 'radicacion.domicilios@logifarma.co'],
@@ -252,4 +261,9 @@ class Command(BaseCommand):
         self.emails.append(email)
 
     def is_autorizacion_con_medicamento_autorizado(self, rad):
-        return 'FECHA_AUTORIZACION' in rad.paciente_data
+        return 'FECHA_AUTORIZACION' in rad.paciente_data or 'DIAGNOSTICO' in rad.paciente_data
+
+    def get_numero_autorizacion(self, rad: Radicacion) -> str:
+        if self.is_autorizacion_con_medicamento_autorizado(rad):
+            return rad.numero_radicado
+        return f"F{rad.id}"
