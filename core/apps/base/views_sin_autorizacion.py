@@ -83,13 +83,13 @@ class SinAutorizacion(CustomSessionWizard):
 
         if 'fotoFormulaMedica' in form_data:
             self.foto_fmedica = form_data['fotoFormulaMedica']['src']
-            info_email.update({'foto': self.foto_fmedica})
+            info_email['foto'] = self.foto_fmedica
 
         # Guardará en BD cuando DEBUG sean números reales
         ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
 
         if info_email['documento'][2:] not in ('99999999',):
-        # if True:  # Testando inserción en producción temporalmente
+            # if True:  # Testando inserción en producción temporalmente
             rad = guardar_short_info_bd(**info_email, ip=ip)
             info_email['ref_id'], info_email['NUMERO_RADICACION'], info_email['FECHA_RADICACION'] = rad
             rad_id = info_email['NUMERO_RADICACION']
@@ -99,7 +99,7 @@ class SinAutorizacion(CustomSessionWizard):
 
         if rad_id:
             self.log_text = f"{self.request.COOKIES.get('sessionid')[:6]} {rad_id=} {info_email['documento']}"
-            info_email.update({'log_text': self.log_text})
+            info_email['log_text'] = self.log_text
 
             logger.info(f"{self.log_text} {info_email['NOMBRE']} Radicación finalizada. "
                         f"E-mail de confirmación será enviado a {form_data['digitaCorreo']}")
@@ -140,6 +140,10 @@ class SinAutorizacion(CustomSessionWizard):
         en la ruta recibida como argumento.
         :param filepath_img: Ruta de imagen.
         """
-        img = ImgHelper(filepath_img)
-        img.convert_to_grayscale()
-        img.save(filepath_img)
+        try:
+            img = ImgHelper(filepath_img)
+        except Exception as e:
+            logger.warning(f"{filepath_img} no pudo ser tratada por error: {e}p")
+        else:
+            img.convert_to_grayscale()
+            img.save(filepath_img)
