@@ -44,52 +44,78 @@ class Command(BaseCommand):
         self.end = pretty_date(end)
         return start, end
 
-    def get_all_radicados(self, start, end) -> List[Radicacion]:
+    def get_radicados_med_autorizados(self, start, end):
+        """Busca los radicados con acta de entrega vacío y que el valor de su
+            numero_radicado sea menor a 15 caracteres."""
+        logger.info('Buscando radicados con medicamentos autorizados')
         return Radicacion.objects.annotate(
             text_len=Length('numero_radicado')
         ).filter(
             datetime__lte=end, acta_entrega=None, text_len__lt=15).order_by('datetime')
 
+    def get_radicados_med_no_autorizados(self, start, end) -> List[Radicacion]:
+        """Busca los radicados que el valor de su numero_radicado sea
+        mayor a 15 caracteres."""
+        logger.info('Buscando radicados con medicamentos no autorizados')
+        return Radicacion.objects.annotate(
+            text_len=Length('numero_radicado')
+        ).filter(
+            datetime__lte=end, acta_entrega=None, text_len__gt=15).order_by('datetime')
+
     @logtime('SCRIPT')
     def handle(self, *args, **options):
         start, end = self.calc_interval_dates()
-        rads = self.get_all_radicados(start, end)
+
         logger.info('Ejecutando script de chequeo de actas.')
         connection = mail.get_connection()
         connection.open()
-        if rads:
-            logger.info(f"Verificando {len(rads)} número de actas.")
-            with ThreadPoolExecutor(max_workers=4) as executor:
-                should_i_call_auth()
-                future_to_rad = {executor.submit(obtener_datos_formula, r.numero_radicado): r for r in rads}
-                for future in concurrent.futures.as_completed(future_to_rad):
-                    rad = future_to_rad[future]
-                    try:
-                        resp = future.result()
-                        self.validate(resp, rad)
-                    except Exception as exc:
-                        print(f'{rad!r} generated an exception: {str(exc)}')
+        if rads_med_autorizados := self.get_radicados_med_autorizados(start, end):
+            self.process_radicados_medicamentos_autorizados(rads_med_autorizados)
 
-            self.sort_rads()
-            if self.errs:
-                notify('check-acta',
-                       f"Reporte de radicados sin acta hasta el {format(end, '%d/%m')}",
-                       f"Analisis ejecutado el {day_slash_month_year(datetime.datetime.now())}.\n" \
-                       f"Radicados analizados: \t{len(rads)}.\n" \
-                       f"Radicados actualizados: \t{len(self.updated)}. \n" \
-                       f"Radicados sin acta o con error al consultarse: {len(self.errs)}.\n {' '.join(self.errs)}")
+        if rads_med_no_autorizados := self.get_radicados_med_no_autorizados(start, end):
+            self.process_radicados_medicamentos_no_autorizados(rads_med_no_autorizados)
 
-        else:
-            logger.info(f"No se encontraron radicados con \'acta_entrega\' vacía desde el inicio"
-                        f" de los tiempos, hasta el {format(end, '%D %T')}.")
+        self.sort_rads()
+        if self.errs:
+            notify('check-acta',
+                   f"Reporte de radicados sin acta hasta el {format(end, '%d/%m')}",
+                   f"Analisis ejecutado el {day_slash_month_year(datetime.datetime.now())}.\n"
+                   f"Radicados analizados: \t{len(rads_med_autorizados) + len(rads_med_no_autorizados)}.\n"
+                   f"Radicados actualizados: \t{len(self.updated)}. \n" \
+                   f"Radicados sin acta o con error al consultarse: {len(self.errs)}.\n {' '.join(self.errs)}")
 
         # Envia mensajes de alerta de cada autorización
         # connection.send_messages(self.emails)
         for em in self.emails:
+            logger.info(f"Correo con asunto {em.subject!r} a ser enviado.")
             time.sleep(random.randint(1, 5))
             em.send()
+
         connection.close()
         # self.stdout.write(self.style.SUCCESS('Successfully closed poll "%s"' % poll_id))
+
+    def process_radicados_medicamentos_autorizados(self, rads):
+        logger.info(f"Verificando {len(rads)} número de radicados con medicamentos autorizados.")
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            should_i_call_auth()
+            future_to_rad = {executor.submit(obtener_datos_formula, r.numero_radicado): r for r in rads}
+            for future in concurrent.futures.as_completed(future_to_rad):
+                rad = future_to_rad[future]
+                try:
+                    resp = future.result()
+                    self.validate(resp, rad)
+                except Exception as exc:
+                    print(f'{rad!r} generated an exception: {str(exc)}')
+
+    def process_radicados_medicamentos_no_autorizados(self, rads):
+        logger.info(f"Verificando {len(rads)} número de actas de radicados con medicamentos no autorizados.")
+        for rad in rads:
+            self.errs.append(rad)
+            # self.add_alert_email(rad,
+            #                      {'FECHA_RADICACION': rad.datetime,
+            #                       "AFILIADO": rad.paciente_nombre,
+            #                       "TIPO_IDENTIFICACION": rad.paciente_cc[:2],
+            #                       "DOCUMENTO_ID": rad.paciente_cc[2:]})
 
     def sort_rads(self):
         self.errs.sort(key=lambda r: r.datetime)
@@ -113,7 +139,7 @@ class Command(BaseCommand):
     def validate(self, resp, rad):
         """
         Realiza las siguientes validaciones por radicado en el respectivo orden:
-            1. Valida en la api de medicar que tenga un ssc.
+            1. Valida en la respuesta de la api de medicar que tenga un ssc.
                De ser así actualiza el campo acta_entrega en la bd.
             2. Si no tiene un ssc, entonces:
                 2.1. Valida con la api de cajacopi si el ESTADO_AUTORIZACION es 'RECHAZADA'
@@ -134,26 +160,34 @@ class Command(BaseCommand):
             else:
                 # Nunca debería entrar aquí. Cuando el radicado no tiene # de acta, retorna:
                 # { "error": "No se han encontrado registros." }
-                logger.info(f'{self.get_numero_autorizacion(rad)} Radicado no tiene aún número de acta. {rad.datetime}.')
+                logger.info(
+                    f'{self.get_numero_autorizacion(rad)} Radicado no tiene aún número de acta. {rad.datetime}.')
                 self.alert.append(rad)
         else:
-            logger.info(f"{self.get_numero_autorizacion(rad)} sin \'SSC\' en API Medicar, validando estados en API Cajacopi.")
+            logger.info(f"{self.get_numero_autorizacion(rad)} sin \'SSC\' en API Medicar, "
+                        f"validando estados en API Cajacopi.")
             try:
-                if self.is_autorizacion_con_medicamento_autorizado(rad):
-                    resp_eps = obtener_datos_autorizacion(rad.numero_radicado)
-                    if 'ESTADO_AUTORIZACION' in resp_eps and resp_eps['ESTADO_AUTORIZACION'] in ['RECHAZADA', 'ANULADA']:
-                        self.update_acta_entrega(rad, f"{resp_eps['ESTADO_AUTORIZACION'].lower()} por cajacopi")
-                    elif 'ESTADO_AFILIADO' in resp_eps and resp_eps['ESTADO_AFILIADO'] == 'FALLECIDO':
-                        self.update_acta_entrega(rad, 'afiliado fallecido')
-                    else:
-                        logger.info(f"{self.get_numero_autorizacion(rad)} Radicado sin acta.")
-                        self.errs.append(rad)
-                        self.add_alert_email(rad, resp_eps)
+                resp_eps = obtener_datos_autorizacion(rad.numero_radicado)
+                if 'ESTADO_AUTORIZACION' in resp_eps and resp_eps['ESTADO_AUTORIZACION'] in ('RECHAZADA',
+                                                                                             'ANULADA'):
+                    self.update_acta_entrega(rad, f"{resp_eps['ESTADO_AUTORIZACION'].lower()} por cajacopi")
+                elif 'ESTADO_AFILIADO' in resp_eps and resp_eps['ESTADO_AFILIADO'] == 'FALLECIDO':
+                    self.update_acta_entrega(rad, 'afiliado fallecido')
+                else:
+                    logger.info(f"{self.get_numero_autorizacion(rad)} Radicado sin acta.")
+                    self.errs.append(rad)
+                    # self.add_alert_email(rad, resp_eps)
             except Exception as e:
                 notify('error-api', f"ERROR EN API - Radicado #{self.get_numero_autorizacion(rad)}", f"ERROR : \n{e}")
                 self.errs.append(rad)
 
     def update_radicacion(self, rad: Radicacion, acta_entrega: int):
+        """
+        Actualiza el radicado en ambas bases de datos.
+            - Caso haya sido entregado (cuando tiene la llave act en firebase), es
+              actualizado con base a la información que está firebase.
+            - De lo contrario, solamente actualiza el campo acta_entrega.
+        """
         logger.info(f"{self.get_numero_autorizacion(rad)} consultando información en Firebase.")
         resp_fbase = get_firebase_acta(acta_entrega)
         rad_server = Radicacion.objects.using('server').get(numero_radicado=self.get_numero_autorizacion(rad))
@@ -176,6 +210,7 @@ class Command(BaseCommand):
         self.updated.append(self.get_numero_autorizacion(rad))
 
     def update_acta_entrega(self, rad, new_value):
+        """Actualiza el campo acta_entrega del radicado que se recibe."""
         rad.acta_entrega = new_value
         try:
             logger.info(f"{self.get_numero_autorizacion(rad)} Actualizando "
