@@ -20,9 +20,7 @@ class ImgHelper:
     @staticmethod
     def file_exists(filepath):
         file = Path(filepath)
-        if file.exists():
-            return True
-        return False
+        return file.exists()
 
     def convert_to_grayscale(self):
         self.img = self.img.convert("L")
