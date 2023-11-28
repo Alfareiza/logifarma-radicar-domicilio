@@ -212,9 +212,9 @@ def guardar_info_bd(**kwargs):
             numero_radicado=str(rad),
             municipio=Municipio.objects.get(activo=True, name__iexact=municipio),
             barrio=Barrio.objects.filter(
-                municipio__name__iexact=municipio
-            ).get(
-                name=kwargs.pop('barrio', None).lower()),
+                municipio__name__iexact=municipio,
+                status='1',
+            ).get(name=kwargs.pop('barrio', None).lower()),
             cel_uno=kwargs.pop('celular', None),
             cel_dos=kwargs.pop('whatsapp', None),
             email=email,
@@ -271,7 +271,8 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
             numero_radicado=numero_radicado,
             municipio=Municipio.objects.get(activo=True, name__iexact=municipio),
             barrio=Barrio.objects.filter(
-                municipio__name__iexact=municipio
+                municipio__name__iexact=municipio,
+                status='1',
             ).get(name=kwargs.pop('barrio', None).lower()),
             cel_uno=kwargs.pop('celular', None),
             cel_dos=kwargs.pop('whatsapp', None),
