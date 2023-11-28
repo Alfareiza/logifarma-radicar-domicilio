@@ -27,6 +27,7 @@
                                             </td>
                                         </tr>
 
+                                        {% if "F" not in NUMERO_AUTORIZACION %}
                                         <tr>
                                             <td align="left" style="font-size: 0px; padding: 0px 40px 0px 40px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
                                                 <div style="font-family: Ubuntu, Helvetica, Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 22px; text-align: left; color: #55575d;">
@@ -49,6 +50,7 @@
                                                 </div>
                                             </td>
                                         </tr>
+                                    {% endif %}
                                     </tbody>
                                 </table>
                             </div>
@@ -116,7 +118,7 @@
                                             <tr>
                                                 <td align="left" style="font-size: 0px; padding: 0px 25px 0px 25px; padding-top: 0px; padding-right: 25px; padding-bottom: 0px; padding-left: 25px; word-break: break-word;">
                                                     <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
-                                                        <p><span style="color: #55575d;">Número de autorización:</span></p>
+                                                        <p><span style="color: #55575d;">Número de {% if "F" in NUMERO_AUTORIZACION %}radicación:{% else %}autorización:{% endif %}</span></p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -156,7 +158,7 @@
                                             <tr>
                                                 <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
                                                     <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
-                                                        <p><span style="color: #55575d;">Fecha de autorización</span><span style="color: #55575d; font-size: 14px;">:</span></p>
+                                                        <p><span style="color: #55575d;">Fecha de {% if "F" in NUMERO_AUTORIZACION %}radicación{% else %}autorización{% endif %}</span><span style="color: #55575d; font-size: 14px;">:</span></p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -170,7 +172,7 @@
                                             <tr>
                                                 <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
                                                     <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
-                                                        <p><span style="color: #55575d;">{{FECHA_AUTORIZACION}}</span></p>
+                                                        <p><span style="color: #55575d;">{% if "F" in NUMERO_AUTORIZACION %}{{FECHA_RADICACION}}{% else %}{{FECHA_AUTORIZACION}}{% endif %}</span></p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -184,6 +186,7 @@
             </table>
         </div>
 
+        {% if "F" not in NUMERO_AUTORIZACION %}
         <div style="background: #e5f7ff; background-color: #e5f7ff; margin: 0px auto; max-width: 600px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #e5f7ff; background-color: #e5f7ff; width: 100%;">
                 <tbody>
@@ -383,6 +386,8 @@
                 </tbody>
             </table>
         </div>
+
+        {% endif %}
 
         <div style="background: #e4fae6; background-color: #e4fae6; margin: 0px auto; max-width: 600px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #e4fae6; background-color: #e4fae6; width: 100%;">
@@ -704,6 +709,8 @@
         </div>
         {% endif %}
 
+
+        {% if "F" not in NUMERO_AUTORIZACION %}
         <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
                 <tbody>
@@ -723,7 +730,7 @@
                                                     {% empty %}
                                                         <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
                                                             <p><span style="color: #55575d;">No se registraron artículos para esta autorización.</span></p>
-                                                        </div>  
+                                                        </div>
                                                     {% endfor %}
                                                 </div>
                                             </td>
@@ -736,6 +743,7 @@
                 </tbody>
             </table>
         </div>
+        {% endif %}
 
         <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
