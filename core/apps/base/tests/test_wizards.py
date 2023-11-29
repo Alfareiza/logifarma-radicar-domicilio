@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from django.test import TestCase
 from django.urls import reverse
 
@@ -13,19 +15,22 @@ class FormTests(TestCase):
 
     def test_form_init(self):
         testform = TestWizard.get_initkwargs(FORMS)
-        self.assertEqual(testform['form_list'], {"home": Home,
-                                                 "autorizacionServicio": AutorizacionServicio,
-                                                 "fotoFormulaMedica": FotoFormulaMedica,
-                                                 "eligeMunicipio": EligeMunicipio,
-                                                 "digitaDireccionBarrio": DireccionBarrio,
-                                                 "digitaCelular": DigitaCelular,
-                                                 "digitaCorreo": DigitaCorreo})
+        self.assertEqual(testform['form_list'], OrderedDict(
+            [('home', Home), ('autorizado_o_no', AutorizadoONo),
+             ('autorizacionServicio', AutorizacionServicio),
+             ('fotoFormulaMedica', FotoFormulaMedica),
+             ('eligeMunicipio', EligeMunicipio),
+             ('digitaDireccionBarrio', DireccionBarrio),
+             ('digitaCelular', DigitaCelular),
+             ('digitaCorreo', DigitaCorreo)])
+                         )
 
         testform = TestWizardWithInitAttrs.get_initkwargs()
-        self.assertEqual(testform['form_list'], {'0': Home, '1': AutorizacionServicio,
-                                                 '2': FotoFormulaMedica, '3': EligeMunicipio,
-                                                 '4': DireccionBarrio, '5': DigitaCelular,
-                                                 '6': DigitaCorreo})
+        self.assertEqual(testform['form_list'], {'0': Home, '1': AutorizadoONo,
+                                                 '2': AutorizacionServicio,
+                                                 '3': FotoFormulaMedica, '4': EligeMunicipio,
+                                                 '5': DireccionBarrio, '6': DigitaCelular,
+                                                 '7': DigitaCorreo})
 
     def test_first_step(self):
         request = get_request()
@@ -39,7 +44,7 @@ class FormTests(TestCase):
         # Se le hace un post a la vista de home
         request = get_request({'test_wizard-current_step': 'home'})
         response, instance = testform(request)
-        self.assertEqual(instance.steps.current, 'autorizacionServicio')
+        self.assertEqual(instance.steps.current, 'autorizado_o_no')
 
     def test_form_prefix(self):
         request = get_request()
