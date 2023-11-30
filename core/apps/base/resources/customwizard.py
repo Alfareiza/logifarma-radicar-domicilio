@@ -39,7 +39,6 @@ class CustomSessionWizard(SessionWizardView):
         wasn't successful), the next step (if the current step was stored
         successful) or the done view (if no more steps are available)
         """
-        logger.info(self.request.session.get('rendered_done', '-- sin rendered_done --'))
         method = self.request.method
         # logger.info(
         #     f"{self.request.COOKIES.get('sessionid')[:6]} IP={self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))} "
