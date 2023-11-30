@@ -10,6 +10,7 @@ from formtools.wizard.forms import ManagementForm
 from formtools.wizard.views import SessionWizardView
 
 from core.apps.base.models import Barrio
+from core.apps.base.resources.decorators import timed_lru_cache, hash_dict
 from core.apps.base.resources.tools import notify
 from core.settings import logger
 
@@ -169,6 +170,8 @@ class CustomSessionWizard(SessionWizardView):
                 form.fields['barrio'].choices = [(str(b.id), b.name.title()) for b in barrios_mun]
         return form
 
+    @hash_dict
+    @timed_lru_cache(10)
     def render_done(self, form, **kwargs):
         """
         This method gets called when all forms passed. The method should also
@@ -185,9 +188,12 @@ class CustomSessionWizard(SessionWizardView):
                 files = self.storage.get_step_files(form_key)
             except FileNotFoundError:
                 logger.info(f"tmp/ -> {list(self.file_storage.base_location.iterdir())}")
-                logger.info(f"IMAGEN ELIMINADA... NO EXISTE MAS !!!!")
-                notify('error-email', f"EMAIL ENVIADO SIN IMAGEN",
-                       "Revisa los logs de la app en heroku.")
+                logger.info("IMAGEN ELIMINADA... NO EXISTE MAS !!!!")
+                notify(
+                    'error-email',
+                    "EMAIL ENVIADO SIN IMAGEN",
+                    "Revisa los logs de la app en heroku.",
+                )
 
             form_obj = self.get_form(
                 step=form_key,
