@@ -24,9 +24,8 @@ class CustomSessionWizard(SessionWizardView):
 
     @csrf_protected_method
     def get(self, request, *args, **kwargs):
-        sessionid = self.request.COOKIES.get('sessionid')
-        if not sessionid:
-            sessionid = 'Unknown'
+        self.request.session['rendered_done'] = False
+        sessionid = self.request.COOKIES.get('sessionid') or 'Unknown'
         logger.info(f"{sessionid[:6]} "
                     f"IP={self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))} entró en vista={self.request.resolver_match.url_name}")
         return super().get(request, *args, **kwargs)
@@ -40,6 +39,7 @@ class CustomSessionWizard(SessionWizardView):
         wasn't successful), the next step (if the current step was stored
         successful) or the done view (if no more steps are available)
         """
+        logger.info(self.request.session.get('rendered_done', '-- sin rendered_done --'))
         method = self.request.method
         # logger.info(
         #     f"{self.request.COOKIES.get('sessionid')[:6]} IP={self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))} "
@@ -80,7 +80,8 @@ class CustomSessionWizard(SessionWizardView):
             # check if the current step is the last step
             if self.steps.current == self.steps.last:
                 # no more steps, render done view
-                return self.render_done(form, **kwargs)
+                if not self.request.session.get('rendered_done'):
+                    return self.render_done(form, **kwargs)
             else:
                 # proceed to the next step
                 return self.render_next_step(form)
@@ -170,8 +171,6 @@ class CustomSessionWizard(SessionWizardView):
                 form.fields['barrio'].choices = [(str(b.id), b.name.title()) for b in barrios_mun]
         return form
 
-    @hash_dict
-    @timed_lru_cache(10)
     def render_done(self, form, **kwargs):
         """
         This method gets called when all forms passed. The method should also
@@ -179,7 +178,7 @@ class CustomSessionWizard(SessionWizardView):
         validate, `render_revalidation_failure` should get called.
         If everything is fine call `done`.
         """
-
+        self.request.session['rendered_done'] = True
         # logger.info(f'Entrando en render_done {CustomSessionWizard.new_form_list=}')
         final_forms = OrderedDict()
         # walk through the form list and try to validate the data again.

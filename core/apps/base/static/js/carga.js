@@ -78,3 +78,16 @@ function animabotoncarga_sin_autorizacion() {
         carga.style.display = "none";
     };
 };
+
+function animabotoncarga_correo() {
+    let carga = document.getElementById("btn_carga") ;
+    // let camp = document.getElementById("id_digitaCorreo-email").value;
+
+    if($('id_digitaCorreo-email').val().length >= 6){
+    console.log('adlkfajsh;ljs')
+        carga.style.display = "block";
+    }else{
+
+        carga.style.display = "none";
+    };
+};

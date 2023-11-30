@@ -257,6 +257,7 @@ def finalizado(request):
              'NUMERO_AUTORIZACION': 99999998}
     :return:
     """
+    request.session['rendered_done'] = False
     if ctx := request.session.get('ctx', {}):
         logger.info(f"{request.COOKIES.get('sessionid')[:6]} {ctx['NUMERO_AUTORIZACION']} "
                     f"acessando a vista /finalizado al haber terminado el wizard.")
