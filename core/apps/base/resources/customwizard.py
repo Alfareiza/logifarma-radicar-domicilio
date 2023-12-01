@@ -28,7 +28,7 @@ class CustomSessionWizard(SessionWizardView):
         sessionid = self.request.COOKIES.get('sessionid') or 'Unknown'
         logger.info(f"{sessionid[:6]} "
                     f"IP={self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))} "
-                    f"entró en vista={self.request.resolver_match.url_name}  {self.request.session.get('rendered_done')=}")
+                    f"entró en vista={self.request.resolver_match.url_name} rendered_done -> {self.request.session.get('rendered_done')}")
         return super().get(request, *args, **kwargs)
 
     @csrf_protected_method
@@ -121,7 +121,7 @@ class CustomSessionWizard(SessionWizardView):
 
         else:
             logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} "
-                        f"vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
+                        f"vista{idx_view}={self.steps.current}, capturado={form.cleaned_data} rendered_done={self.request.session.get('rendered_done')}")
         # ls_form_list = self.form_list.keys()
         # logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
         return self.get_form_step_data(form)
@@ -180,7 +180,7 @@ class CustomSessionWizard(SessionWizardView):
         If everything is fine call `done`.
         """
         self.request.session['rendered_done'] = True
-        logger.info(f"render_done -> {self.request.session.get('rendered_done')=}")
+        logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} render_done -> {self.request.session.get('rendered_done')}")
         # logger.info(f'Entrando en render_done {CustomSessionWizard.new_form_list=}')
         final_forms = OrderedDict()
         # walk through the form list and try to validate the data again.
