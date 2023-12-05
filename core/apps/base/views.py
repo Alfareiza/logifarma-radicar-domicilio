@@ -258,7 +258,11 @@ def finalizado(request):
     :return:
     """
     request.session['rendered_done'] = False
-    ssid = request.COOKIES.get('sessionid')[:6] or 'Unknown'
+    ssid = request.COOKIES.get('sessionid')
+    if ssid:
+        ssid = ssid[:6]
+    else:
+        ssid = 'Unknown'
     logger.info(f"{ssid} finalizado -> {request.session.get('rendered_done')=}")
     if ctx := request.session.get('ctx', {}):
         logger.info(f"{request.COOKIES.get('sessionid')[:6]} {ctx['NUMERO_AUTORIZACION']} "
