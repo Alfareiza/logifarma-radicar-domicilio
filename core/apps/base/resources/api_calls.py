@@ -13,7 +13,7 @@ from core.apps.base.resources.decorators import hash_dict, logtime, \
     timed_lru_cache
 from core.apps.base.resources.email_helpers import get_complement_subject
 from core.apps.base.resources.tools import notify
-from core.settings import BASE_DIR
+from core.settings import BASE_DIR, BLIP_USER, BLIP_PASS, BLIP_URL
 from core.settings import logger
 
 pickle_path = BASE_DIR / "core/apps/base/resources/stored.pickle"
@@ -263,6 +263,7 @@ def check_meds(info_email: dict):
                 bcc=['alfareiza@gmail.com']
             )
 
+
 # Deprecated 05-Oct-2023
 # def check_med(med: str) -> list:
 #     """
@@ -349,6 +350,20 @@ def make_dbconn() -> Connection:
     password = config('SQL_SERVER_PASS')
     return pymssql.connect(server=server, database=database,
                            user=username, password=password)
+
+
+def send_sms(number: str, content: str) -> dict:
+    url = BLIP_URL
+    payload = {
+        "msisdn": number,
+        "user": BLIP_USER,
+        "password": BLIP_PASS,
+        "msg": content,
+        "CountryCode": "COL"
+    }
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    resp = request_api(url, headers, payload)  # esta puede fallar pq la respuesta no es serializable
+    # todo validar tipos de respuestas
 
 
 if __name__ == '__main__':
