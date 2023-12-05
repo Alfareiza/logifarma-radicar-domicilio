@@ -229,3 +229,7 @@ SPECTACULAR_SETTINGS = {
         'supportedSubmitMethods': ['']
     },
 }
+
+BLIP_USER = config('BLIP_USER')
+BLIP_PASS = config('BLIP_PASS')
+BLIP_URL = config('BLIP_URL')
