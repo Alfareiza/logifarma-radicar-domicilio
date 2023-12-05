@@ -215,7 +215,7 @@ def guardar_info_bd(**kwargs):
                 municipio__name__iexact=municipio,
                 status='1',
             ).get(name=kwargs.pop('barrio', None).lower()),
-            cel_uno=kwargs.pop('celular', None),
+            cel_uno=kwargs.get('celular', None),
             cel_dos=kwargs.pop('whatsapp', None),
             email=email,
             direccion=kwargs.pop('direccion', None),
@@ -254,7 +254,7 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
     Guarda radicado en base de datos
     :param kwargs: Información final del wizard + ip:
             Ejemplo:
-            {'sinAutorizacion': '99999999', 'fotoFormulaMedica': {'src': <UploadedFile: chat.png (image/png)>}, 'eligeMunicipio': {'cod_dane': None, 'activo': False, 'municipio': <Municipio: Valledupar, Cesar>}, 'digitaDireccionBarrio': {'barrio': 'Barrio 1', 'direccion': '213'}, 'digitaCelular': {'celular': 3213213211, 'whatsapp': None}, 'digitaCorreo': ['']}
+            {'documento': 'CC99999999', 'AFILIADO': 'DA SILVA RODRIQUEZ MARCELO SOUZA', 'NOMBRE': 'MARCELO DA SILVA', 'P_NOMBRE': 'MARCELO', 'TIPO_IDENTIFICACION': 'CC', 'DOCUMENTO_ID': '99999999', 'cod_dane': None, 'activo': False, 'municipio': <Municipio: Barranquilla, Atlántico>, 'barrio': 'Barrio 2', 'direccion': '3213213121', 'celular': 3213213211, 'whatsapp': None, 'email': ['alfareiza@gmail.com'], 'foto': <UploadedFile: check.png (image/png)>, 'ip': '127.0.0.1'}
     :return:
     """
     resp = ('', '', '')
@@ -274,7 +274,7 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
                 municipio__name__iexact=municipio,
                 status='1',
             ).get(name=kwargs.pop('barrio', None).lower()),
-            cel_uno=kwargs.pop('celular', None),
+            cel_uno=kwargs.get('celular', None),
             cel_dos=kwargs.pop('whatsapp', None),
             email=email,
             direccion=kwargs.pop('direccion', None),
@@ -285,7 +285,7 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
         )
 
         save_in_bd('default', rad)
-        resp = numero_radicado, rad.id, rad.datetime,
+        resp = numero_radicado, f"F{rad.id}", rad.datetime,
         rad.id = None
         save_in_bd('server', rad)
 
@@ -502,3 +502,18 @@ def datetime_id():
     last_datetime_id = result
 
     return str(result)
+
+def create_msg(info_email: dict) -> str:
+    """
+    Crea mensaje que es enviado via sms.
+    No debe superar 160 caracteres ni usar acentos o caracteres
+    especiales.
+    :param info_email:
+    # TODO BORRAR TEXTO
+    Ejemplo de info_email para radicados con medicamentos autorizados
+    {'TIPO_IDENTIFICACION': 'CC', 'DOCUMENTO_ID': '17148766', 'AFILIADO': 'CERRA CERRA TOMAS ENRIQUE', 'P_NOMBRE': 'TOMAS', 'S_NOMBRE': 'ENRIQUE', 'P_APELLIDO': 'CERRA', 'S_APELLIDO': 'CERRA', 'ESTADO_AFILIADO': 'ACTIVO', 'SEDE_AFILIADO': 'MALAMBO', 'REGIMEN': 'SUBSIDIADO', 'DIRECCION': 'KR  1 C   11 A 21', 'CORREO': 'notiene@hotmail.com', 'TELEFONO': '1111111', 'CELULAR': '3166353052', 'ESTADO_AUTORIZACION': 'PROCESADA', 'FECHA_AUTORIZACION': '27/11/2023', 'MEDICO_TRATANTE': 'JOSE DE DIOS NAVARRO BARRAZA', 'MIPRES': '20230830130036726185', 'DIAGNOSTICO': 'R32X-INCONTINENCIA URINARIA NO ESPECIFICADA', 'ARCHIVO': '', 'IPS_SOLICITA': 'LOGIFARMA S.A.S.', 'Observacion': 'ENTREGA: 33  CUPS: 139 INDICACIONES: ORDENO PANALAES DESECHABLES TALLA MA  CAMBSIO CADA  6 HORAS POR 3 MESES', 'RESPONSABLE_GUARDA': 'MARQUEZ LEAL HARRY .', 'CORREO_RESP_GUARDA': 'harry.marquez@cajacopieps.com', 'RESPONSABLE_AUT': 'MARQUEZ LEAL HARRY .', 'CORREO_RESP_AUT': 'harry.marquez@cajacopieps.com', 'DETALLE_AUTORIZACION': [{'CUMS': '139', 'NOMBRE_PRODUCTO': 'PANALES', 'CANTIDAD': '120'}], 'NUMERO_AUTORIZACION': 101783400, 'cod_dane': None, 'activo': False, 'municipio': <Municipio: Malambo, Atlántico>, 'barrio': 'Bellavista', 'direccion': 'Cra 1c #11a-22', 'celular': 3013328888, 'whatsapp': None, 'email': ['celenecerradeavila@gmail.com']}
+    Ejemplo de info_email para radicados con medicamentos NO autorizados
+    {'documento': 'CC99999999', 'AFILIADO': 'DA SILVA RODRIQUEZ MARCELO SOUZA', 'NOMBRE': 'MARCELO DA SILVA', 'P_NOMBRE': 'MARCELO', 'TIPO_IDENTIFICACION': 'CC', 'DOCUMENTO_ID': '99999999', 'cod_dane': None, 'activo': False, 'municipio': <Municipio: Barranquilla, Atlántico>, 'barrio': 'Barrio 2', 'direccion': '3213213211', 'celular': 3213213211, 'whatsapp': None, 'email': ['foo@bar.com'], 'foto': <UploadedFile: fb Background Removed.png (image/png)>, 'ref_id': '1701464052713688', 'NUMERO_RADICACION': 73, 'FECHA_RADICACION': datetime.datetime(2023, 12, 1, 15, 54, 12, 719040), 'log_text': '1p65md rad_id=73 CC99999999'}
+    :return: Texto sin acentos
+    """
+    return ''

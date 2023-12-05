@@ -15,17 +15,19 @@ from core.settings import logger, BASE_DIR
 def get_complement_subject(payload: dict) -> str:
     """
     A partir del payload verifica si se trata de una
-    radicación o un centro (inventario).
+    radicación o un centro (inventario) o un numero celular.
     """
-    num_aut = payload.get('autorizacion') or payload.get('serial') or payload.get('Centro')
-    if num_aut:
-        if len(num_aut) < 4:
-            num_aut = f"- Centro # {num_aut}"
+    number = payload.get('autorizacion') or payload.get('serial') or payload.get('Centro') or payload.get('msisdn')
+    if number:
+        if str(number)[0] == "3" and len(str(number)) == 10:
+            number = f"- Celular # {number}"
+        elif len(number) < 4:
+            number = f"- Centro # {number}"
         else:
-            num_aut = f"- Radicado # {num_aut}"
+            number = f"- Radicado # {number}"
     else:
-        num_aut = ''
-    return num_aut
+        number = ''
+    return number
 
 
 def make_subject_and_cco(info_email) -> tuple:
@@ -215,7 +217,7 @@ class Email:
 
         # Definiendo asunto
         if info.get('documento'):
-            subject = (f"F{info['NUMERO_RADICACION']} - Este es el "
+            subject = (f"{info['NUMERO_RADICACION']} - Este es el "
                        "número de radicación de tu domicilio en Logifarma")
         else:
             subject = (f"{info['NUMERO_AUTORIZACION']} - Este es el "

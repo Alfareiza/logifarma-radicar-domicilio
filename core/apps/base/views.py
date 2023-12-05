@@ -1,5 +1,5 @@
-import threading
 from functools import lru_cache
+from threading import Thread
 
 from decouple import config
 from django.core.files.storage import FileSystemStorage
@@ -11,11 +11,11 @@ from django.urls import reverse
 
 from core import settings
 from core.apps.base.forms import *
-from core.apps.base.resources.api_calls import check_meds
+from core.apps.base.resources.api_calls import check_meds, send_sms
 from core.apps.base.resources.customwizard import CustomSessionWizard
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.email_helpers import make_subject_and_cco, make_destinatary
-from core.apps.base.resources.tools import convert_bytes, is_file_valid, notify, guardar_info_bd
+from core.apps.base.resources.tools import convert_bytes, is_file_valid, notify, guardar_info_bd, create_msg
 from core.settings import logger, BASE_DIR
 
 FORMS = [
@@ -151,13 +151,12 @@ class ContactWizard(CustomSessionWizard):
 
         # Revisa medicamentos
         if not config("DEBUG", cast=bool):
-            ask_med = threading.Thread(target=check_meds, args=(info_email,))
-            ask_med.start()
+            Thread(target=check_meds, args=(info_email,)).start()
 
         # Envía e-mail
         if not self.foto_fmedica:
-            x = threading.Thread(target=self.send_mail, args=(info_email,))
-            x.start()
+            Thread(target=self.send_mail, args=(info_email,)).start()
+            Thread(target=send_sms, args=(str(info_email['celular']), create_msg(info_email))).start()
         else:
             self.send_mail(info_email)
 
