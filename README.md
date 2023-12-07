@@ -4,6 +4,11 @@
 <img alt="GitHub followers" src="https://img.shields.io/github/followers/Alfareiza?label=Follow%20me%20%3A%29&style=social">
 </h2>
 
+
+<h1 align="center" >
+    <img width="30%" src="demo-radicar-domicilio.gif">
+</h1>
+
 <h2>⚈ Overview </h2>
 
 This application emerges as a direct response to a vital need within Colombia's private health system. Driven by the requests of numerous beneficiaries of state-subsidized medications, a multistep form was forged between these users and Logifarma in order to step aside Whatsapp which was where user requested their medicines.
