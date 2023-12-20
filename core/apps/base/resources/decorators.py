@@ -98,3 +98,24 @@ def timed_lru_cache(seconds: int, maxsize: int = 4):
         return wrapped_func
 
     return wrapper_cache
+
+
+def once_in_interval(interval_seconds):
+    def decorator(func):
+        last_execution_time = datetime.min
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            nonlocal last_execution_time
+            current_time = datetime.now()
+            if current_time - last_execution_time >= timedelta(seconds=interval_seconds):
+                # Execute the function
+                result = func(*args, **kwargs)
+                # Update the last execution time
+                last_execution_time = datetime.now()
+                return result
+            else:
+                # Function was not executed due to repeated attempt
+                logger.warning(f"{func.__name__!r} wasn\'t executed due to a repeated attempt within {interval_seconds} seconds.")
+
+        return wrapper
+    return decorator

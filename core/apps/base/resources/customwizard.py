@@ -10,7 +10,7 @@ from formtools.wizard.forms import ManagementForm
 from formtools.wizard.views import SessionWizardView
 
 from core.apps.base.models import Barrio
-from core.apps.base.resources.decorators import timed_lru_cache, hash_dict
+from core.apps.base.resources.decorators import timed_lru_cache, hash_dict, once_in_interval
 from core.apps.base.resources.tools import notify
 from core.settings import logger
 
@@ -172,6 +172,7 @@ class CustomSessionWizard(SessionWizardView):
                 form.fields['barrio'].choices = [(str(b.id), b.name.title()) for b in barrios_mun]
         return form
 
+    @once_in_interval(6)
     def render_done(self, form, **kwargs):
         """
         This method gets called when all forms passed. The method should also
