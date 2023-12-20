@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 from django.core.exceptions import SuspiciousOperation
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
@@ -82,7 +82,10 @@ class CustomSessionWizard(SessionWizardView):
                 # no more steps, render done view
                 logger.info(f"Accesando ultimo paso {self.request.session.get('rendered_done')=}")
                 if not self.request.session.get('rendered_done'):
-                    return self.render_done(form, **kwargs)
+                    if res := self.render_done(form, **kwargs):
+                        return res
+                    else:
+                        return HttpResponse(status=444)
             else:
                 # proceed to the next step
                 return self.render_next_step(form)
