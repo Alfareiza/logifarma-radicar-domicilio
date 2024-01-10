@@ -9,15 +9,20 @@
     <img width="30%" src="demo-radicar-domicilio.gif">
 </h1>
 
+<h2>⚈ Context</h2>
+
+Many users of the Colombian health system go to dispensaries to claim their medications and this generated operational wear and tear because sometimes there was no inventory and the user wasted their time, or simply the line in these places was very long and therefore the medication was not claimed or the user had to wait a long time.
+
+Meanwhile, there was the possibility of claiming medicines through WhatsApp, but the delay was the same and many times the user was left waiting without a response.
+
 <h2>⚈ Overview </h2>
+This application emerges as a response to a need within Colombia's private health system. Driven by the requests of numerous beneficiaries of state-subsidized medications, a multistep form was forged in order to step aside Whatsapp which was where user requested their medicines without to mention the long lines which sometimes they experienced.
 
-This application emerges as a direct response to a vital need within Colombia's private health system. Driven by the requests of numerous beneficiaries of state-subsidized medications, a multistep form was forged between these users and Logifarma in order to step aside Whatsapp which was where user requested their medicines.
+In the pursuit of operational excellence, this solution allow users to effortlessly requisition their medications, which are subsequently hand-delivered to their doorstep. This simplified ordering and medication monitoring, enabling delivery metrics and advanced reporting for the logistic area.
 
-In the pursuit of operational excellence, this solution empowers users to effortlessly requisition their medications, which are subsequently hand-delivered to their doorstep. This streamlined drug requests and control at Logifarma, enabling advanced delivery metrics and reporting.
 
 <h2>⚈ Impact</h2>
 
-In the present landscape, the application stands as a testament to its success, overseeing no less than 4,000 monthly medication requests,  across diverse corners of Colombia. Besides, its impact is magnified by a steady influx of 1,000+ new monthly users.
+Currently, no less than 4,000 monthly medication are requested,  across diverse corners of Colombia. As an example, the following graph shows that in the month of August 2023, 6,022 deliveries were made, 5,138 users were served and 2,475 were new users.
 
-
-This initiative stands as a prime example of how technology can bridge essential gaps, enhancing user experience, optimizing operations, and enabling data-powered advancements. As I forge ahead, the application's impact is poised to scale even further, cementing its position as a transformative asset within Colombia's healthcare landscape.
+<img width="1552" alt="logifarma-dash-august" src="https://github.com/Alfareiza/logifarma-radicar-domicilio/assets/63620799/5afe737e-3365-4ebc-ace7-f897daced95f">
