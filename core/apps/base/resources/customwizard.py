@@ -10,7 +10,7 @@ from formtools.wizard.forms import ManagementForm
 from formtools.wizard.views import SessionWizardView
 
 from core.apps.base.models import Barrio
-from core.apps.base.resources.decorators import timed_lru_cache, hash_dict, once_in_interval
+from core.apps.base.resources.decorators import once_in_interval
 from core.apps.base.resources.tools import notify
 from core.settings import logger
 
@@ -184,7 +184,8 @@ class CustomSessionWizard(SessionWizardView):
         If everything is fine call `done`.
         """
         self.request.session['rendered_done'] = True
-        logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} render_done -> {self.request.session.get('rendered_done')}")
+        logger.info(
+            f"{self.request.COOKIES.get('sessionid')[:6]} render_done -> {self.request.session.get('rendered_done')}")
         # logger.info(f'Entrando en render_done {CustomSessionWizard.new_form_list=}')
         final_forms = OrderedDict()
         # walk through the form list and try to validate the data again.
@@ -239,3 +240,15 @@ class CustomSessionWizard(SessionWizardView):
     #                 CustomSessionWizard.new_form_list[form_key] = form_class
     #         return CustomSessionWizard.new_form_list
     #     return self.form_list
+
+    def get_form_step_files(self, form):
+        """
+        Is used to return the raw form files. You may use this method to
+        manipulate the data.
+        """
+        if form.prefix == 'fotoFormulaMedica':
+            from datetime import datetime
+            ext = f".{form.files['fotoFormulaMedica-src'].image.format.lower()}"
+            name = f'{datetime.now():%d%m%Y%H%M%S%s}'[:16]
+            form.files['fotoFormulaMedica-src'].name = name + ext
+        return form.files
