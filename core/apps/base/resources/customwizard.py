@@ -248,7 +248,11 @@ class CustomSessionWizard(SessionWizardView):
         """
         if form.prefix == 'fotoFormulaMedica':
             from datetime import datetime
-            ext = f".{form.files['fotoFormulaMedica-src'].image.format.lower()}"
-            name = f'{datetime.now():%d%m%Y%H%M%S%s}'[:16]
-            form.files['fotoFormulaMedica-src'].name = name + ext
+            try:
+                ext = f".{form.files['fotoFormulaMedica-src'].image.format.lower()}"
+                name = f'{datetime.now():%d%m%Y%H%M%S%s}'[:16]
+                form.files['fotoFormulaMedica-src'].name = name + ext
+            except Exception as e:
+                logger.error(e)
+
         return form.files
