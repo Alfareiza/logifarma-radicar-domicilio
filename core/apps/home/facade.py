@@ -7,7 +7,7 @@ from core.apps.base.models import Radicacion
 
 def listar_radicados_mes(month: str,
                          args=('datetime', 'numero_radicado', 'ip', 'paciente_cc'),
-                         year: str = '2023') -> List[Radicacion]:
+                         year: str = '2024') -> List[Radicacion]:
     """
     Lista todos los radicados de un mes ordenados decrescentemente.
     :param args:
@@ -21,7 +21,7 @@ def listar_radicados_mes(month: str,
     ).order_by('-datetime').values(*args)
 
 
-def listar_uniques_by_field(month: str, field: str, year: str = '2023') -> List[Radicacion]:
+def listar_uniques_by_field(month: str, field: str, year: str = '2024') -> List[Radicacion]:
     """
     Lista todos los radicados de un mes sin repetir basado en el
     field.
@@ -32,14 +32,14 @@ def listar_uniques_by_field(month: str, field: str, year: str = '2023') -> List[
     ).order_by(field).distinct(field)
 
 
-def listar_radicados_old_months(month: str, year: str = '2023') -> List[Radicacion]:
+def listar_radicados_old_months(month: str, year: str = '2024') -> List[Radicacion]:
     return Radicacion.objects.filter(
         datetime__year=year,
         datetime__month__lt=month
     ).values('ip', 'paciente_cc')
 
 
-def order_radicados_by_mun_mes(month: str, year: str = '2023') -> List[dict]:
+def order_radicados_by_mun_mes(month: str, year: str = '2024') -> List[dict]:
     """
     Lista a cantidad de radicados por municipio en determinado mes/año
     :param month: Obligatório. '04' o '12' o '10' ...

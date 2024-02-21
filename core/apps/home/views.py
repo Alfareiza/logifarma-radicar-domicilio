@@ -3,6 +3,7 @@ import datetime
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
+from django.db.models.functions import Length
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 
@@ -35,6 +36,11 @@ def index(request):
     radicados = facade.listar_radicados_mes(current_month)
     unique_pacientes_in_month = facade.listar_uniques_by_field(current_month, field='paciente_cc')
     old_radicados = facade.listar_radicados_old_months(current_month)
+    qty_new_pacientes = unique_pacientes_in_month.exclude(
+                          paciente_cc__in=old_radicados.values_list('paciente_cc', flat=True)
+                      )
+    qty_medicamentos_autorizados = radicados.annotate(text_len=Length('numero_radicado')).filter(text_len__lt=15)
+    qty_medicamentos_no_autorizados = radicados.annotate(text_len=Length('numero_radicado')).filter(text_len__gt=15)
 
     return render(request, "pages/index.html",
                   {
@@ -42,9 +48,9 @@ def index(request):
                       'radicados_day': {f"{k}": len(v) for k, v in order_radicados_by_day(radicados).items()},
                       'radicados_mun': order_radicados_by_mun_mes(current_month),
                       'qty_pacientes': unique_pacientes_in_month.count(),
-                      'qty_new_pacientes': unique_pacientes_in_month.exclude(
-                          paciente_cc__in=old_radicados.values_list('paciente_cc', flat=True)
-                      ).count()
+                      'qty_new_pacientes': qty_new_pacientes.count(),
+                      'qty_medicamentos_autorizados': qty_medicamentos_autorizados.count(),
+                      'qty_medicamentos_no_autorizados': qty_medicamentos_no_autorizados.count(),
                   }
                   )
 
