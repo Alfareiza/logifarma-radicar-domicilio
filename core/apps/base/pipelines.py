@@ -28,9 +28,9 @@ class NotifyEmail(PostStep, Email):
 
 class NotifySMS(PostStep):
     def proceed(self, info_email: dict, rad_id: str) -> Tuple[bool, dict]:
-        log.info(f"{info_email['log_text']} ...enviando SMS.")
-        check = True
         # TODO Pendiente de implementar
+        # log.info(f"{info_email['log_text']} ...enviando SMS.")
+        check = True
         return check, info_email
 
 

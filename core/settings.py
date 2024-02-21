@@ -193,14 +193,10 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 
 # create formatter
-formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s",
-                              "[%d/%b/%Y %H:%M:%S]")
+formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s", "[%d/%b/%Y %H:%M:%S]")
+ch.setFormatter(formatter)  # add formatter to ch
 
-# add formatter to ch
-ch.setFormatter(formatter)
-
-# add ch to logger
-logger.addHandler(ch)
+logger.addHandler(ch)  # add ch to logger
 
 # Firebase configuration
 # https://github.com/nhorvath/Pyrebase4

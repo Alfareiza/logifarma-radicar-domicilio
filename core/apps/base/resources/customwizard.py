@@ -1,3 +1,4 @@
+import logging
 from collections import OrderedDict
 
 from django.core.exceptions import SuspiciousOperation
@@ -12,7 +13,7 @@ from formtools.wizard.views import SessionWizardView
 from core.apps.base.models import Barrio
 from core.apps.base.resources.decorators import once_in_interval
 from core.apps.base.resources.tools import notify
-from core.settings import logger
+from core.settings import logger, ch
 
 
 class CustomSessionWizard(SessionWizardView):
@@ -26,9 +27,9 @@ class CustomSessionWizard(SessionWizardView):
     def get(self, request, *args, **kwargs):
         self.request.session['rendered_done'] = False
         sessionid = self.request.COOKIES.get('sessionid') or 'Unknown'
-        logger.info(f"{sessionid[:6]} "
-                    f"IP={self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))} "
-                    f"entró en vista={self.request.resolver_match.url_name} rendered_done -> {self.request.session.get('rendered_done')}")
+        self.set_formatter_with_ssid() if sessionid != 'Unknown' else self.set_formatter_base()
+        logger.info(f"IP={self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))} "
+                    f"entró en vista={self.request.resolver_match.url_name}")
         return super().get(request, *args, **kwargs)
 
     @csrf_protected_method
@@ -80,7 +81,6 @@ class CustomSessionWizard(SessionWizardView):
             # check if the current step is the last step
             if self.steps.current == self.steps.last:
                 # no more steps, render done view
-                logger.info(f"Accesando ultimo paso {self.request.session.get('rendered_done')=}")
                 if not self.request.session.get('rendered_done'):
                     if res := self.render_done(form, **kwargs):
                         return res
@@ -117,14 +117,13 @@ class CustomSessionWizard(SessionWizardView):
                     }
                 >
         """
+        self.set_formatter_with_ssid()
         idx_view = list(self.form_list).index(self.steps.current)
         if not form.cleaned_data:
-            logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} No fue capturado "
-                        f"nada en vista{idx_view}={self.steps.current}")
-
+            logger.info(f"No fue capturado nada en vista{idx_view}={self.steps.current}")
         else:
-            logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} "
-                        f"vista{idx_view}={self.steps.current}, capturado={form.cleaned_data} rendered_done={self.request.session.get('rendered_done')}")
+            logger.info(f"vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
+
         # ls_form_list = self.form_list.keys()
         # logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
         return self.get_form_step_data(form)
@@ -142,12 +141,10 @@ class CustomSessionWizard(SessionWizardView):
         steps = list(ls_form_list)
         if (steps.index(self.steps.current) - steps.index(args[0])) != 1:
             self.request.session['ctx'] = {}
-            logger.warning(f"{self.request.COOKIES.get('sessionid')[:6]} redireccionando "
-                           f"a err_multitabs por multipestañas.")
+            logger.warning("redireccionando a err_multitabs por multipestañas.")
             return HttpResponseRedirect(reverse('base:err_multitabs'))
 
-        logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Acabó de clicar "
-                    f"en \'< Atrás\' para ir de {self.steps.current} a {args[0]}.")
+        logger.info(f"Acabó de clicar en \'< Atrás\' para ir de {self.steps.current!r} a {args[0]!r}")
 
         form = self.get_form(data=self.request.POST, files=self.request.FILES)
         # self.storage.set_step_data(self.steps.current, self.process_step(form))
@@ -184,8 +181,6 @@ class CustomSessionWizard(SessionWizardView):
         If everything is fine call `done`.
         """
         self.request.session['rendered_done'] = True
-        logger.info(
-            f"{self.request.COOKIES.get('sessionid')[:6]} render_done -> {self.request.session.get('rendered_done')}")
         # logger.info(f'Entrando en render_done {CustomSessionWizard.new_form_list=}')
         final_forms = OrderedDict()
         # walk through the form list and try to validate the data again.
@@ -208,8 +203,7 @@ class CustomSessionWizard(SessionWizardView):
             )
             if files:
                 logger.info(f"tmp/ -> {list(self.file_storage.base_location.iterdir())}")
-                logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} "
-                            f"files => {files}")
+                logger.info(f"files => {files}")
             if form_obj.is_valid():
                 final_forms[form_key] = form_obj
                 # return self.render_revalidation_failure(form_key, form_obj, **kwargs)
@@ -252,7 +246,21 @@ class CustomSessionWizard(SessionWizardView):
                 ext = f".{form.files['fotoFormulaMedica-src'].image.format.lower()}"
                 name = f'{datetime.now():%d%m%Y%H%M%S%s}'[:16]
                 form.files['fotoFormulaMedica-src'].name = name + ext
+            except KeyError as e:
+                logger.error(f"No fue encontrado 'fotoFormulaMedica-src' en form.files : {str(e)}")
             except Exception as e:
-                logger.error(e)
+                logger.error(str(e))
 
         return form.files
+
+    def set_formatter_with_ssid(self):
+        ch.setFormatter(
+            logging.Formatter("%(asctime)s %(levelname)s %(ssid)s %(message)s", "[%d/%b/%Y %H:%M:%S]",
+                              defaults={"ssid": f"[{self.request.COOKIES.get('sessionid')[:6]}]"})
+        )
+
+    def set_formatter_base(self):
+        ch.setFormatter(
+            logging.Formatter("%(asctime)s %(levelname)s %(message)s",
+                              "[%d/%b/%Y %H:%M:%S]")
+        )
