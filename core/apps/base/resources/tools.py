@@ -470,6 +470,14 @@ def update_rad_from_fbase(rad: Radicacion, resp_fbase: dict) -> None:
     rad.save()
 
 
+def update_field(rad: Radicacion, attr, value) -> None:
+    if hasattr(rad, attr):
+        setattr(rad, attr, value)
+        rad.save()
+    else:
+        logger.error(f'No fue posible actualizar radicación # {rad!r} en bd')
+
+
 def dt_str_to_date_obj(dt: str) -> datetime.date:
     """
     Convierte una fecha de string a un objeto datetime.date.
