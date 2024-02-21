@@ -11,7 +11,7 @@ from django.utils.safestring import mark_safe
 from core.apps.base.models import Med_Controlado, Radicacion
 from core.apps.base.resources.api_calls import get_firebase_acta
 from core.apps.base.resources.tools import encrypt, notify, pretty_date, \
-    update_rad_from_fbase, has_accent
+    update_rad_from_fbase, has_accent, update_field
 from core.settings import BASE_DIR, logger
 
 
@@ -36,18 +36,14 @@ def validate_status(resp_mcar: dict, rad_default: Radicacion) -> ValidationError
     rad_server = Radicacion.objects.using('server').filter(numero_radicado=rad_default.numero_radicado).first()
     if ssc := resp_mcar.get('ssc'):
         if not rad_default.acta_entrega:
-            rad_default.acta_entrega = ssc
-            rad_default.save()
-            rad_server.acta_entrega = ssc
-            rad_server.save()
+            update_field(rad_default, 'acta_entrega', ssc)
+            update_field(rad_server, 'acta_entrega', ssc)
         if factura := resp_mcar.get('factura'):
             # Radicado  tiene SSC, factura y está por confirmar si está firebase
             logger.info(f"{rad_default.numero_radicado} radicado con factura detectada.")
             if not rad_default.factura:
-                rad_default.factura = factura
-                rad_default.save()
-                rad_server.factura = factura
-                rad_server.save()
+                update_field(rad_default, 'factura', factura)
+                update_field(rad_server, 'factura', factura)
             text_resp = f'Número de autorización {rad_default.numero_radicado} radicado ' \
                         f'{radicado_dt}.<br><br>Este domicilio se encuentra en reparto<br><br>' \
                         f'Si tiene alguna duda se puede comunicar con nosotros ' \
