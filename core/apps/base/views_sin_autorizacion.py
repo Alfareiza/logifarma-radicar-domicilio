@@ -98,7 +98,7 @@ class SinAutorizacion(CustomSessionWizard):
             info_email['NUMERO_RADICACION'] = rad_id
 
         if rad_id:
-            self.log_text = f"{self.request.COOKIES.get('sessionid')[:6]} {rad_id=} {info_email['documento']}"
+            self.log_text = f"{rad_id=} {info_email['documento']}"
             info_email['log_text'] = self.log_text
 
             logger.info(f"{self.log_text} {info_email['NOMBRE']} Radicación finalizada. "
@@ -132,9 +132,8 @@ class SinAutorizacion(CustomSessionWizard):
 
         return result
 
-    @staticmethod
-    @logtime('IMG CONVERT')
-    def treat_img(filepath_img: str) -> None:
+    # @logtime('IMG CONVERT')
+    def treat_img(self, filepath_img: str) -> None:
         """Trata imagen disminuyendo su peso y conviertiéndola a blanco y negro.
         Posteriormente queda guardada en substitución de la imagen referenciada
         en la ruta recibida como argumento.
@@ -142,8 +141,7 @@ class SinAutorizacion(CustomSessionWizard):
         """
         try:
             img = ImgHelper(filepath_img)
-        except Exception as e:
-            logger.warning(f"{filepath_img} no pudo ser tratada por error: {e}p")
-        else:
             img.convert_to_grayscale()
             img.save(filepath_img)
+        except Exception as e:
+            logger.error(f"{self.log_text} {filepath_img} no pudo ser tratada por error: {e}")
