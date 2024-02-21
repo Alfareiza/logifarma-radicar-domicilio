@@ -8,6 +8,7 @@ from decouple import config
 from django.template.loader import get_template
 from pymssql import Connection
 from requests import Timeout
+from urllib3.exceptions import NewConnectionError, MaxRetryError
 
 from core.apps.base.resources.decorators import hash_dict, logtime, \
     timed_lru_cache
@@ -105,9 +106,17 @@ def request_api(url, headers, payload, method='POST') -> dict:
         notify('error-api', f'ERROR SSL en API {complement_subject}',
                f"ERROR: {e}")
         return {}
+    except NewConnectionError as e:
+        notify('error-api', f'ERROR NewConnectionError en API {complement_subject}',
+               f"ERROR: {e}")
+        return {}
+    except MaxRetryError as e:
+        notify('error-api', f'ERROR MaxRetryError en API {complement_subject}',
+               f"ERROR: {e}")
+        return {}
     except Exception as e:
         notify('error-api', f'ERROR EN API {complement_subject}',
-               f"ERROR: {e}\n\nRESPUESTA DE API: {response.text}")
+               f"ERROR: {e}\n\nRESPUESTA DE API: response no capturado")
         return {}
 
 
