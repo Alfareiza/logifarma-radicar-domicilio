@@ -117,7 +117,9 @@ class CustomSessionWizard(SessionWizardView):
                     }
                 >
         """
-        self.set_formatter_with_ssid()
+        sessionid = self.request.COOKIES.get('sessionid') or 'Unknown'
+        self.set_formatter_with_ssid() if sessionid != 'Unknown' else self.set_formatter_base()
+
         idx_view = list(self.form_list).index(self.steps.current)
         if not form.cleaned_data:
             logger.info(f"No fue capturado nada en vista{idx_view}={self.steps.current}")
