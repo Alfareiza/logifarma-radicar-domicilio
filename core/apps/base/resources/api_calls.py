@@ -86,18 +86,17 @@ def request_api(url, headers, payload, method='POST') -> dict:
     # logger.info(f'API Payload: {payload}')
     try:
         response = requests.request(method, url, headers=headers, data=payload, timeout=20)
-        # logger.info(f'API Response [{response.status_code}]: {response.text}')
-        if response.status_code != 200:
-            res = requests.request('GET', 'https://httpbin.org/ip')
-            ip = json.loads(res.text.encode('utf8'))
+        if response.status_code == 200:
+            return json.loads(response.text.encode('utf-8'), strict=False)
+        res = requests.request('GET', 'https://httpbin.org/ip')
+        ip = json.loads(res.text.encode('utf8'))
+        if response.status_code != 429:
             notify('error-api', f'ERROR EN API {complement_subject}',
                    f"STATUS CODE: {response.status_code}\n\n"
                    f"IP: {ip.get('origin')}\n\n"
                    f"URL: {url}\n\nHeader: {headers}\n\n"
                    f"Payload: {payload}\n\n{response.text}")
-            return {'error': 'No se han encontrado registros.', 'codigo': '1'}
-        else:
-            return json.loads(response.text.encode('utf-8'), strict=False)
+        return {'error': 'No se han encontrado registros.', 'codigo': '1'}
     except Timeout as e:
         notify('error-api', f'ERROR TIMEOUT EN API {complement_subject}',
                f"ERROR: {e}.\nNo hubo respuesta de la API en 20 segundos")
