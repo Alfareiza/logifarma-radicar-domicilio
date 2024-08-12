@@ -215,3 +215,11 @@ def validate_email(email: str) -> ValidationError:
     regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
     if not re.fullmatch(regex, email):
         raise forms.ValidationError(mark_safe("E-mail inválido."))
+
+
+def validate_empty_empty_response(resp_eps: dict, documento: str) -> ValidationError:
+    if not resp_eps:
+        logger.info(f"No se pudo obtener información del usuario {documento}.")
+        raise forms.ValidationError(mark_safe("Disculpa, en estos momentos no tenemos conexión<br><br>"
+                                              "Por favor intentalo más tarde o en caso de dudas, <br>"
+                                              "comunícate con nosotros al <br>333 033 3124"))

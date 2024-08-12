@@ -27,9 +27,16 @@ class CustomSessionWizard(SessionWizardView):
     def get(self, request, *args, **kwargs):
         self.request.session['rendered_done'] = False
         sessionid = self.request.COOKIES.get('sessionid') or 'Unknown'
+        source = request.GET.get('s', None)
         self.set_formatter_with_ssid() if sessionid != 'Unknown' else self.set_formatter_base()
-        logger.info(f"IP={self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))} "
-                    f"entró en vista={self.request.resolver_match.url_name}")
+        msg = (f"IP={self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))} "
+               f"entró en vista={self.request.resolver_match.url_name}/")
+        if source:
+            self.request.COOKIES['source'] = source
+            tipo_usuario = {'f': 'fomag', 'c': 'cajacopi'}
+            logger.info(f"usuario {tipo_usuario[source].upper()} con {msg}")
+        else:
+            logger.info(f'{msg}, tipo de usuario indetectable para {source=}')
         return super().get(request, *args, **kwargs)
 
     @csrf_protected_method
@@ -165,6 +172,8 @@ class CustomSessionWizard(SessionWizardView):
         """
         form = super(CustomSessionWizard, self).get_form(step, data, files)
         step = step or self.steps.current
+        if self.request.method == 'POST' and step == 'sinAutorizacion' and self.request.GET:
+            form.source = self.request.GET.get('s', '')
         if step == 'digitaDireccionBarrio':
             if form1_cleaned_data := self.get_cleaned_data_for_step('eligeMunicipio'):
                 barrios_mun = Barrio.objects.filter(

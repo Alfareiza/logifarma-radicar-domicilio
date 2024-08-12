@@ -3,6 +3,7 @@ from datetime import timedelta, datetime
 from functools import wraps
 from time import time
 
+from core.apps.base.resources.tools import login_check
 from core.settings import logger
 
 
@@ -119,3 +120,14 @@ def once_in_interval(interval_seconds):
 
         return wrapper
     return decorator
+
+
+def login_sap_required(func):
+    @wraps(func)
+    def wrapper(*fargs, **fkwargs):
+        self = fargs[0]  # Instancia de SAPData
+        login_succeed = login_check(self)
+        if login_succeed:
+            return func(*fargs, **fkwargs)
+
+    return wrapper

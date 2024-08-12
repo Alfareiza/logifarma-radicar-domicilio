@@ -4,85 +4,163 @@
 {% block title %}Domicilios Logifarma{% endblock %}
 
 {% block content %}
-<section class="vista1"> 
+<section class="vista2">
     <form id="form-id" action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
-        <div class="vist1">
+<!--        {% comment %}-->
+<!--        {% include "base/logo.html" %}-->
+<!--        {% endcomment %}-->
+
+        <!--<div class="vist1">
             <img class="img1 img-fit" src="{% static 'img/logifarma-cajacopi.png' %}" alt="">
         </div>
         <div class="vist1_1">
             <img class="img2 img-fit" src="{% static 'img/Imagendomicilio.png' %}" alt="">
+        </div> -->
+
+
+        <!--    <button class="btn_inicio" id="btn_conti" type="submit" onclick="animabotoncarga_home()">-->
+        <!--        Continuar-->
+        <!--        <div id="btn_carga_home" class="conten_carga_home">-->
+        <!--            <div class="carga_home"></div>-->
+        <!--        </div>-->
+        <!--    </button>-->
+        <div>
+            <div style="display:flex;flex-direction: column; justify-content:center; align-items:center">
+
+
+                <div style="display:flex;flex-direction: column; justify-content:center; align-items:center;">
+                    <!--                    <div style="">-->
+                    <!--                        <div style="margin-top:2rem;">-->
+                    <!--                            <p style="margin-bottom: 1rem;margin-bottom: 1rem;font-size: x-large;font-weight: 600;color:#2a57a9; padding-right:1rem">-->
+                    <!--                                Solicita la entrega <br>de tus medicamentos<br><span style="color:#42A73F;font-size: 2rem;font-weight: 600">A DOMICILIO</span>-->
+                    <!--                            </p>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <!--                    <div style="display:flex;flex-direction: column; justify-content:center; align-items:center">-->
+                    <!--                            <div>ARRIBA</div>-->
+                    <!--                            <div>ABAJO</div>-->
+                    <!--                    </div>-->
+<!--                <img src="https://placehold.co/410x140" width="100%">-->
+                    <div class="vist1">
+                    </div>
+                    <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="Logo Logifarma" style="padding-bottom: 0rem">
+                    <img src="{% static 'img/imagen_banner_sin_moto.jpg' %}" alt="Banner" style="width: 26rem">
+                </div>
+
+                <div style="margin-top:0rem" class="txt-sm">
+                    <p style="margin-bottom: 1rem;margin-bottom: 1rem;font-weight: 300;color:#2a57a9">
+                        Elige donde estás afiliado
+                    </p>
+                </div>
+
+                <!-- INICIO: Botón cajacopi -->
+                <div class="btn_and_text" style="margin-top:.3rem">
+                    <button type="submit" class='button_modal btn_success hvr-float btn-cajacopi-sm-pd'
+                            style="background: #ffffff;box-shadow: 7px 3px 11px 3px rgb(0 0 0 / 26%);">
+                        <img style="width: 10rem;" src="{% static 'img/cajacopi_logo.png' %}" alt="">
+                    </button>
+                </div>
+                <!-- FIN: Botón cajacopi -->
+
+
+                <div class="btn_and_text mt-2" style="margin-top:1.5rem">
+                    <!-- INICIO: Botón fomag -->
+                    <a href="{% url 'base:sin-autorizacion' %}?s=f">
+                        <div class='button_modal btn_success hvr-float btn-fomag-sm-pd p-button-modal'
+                             style="background: #ffffff;box-shadow: 7px 3px 11px 3px rgb(0 0 0 / 26%);">
+                            <img style="width: 8rem;" src="{% static 'img/fomag_logo.png' %}" alt="">
+                        </div>
+                    </a>
+                    <!-- FIN: Botón fomag -->
+
+                    <!-- INICIO: Avisos post-botón -->
+                    <div style="padding: 0rem .5rem" class="sub-fs-small">
+                        <div style="display:flex;flex-direction: row; justify-content:left; align-items:center">
+                            <img class="icon_img img-fit" src="{% static 'img/iconorestriccion.png' %}" alt="">
+                            <b style="color: #404040;padding-left:.9rem;text-align:left;">No aplica para medicamentos
+                                controlados</b>
+                        </div>
+                        <div style="margin-top:.5rem; display:flex;flex-direction: row; justify-content:space-between; align-items:center">
+                            <img style="padding-bottom:8px" class="icon_img img-fit extra_icon_img"
+                                 src="{% static 'img/iconadvertencia.png' %}" alt="">
+                            <b class="pl-max-500-1-3" style="color: #404040; text-align:left;">Al finalizar tu solicitud, te
+                                enviaremos tus medicamentos lo más
+                                pronto posible</b>
+                        </div>
+                    </div>
+                    <!-- FIN: Avisos post-botón -->
+                </div>
+
+                <div style="border: 1px solid #81818145;width:25em;margin-top:.7rem;"></div>
+                <!-- INICIO: Debes contar con... -->
+                <div class="btn_and_text" style="margin-top:.5rem">
+                    <div style="text-align:left;font-size: 1.2rem;">
+                        <div>
+                            <p style="font-weight: 300;color:#2a57a9">
+                                Debes contar con:
+                            </p>
+                        </div>
+                    </div>
+                    <div style="margin-left: 1.5rem;">
+                        <!-- INICIO: Número de autorización -->
+                        <div style="margin-top:.7rem; display:flex;flex-direction: row; justify-content:left; align-items:center">
+                            <img style="padding: 0px 10px 8px 0px" class="icon_img img-fit icon-x"
+                                 src="{% static 'img/oconoformula.png' %}" alt="">
+                            <div style="text-align:left">
+                                <p>
+                                    <b style="color: #404040;">Número de autorización (NO PBS)</b><br>
+                                    <p style="font-size: .7em;padding-top:3px;padding-left: .7rem;">Aplica solo para afiliados de <b>Cajacopi EPS</b></p>
+                                </p>
+                            </div>
+                        </div>
+                        <!-- FIN: Número de autorización -->
+
+                        <!-- INICIO: Formula medica -->
+                        <div style="margin-top:.5rem; display:flex;flex-direction: row; justify-content:left; align-items:center">
+                            <img style="padding: 8px 10px 0px 0px" class="icon_img img-fit icon-y"
+                                 src="{% static 'img/iconoautorizacion.png' %}" alt="">
+                            <b style="color: #404040;">Fórmula médica</b>
+                            <p style="font-size:.7em;padding-left:3px;"> (No escrita manualmente)</p>
+                        </div>
+                        <div style="margin-top: -3px;;padding-left: 2.2rem;text-align: left;">
+                            <p style="font-size: .7em;padding-left: .2rem">
+                                La fórmula médica debe cumplir con el
+                                <span style="text-decoration: underline">
+                                <a target="_blank"
+                                   href="https://www.minsalud.gov.co/Normatividad_Nuevo/Decreto%200780%20de%202016.pdf">
+                                    <u>decreto 780 de 2016:</u>
+                                </a>
+                            </span>
+                            </p>
+                            <div class="text-x" style="margin-top: .2rem;padding-left: .2rem;padding-right: 1rem;">
+                                <p><b>Artículo 2.5.3.10.15. Características de la
+                                    prescripción.
+                                    (hoja 290)</b></p>
+                                <p style=""><b>Artículo 2.5.3.10.16. Contenido de la prescripción.
+                                    (hoja 291)</b></p>
+                            </div>
+                        </div>
+                        <!-- FIN: Formula medica -->
+
+                        <!-- INICIO: Dirección y número de celular -->
+                        <div style="margin:.7rem 0rem 1.5rem; display:flex;flex-direction: row; justify-content:left; align-items:center">
+                            <img style="padding: 0px 10px 0px 0px" class="icon_img img-fit icon-x"
+                                 src="{% static 'img/iconoubicacion.png' %}" alt="">
+                            <b style="color: #404040;">Dirección y Número de celular</b>
+                        </div>
+                        <!-- INICIO: Dirección y número de celular -->
+                    </div>
+                </div>
+                <!-- FIN: Debes contar con... -->
+
+
+            </div>
         </div>
 
-    <div class="cont_adv">
-        <div class="cont_icon">
-            <div class="adv_icon">
-                <img class="icon_img img-fit" src="{% static 'img/iconorestriccion.png' %}" alt="">
-            </div>
-            <div class="tex_img">
-                <p class="p_adv">No aplica para medicamentos controlados.</p>
-            </div>
+<!--        <article class="piedepagina" style="background: #ffffff;"></article>-->
         </div>
-    </div>
-    <div class="cont_mensaje">
-        <div class="cont_icono_mensaje">
-            <div class="icon_mensaje">
-                <img class="icon_img_mensaje img-fit" src="{% static 'img/iconadvertencia.png' %}" alt="">
-            </div>
-            <div class="tex_img_mensaje">
-                <p class="p_mensaje">Al finalizar tu solicitud, te enviaremos tus medicamentos lo más pronto posible.</p>
-            </div>
-        </div>
-    </div>
-    
-
-    <article class="piedepagina">
-
-        <div class="cont_piedepagina">
-            <h1 class="text_piedepagina"> Debes contar con:</h1>
-        </div>
-
-        <div class="cont_pie">
-            <div class="cont_icon_pie">
-                <div class="icon_pie">
-                    <img class="icon_img_pie img-fit" src="{% static 'img/oconoformula.png' %}" alt="">
-                </div>
-                <div class="tex_img_pie">
-                    <p class="p_pie">Número de autorización.</p>
-                </div>
-            </div>
-        </div>
-        <div class="cont_pie">
-            <div class="cont_icon_pie">
-                <div class="icon_pie">
-                    <img class="icon_img_pie img-fit" src="{% static 'img/iconoautorizacion.png' %}" alt="">
-                </div>
-                <div class="tex_img_pie">
-                    <p class="p_pie">Fórmula médica.</p>
-                </div>
-            </div>
-        </div>
-        <div class="cont_pie">
-            <div class="cont_icon_pie">
-                <div class="icon_pie">
-                    <img class="icon_img_pie img-fit" src="{% static 'img/iconoubicacion.png' %}" alt="">
-                </div>
-                <div class="tex_img_pie">
-                    <p class="p_pie">Dirección y número celular.</p>
-                </div>
-            </div>
-        </div>
-
-    </article>
-
-    <button class="btn_inicio" id="btn_conti" type="submit" onclick="animabotoncarga_home()">
-        Continuar
-        <div id="btn_carga_home" class="conten_carga_home">
-            <div class="carga_home"></div>
-        </div>
-    </button>
-    
     </form>
 </section>
 {% endblock %}

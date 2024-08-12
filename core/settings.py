@@ -225,3 +225,10 @@ SPECTACULAR_SETTINGS = {
         'supportedSubmitMethods': ['']
     },
 }
+
+# SAP INFORMATION
+
+SAP_USER = config('SAP_USER')
+SAP_PASS = config('SAP_PASS')
+SAP_COMPANY = config('SAP_COMPANY')
+SAP_URL = config('SAP_URL')

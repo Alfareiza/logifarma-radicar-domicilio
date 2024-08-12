@@ -1,7 +1,7 @@
 import json
 import pickle
 from datetime import datetime, timedelta
-from typing import Tuple, List, Dict
+from typing import Tuple, Dict
 
 import requests
 from decouple import config
@@ -13,6 +13,7 @@ from urllib3.exceptions import NewConnectionError, MaxRetryError
 from core.apps.base.resources.decorators import hash_dict, logtime, \
     timed_lru_cache
 from core.apps.base.resources.email_helpers import get_complement_subject
+from core.apps.base.resources.sap import SAP
 from core.apps.base.resources.tools import notify
 from core.settings import BASE_DIR
 from core.settings import logger
@@ -140,6 +141,36 @@ def call_api_medicar(payload: dict, endpoint: str):
                'Content-Type': 'application/json'}
     resp = request_api(url, headers, payload)
     return resp
+
+
+def obtener_datos_identificacion_fomag(tipo: str, value: str) -> dict:
+    """
+    Llama API de SAP y consulta datos referentes a afiliado de Fomag.
+    Ejemplo de respuesta:
+            - En caso de haber registros:
+             {'NOMBRE': 'MOISES AGUILA DELFIN',
+             'PRIMER_NOMBRE': 'MOISES',
+             'PRIMER_APELLIDO': 'AGUILA'}
+            - En caso de no encontrarse registros:
+              {}
+
+    """
+    sap = SAP()
+    resp = sap.get_info_afiliado(tipo, value)
+
+    def parse_response(resp_api: dict) -> dict:
+        retval = {'NOMBRE': 'no existe'}
+
+        data_user = value[0] if (value := resp_api.get('value')) else None
+        if data_user:
+            retval |= {
+                'NOMBRE': f"{data_user.get('U_LF_Primer_Nom')} {data_user.get('U_LF_Primer_Ape')} {data_user.get('U_LF_Segundo_Ape')}",
+                'PRIMER_NOMBRE': data_user.get('U_LF_Primer_Nom'),
+                'PRIMER_APELLIDO': data_user.get('U_LF_Primer_Ape')
+            }
+        return retval
+
+    return parse_response(resp)
 
 
 def should_i_call_auth():
