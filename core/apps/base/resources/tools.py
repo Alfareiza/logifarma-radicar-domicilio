@@ -1,3 +1,4 @@
+import pickle
 import unicodedata
 from datetime import date, datetime, timedelta
 from typing import Tuple, Any
@@ -6,9 +7,10 @@ from decouple import config
 from django.conf import settings
 from django.core.mail import EmailMessage, get_connection
 from django.utils.safestring import SafeString
+from pytz import timezone
 
 from core.apps.base.models import Radicacion, Municipio, Barrio
-from core.settings import BASE_DIR, logger
+from core.settings import BASE_DIR, logger, logger as log
 
 
 def has_accent(word: str) -> bool:
@@ -433,6 +435,8 @@ def when(dt) -> str:
 dct = {'0': 'X', '1': 'y', '2': 'z', '3': 'N', '4': 'o', '5': 'k',
        '6': 'J', '7': 'C', '8': 'b', '9': 'a'}
 
+def moment():
+    return datetime.now(tz=timezone('America/Bogota'))
 
 def encrypt(num: int) -> str:
     """
@@ -510,3 +514,35 @@ def datetime_id():
     last_datetime_id = result
 
     return str(result)
+
+
+def login_check(sap) -> bool:
+    """
+    1. Valida que exista el archivo de login:
+        1.1 Caso exista:
+                1.1.1 Valida que que la hora de sesión
+                        no sea mayor que la hora actual.
+                1.1.2 Caso sea mayor, efectua el login.
+        1.2 Caso no exista, efectua el login.
+    Puede retornar False cuando la API que logra el login este
+    caída.
+    :param sap: Instancia de SAPData
+    :return: True o False caso haga login o no.
+    """
+    login_pkl = BASE_DIR / 'login_sap.pickle'
+
+    if not login_pkl.exists():
+        log.info('[SAP] Cache de login no encontrado')
+        login_succeed = sap.login()
+    else:
+        with open(login_pkl, 'rb') as f:
+            sess_id, sess_timeout = pickle.load(f)
+            now = moment()
+            if now > sess_timeout:
+                log.warning('[SAP] Tiempo de login anterior expiró')
+                login_succeed = sap.login()
+            else:
+                log.info("[SAP] Usando login que está en cache")
+                sap.sess_id = sess_id
+                login_succeed = True
+    return login_succeed

@@ -7,11 +7,14 @@ from core.apps.base.resources.medicar import obtener_datos_formula
 from core.apps.base.resources.tools import read_json
 from core.apps.base.validators import (
     validate_aut_exists,
+    validate_email,
+    validate_empty_empty_response,
+    validate_identificacion_exists,
     validate_med_controlados,
     validate_status,
     validate_status_afiliado,
     validate_status_aut,
-    validate_structure, validate_identificacion_exists, validate_email
+    validate_structure,
 )
 from core.settings import logger
 
@@ -65,31 +68,40 @@ class SinAutorizacion(forms.Form):
     def clean(self):
         tipo = self.cleaned_data.get('tipo_identificacion')
         value = self.cleaned_data.get('identificacion')
-
+        entidad = {'c': 'cajacopi', 'f': 'fomag'}.get(getattr(self, 'source', ''), '')
         resp = {'documento': f"{tipo}{value}"}
 
         if value == "99999999":
             resp_eps = read_json('resources/fake_sin_autorizacion.json')
+        elif entidad:
+            resp_eps = obtener_datos_identificacion(entidad, tipo, value)
+            validate_identificacion_exists(resp_eps, f"{tipo}{value}")
+            validate_empty_empty_response(resp_eps, resp['documento'])
+            self.extra_valitations(entidad, resp, tipo, value)
         else:
-            resp_eps = obtener_datos_identificacion(tipo, value)
+            raise forms.ValidationError(
+                mark_safe("No ha sido posible detectar la entidad a la cual estás afiliado<br><br>"
+                          "<a style='text-decoration:none' href='/'>Click aqui</a> para radicar tu domicilio."))
 
-            if not resp_eps:
-                logger.info(f"No se pudo obtener información del usuario {resp['documento']}.")
-                raise forms.ValidationError(mark_safe("Disculpa, en estos momentos no tenemos conexión<br>"
-                                                      "Por favor intentalo más tarde o en caso de dudas, <br>"
-                                                      "comunícate con nosotros al <br>333 033 3124"))
-
-            validate_identificacion_exists(resp_eps, f"{tipo}:{value}")
-            validate_status_afiliado(resp_eps, 'ESTADO', f"{tipo}:{value}")
-
-        resp.update(
-            {'AFILIADO': resp_eps['NOMBRE'],
-             'NOMBRE': f"{resp_eps['PRIMER_NOMBRE']} {resp_eps['PRIMER_APELLIDO']}",
-             'P_NOMBRE': resp_eps['PRIMER_NOMBRE'],
-             'TIPO_IDENTIFICACION': tipo,
-             'DOCUMENTO_ID': value}
-        )
+        resp |= {
+            'AFILIADO': resp_eps['NOMBRE'],
+            'NOMBRE': f"{resp_eps['PRIMER_NOMBRE']} {resp_eps['PRIMER_APELLIDO']}",
+            'P_NOMBRE': resp_eps['PRIMER_NOMBRE'],
+            'TIPO_IDENTIFICACION': tipo,
+            'DOCUMENTO_ID': value,
+        }
         return resp
+
+    def extra_valitations(self, entidad, resp_api, tipo, value):
+        """
+        Realiza validaciones extra una vez se tenga información de respuesta de api.
+        """
+        if entidad == 'cajacopi':
+            validate_identificacion_exists(resp_api, f"{tipo}:{value}")
+            validate_status_afiliado(resp_api, 'ESTADO', f"{tipo}:{value}")
+        elif entidad == 'fomag':
+            # Validaciones extra cuando se consulta usuario fomag sin autorización
+            ...
 
 
 class AutorizacionServicio(forms.Form):
@@ -184,8 +196,7 @@ class EligeMunicipio(forms.ModelForm):
     municipio = forms.ModelChoiceField(queryset=Municipio.objects.filter(activo=True),
                                        empty_label="Seleccione un municipio",
                                        widget=forms.RadioSelect(
-                                           attrs={'class': 'select_opt'}
-                                       ),
+                                           attrs={'class': 'select_opt'}),
                                        label=False
                                        )
 

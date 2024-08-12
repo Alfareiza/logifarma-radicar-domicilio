@@ -376,7 +376,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
     margin: auto;}
 
 .icon_img {position: relative;
-    width: 100%;
+    width: 2rem;
     height: 100%;}
 
 .tex_img {position: relative;
@@ -425,7 +425,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .piedepagina{position: relative;
     width: 100%;
-    height: 30.3vh;
+    height: 308vh;
     margin: 0px auto 0%;
     padding: 0;
     background: #3c468f;
@@ -1301,6 +1301,7 @@ main section.vista10 p.vist10 {position: relative;
     color: #007BFF;
 }
 .mt-3 { margin-top:3rem }
+.mt-2 { margin-top:2rem }
 
 .button_modal {
       border: none;
@@ -1462,7 +1463,9 @@ main section.vista10 p.vist10 {position: relative;
 
 @media only screen and (max-width: 1899px){
 
-
+.sub-fs-small { font-size: 1rem; margin-top:1.8rem}
+.txt-sm { font-size: 1.5rem; }
+.btn-fomag-sm-pd { padding: 1.3rem 0rem; }
 h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
     font-family: 'Montserrat', sans-serif; }
 
@@ -1800,7 +1803,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
     height: 100%;}
 
 .icon_img {position: relative;
-    width: 100%;
+    width: 2rem;
     height: 100%;}
 
 .tex_img {position: relative;
@@ -1849,7 +1852,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .piedepagina{position: relative;
     width: 100%;
-    height: 34vh;
+    height: 8vh;
     margin: 0px auto 0%;
     padding: 0;
     background: #3c468f;
@@ -2699,6 +2702,9 @@ main section.vista10 p.vist10 {position: relative;
 
 @media only screen and (max-width:1024px) and (max-height:1366px){
 
+.sub-fs-small { font-size: 1rem; margin-top:1.8rem}
+.txt-sm { font-size: 1.5rem; }
+
 h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
     font-family: 'Montserrat', sans-serif; }
 
@@ -3018,7 +3024,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 }
 
 .icon_img {position: relative;
-    width: 100%;
+    width: 2rem;
     height: 100%;}
 
 .tex_img {position: relative;
@@ -3067,7 +3073,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .piedepagina{position: relative;
     width: 100%;
-    height: 40vh;
+    height: 8vh;
     margin: 0px auto 0%;
     padding: 0;
     background: #3c468f;
@@ -3927,7 +3933,8 @@ main section.vista10 p.vist10 {position: relative;
 
 
 @media only screen and (max-width: 822px){
-
+.sub-fs-small { font-size: 1rem; margin-top:1.8rem}
+.txt-sm { font-size: 1.5rem; }
 h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
     font-family: 'Montserrat', sans-serif; }
 
@@ -4262,7 +4269,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 }
 
 .icon_img {position: relative;
-    width: 100%;
+    width: 2rem;
     height: 100%;}
 
 .tex_img {position: relative;
@@ -4311,7 +4318,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .piedepagina{position: relative;
     width: 100%;
-    height: 38vh;
+    height: 8vh;
     margin: 0px auto 0%;
     padding: 0;
     background: #3c468f;
@@ -5193,6 +5200,16 @@ main section.vista10 p.vist10 {position: relative;
 /*mobile*/
 @media only screen and (max-width: 499px){
 
+.sub-fs-small { font-size: .8rem; margin-top:1rem}
+.btn_and_text{
+       margin-top: 3rem;
+       width: 23.5rem;
+       text-align: center;
+   }
+.txt-sm { font-size: 1.2rem; }
+.btn-fomag-sm-pd { padding: 1.3rem 0rem; }
+.btn-cajacopi-sm-pd { padding: .9rem .6rem; }
+
 h1, h2, h3, h4, h5, h6{
     font-family: 'Montserrat', sans-serif; }
 
@@ -5535,7 +5552,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 }
 
 .icon_img {position: relative;
-    width: 100%;
+    width: 1.2rem;
     height: 100%;}
 
 .tex_img {position: relative;
@@ -5584,7 +5601,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .piedepagina{position: relative;
     width: 100%;
-    height: 27vh;
+    height: 8vh;
     margin: 0px auto 0%;
     padding: 0;
     background: #3c468f;
@@ -5649,7 +5666,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
-main section.vista2 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block; background: #27ae60;}
+/*main section.vista2 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block; background: #27ae60;}*/
 
 
 main section.vista2 div.vist2_text { position: relative;
@@ -6495,6 +6512,9 @@ main section.vista10 p.vist10 {position: relative;
 
 @media only screen and (max-width: 320px){
 
+.sub-fs-small { font-size: .8rem; margin-top:1rem}
+.txt-sm { font-size: 1.2rem; }
+
 h1, h2, h3, h4, h5, h6, p, a, span, strong, div, form, select, option, textarea, button {
     font-family: 'Montserrat', sans-serif; }
 
@@ -6834,7 +6854,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 }
 
 .icon_img {position: relative;
-    width: 100%;
+    width: 2rem;
     height: 100%;}
 
 .tex_img {position: relative;
@@ -6884,7 +6904,7 @@ main section.vista1 div.vist1_1 img.img2 {position: relative;
 
 .piedepagina{position: relative;
     width: 100%;
-    height: 36.2vh;
+    height: 368vh;
     margin: 0px auto 0%;
     padding: 0;
     background: #3c468f;
@@ -7756,3 +7776,38 @@ main section.vista10 p.vist10 {position: relative;
 main section#vist2 nav#vist2 div#img p#vist2 {font-size: 0.8em;}
 }
 
+@media (min-width: 500px) {
+    .extra_icon_img {
+        width: 3rem;
+    }
+    .pl-max-500-1-3 {
+        padding-left: 1rem;
+    }
+    .icon-x {
+        width: 1.8rem;
+    }
+    .icon-y {
+        width: 1.6rem;
+    }
+    .text-x {
+        font-size: .67em;
+    }
+    .p-button-modal {
+        padding: 1.5rem 0rem;
+    }
+
+}
+@media (max-width: 499px) {
+    .pl-max-500-1-3 {
+        padding-left: 1.3rem;
+    }
+    .icon-x {
+        width: 1.2rem;
+    }
+    .icon-y {
+        width: 1rem;
+    }
+    .text-x {
+        font-size: .37em;
+    }
+}

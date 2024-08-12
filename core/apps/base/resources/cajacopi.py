@@ -1,4 +1,4 @@
-from core.apps.base.resources.api_calls import request_api, call_api_eps
+from core.apps.base.resources.api_calls import call_api_eps, obtener_datos_identificacion_fomag
 
 
 def obtener_datos_autorizacion(num_aut: int) -> dict:
@@ -50,7 +50,19 @@ def obtener_datos_autorizacion(num_aut: int) -> dict:
     return call_api_eps(url, payload)
 
 
-def obtener_datos_identificacion(tipo: str, value: str) -> dict:
+def obtener_datos_identificacion(eps: str, tipo: str, value: str) -> dict:
+    """
+    Obtiene información de un usuario con base en el tipo de identificaión
+    y su valor
+    :param eps: Puede ser: 'cajacopi' o 'fomag'
+    :param tipo: Puede ser: CC, TI, RC, CN, CD, PA, PE, PT, SC, CE, MS o AS
+    :param value: Valor de identifiación del usuario.
+    """
+    func = {'cajacopi': obtener_datos_identificacion_cajacopi, 'fomag': obtener_datos_identificacion_fomag}
+    return func[eps](tipo, value)
+
+
+def obtener_datos_identificacion_cajacopi(tipo: str, value: str) -> dict:
     """
     Obtiene información de un usuario con base en el tipo de identificaión
     y su valor
