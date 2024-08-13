@@ -77,7 +77,7 @@ class SinAutorizacion(forms.Form):
             resp_eps = obtener_datos_identificacion(entidad, tipo, value)
             validate_identificacion_exists(resp_eps, f"{tipo}{value}")
             validate_empty_empty_response(resp_eps, resp['documento'])
-            self.extra_valitations(entidad, resp, tipo, value)
+            self.extra_valitations(entidad, resp_eps, tipo, value)
         else:
             raise forms.ValidationError(
                 mark_safe("No ha sido posible detectar la entidad a la cual estás afiliado<br><br>"
