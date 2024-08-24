@@ -229,9 +229,9 @@ def guardar_info_bd(**kwargs):
         rad.id = None
         save_in_bd('server', rad)
     except Exception as e:
-        logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación: {e}")
+        logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación: {str(e)}")
         notify('error-bd',
-               f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", e)
+               f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", str(e))
     else:
         logger.info(f"{rad} Radicación guardada con éxito!")
 
