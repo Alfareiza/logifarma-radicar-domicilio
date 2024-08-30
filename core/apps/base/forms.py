@@ -75,7 +75,7 @@ class SinAutorizacion(forms.Form):
             resp_eps = read_json('resources/fake_sin_autorizacion.json')
         elif entidad:
             resp_eps = obtener_datos_identificacion(entidad, tipo, value)
-            validate_identificacion_exists(resp_eps, f"{tipo}{value}")
+            validate_identificacion_exists(entidad, resp_eps, f"{tipo}{value}")
             validate_empty_empty_response(resp_eps, resp['documento'])
             self.extra_valitations(entidad, resp_eps, tipo, value)
         else:
@@ -97,7 +97,7 @@ class SinAutorizacion(forms.Form):
         Realiza validaciones extra una vez se tenga información de respuesta de api.
         """
         if entidad == 'cajacopi':
-            validate_identificacion_exists(resp_api, f"{tipo}:{value}")
+            validate_identificacion_exists(entidad, resp_api, f"{tipo}:{value}")
             validate_status_afiliado(resp_api, 'ESTADO', f"{tipo}:{value}")
         elif entidad == 'fomag':
             # Validaciones extra cuando se consulta usuario fomag sin autorización
