@@ -191,7 +191,7 @@ def validate_status_aut(resp_eps: dict, num_aut: int) -> ValidationError:
         raise forms.ValidationError("El estado de la autorización no está activa.")
 
 
-def validate_identificacion_exists(resp: dict, info: str) -> ValidationError:
+def validate_identificacion_exists(entidad: str, resp: dict, info: str) -> ValidationError:
     """
     Valida que la identificacion existe, considerando la respuesta
     de la API.
@@ -200,9 +200,9 @@ def validate_identificacion_exists(resp: dict, info: str) -> ValidationError:
                 Ej: 'CC:123456789'
     """
     if resp.get('NOMBRE') and 'no existe' in resp['NOMBRE']:
-        logger.info(f"El afiliado {info} no fue encontrado.")
+        logger.info(f"El afiliado {info} no fue encontrado en {entidad}.")
         raise forms.ValidationError(
-            mark_safe("Disculpa, no hemos podido encontrar información con ese documento.<br><br>"
+            mark_safe(f"Disculpa, no hemos podido encontrar información con ese documento en {entidad.title()}.<br><br>"
                       "Por favor verifica e intenta nuevamente."))
 
 
