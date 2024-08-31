@@ -172,6 +172,7 @@ class AutorizacionServicio(forms.Form):
                                         f"con nosotros al: 333 033 3124")
 
         resp_eps['NUMERO_AUTORIZACION'] = num_aut
+        resp_eps['CONVENIO'] = 'cajacopi'
         logger.info(f"{num_aut} Número de autorización pasó las validaciones.")
         return resp_eps
 
