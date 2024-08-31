@@ -89,7 +89,7 @@ class SinAutorizacion(CustomSessionWizard):
         ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
 
         if info_email['documento'][2:] not in ('99999999',):
-            # if True:  # Testando inserción en producción temporalmente
+        # if True:  # Testando inserción en producción temporalmente
             rad = guardar_short_info_bd(**info_email, ip=ip)
             info_email['ref_id'], info_email['NUMERO_RADICACION'], info_email['FECHA_RADICACION'] = rad
             rad_id = info_email['NUMERO_RADICACION']

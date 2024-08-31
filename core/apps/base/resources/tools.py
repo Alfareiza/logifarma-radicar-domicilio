@@ -208,10 +208,11 @@ def guardar_info_bd(**kwargs):
 
     ip = clean_ip(kwargs.pop('ip'))
 
-    logger.info(f"{rad} Guardando radicación.")
+    logger.info(f"{rad} Guardando radicación (medicamento autorizado) de {kwargs.get('CONVENIO', '')}.")
     try:
         rad = Radicacion(
             numero_radicado=str(rad),
+            convenio=kwargs.pop('CONVENIO', None),
             municipio=Municipio.objects.get(activo=True, name__iexact=municipio),
             barrio=Barrio.objects.filter(
                 municipio__name__iexact=municipio,
@@ -267,10 +268,11 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
     ip = clean_ip(kwargs.pop('ip'))
 
     numero_radicado = datetime_id()
-    logger.info(f"{numero_radicado} Guardando radicación de {kwargs['documento']}.")
+    logger.info(f"{numero_radicado} Guardando radicación (medicamento NO autorizado) de {kwargs['documento']} {kwargs.get('CONVENIO', '')}.")
     try:
         rad = Radicacion(
             numero_radicado=numero_radicado,
+            convenio=kwargs.pop('CONVENIO', None),
             municipio=Municipio.objects.get(activo=True, name__iexact=municipio),
             barrio=Barrio.objects.filter(
                 municipio__name__iexact=municipio,
