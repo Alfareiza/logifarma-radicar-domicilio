@@ -89,6 +89,7 @@ class SinAutorizacion(forms.Form):
             'P_NOMBRE': resp_eps['PRIMER_NOMBRE'],
             'TIPO_IDENTIFICACION': tipo,
             'DOCUMENTO_ID': value,
+            'CONVENIO': entidad,
         }
         return resp
 

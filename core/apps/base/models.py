@@ -47,6 +47,7 @@ class Radicacion(Model):
     # creado = DateTimeField(blank=True, null=True)
 
     numero_radicado = CharField(unique=True, max_length=24)
+    convenio = CharField(unique=True, max_length=24, blank=True, null=True)
     municipio = ForeignKey(Municipio, on_delete=CASCADE)
     barrio = ForeignKey(Barrio, on_delete=CASCADE)
     cel_uno = CharField(max_length=24, blank=True, null=True)

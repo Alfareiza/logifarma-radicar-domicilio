@@ -195,6 +195,7 @@ def validate_identificacion_exists(entidad: str, resp: dict, info: str) -> Valid
     """
     Valida que la identificacion existe, considerando la respuesta
     de la API.
+    :param entidad: 'cajacopi' o 'fomag'
     :param resp: Respuesta de la API al ser consultada.
     :param info: Representación del tipo de identificación y su valor.
                 Ej: 'CC:123456789'
