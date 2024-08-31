@@ -15,6 +15,7 @@ from os.path import join
 from pathlib import Path
 
 import pyrebase
+import sentry_sdk
 from decouple import config
 from dj_database_url import parse
 
@@ -232,3 +233,16 @@ SAP_USER = config('SAP_USER')
 SAP_PASS = config('SAP_PASS')
 SAP_COMPANY = config('SAP_COMPANY')
 SAP_URL = config('SAP_URL')
+
+# Sentry
+if SENTRY_DSN := config("SENTRY_DSN", default=None):
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for tracing.
+        traces_sample_rate=1.0,
+        # Set profiles_sample_rate to 1.0 to profile 100%
+        # of sampled transactions.
+        # We recommend adjusting this value in production.
+        profiles_sample_rate=1.0,
+    )
