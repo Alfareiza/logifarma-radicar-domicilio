@@ -77,6 +77,17 @@ class Radicacion(Model):
     def __str__(self):
         return f"{self.numero_radicado}"
 
+    @property
+    def foto_formula(self) -> str:
+        """Determina la url de la imagen de la formula, el cual es una foto tomada en su momento por el usuario"""
+        if self.paciente_data and 'IMG_ID' in self.paciente_data:
+            return f"https://drive.google.com/file/d/{self.paciente_data['IMG_ID']}/view"
+        return ''
+
+    @property
+    def medicamento_autorizado(self) -> bool:
+        """Determina si el radicado contiene medicamentos autorizados."""
+        return 'FECHA_AUTORIZACION' in self.paciente_data or 'DIAGNOSTICO' in self.paciente_data
 
 
 class Med_Controlado(Model):
