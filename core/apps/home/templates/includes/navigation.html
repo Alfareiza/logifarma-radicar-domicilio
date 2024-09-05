@@ -16,32 +16,45 @@
   </a>
   <div class="collapse navbar-collapse">
     <ul class="navbar-nav mr-auto">
-      <li><a href="javascript:" class="full-screen" onclick="javascript:toggleFullScreen()"><i
-            class="feather icon-maximize"></i></a></li>
-      <!--<li class="nav-item dropdown">
-        <a class="dropdown-toggle" href="javascript:" data-toggle="dropdown">Dropdown</a>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="javascript:">Action</a></li>
-          <li><a class="dropdown-item" href="javascript:">Another action</a></li>
-          <li><a class="dropdown-item" href="javascript:">Something else here</a></li>
-        </ul>
-      </li>-->
+      <li><a href="javascript:" class="full-screen" onclick="javascript:toggleFullScreen()">
+        <i class="feather icon-maximize"></i></a>
+      </li>
+<!--      <li class="nav-item dropdown">-->
+<!--        <a class="dropdown-toggle" href="javascript:" data-toggle="dropdown">Dropdown</a>-->
+<!--        <ul class="dropdown-menu">-->
+<!--          <li><a class="dropdown-item" href="javascript:">Action</a></li>-->
+<!--          <li><a class="dropdown-item" href="javascript:">Another action</a></li>-->
+<!--          <li><a class="dropdown-item" href="javascript:">Something else here</a></li>-->
+<!--        </ul>-->
+<!--      </li>-->
 
-  <!--<li class="nav-item">
-        <div class="main-search">
-          <div class="input-group">
-            <input type="text" id="m-search" class="form-control" placeholder="Search . . .">
-            <a href="javascript:" class="input-group-append search-close">
-              <i class="feather icon-x input-group-text"></i>
-            </a>
-            <span class="input-group-append search-btn btn btn-primary">
-              <i class="feather icon-search input-group-text"></i>
-            </span>
-          </div>
-        </div>
-      </li>-->
+<!--  <li class="nav-item">-->
+<!--        <div class="main-search">-->
+<!--          <div class="input-group">-->
+<!--            <input type="text" id="m-search" class="form-control" placeholder="Search . . .">-->
+<!--            <a href="javascript:" class="input-group-append search-close">-->
+<!--              <i class="feather icon-x input-group-text"></i>-->
+<!--            </a>-->
+<!--            <span class="input-group-append search-btn btn btn-primary">-->
+<!--              <i class="feather icon-search input-group-text"></i>-->
+<!--            </span>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </li>-->
     </ul>
     <ul class="navbar-nav ml-auto">
+      <!-- Sart timer -->
+        <li id="timer-container" style="padding-right:0px;color:#888">
+      <!-- End timer -->
+      <li>
+       <div>
+         <label>
+          <input type="checkbox" id="autorefresh-switch" class="d-none">
+          <i class="icon feather icon-refresh-cw auto-refresh" id="auto-refresh-indicator" data-toggle="tooltip"
+             title="Actualiza la página cada 1 minuto"></i>
+        </label>
+       </div>
+      </li>
       <li>
         <label>
           <i class="icon feather icon-sun" id="theme-indicator"></i>
@@ -151,3 +164,97 @@
     </ul>
   </div>
 </header>
+<script>
+    let refreshInterval;
+    let countdownInterval;
+    let countdownValue = 60; // Start from 60 seconds
+
+    const autoRefreshSwitch = document.getElementById('autorefresh-switch');
+    const autoRefreshIndicator = document.getElementById('auto-refresh-indicator');
+    const timerContainer = document.getElementById('timer-container');
+
+    console.log('opa0')
+
+    // Check the saved state in localStorage when the page loads
+    window.onload = function() {
+        const isAutoRefreshEnabled = localStorage.getItem('isAutoRefreshEnabled') === 'true';
+
+        // Set checkbox and auto-refresh state based on stored value
+        autoRefreshSwitch.checked = isAutoRefreshEnabled;
+
+        if (isAutoRefreshEnabled) {
+            enableAutoRefresh();
+        } else {
+            disableAutoRefresh();
+        }
+    };
+
+    // Event listener for checkbox change
+    autoRefreshSwitch.addEventListener('change', function () {
+        if (this.checked) {
+            // Enable auto-refresh
+            enableAutoRefresh();
+            console.log('Auto actualización activada')
+        } else {
+            // Disable auto-refresh
+            disableAutoRefresh();
+            console.log('Auto actualización desactivada')
+        }
+
+        // Save the state in localStorage
+        localStorage.setItem('isAutoRefreshEnabled', this.checked);
+    });
+
+    function enableAutoRefresh() {
+        // Start auto-refresh interval
+        refreshInterval = setInterval(function () {
+            location.reload();
+        }, 60000); // Refresh every 60000 milliseconds (1 minute)
+
+        // Remove the "disabled-refresh" class when enabling
+        autoRefreshIndicator.classList.remove('disabled-refresh');
+
+         showTimer();
+         startCountdown();
+
+    }
+
+    function disableAutoRefresh() {
+        // Clear auto-refresh interval
+        clearInterval(refreshInterval);
+
+        // Add the "disabled-refresh" class to change styles
+        autoRefreshIndicator.classList.add('disabled-refresh');
+
+         // Hide the timer and stop countdown
+        hideTimer();
+        stopCountdown();
+    }
+
+     function showTimer() {
+        // Render the timer HTML
+        timerContainer.innerHTML = `<p id="countdown">${countdownValue}</p>`;
+    }
+
+    function hideTimer() {
+        // Clear the timer HTML
+        timerContainer.innerHTML = '';
+    }
+
+    function startCountdown() {
+        countdownValue = 60; // Reset the countdown
+        countdownInterval = setInterval(function() {
+            countdownValue--;
+            document.getElementById('countdown').textContent = countdownValue;
+
+            // If countdown reaches 0, reset to 60 for the next interval
+            if (countdownValue <= 0) {
+                countdownValue = 60;
+            }
+        }, 1000); // Update every second
+    }
+
+    function stopCountdown() {
+        clearInterval(countdownInterval); // Stop the countdown
+    }
+</script>

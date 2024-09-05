@@ -80,10 +80,13 @@ def crecimiento_con_mes_anterior(current_day, current_hour, rads_current_month, 
     count_rads_last_month_until_current_day = rads_last_month.filter(
         datetime__day__lte=current_day).exclude(datetime__day=current_day, datetime__hour__gt=current_hour).count()
     count_rads_current_month_until_current_day = rads_current_month.filter(datetime__day__lte=current_day).count()
-    crecimiento = int(round((
-                                (count_rads_current_month_until_current_day - count_rads_last_month_until_current_day)
-                                / count_rads_last_month_until_current_day
-                        ) * 100, 2))
+    if count_rads_last_month_until_current_day:
+        crecimiento = int(round((
+                                    (count_rads_current_month_until_current_day - count_rads_last_month_until_current_day)
+                                    / count_rads_last_month_until_current_day
+                            ) * 100, 2))
+    else:
+        crecimiento = 0
     return f"+{crecimiento}%" if crecimiento > 0 else f"{crecimiento}%"
 
 

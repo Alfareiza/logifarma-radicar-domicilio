@@ -318,8 +318,9 @@
             </div>
             <div class="col text-right">
               <h3>{{ radicados|length }}</h3>
-              <h5 class="text-c-purple mb-0">{{porcentaje_crecimiento}}<span class="text-muted">Total Radicados del Mes</span>
-              </h5>
+              <h6 class="{% if porcentaje_crecimiento|first in '+' %} text-c-green {% else %} text-c-red {% endif %}mb-0">
+                {{porcentaje_crecimiento}}</h6>
+              <h5><span class="text-muted">Total Radicados del Mes</span></h5>
             </div>
           </div>
         </div>

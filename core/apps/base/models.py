@@ -89,6 +89,12 @@ class Radicacion(Model):
         """Determina si el radicado contiene medicamentos autorizados."""
         return 'FECHA_AUTORIZACION' in self.paciente_data or 'DIAGNOSTICO' in self.paciente_data
 
+    @property
+    def numero_autorizacion(self):
+        if self.medicamento_autorizado:
+            return self.numero_radicado
+        return f"F{self.id}"
+
 
 class Med_Controlado(Model):
     cum = CharField(max_length=24)
