@@ -1,0 +1,72 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load my_filters %}
+{% block extrastyle %}
+<!-- datatable css https://datatables.net -->
+<!--<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">-->
+<link rel="stylesheet" href="{% static 'assets/plugins/chart-morris/css/morris.css' %}">
+{% endblock extrastyle %}
+
+{% block content %}
+<!-- [ Main Content ] start https://django-datta-able.appseed-srv1.com/ -->
+<!--[ Recent Rads ] start-->
+<div class="col-xl-12 col-md-12">
+  <div class="card Recent-Users">
+    <div class="card-header">
+      <h5>Radicados sin acta ({{radicados|length}})</h5>
+    </div>
+    <div class="card-block px-0 py-3">
+      <div class="table-responsive">
+        <table id="myTable" class="table table-hover display">
+          <thead>
+            <tr>
+              <th>Numero radicado</th>
+              <th>Celular</th>
+              <th>Municipio/Departamento</th>
+              {% comment %}<th>Dirección/Email</th>{% endcomment %}
+              <th>Fecha de radicado</th>
+              <th>Más</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for rad in radicados %}
+            <tr class="unread">
+              <td>
+                <h6 class="m-0">{{ rad.numero_radicado }}</h6>
+                <p class="mb-1">{{ rad.paciente_nombre }}</p>
+              </td>
+              <td>
+                <h6 class="mb-1">{{ rad.cel_uno }}</h6>
+                <h6 class="text-muted">{{ rad.cel_dos|default_if_none:'' }}</h6>
+              </td>
+              <td>
+                <h6 class="mb-1">{{ rad.municipio }}</h6>
+                <h6 class="mb-1">{{ rad.direccion }}</h6>
+              </td>
+              {% comment %}
+              <td>
+                <h6 class="mb-1">{{ rad.email }}</h6>
+              </td>
+              {% endcomment %}
+              <td>
+                <h6 class="text-muted">
+                  {{ rad.datetime|date:"j M Y H:i" }}
+                </h6>
+                <p class="mb-1">{{ rad.convenio|title }}</p>
+              </td>
+              <td>
+                {% if rad.foto_formula %}
+                  <a href="{{rad.foto_formula}}" target="_blank" class="label theme-bg text-white f-12">Foto fórmula</a>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!--[ Recent Rads ] end-->
+{% endblock content %}
+{% block extra_js %}{% endblock extra_js %}

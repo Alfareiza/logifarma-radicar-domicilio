@@ -82,7 +82,9 @@ class Command(BaseCommand):
                    f"Analisis ejecutado el {day_slash_month_year(datetime.datetime.now())}.\n"
                    f"Radicados analizados: \t{len(rads_med_autorizados) + len(rads_med_no_autorizados)}.\n"
                    f"Radicados actualizados: \t{len(self.updated)}. \n" \
-                   f"Radicados sin acta o con error al consultarse: {len(self.errs)}.\n {' '.join(self.errs)}")
+                   f"Radicados sin acta o con error al consultarse: {len(self.errs)}."
+                   f"\nEl siguiente reporte puede ser visto en https://domicilios.logifarma.com.co/sinacta/"
+                   f"\n {' '.join(self.errs)}")
 
         # Envia mensajes de alerta de cada autorización
         # connection.send_messages(self.emails)

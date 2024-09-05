@@ -17,16 +17,21 @@
         <li class="nav-item pcoded-menu-caption">
           <label>Menú </label>
         </li>
+        {% if request.user.is_superuser or request.user|is_staff %}
         <li data-username="dashboard Default Ecommerce CRM Analytics Crypto Project" class="nav-item {% if 'index' in segment %}active{% endif %}">
-          {% if request.user.is_superuser or request.user|is_staff %}
-          <a href="#" class="nav-link ">
+          <a href="{% url 'index' %}" class="nav-link ">
             <span class="pcoded-micon">
               <i class="feather icon-home"></i>
             </span>
             <span class="pcoded-mtext">Dashboard</span>
           </a>
-          {% endif %}
         </li>
+        <li data-username="Table bootstrap datatable footable" class="nav-item {% if 'basic_tables' in segment %}active{% endif %}">
+          <a href="{% url 'sinacta' %}" class="nav-link ">
+            <span class="pcoded-micon"><i class="feather icon-server"></i></span>
+            <span class="pcoded-mtext">Sin acta de entrega</span></a>
+        </li>
+        {% endif %}
 
         {% if not request.user.is_authenticated %}
         <li

@@ -1,3 +1,4 @@
+import datetime
 from typing import List
 
 from django.db.models import Count
@@ -84,3 +85,10 @@ def crecimiento_con_mes_anterior(current_day, current_hour, rads_current_month, 
                                 / count_rads_last_month_until_current_day
                         ) * 100, 2))
     return f"+{crecimiento}%" if crecimiento > 0 else f"{crecimiento}%"
+
+
+def radicados_sin_acta():
+    dt = datetime.datetime.now()
+    return Radicacion.objects.select_related('municipio').filter(acta_entrega=None).exclude(
+        datetime__day=dt.day, datetime__month=dt.month, datetime__year=dt.year
+    ).order_by('datetime')

@@ -64,6 +64,14 @@ def index(request):
                       'qty_pacientes_cajacopi': radicados.filter(convenio='cajacopi').count()
                   }
                   )
+def sinacta(request):
+    radicados = facade.radicados_sin_acta()
+    return render(request, "pages/tables.html",
+                  {
+                      'segment': '',
+                      'parent': f'Radicados sin acta de entrega',
+                      'radicados': radicados
+                  })
 
 
 # Authentication
