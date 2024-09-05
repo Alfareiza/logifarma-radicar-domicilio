@@ -7,8 +7,6 @@
 <link rel="stylesheet" href="{% static 'assets/plugins/chart-morris/css/morris.css' %}">
 {% endblock extrastyle %}
 
-{% block breadcrumbs %}{% endblock breadcrumbs %}
-
 {% block content %}
 
   <!-- [ Main Content ] start https://django-datta-able.appseed-srv1.com/ -->
@@ -320,7 +318,7 @@
             </div>
             <div class="col text-right">
               <h3>{{ radicados|length }}</h3>
-              <h5 class="text-c-purple mb-0">+6.2% <span class="text-muted">Total Radicados del Mes</span>
+              <h5 class="text-c-purple mb-0">{{porcentaje_crecimiento}}<span class="text-muted">Total Radicados del Mes</span>
               </h5>
             </div>
           </div>
@@ -345,6 +343,33 @@
                   <div class="progress-bar progress-c-purple" role="progressbar" style="width:70%;height:.6rem;"
                     aria-valuenow="{{qty_medicamentos_no_autorizados}}" aria-valuemin="0" aria-valuemax="{{ radicados|length }}"></div>
                 </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-xl-4">
+      <div class="card">
+        <div class="card-block border-bottom">
+          <div class="row d-flex align-items-center">
+            <div class="col-auto">
+              <img style="width: 8rem;" src="{% static 'img/fomag_logo.png' %}" alt="">
+            </div>
+            <div class="col">
+              <h3 class="f-w-300 text-center">{{ qty_pacientes_fomag }}</h3>
+<!--              <span class="d-block text-uppercase">Usuarios atendidos</span>-->
+            </div>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="row d-flex align-items-center">
+            <div class="col-auto">
+              <img style="width: 10rem;" src="{% static 'img/cajacopi_logo.png' %}" alt="">
+            </div>
+            <div class="col">
+              <h3 class="f-w-300 text-center">{{ qty_pacientes_cajacopi }}</h3>
+<!--              <span class="d-block text-uppercase">Cajacopi</span>-->
             </div>
           </div>
         </div>

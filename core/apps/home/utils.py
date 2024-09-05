@@ -5,6 +5,8 @@ Copyright (c) 2019 - present AppSeed.us
 
 import datetime
 import json
+from typing import Tuple
+
 from django.template import Context
 from django.utils import translation
 
@@ -39,7 +41,6 @@ try:
     from collections import OrderedDict
 except ImportError:
     from ordereddict import OrderedDict  # Python 2.6
-
 
 default_apps_icon = {
     'auth': 'feather icon-lock'
@@ -555,3 +556,16 @@ def user_is_authenticated(user):
         return user.is_authenticated
     else:
         return user.is_authenticated()
+
+
+def get_last_month_and_year(dt: 'datetime') -> Tuple:
+    if dt.month == 1:
+        previous_month = 12
+        previous_year = dt.year - 1
+    else:
+        previous_month = dt.month - 1
+        previous_year = dt.year
+    return previous_year, previous_month
+
+MES = ('', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre',
+       'Noviembre', 'Diciembre')
