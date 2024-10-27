@@ -37,7 +37,7 @@ def make_subject_and_cco(info_email) -> tuple:
                 1 -> copia_oculta (list)
     """
 
-    copia_oculta = config('EMAIL_BCC', cast=Csv())
+    copia_oculta = config('EMAIL_BCC', cast=Csv(), default=())
 
     # Definiendo asunto
     if info_email.get('documento'):
@@ -211,7 +211,7 @@ class Email:
                     1 -> copia_oculta (list)
         """
 
-        copia_oculta = config('EMAIL_BCC', cast=Csv())
+        copia_oculta = config('EMAIL_BCC', cast=Csv(), default=())
 
         # Definiendo asunto
         if info.get('documento'):
