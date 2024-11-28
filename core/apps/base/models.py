@@ -74,6 +74,9 @@ class Radicacion(Model):
     acta_entrega = CharField(max_length=150, blank=True, null=True)
     factura = CharField(max_length=150, blank=True, null=True)
 
+    # Uso interno de Logifarma
+    visto = BooleanField(default=False)
+
     def __str__(self):
         return f"{self.numero_radicado}"
 
