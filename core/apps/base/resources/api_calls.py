@@ -6,7 +6,7 @@ from typing import Tuple, Dict
 import requests
 from decouple import config
 from django.template.loader import get_template
-from pymssql import Connection
+# from pymssql import Connection
 from requests import Timeout
 from urllib3.exceptions import NewConnectionError, MaxRetryError
 
@@ -86,7 +86,7 @@ def request_api(url, headers, payload, method='POST') -> dict:
     # logger.info(f'API Header: {headers}')
     # logger.info(f'API Payload: {payload}')
     try:
-        response = requests.request(method, url, headers=headers, data=payload, timeout=20)
+        response = requests.request(method, url, headers=headers, data=payload, timeout=20, verify=False)
         if response.status_code == 200:
             return json.loads(response.text.encode('utf-8'), strict=False)
         res = requests.request('GET', 'https://httpbin.org/ip')
@@ -380,14 +380,14 @@ def find_cums(articulos: Tuple) -> Dict[str, str]:
         conn.close()
 
 
-def make_dbconn() -> Connection:
-    import pymssql
-    server = config('SQL_SERVER_HOST')
-    database = config('SQL_SERVER_DB')
-    username = config('SQL_SERVER_USER')
-    password = config('SQL_SERVER_PASS')
-    return pymssql.connect(server=server, database=database,
-                           user=username, password=password)
+# def make_dbconn() -> Connection:
+#     import pymssql
+#     server = config('SQL_SERVER_HOST')
+#     database = config('SQL_SERVER_DB')
+#     username = config('SQL_SERVER_USER')
+#     password = config('SQL_SERVER_PASS')
+#     return pymssql.connect(server=server, database=database,
+#                            user=username, password=password)
 
 
 if __name__ == '__main__':

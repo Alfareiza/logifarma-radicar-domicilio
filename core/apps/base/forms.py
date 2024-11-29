@@ -8,9 +8,10 @@ from core.apps.base.resources.tools import read_json
 from core.apps.base.validators import (
     validate_aut_exists,
     validate_email,
-    validate_empty_empty_response,
+    validate_empty_response,
     validate_identificacion_exists,
     validate_med_controlados,
+    validate_recent_radicado,
     validate_status,
     validate_status_afiliado,
     validate_status_aut,
@@ -68,6 +69,7 @@ class SinAutorizacion(forms.Form):
     def clean(self):
         tipo = self.cleaned_data.get('tipo_identificacion')
         value = self.cleaned_data.get('identificacion')
+        flag_new_formula = self.data.get('flag_new_formula')
         entidad = {'c': 'cajacopi', 'f': 'fomag'}.get(getattr(self, 'source', ''), '')
         resp = {'documento': f"{tipo}{value}"}
 
@@ -76,8 +78,10 @@ class SinAutorizacion(forms.Form):
         elif entidad:
             resp_eps = obtener_datos_identificacion(entidad, tipo, value)
             validate_identificacion_exists(entidad, resp_eps, f"{tipo}{value}")
-            validate_empty_empty_response(resp_eps, resp['documento'])
-            self.extra_valitations(entidad, resp_eps, tipo, value)
+            validate_empty_response(resp_eps, resp['documento'])
+            if not flag_new_formula:
+                self.extra_validations(entidad, resp_eps, tipo, value)
+                validate_recent_radicado(tipo, value)
         else:
             raise forms.ValidationError(
                 mark_safe("No ha sido posible detectar la entidad a la cual estás afiliado<br><br>"
@@ -93,7 +97,7 @@ class SinAutorizacion(forms.Form):
         }
         return resp
 
-    def extra_valitations(self, entidad, resp_api, tipo, value):
+    def extra_validations(self, entidad, resp_api, tipo, value):
         """
         Realiza validaciones extra una vez se tenga información de respuesta de api.
         """

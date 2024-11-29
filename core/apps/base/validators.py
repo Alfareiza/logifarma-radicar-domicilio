@@ -11,7 +11,7 @@ from django.utils.safestring import mark_safe
 from core.apps.base.models import Med_Controlado, Radicacion
 from core.apps.base.resources.api_calls import get_firebase_acta
 from core.apps.base.resources.tools import encrypt, notify, pretty_date, \
-    update_rad_from_fbase, has_accent, update_field
+    update_rad_from_fbase, has_accent, update_field, when
 from core.settings import BASE_DIR, logger
 
 
@@ -218,9 +218,37 @@ def validate_email(email: str) -> ValidationError:
         raise forms.ValidationError(mark_safe("E-mail inválido."))
 
 
-def validate_empty_empty_response(resp_eps: dict, documento: str) -> ValidationError:
+def validate_empty_response(resp_eps: dict, documento: str) -> ValidationError:
     if not resp_eps:
         logger.info(f"No se pudo obtener información del usuario {documento}.")
         raise forms.ValidationError(mark_safe("Disculpa, en estos momentos no tenemos conexión<br><br>"
                                               "Por favor intentalo más tarde o en caso de dudas, <br>"
                                               "comunícate con nosotros al <br>333 033 3124"))
+
+
+def validate_recent_radicado(tipo: str, value: str):
+    """Check that the user with more than one radicado is notified that he has pending filings."""
+    existing_radicados = Radicacion.objects.filter(
+        paciente_cc=f'{tipo}{value}', acta_entrega__isnull=True
+    ).only('id', 'datetime', 'paciente_data')
+    existing_radicados_count = existing_radicados.count()
+    logger.info(f"{tipo}{value} tiene {existing_radicados_count} radicacion(es) pendiente(es) de entregar.")
+    if existing_radicados_count >= 1:
+        announce_pending_radicado_and_render_buttons(existing_radicados)
+
+
+def announce_pending_radicado_and_render_buttons(existing_radicados: 'QuerySet') -> ValidationError:
+    """Raise an exception with "entiendo" button and "solicitar fórmula nueva" button conditionally."""
+    rad = existing_radicados.first()
+    template_btn = get_template('base/btn_in_modal.html')
+    entiendo = template_btn.render({'id': 'entiendo', 'txt': 'Entiendo', 'bgcolor': '#2a57a9',
+                                    'txtcolor': 'white', 'widthbox': 70})
+    new_formula = template_btn.render({'id': 'new_formula', 'txt': 'Solicitar fórmula nueva',
+                                       'bgcolor': 'white', 'txtcolor': '#2a57a9', 'widthbox': 22})
+    raise forms.ValidationError(mark_safe("Tenemos pendiente la entrega de medicamento(s) con el "
+                                          f"número de radicación F{rad.id} solicitado "
+                                          f"{format(rad.datetime, when(rad.datetime))}.<br><br>"
+                                          f'<a style="text-decoration:none" target="_blank" '
+                                          f'href="{rad.foto_formula}"">Click aquí para ver la fórmula</a><br><br>'
+                                          f'<b>No es necesario que la vuelvas a radicar</b><br><br>'
+                                          f'{entiendo}<br>{new_formula}<br>'))
