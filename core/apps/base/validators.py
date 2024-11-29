@@ -251,4 +251,4 @@ def announce_pending_radicado_and_render_buttons(existing_radicados: 'QuerySet')
                                           f'<a style="text-decoration:none" target="_blank" '
                                           f'href="{rad.foto_formula}"">Click aquí para ver la fórmula</a><br><br>'
                                           f'<b>No es necesario que la vuelvas a radicar</b><br><br>'
-                                          f'{entiendo}<br>{new_formula}<br>'))
+                                          f'{entiendo}<br>{new_formula if not rad.radicado_today else ""}<br>'))

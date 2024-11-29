@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db.models import (
     BooleanField, CASCADE,
     CharField,
@@ -11,6 +13,7 @@ from django.db.models import (
     PositiveBigIntegerField,
     PositiveIntegerField, DateField,
 )
+from pytz import timezone
 
 
 class Municipio(Model):
@@ -97,6 +100,10 @@ class Radicacion(Model):
         if self.medicamento_autorizado:
             return self.numero_radicado
         return f"F{self.id}"
+
+    @property
+    def radicado_today(self) -> bool:
+        return self.datetime.date() == datetime.now(tz=timezone('America/Bogota')).date()
 
 
 class Med_Controlado(Model):
