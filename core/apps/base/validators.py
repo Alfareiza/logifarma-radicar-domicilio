@@ -232,8 +232,9 @@ def validate_recent_radicado(tipo: str, value: str):
         paciente_cc=f'{tipo}{value}', acta_entrega__isnull=True
     ).only('id', 'datetime', 'paciente_data')
     existing_radicados_count = existing_radicados.count()
-    logger.info(f"{tipo}{value} tiene {existing_radicados_count} radicacion(es) pendiente(es) de entregar.")
     if existing_radicados_count >= 1:
+        logger.info(f"{tipo}{value} tiene {existing_radicados_count} radicacion(es) pendiente(es) de entregar y está "
+                    f"radicando una nueva.")
         announce_pending_radicado_and_render_buttons(existing_radicados)
 
 
@@ -251,4 +252,4 @@ def announce_pending_radicado_and_render_buttons(existing_radicados: 'QuerySet')
                                           f'<a style="text-decoration:none" target="_blank" '
                                           f'href="{rad.foto_formula}"">Click aquí para ver la fórmula</a><br><br>'
                                           f'<b>No es necesario que la vuelvas a radicar</b><br><br>'
-                                          f'{entiendo}<br>{new_formula if not rad.radicado_today else ""}<br>'))
+                                          f'{entiendo}<br>{"" if rad.radicado_today else new_formula}<br>'))
