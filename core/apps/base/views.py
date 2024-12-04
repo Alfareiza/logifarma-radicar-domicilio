@@ -150,9 +150,10 @@ class ContactWizard(CustomSessionWizard):
                     f" Radicación finalizada. E-mail de confirmación será enviado a {form_data['digitaCorreo']}")
 
         # Revisa medicamentos
-        if not config("DEBUG", cast=bool):
-            ask_med = threading.Thread(target=check_meds, args=(info_email,))
-            ask_med.start()
+        # Deprecado 4-Dic-2024
+        # if not config("DEBUG", cast=bool):
+        #     ask_med = threading.Thread(target=check_meds, args=(info_email,))
+        #     ask_med.start()
 
         # Envía e-mail
         if not self.foto_fmedica:
