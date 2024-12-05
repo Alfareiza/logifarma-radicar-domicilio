@@ -227,8 +227,6 @@ def guardar_info_bd(**kwargs):
             paciente_cc=kwargs.pop('DOCUMENTO_ID', None),
             paciente_data=kwargs)
         save_in_bd('default', rad)
-        rad.id = None
-        save_in_bd('server', rad)
     except Exception as e:
         logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación: {str(e)}")
         notify('error-bd',
@@ -240,7 +238,7 @@ def guardar_info_bd(**kwargs):
 def save_in_bd(name_bd: str, rad: Radicacion):
     """
     Guarda una instancia de Radicacion en la base de datos informada en name_bd
-    :param name_bd: Puede ser 'default' o 'server' que son las bases configuradas en settings.
+    :param name_bd: Puede ser 'default' que son las bases configuradas en settings.
     :return:
     """
     try:
@@ -290,8 +288,6 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
 
         save_in_bd('default', rad)
         resp = numero_radicado, rad.id, rad.datetime,
-        rad.id = None
-        save_in_bd('server', rad)
 
     except Exception as e:
         logger.error(f"{numero_radicado} Error guardando radicación: {e}")
