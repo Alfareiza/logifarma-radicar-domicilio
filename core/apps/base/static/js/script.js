@@ -59,7 +59,7 @@ function buscador_interno(){
 }
 
 
-const btnPageTwo = document.getElementById('btn_conti');
+const btnPageTwo = document.getElementById('btn_final');
 
 btnPageTwo.addEventListener('click', function() {
   

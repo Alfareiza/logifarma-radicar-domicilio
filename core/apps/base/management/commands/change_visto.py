@@ -21,15 +21,16 @@ class Command(BaseCommand):
         if radicaciones:
             Radicacion.objects.bulk_update(radicaciones, ['visto'], batch_size=500)
             logger.info(f'{len(radicaciones)} Radicados fueron actualizados para visto igual a True')
-        logger.info('No se encontraron radicados con acta_entrega igual a Null y visto igual a True')
+        else:
+            logger.info('No se encontraron radicados con acta_entrega igual a Null y visto igual a True')
 
     def handle(self, *args, **options):
         """Función principal que busca los radicados y los actualiza."""
-        logger.info('Iniciando script para cambiar visto en radicados')
+        logger.info("Iniciando script que cambia 'visto' en radicados")
         qs = self.get_queryset()
         to_update = []
         for radicacion in qs:
             radicacion.visto = False
             to_update.append(radicacion)
         self.update(to_update)
-        logger.info('Finalizado script para cambiar visto en radicados')
+        logger.info("Finalizado script que cambia 'visto' en radicados")
