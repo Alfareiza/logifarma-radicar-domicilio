@@ -101,10 +101,6 @@ class Radicacion(Model):
             return self.numero_radicado
         return f"F{self.id}"
 
-    @property
-    def radicado_today(self) -> bool:
-        return self.datetime.date() == datetime.now(tz=timezone('America/Bogota')).date()
-
 
 class Med_Controlado(Model):
     cum = CharField(max_length=24)
