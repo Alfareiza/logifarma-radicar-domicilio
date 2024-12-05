@@ -44,17 +44,6 @@ class MunicipioAdmin(admin.ModelAdmin):
     ordering = ('name', 'departamento')
     actions = [export_csv, toggle_activo]
 
-    def save_model(self, request, obj, form, change):
-        self.saving_obj(obj)
-
-    def saving_obj(self, obj):
-        try:
-            obj.save(using='default')
-        except Exception as e:
-            logger.info("Error al guardar municipio: ", e)
-        else:
-            obj.save(using='server')
-
 
 @admin.register(Barrio)
 class BarrioAdmin(admin.ModelAdmin):
@@ -65,17 +54,6 @@ class BarrioAdmin(admin.ModelAdmin):
     raw_id_fields = ('municipio',)
     actions = [export_csv]
 
-    def save_model(self, request, obj, form, change):
-        self.saving_obj(obj)
-
-    def saving_obj(self, obj):
-        try:
-            obj.save(using='default')
-        except Exception as e:
-            logger.info("Error al guardar barrio: ", e)
-        else:
-            obj.save(using='server')
-
 
 @admin.register(Med_Controlado)
 class MedicamentoControladoAdmin(admin.ModelAdmin):
@@ -85,14 +63,3 @@ class MedicamentoControladoAdmin(admin.ModelAdmin):
     search_fields = ('name', 'cum')
     ordering = ('nombre', 'cum')
     actions = [export_csv]
-
-    def save_model(self, request, obj, form, change):
-        self.saving_obj(obj)
-
-    def saving_obj(self, obj):
-        try:
-            obj.save(using='default')
-        except Exception as e:
-            logger.info("Error al guardar medicamento controlado: ", e)
-        else:
-            obj.save(using='server')

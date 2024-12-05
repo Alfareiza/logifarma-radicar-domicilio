@@ -56,12 +56,9 @@ class Command(BaseCommand):
         Excluye el Inventario de determinado centro.
         :param centro: Codigo del centro a ser excluido. Ej.: '404'
         """
-        all_inv_default = Inventario.objects.using('default').filter(centro=centro).all()
-        # all_inv_server = Inventario.objects.using('server').filter(centro=centro).all()
+        all_inv_default = Inventario.objects.filter(centro=centro).all()
         if all_inv_default:
-            # and all_inv_server):
             all_inv_default.delete()
-            # all_inv_server.delete()
 
     @logtime('INV')
     def register_inventario(self, centro: str, objs: List[Inventario]) -> None:
@@ -73,7 +70,6 @@ class Command(BaseCommand):
         :param objs: Inventario a ser agregado.
         """
         Inventario.objects.bulk_create(objs)
-        # Inventario.objects.using('server').bulk_create(objs)
 
     @logtime('')
     def fetch_cums(self, total_inv: List[List[dict]]) -> List:

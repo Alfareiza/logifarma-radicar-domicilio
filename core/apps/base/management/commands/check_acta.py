@@ -185,19 +185,16 @@ class Command(BaseCommand):
 
     def update_radicacion(self, rad: Radicacion, acta_entrega: int):
         """
-        Actualiza el radicado en ambas bases de datos.
+        Actualiza el radicado en bases de datos.
             - Caso haya sido entregado (cuando tiene la llave act en firebase), es
               actualizado con base a la información que está firebase.
             - De lo contrario, solamente actualiza el campo acta_entrega.
         """
         logger.info(f"{self.get_numero_autorizacion(rad)} consultando información en Firebase.")
         resp_fbase = get_firebase_acta(acta_entrega)
-        rad_server = Radicacion.objects.using('server').get(numero_radicado=self.get_numero_autorizacion(rad))
         if resp_fbase.get('act'):
             try:
                 update_rad_from_fbase(rad, resp_fbase)
-                if rad_server:
-                    update_rad_from_fbase(rad_server, resp_fbase)
             except Exception as e:
                 logger.error(f"{self.get_numero_autorizacion(rad)} No fue posible guardar, ERROR={e}")
                 self.errs.append(rad)
@@ -207,8 +204,6 @@ class Command(BaseCommand):
             logger.info(f"{self.get_numero_autorizacion(rad)} tiene acta pero aún no tiene "
                         f"información en Firebase.")
             self.update_acta_entrega(rad, str(acta_entrega))
-            if rad_server:
-                self.update_acta_entrega(rad_server, str(acta_entrega))
         self.updated.append(self.get_numero_autorizacion(rad))
 
     def update_acta_entrega(self, rad, new_value):

@@ -33,17 +33,14 @@ def validate_status(resp_mcar: dict, rad_default: Radicacion) -> ValidationError
     )
     logger.info(f"{rad_default.numero_radicado} radicado {radicado_dt}.")
     text_resp = ''
-    rad_server = Radicacion.objects.using('server').filter(numero_radicado=rad_default.numero_radicado).first()
     if ssc := resp_mcar.get('ssc'):
         if not rad_default.acta_entrega:
             update_field(rad_default, 'acta_entrega', ssc)
-            update_field(rad_server, 'acta_entrega', ssc)
         if factura := resp_mcar.get('factura'):
             # Radicado  tiene SSC, factura y está por confirmar si está firebase
             logger.info(f"{rad_default.numero_radicado} radicado con factura detectada.")
             if not rad_default.factura:
                 update_field(rad_default, 'factura', factura)
-                update_field(rad_server, 'factura', factura)
             text_resp = f'Número de autorización {rad_default.numero_radicado} radicado ' \
                         f'{radicado_dt}.<br><br>Este domicilio se encuentra en reparto<br><br>' \
                         f'Si tiene alguna duda se puede comunicar con nosotros ' \
@@ -52,7 +49,6 @@ def validate_status(resp_mcar: dict, rad_default: Radicacion) -> ValidationError
             if resp_fbase and resp_fbase['state'] == 'Completed':
                 # Radicado  tiene SSC, factura y está en firebase
                 update_rad_from_fbase(rad_default, resp_fbase)
-                update_rad_from_fbase(rad_server, resp_fbase)
                 entregado_dt = pretty_date(
                     rad_default.despachado.astimezone(timezone.get_current_timezone())
                 )

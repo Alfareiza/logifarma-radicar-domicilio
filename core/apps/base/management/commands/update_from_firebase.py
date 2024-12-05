@@ -40,8 +40,7 @@ class Command(BaseCommand):
             if resp_fbase.get('act'):
                 update_rad_from_fbase(rad, resp_fbase)
                 try:
-                    rad.save(using='default')
-                    rad.save(using='server')
+                    rad.save()
                 except Exception:
                     self.errs.append(rad.numero_radicado)
                 else:
