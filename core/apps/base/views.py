@@ -201,6 +201,9 @@ class ContactWizard(CustomSessionWizard):
                 logger.error(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']} "
                              f"Perdida la referencia de imagen adjunta.")
             r = email.send(fail_silently=False)
+        except FileNotFoundError as e:
+            notify('error-archivo', f"ERROR CON ARCHIVO ENVIANDO EMAIL- Radicado #{info_email['NUMERO_AUTORIZACION']}",
+                   f"JSON_DATA: {info_email}\n\nERROR: {e}\n\nSession ID:{self.request.COOKIES.get('sessionid')[:6]}")
         except Exception as e:
             notify('error-email', f"ERROR ENVIANDO EMAIL- Radicado #{info_email['NUMERO_AUTORIZACION']}",
                    f"JSON_DATA: {info_email}\n\nERROR: {e}")
@@ -214,11 +217,11 @@ class ContactWizard(CustomSessionWizard):
                 if self.foto_fmedica:
                     logger.info(
                         f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']} "
-                        f"Correo enviado a {info_email['email']} con imagen adjunta de {convert_bytes(self.foto_fmedica.size)}.")
+                        f"Correo enviado a {info_email['email'] or ''} con imagen adjunta de {convert_bytes(self.foto_fmedica.size)}.")
                 else:
                     logger.info(
                         f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']} "
-                        f"correo enviado a {info_email['email']} sin imagem")
+                        f"correo enviado a {info_email['email'] or ''} sin imagen")
             else:
                 notify('error-email', f"ERROR ENVIANDO EMAIL- Radicado #{info_email['NUMERO_AUTORIZACION']}",
                        f"JSON_DATA: {info_email}")

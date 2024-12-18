@@ -353,6 +353,7 @@ def notify(reason: str, subject: str, body: str, to=None, bcc: list = []):
     :param reason: Puede ser:
                     'error-bd'
                     'error-api'
+                    'error-archivo'
                     'error-archivo-url'
                     'error-email'
                     'check-acta'
@@ -372,6 +373,7 @@ def notify(reason: str, subject: str, body: str, to=None, bcc: list = []):
                 'error-api': '{} Correo enviado notificando problema con API.',
                 'error-archivo-url': 'Correo enviado notificando radicado sin archivo.',
                 'error-email': 'Correo enviado notificando problema al enviar e-mail de confirmación.',
+                'error-archivo': 'Correo enviado notificando problema con archivo.',
                 'check-acta': 'Correo enviado con reporte de chequeo de actas.',
                 'check-aut': '{} Correo de alerta de autorización no radicada enviado.',
                 'check-datosgov': 'Correo enviado por problema al consultar datos.gov.co.',
