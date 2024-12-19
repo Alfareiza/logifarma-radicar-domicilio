@@ -1,4 +1,5 @@
 import threading
+import traceback
 from functools import lru_cache
 
 from decouple import config
@@ -176,15 +177,20 @@ class ContactWizard(CustomSessionWizard):
 
         if self.foto_fmedica:
             uploaded = settings.MEDIA_ROOT / self.foto_fmedica.name
+            if uploaded.exists():
+                str_exists_or_not = f'imagen {str(uploaded)!r} ya no existe :('
+            else:
+                str_exists_or_not = f'adjuntando imagen {str(uploaded)}'
             logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']} "
-                        f"adjuntando imagen {str(uploaded)}")
+                        f"{str_exists_or_not} - {self.foto_fmedica}")
+
             email.attach_file(str(uploaded))
             if email.attachments:
                 logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']} "
                             f"Imagen adjuntada con éxito.")
             else:
-                logger.error(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']} "
-                             f"No se adjuntó la imagen. email.attachments={email.attachments}")
+                logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']} "
+                            f"No se adjuntó la imagen. email.attachments={email.attachments}")
 
         return email
 
@@ -202,8 +208,10 @@ class ContactWizard(CustomSessionWizard):
                              f"Perdida la referencia de imagen adjunta.")
             r = email.send(fail_silently=False)
         except FileNotFoundError as e:
+            tracebk = '\n'.join(traceback.format_exc().splitlines())
             notify('error-archivo', f"ERROR CON ARCHIVO ENVIANDO EMAIL- Radicado #{info_email['NUMERO_AUTORIZACION']}",
-                   f"JSON_DATA: {info_email}\n\nERROR: {e}\n\nSession ID:{self.request.COOKIES.get('sessionid')[:6]}")
+                   f"JSON_DATA: {info_email}\n\nERROR: {str(e)}\n\nSession ID:{self.request.COOKIES.get('sessionid')[:6]}"
+                   f"Traceback: \n{tracebk}")
         except Exception as e:
             notify('error-email', f"ERROR ENVIANDO EMAIL- Radicado #{info_email['NUMERO_AUTORIZACION']}",
                    f"JSON_DATA: {info_email}\n\nERROR: {e}")
