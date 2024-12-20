@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.urls import reverse
+from retry import retry
 
 from core import settings
 from core.apps.base.forms import *
@@ -166,6 +167,11 @@ class ContactWizard(CustomSessionWizard):
         return form_data['autorizacionServicio']['num_autorizacion']
 
     def prepare_email(self, info_email):
+
+        @retry(tries=3, delay=5)
+        def attach_file(email: 'EmailMessage', file_path: str):
+            email.attach_file(file_path)
+
         subject, copia_oculta = make_subject_and_cco(info_email)
         destinatary = make_destinatary(info_email)
         html_content = htmly.render(info_email)
@@ -184,7 +190,7 @@ class ContactWizard(CustomSessionWizard):
             logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']} "
                         f"{str_exists_or_not} - {self.foto_fmedica}")
 
-            email.attach_file(str(uploaded))
+            attach_file(email, str(uploaded))
             if email.attachments:
                 logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']} "
                             f"Imagen adjuntada con éxito.")
@@ -210,8 +216,8 @@ class ContactWizard(CustomSessionWizard):
         except FileNotFoundError as e:
             tracebk = '\n'.join(traceback.format_exc().splitlines())
             notify('error-archivo', f"ERROR CON ARCHIVO ENVIANDO EMAIL- Radicado #{info_email['NUMERO_AUTORIZACION']}",
-                   f"JSON_DATA: {info_email}\n\nERROR: {str(e)}\n\nSession ID:{self.request.COOKIES.get('sessionid')[:6]}"
-                   f"Traceback: \n{tracebk}")
+                   f"JSON_DATA: {info_email}\n\nSession ID:{self.request.COOKIES.get('sessionid')[:6]}"
+                   f"\n\nTraceback: \n{tracebk}")
         except Exception as e:
             notify('error-email', f"ERROR ENVIANDO EMAIL- Radicado #{info_email['NUMERO_AUTORIZACION']}",
                    f"JSON_DATA: {info_email}\n\nERROR: {e}")
