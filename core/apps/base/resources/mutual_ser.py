@@ -1,4 +1,5 @@
 """Module for BaseApp class."""
+from datetime import datetime
 
 from RPA.Browser.Selenium import Selenium  # type: ignore
 
@@ -15,9 +16,11 @@ class MutualSerPage:
         return self.page.browser
 
     def login(self):
+        print(f'{datetime.now():%T:%s} - INIT LOGIN')
         self.page.open_browser()
         self.page.login.perform(self.url, self.browser)
         self.browser.close_all_browsers()
+        print(f'{datetime.now():%T:%s} - END LOGIN')
 
 
 if __name__ == '__main__':
