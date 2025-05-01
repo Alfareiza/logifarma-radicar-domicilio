@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'drf_spectacular',
+    'gdstorage',
 ]
 
 MIDDLEWARE = [
@@ -164,8 +165,11 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_SSL = config('EMAIL_USE_SSL')
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'tmp'
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = BASE_DIR / 'tmp'
+
+GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = None
+GOOGLE_DRIVE_STORAGE_MEDIA_ROOT = 'FormulasMedicasTemp'
 
 # STATICFILES_DIRS = [BASE_DIR / "build/static", BASE_DIR / "build"]
 STATIC_ROOT = BASE_DIR / "staticfiles"

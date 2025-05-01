@@ -18,6 +18,7 @@ from core.apps.base.resources.customwizard import CustomSessionWizard
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.email_helpers import make_subject_and_cco, make_destinatary
 from core.apps.base.resources.tools import convert_bytes, is_file_valid, notify, guardar_info_bd
+from core.apps.tasks.utils.gdrive import CustomGoogleDriveStorage
 from core.settings import logger, BASE_DIR
 
 FORMS = [
@@ -89,7 +90,8 @@ def show_fotoFormulaMedica(wizard) -> bool:
 class ContactWizard(CustomSessionWizard):
     # template_name = 'start.html'
     form_list = FORMS
-    file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
+    # file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
+    file_storage = CustomGoogleDriveStorage()
     condition_dict = {'fotoFormulaMedica': show_fotoFormulaMedica}
 
     def get_template_names(self):

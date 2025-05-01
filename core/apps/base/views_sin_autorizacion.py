@@ -2,6 +2,8 @@ from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponseRedirect
 from django.template.loader import get_template
 from django.urls import reverse
+from gdstorage.storage import GoogleDriveStorage, GoogleDriveFilePermission, GoogleDrivePermissionRole, \
+    GoogleDrivePermissionType
 
 from core import settings
 from core.apps.base.forms import *
@@ -11,6 +13,7 @@ from core.apps.base.views import TEMPLATES
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.img_helpers import ImgHelper
 from core.apps.base.resources.tools import guardar_short_info_bd
+from core.apps.tasks.utils.gdrive import CustomGoogleDriveStorage
 from core.settings import logger, BASE_DIR
 
 FORMS = [
@@ -27,11 +30,16 @@ MANDATORIES_STEPS_SIN_AUTORIZACION = ("sinAutorizacion", "eligeMunicipio",
 
 htmly = get_template(BASE_DIR / "core/apps/base/templates/notifiers/correo_sin_autorizacion.html")
 
-
+permission = GoogleDriveFilePermission(
+   g_role=GoogleDrivePermissionRole.WRITER,
+   g_type=GoogleDrivePermissionType.USER,
+   g_value="logistica@logifarma.co"
+)
 class SinAutorizacion(CustomSessionWizard):
     # template_name = 'start.html'
     form_list = FORMS
-    file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
+    # file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
+    file_storage = CustomGoogleDriveStorage()
     post_wizard = [NotifyEmail, NotifySMS, Drive, UpdateDB]
 
     def get_template_names(self):

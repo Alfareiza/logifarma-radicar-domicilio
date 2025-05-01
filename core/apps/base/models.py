@@ -13,6 +13,7 @@ from django.db.models import (
     PositiveBigIntegerField,
     PositiveIntegerField, DateField,
 )
+from gdstorage.storage import GoogleDriveStorage
 from pytz import timezone
 
 
@@ -44,6 +45,8 @@ class Barrio(Model):
     def __str__(self):
         return f"{self.name.title()} - Zona {self.zona.title()}"
 
+
+gd_storage = GoogleDriveStorage()
 
 class Radicacion(Model):
     datetime = DateTimeField(auto_now_add=True)
