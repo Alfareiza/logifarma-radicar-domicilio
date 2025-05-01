@@ -16,11 +16,18 @@ class MutualSerPage:
         return self.page.browser
 
     def login(self):
-        print(f'{datetime.now():%T:%s} - INIT LOGIN')
+        print(f'{datetime.now():%T:%s} - INIT PROCESS')
         self.page.open_browser()
         self.page.login.perform(self.url, self.browser)
+        self.search_user()
+        print(f'{datetime.now():%T:%s} - END PROCESS')
         self.browser.close_all_browsers()
-        print(f'{datetime.now():%T:%s} - END LOGIN')
+
+    def search_user(self):
+        self.page.search_page.perform(self.browser, 'Cedula de Ciudadania', '32816865')
+
+
+
 
 
 if __name__ == '__main__':

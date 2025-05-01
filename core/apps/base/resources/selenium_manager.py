@@ -5,12 +5,14 @@ from time import sleep
 
 from RPA.Browser.Selenium import Selenium  # type: ignore
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 logger = logging.getLogger(__name__)
 
+
 def wait_element_load(browser, locator, timeout=5):
     is_success = False
-    timer = datetime.datetime.now() + datetime.timedelta(0, timeout)
+    timer = datetime.datetime.now() + datetime.timedelta(0, seconds=timeout)
 
     while not is_success and timer > datetime.datetime.now():
         if browser.does_page_contain_element(locator):
@@ -56,9 +58,47 @@ class LoginPage:
         logger.info('Credenciales ingresadas.')
         browser.click_element(self.iniciar_sesion)
         logger.info('Clicando en iniciar sesión.... esperando')
-        if browser.does_page_contain_element("//h3[text()='Modulos Portal']"):
+        if wait_element_load(browser, "//h3[text()='Modulos Portal']"):
             logger.info('Login efectuado con éxito.')
 
+
+class SearchPage:
+    consulta_solicitudes = "//*[@id='main:j_idt29']//span[text()='Consulta de Solicitudes']"
+    solicitud_de_autorizacion = "//label[text()[contains(., 'autorización de servicios')]]"
+    afiliado_dropdown = "//div[@id='main:tipoAfiliadoSolicitud']"
+    afiliado_tipo_documento = "//div[@id='main:tipoAfiliadoSolicitud_panel']//li[text()='{}']"
+    afiliado_documento = "//input[@id='main:documentoAfiliadoSolicitud']"
+    buscar_btn = "//img[contains(@src, 'buscar1.gif')]"
+    table = "//table[thead[@id='main:a3tabladesolicuti_head']]"
+    ver_solicitud = "//tr[td/span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'ver solicitud')]]"
+
+    def goto_form(self, browser):
+        browser.click_element(self.consulta_solicitudes)
+        wait_element_load(browser, self.solicitud_de_autorizacion)
+        browser.click_element(self.solicitud_de_autorizacion)
+        wait_element_load(browser, self.afiliado_dropdown)
+
+    def input_info_afiliado(self, browser, tipo_documento, documento):
+        browser.click_element(self.afiliado_dropdown)
+        locator_tipo_documento = self.afiliado_tipo_documento.format(tipo_documento)
+        browser.get_webelement(locator_tipo_documento).click()
+        browser.input_text(self.afiliado_documento, documento)
+        wait_element_load(browser, self.buscar_btn)
+
+    def extract_table(self, browser):
+        table_element = browser.find_element(self.table)
+        ver_solicitud_btns = table_element.find_elements(By.XPATH, self.ver_solicitud)
+
+    def perform(self, browser, tipo_documento, documento):
+        self.goto_form(browser)
+        self.input_info_afiliado(browser, tipo_documento, documento)
+        browser.click_element(self.buscar_btn)
+        if not wait_element_load(browser, "//*[contains(text(),'la consulta realizada arroja las solicitudes')]", 2):
+            logger.info('No apareció mensaje ... la consulta realizada arroja las solicitudes de autorización y por eso'
+                        ' no se pudo comprobar si la página cargó después de clicar en buscar.')
+        if browser.does_page_contain("No se encontraron registros"):
+            raise UserNotFound(f'No fue encontrado usuário {tipo_documento}{documento} en mutual ser.')
+        user_info = self.extract_table(browser)
 
 
 class BaseApp:
@@ -103,9 +143,11 @@ class MutualSerSite(BaseApp):
     browser: Selenium = None
     headless: bool = False
     login = LoginPage()
+    search_page = SearchPage()
     wait_time: int = 2
     browser_options = ["--no-sandbox", "--disable-dev-shm-usage",
-                       "--log-level=3", "--disable-logging",
+                       "--log-level=3",
+                       # "--disable-logging",
                        "--lang=en"]
     experimental_options = {
         "excludeSwitches": ("enable-automation",),
@@ -117,3 +159,7 @@ class MutualSerSite(BaseApp):
         super().__init__(**config)
         self.browser = Selenium()
         self.browser.set_selenium_implicit_wait(0)
+
+
+class UserNotFound(Exception):
+    ...
