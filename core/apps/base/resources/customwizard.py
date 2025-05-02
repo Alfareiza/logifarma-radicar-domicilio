@@ -33,7 +33,7 @@ class CustomSessionWizard(SessionWizardView):
                f"entró en vista={self.request.resolver_match.url_name}/")
         if source:
             self.request.COOKIES['source'] = source
-            tipo_usuario = {'f': 'fomag', 'c': 'cajacopi'}
+            tipo_usuario = {'f': 'fomag', 'c': 'cajacopi', 'm': 'mutualser'}
             logger.info(f"usuario {tipo_usuario[source].upper()} con {msg}")
         else:
             logger.info(f'{msg}, tipo de usuario indetectable para {source=}')

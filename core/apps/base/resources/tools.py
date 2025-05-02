@@ -265,7 +265,7 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
     email = email[0] if email and email[0] else ', '.join(email)
     ip = clean_ip(kwargs.pop('ip'))
 
-    numero_radicado = datetime_id()
+    numero_radicado = kwargs.get('NUMERO_AUTORIZACION', datetime_id())
     logger.info(f"{numero_radicado} Guardando radicación (medicamento NO autorizado) de {kwargs['documento']} {kwargs.get('CONVENIO', '')}.")
     try:
         rad = Radicacion(
@@ -516,7 +516,7 @@ def datetime_id():
     return str(result)
 
 
-def login_check(sap) -> bool:
+def login_check(obj) -> bool:
     """
     1. Valida que exista el archivo de login:
         1.1 Caso exista:
@@ -524,25 +524,25 @@ def login_check(sap) -> bool:
                         no sea mayor que la hora actual.
                 1.1.2 Caso sea mayor, efectua el login.
         1.2 Caso no exista, efectua el login.
-    Puede retornar False cuando la API que logra el login este
-    caída.
-    :param sap: Instancia de SAPData
+    Puede retornar False cuando la API que logra el login este caída.
+    :param obj: Instancia de SAPData o MutualSerAPI o cualquier instancia que su clase tenga la función login
     :return: True o False caso haga login o no.
     """
-    login_pkl = BASE_DIR / 'login_sap.pickle'
+    login_pkl = obj.LOGIN_CACHE
+    name_obj = obj.__class__.__name__
 
     if not login_pkl.exists():
-        log.info('[SAP] Cache de login no encontrado')
-        login_succeed = sap.login()
+        log.info(f'[{name_obj}] Cache de login no encontrado')
+        login_succeed = obj.login()
     else:
         with open(login_pkl, 'rb') as f:
             sess_id, sess_timeout = pickle.load(f)
             now = moment()
             if now > sess_timeout:
-                log.warning('[SAP] Tiempo de login anterior expiró')
-                login_succeed = sap.login()
+                log.warning(f'[{name_obj}] Tiempo de login anterior expiró')
+                login_succeed = obj.login()
             else:
-                log.info("[SAP] Usando login que está en cache")
-                sap.sess_id = sess_id
+                log.info(f"[{name_obj}] Usando login que está en cache")
+                obj.sess_id = sess_id
                 login_succeed = True
     return login_succeed
