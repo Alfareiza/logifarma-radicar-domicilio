@@ -1,0 +1,88 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Autorización de servicio{% endblock %}
+
+{% block content %}
+<section class="vista3">
+    <form id="form-id" action="" method="post">
+
+        <button class="continuar" formnovalidate name=""
+            type="submit" value="" onclick="animabotoncarga_autorizacion()">
+            <p class="text_continuar">Continuar <i class="fa-solid fa-chevron-right"></i></p>
+        </button>
+
+        {% csrf_token %}
+        {{ wizard.management_form }}
+
+        <a href="/" class="atras">
+                <p class="b_atras"><i class="fa-solid fa-chevron-left"></i> Atrás</p>
+        </a>
+        <div class="vist1">
+            <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
+        </div>
+
+        {% if form.errors %}
+            <!-- Es usado non_field_errors porque se implementó el método clean en el form y no clean_field-->
+            {% with txt_error=form.non_field_errors.as_text|cut:"* " %}
+            <script src="{% static 'js/modal.js' %}"></script>
+            <div class="modal" id="modal_vist">
+                <div class="conten" id="cont_mod" {% if txt_error|length < 130 %} style="height: 22%;" {% endif %}>
+                    <header></header>
+                    <div class="modal_btn">
+                        <button type="button" id="btn_modal" class="close">X</button>
+                    </div>
+                    <div class="contenido">
+                        <p class="texto" style="margin: 0rem 1rem;">
+                           {{ txt_error }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endwith %}
+        {% endif %}
+
+        {% if wizard.form.forms %}
+            <!--NOTHING-->
+            {{ wizard.form.management_form }}
+                {% for form in wizard.form.forms %}
+                    {{ form.as_table }}
+                {% endfor %}
+        {% else %}
+            <div class="box-select-input">
+                <div class="input-effect">
+                    {{ wizard.form.no_orden }}
+                    <label>{{wizard.form.no_orden.label}}</label>
+                </div>
+            </div>
+        {% endif %}
+
+        <button class="btn" id="btn_conti" type="submit" onclick="animabotoncarga_sin_autorizacion()">
+        Continuar
+        <div id="btn_carga" class="conten_carga">
+                <div class="carga"></div>
+        </div>
+        </button>
+
+
+
+    </form>
+
+    
+    <div class="conten-progreso-global">
+        <div class="pagina">Paso {{ wizard.steps.step1 }} de 7</div>
+        <div class="contenedor">
+            <div class="progreso-contenedor">
+               <div class="progreso" id="progreso"></div>
+               <div class="circulo active"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+               <div class="circulo"></div>
+            </div>
+        </div>
+      </div>
+
+</section>
+{% endblock %}

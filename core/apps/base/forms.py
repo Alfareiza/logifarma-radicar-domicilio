@@ -70,7 +70,7 @@ class SinAutorizacion(forms.Form):
         tipo = self.cleaned_data.get('tipo_identificacion')
         value = self.cleaned_data.get('identificacion')
         flag_new_formula = self.data.get('flag_new_formula')
-        entidad = {'c': 'cajacopi', 'f': 'fomag'}.get(getattr(self, 'source', ''), '')
+        entidad = {'c': 'cajacopi', 'f': 'fomag', 'm': 'mutualser'}.get(getattr(self, 'source', ''), '')
         resp = {'documento': f"{tipo}{value}"}
 
         if value == "99999999":
@@ -106,6 +106,8 @@ class SinAutorizacion(forms.Form):
             validate_status_afiliado(resp_api, 'ESTADO', f"{tipo}:{value}")
         elif entidad == 'fomag':
             # Validaciones extra cuando se consulta usuario fomag sin autorización
+            ...
+        elif entidad == 'mutualser':
             ...
 
 
@@ -180,6 +182,13 @@ class AutorizacionServicio(forms.Form):
         logger.info(f"{num_aut} Número de autorización pasó las validaciones.")
         return resp_eps
 
+
+class Orden(forms.Form):
+    no_orden = forms.IntegerField(min_value=100_000, label='Número para facturar',
+                                  widget=forms.TextInput(attrs={'class': 'effect-16', 'autofocus': True}))
+
+    def clean_no_orden(self):
+        return {'NUMERO_AUTORIZACION': self.cleaned_data.get('no_orden')}
 
 class FotoFormulaMedica(forms.Form):
     """

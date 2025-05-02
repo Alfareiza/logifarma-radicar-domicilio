@@ -39,6 +39,7 @@ TEMPLATES = {
     "sinAutorizacion": "sin_autorizacion.html",
     "autorizado_o_no": "autorizado_o_no.html",
     "autorizacionServicio": "autorizacion.html",
+    "orden": "orden.html",
     "fotoFormulaMedica": "foto.html",
     "eligeMunicipio": "elige_municipio.html",
     "digitaDireccionBarrio": "direccion_barrio.html",

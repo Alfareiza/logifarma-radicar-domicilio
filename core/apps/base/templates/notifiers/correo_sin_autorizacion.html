@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,53 +12,80 @@
     <div style="word-spacing: normal; background-color: #f4f4f4;">
     <div style="background-color: #f4f4f4;">
         <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
-            <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
-                <tbody>
-                    <tr>
-                        <td style="direction: ltr; font-size: 0px; padding: 5px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 5px; text-align: center;">
-                            <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 100%;">
-                                <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+                <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                        <tr>
+                            <td bgcolor="#ffffff" align="center" valign="top" style="padding: 0px 0px 0px 0px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; letter-spacing: 4px; line-height: 48px;">
+                                <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="background: #ffffff; background-color: #ffffff; width: 100%;">
                                     <tbody>
                                         <tr>
-                                            <td align="left" style="font-size: 0px; padding: 0px 25px 0px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
-                                                <div style="font-family: Ubuntu, Helvetica, Arial, sans-serif; font-size: 20px; letter-spacing: normal; line-height: 22px; text-align: left; color: #55575d;">
-                                                    <h1><span style="font-size: 20px;">Hola {{P_NOMBRE|title}}... </span></h1>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                            <td style="direction: ltr; font-size: 0px; padding: 5px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 5px; text-align: center;">
+                                                <div class="m_-699636249018344079mj-column-per-100" style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 100%;">
+                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align: top;" width="100%">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td style="font-size: 0px; padding: 0px 25px 0px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
+                                                                    <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="width: 100%;">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td align="left" style="vertical-align: middle; width: 80%; display: flex; align-items: center;">
+                                                                                    <div style="font-family: Ubuntu, Helvetica, Arial, sans-serif; font-size: 20px; letter-spacing: normal; line-height: 22px; text-align: left; color: #55575d;">
+                                                                                        <h1><span style="font-size: 20px;">Hola {{P_NOMBRE|title}}... </span></h1>
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td align="right" style="vertical-align: middle; font-size: 0px; width: 40%;">
+                                                                                    <img src="https://domicilios.logifarma.com.co/static/img/cajacopi_logo.png" alt="" width="{{WIDTH}}" style="display: inline-block; border: 0; vertical-align: middle; margin-right: 5px; object-fit: contain;" />
+                                                                                    <span style="display: inline-block; width: 1px; height: 30px; background-color: #cccccc; vertical-align: middle; margin-left: 5px; margin-right: 5px;"></span>
+                                                                                    <img src="https://domicilios.logifarma.com.co/static/img/LogLogifarma.png" alt="" width="50%" style="display: inline-block; border: 0; vertical-align: middle; margin-left: 5px; object-fit: contain;" />
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    </td>
+                                                            </tr>
 
-                                        <tr>
-                                            <td align="left" style="font-size: 0px; padding: 0px 25px 0px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
-                                                <div style="font-family: Ubuntu, Helvetica, Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 22px; text-align: left; color: #55575d;">
-                                                    <p>
-                                                        <span style="color: #55575d; font-family: Arial; font-size: 13px;">
-                                                            Tu radicación de domicilio Nº {% if NUMERO_RADICACION %} F{{NUMERO_RADICACION}} {% else %}  {% endif %} ya está en proceso. . Te informaremos por este medio y/o WhatsApp la confirmación del envío en las próximas horas hábiles.
-                                                        </span>
-                                                    </p>
-                                                    <p><span style="color: #55575d; font-family: Arial; font-size: 13px;">Recuerda que al realizarte la entrega de los artículos debes:</span></p>
-                                                    <ol>
-                                                        <li>
-                                                            <span style="color: #55575d; font-family: Arial; font-size: 13px;">
-                                                                Presentar al domiciliario el documento de identidad <strong><u>original</u></strong> del afiliado: {{AFILIADO}}.
-                                                            </span>
-                                                        </li>
-                                                        <li>
-                                                            <span style="color: #55575d; font-family: Arial; font-size: 13px;">
-                                                                Entregar al domiciliario la formula formula médica <strong><u>original</u></strong>. (El domiciliario se quedará con este documento)
-                                                            </span>
-                                                        </li>
-                                                        <li><span style="color: #55575d; font-family: Arial; font-size: 13px;">&nbsp;Firmar acta de entrega.</span></li>
-                                                    </ol>
+                                                            <tr>
+                                                                <td align="left" style="font-size: 0px; padding: 15px 25px 10px 25px; padding-top: 15px; padding-bottom: 10px; word-break: break-word;">
+                                                                    <div style="font-family: Ubuntu, Helvetica, Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 22px; text-align: left; color: #55575d;">
+                                                                        <p style="margin: 0 0 10px 0;">
+                                                                            <span style="color: #55575d; font-family: Arial, sans-serif; font-size: 13px;">
+                                                                                Tu radicación de domicilio Nº {{NUMERO_RADICACION}} ya está en proceso. Te informaremos por este medio y/o WhatsApp la confirmación del envío en las próximas horas hábiles.
+                                                                            </span>
+                                                                        </p>
+                                                                        <p style="margin: 0 0 5px 0;"><span style="color: #55575d; font-family: Arial, sans-serif; font-size: 13px;">Recuerda que al realizarte la entrega de los artículos debes:</span></p>
+                                                                        <ol style="margin: 0; padding-left: 20px; font-family: Arial, sans-serif; font-size: 13px; color: #55575d;">
+                                                                            <li style="margin-bottom: 5px;">
+                                                                                <span style="color: #55575d; font-family: Arial, sans-serif; font-size: 13px;">
+                                                                                    Presentar al domiciliario el documento de identidad <strong><u>original</u></strong> del afiliado: {{AFILIADO}}.
+                                                                                </span>
+                                                                            </li>
+                                                                            <li style="margin-bottom: 5px;">
+                                                                                <span style="color: #55575d; font-family: Arial, sans-serif; font-size: 13px;">
+                                                                                    Entregar al domiciliario la formula médica <strong><u>original</u></strong>. (El domiciliario se quedará con este documento)
+                                                                                </span>
+                                                                            </li>
+                                                                            <li style="margin-bottom: 0;">
+                                                                                <span style="color: #55575d; font-family: Arial, sans-serif; font-size: 13px;">Firmar acta de entrega.</span>
+                                                                            </li>
+                                                                        </ol>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
-                                            </td>
+                                                </td>
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                                </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+    </table>
         </div>
 
         <div style="margin: 1rem auto; max-width: 600px;">
@@ -159,7 +187,7 @@
                                             <tr>
                                                 <td align="left" style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
                                                     <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
-                                                        <p><span style="color: #55575d;">{% if NUMERO_RADICACION %} F{{NUMERO_RADICACION}} {% else %} {% endif %}</span></p>
+                                                        <p><span style="color: #55575d;">{{NUMERO_RADICACION}}</span></p>
                                                     </div>
                                                 </td>
                                             </tr>

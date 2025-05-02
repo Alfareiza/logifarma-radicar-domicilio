@@ -1,4 +1,5 @@
-from core.apps.base.resources.api_calls import call_api_eps, obtener_datos_identificacion_fomag
+from core.apps.base.resources.api_calls import call_api_eps, obtener_datos_identificacion_fomag, \
+    obtener_datos_identificacion_mutual_ser
 
 
 def obtener_datos_autorizacion(num_aut: int) -> dict:
@@ -58,7 +59,8 @@ def obtener_datos_identificacion(eps: str, tipo: str, value: str) -> dict:
     :param tipo: Puede ser: CC, TI, RC, CN, CD, PA, PE, PT, SC, CE, MS o AS
     :param value: Valor de identifiación del usuario.
     """
-    func = {'cajacopi': obtener_datos_identificacion_cajacopi, 'fomag': obtener_datos_identificacion_fomag}
+    func = {'cajacopi': obtener_datos_identificacion_cajacopi, 'fomag': obtener_datos_identificacion_fomag,
+            'mutualser': obtener_datos_identificacion_mutual_ser}
     return func[eps](tipo, value)
 
 
@@ -81,7 +83,5 @@ def obtener_datos_identificacion_cajacopi(tipo: str, value: str) -> dict:
             }
     """
     url = "https://genesis.cajacopieps.com/php/consultaAfiliados/obtenerafiliadoips.php"
-    payload = {"function": "obtenerafiliados",
-               "tipodocumento": tipo,
-               "documento": value}
+    payload = {"function": "obtenerafiliados", "tipodocumento": tipo, "documento": value}
     return call_api_eps(url, payload)

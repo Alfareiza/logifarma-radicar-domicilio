@@ -5,7 +5,7 @@ import datetime
 import requests
 from requests import Timeout, HTTPError
 
-from core.apps.base.resources.decorators import login_sap_required
+from core.apps.base.resources.decorators import login_required
 from core.settings import SAP_COMPANY, SAP_USER, SAP_PASS, SAP_URL, BASE_DIR
 from core.settings import logger as log
 from core.apps.base.resources.tools import moment
@@ -113,6 +113,6 @@ class SAP:
         headers = self.set_header()
         return self.request_api('GET', url, headers=headers)
 
-    @login_sap_required
+    @login_required
     def get_info_afiliado(self, tipo_documento, valor_documento):
         return self.get(f'{SAP_URL}{self.ENDPOINT_FOMAG}?$filter=Name eq \'{valor_documento}{tipo_documento}\'')

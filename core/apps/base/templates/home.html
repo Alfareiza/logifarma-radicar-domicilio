@@ -8,9 +8,9 @@
     <form id="form-id" action="" method="post">
         {% csrf_token %}
         {{ wizard.management_form }}
-<!--        {% comment %}-->
-<!--        {% include "base/logo.html" %}-->
-<!--        {% endcomment %}-->
+        <!--        {% comment %}-->
+        <!--        {% include "base/logo.html" %}-->
+        <!--        {% endcomment %}-->
 
         <!--<div class="vist1">
             <img class="img1 img-fit" src="{% static 'img/logifarma-cajacopi.png' %}" alt="">
@@ -42,10 +42,11 @@
                     <!--                            <div>ARRIBA</div>-->
                     <!--                            <div>ABAJO</div>-->
                     <!--                    </div>-->
-<!--                <img src="https://placehold.co/410x140" width="100%">-->
+                    <!--                <img src="https://placehold.co/410x140" width="100%">-->
                     <div class="vist1">
                     </div>
-                    <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="Logo Logifarma" style="padding-bottom: 0rem">
+                    <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="Logo Logifarma"
+                         style="padding-bottom: 0rem">
                     <img src="{% static 'img/imagen_banner_sin_moto.jpg' %}" alt="Banner" style="width: 26rem">
                 </div>
 
@@ -66,26 +67,37 @@
 
 
                 <div class="btn_and_text mt-2" style="margin-top:1.5rem">
+                    <!-- INICIO: Botón mutualser -->
+                        <a href="{% url 'base:sin-autorizacion' %}?s=m">
+                            <div class='button_modal btn_success hvr-float btn-fomag-sm-pd p-button-modal'
+                                 style="background: #ffffff;box-shadow: 7px 3px 11px 3px rgb(0 0 0 / 26%);">
+                                <img style="width: 8rem;" src="{% static 'img/mutual_ser_logo.png' %}" alt="">
+                            </div>
+                        </a>
+                    <!-- FIN: Botón mutualser -->
+
                     <!-- INICIO: Botón fomag -->
-                    <a href="{% url 'base:sin-autorizacion' %}?s=f">
-                        <div class='button_modal btn_success hvr-float btn-fomag-sm-pd p-button-modal'
-                             style="background: #ffffff;box-shadow: 7px 3px 11px 3px rgb(0 0 0 / 26%);">
-                            <img style="width: 8rem;" src="{% static 'img/fomag_logo.png' %}" alt="">
-                        </div>
-                    </a>
+                    <div class="btn_and_text mt-2" style="margin-top:1.5rem">
+                        <a href="{% url 'base:sin-autorizacion' %}?s=f">
+                            <div class='button_modal btn_success hvr-float btn-fomag-sm-pd p-button-modal'
+                                 style="background: #ffffff;box-shadow: 7px 3px 11px 3px rgb(0 0 0 / 26%);">
+                                <img style="width: 8rem;" src="{% static 'img/fomag_logo.png' %}" alt="">
+                            </div>
+                        </a>
+                    </div>
                     <!-- FIN: Botón fomag -->
 
                     <!-- INICIO: Avisos post-botón -->
                     <div style="padding: 0rem .5rem" class="sub-fs-small">
                         <div style="display:flex;flex-direction: row; justify-content:left; align-items:center">
                             <img class="icon_img img-fit" src="{% static 'img/iconorestriccion.png' %}" alt="">
-                            <b style="color: #404040;padding-left:.9rem;text-align:left;">No aplica para medicamentos
-                                controlados</b>
+                            <b style="color: #404040;padding-left:.9rem;text-align:left;">No aplica para medicamentos controlados</b>
                         </div>
                         <div style="margin-top:.5rem; display:flex;flex-direction: row; justify-content:space-between; align-items:center">
                             <img style="padding-bottom:8px" class="icon_img img-fit extra_icon_img"
                                  src="{% static 'img/iconadvertencia.png' %}" alt="">
-                            <b class="pl-max-500-1-3" style="color: #404040; text-align:left;">Al finalizar tu solicitud, te
+                            <b class="pl-max-500-1-3" style="color: #404040; text-align:left;">Al finalizar tu
+                                solicitud, te
                                 enviaremos tus medicamentos lo más
                                 pronto posible</b>
                         </div>
@@ -111,7 +123,8 @@
                             <div style="text-align:left">
                                 <p>
                                     <b style="color: #404040;">Número de autorización (NO PBS)</b><br>
-                                    <p style="font-size: .7em;padding-top:3px;padding-left: .7rem;">Aplica solo para afiliados de <b>Cajacopi EPS</b></p>
+                                <p style="font-size: .7em;padding-top:3px;padding-left: .7rem;">Aplica solo para
+                                    afiliados de <b>Cajacopi EPS</b></p>
                                 </p>
                             </div>
                         </div>
@@ -159,7 +172,7 @@
             </div>
         </div>
 
-<!--        <article class="piedepagina" style="background: #ffffff;"></article>-->
+        <!--        <article class="piedepagina" style="background: #ffffff;"></article>-->
         </div>
     </form>
 </section>

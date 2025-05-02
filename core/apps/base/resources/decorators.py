@@ -122,10 +122,10 @@ def once_in_interval(interval_seconds):
     return decorator
 
 
-def login_sap_required(func):
+def login_required(func):
     @wraps(func)
     def wrapper(*fargs, **fkwargs):
-        self = fargs[0]  # Instancia de SAPData
+        self = fargs[0]  # Instancia de SAPData o MutualSerAPI
         login_succeed = login_check(self)
         if login_succeed:
             return func(*fargs, **fkwargs)

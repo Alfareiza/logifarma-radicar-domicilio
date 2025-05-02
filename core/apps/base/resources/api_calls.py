@@ -13,6 +13,7 @@ from urllib3.exceptions import NewConnectionError, MaxRetryError
 from core.apps.base.resources.decorators import hash_dict, logtime, \
     timed_lru_cache
 from core.apps.base.resources.email_helpers import get_complement_subject
+from core.apps.base.resources.mutual_ser import MutualSerAPI
 from core.apps.base.resources.sap import SAP
 from core.apps.base.resources.tools import notify
 from core.settings import BASE_DIR
@@ -171,6 +172,23 @@ def obtener_datos_identificacion_fomag(tipo: str, value: str) -> dict:
         return retval
 
     return parse_response(resp)
+
+
+def obtener_datos_identificacion_mutual_ser(tipo: str, value: str) -> dict:
+    """
+    Llama API de Mutual Ser y consulta datos referentes a afiliado de Mutual Ser.
+    Ejemplo de respuesta:
+            - En caso de haber registros:
+             {'NOMBRE': 'MOISES AGUILA DELFIN',
+             'PRIMER_NOMBRE': 'MOISES',
+             'PRIMER_APELLIDO': 'AGUILA',
+             'STATUS': 'ACTIVO'}
+            - En caso de no encontrarse registros o haber error en la respuesta:
+              {}
+
+    """
+    ms = MutualSerAPI()
+    return ms.get_info_afiliado(tipo, value)
 
 
 def should_i_call_auth():

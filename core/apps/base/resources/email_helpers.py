@@ -140,7 +140,8 @@ ServerError = DNS.ServerError
 
 
 class Email:
-    def __init__(self, foto=None, template=BASE_DIR / "core/apps/base/templates/notifiers/correo_sin_autorizacion.html"):
+    def __init__(self, foto=None,
+                 template=BASE_DIR / "core/apps/base/templates/notifiers/correo_sin_autorizacion.html"):
         self.log_text = None
         self.foto = foto
         self.template = get_template(template)
@@ -148,6 +149,7 @@ class Email:
     def prepare_mail(self, info: dict) -> EmailMessage:
         subject, copia_oculta = self.make_subject_and_cco(info)
         destinatary = self.make_destinatary(info)
+        self.set_logo(info)
         html_content = self.template.render(info)
         email = EmailMessage(
             subject, html_content, to=destinatary, bcc=copia_oculta,
@@ -214,12 +216,14 @@ class Email:
         copia_oculta = config('EMAIL_BCC', cast=Csv(), default=())
 
         # Definiendo asunto
-        if info.get('documento'):
+        if info.get('CONVENIO', '').lower() in ('cajacopi', 'fomag') and info.get('documento'):
             subject = (f"F{info['NUMERO_RADICACION']} - Este es el "
                        "número de radicación de tu domicilio en Logifarma")
         else:
             subject = (f"{info['NUMERO_AUTORIZACION']} - Este es el "
                        f"número de radicación de tu domicilio en Logifarma")
+
+        info.update({'NUMERO_RADICACION': subject.split('-')[0]})
 
         if info.get('documento') in ('CC99999999',) or info.get('NUMERO_AUTORIZACION') in (
                 99_999_999, 99_999_998):
@@ -248,3 +252,25 @@ class Email:
                     info['email'].remove(e)
         return destinatary
 
+    def set_logo(self, info):
+        """Actualiza info con nombre del logo que se encuentra en carpeta de static files."""
+        logo_path, width = '', ''
+        match info.get('CONVENIO', ''):
+            case 'mutualser':
+                logo_path = 'mutual_ser_logo.png'
+                width = '31%'
+            case 'fomag':
+                logo_path = 'fomag_logo.png'
+                width = '31%'
+            case 'cajacopi':
+                logo_path = 'cajacopi_logo.png'
+                width = '36%'
+            case _:
+                logger.warning('Logo no reconocido para template.')
+        if logo_path:
+            info.update({'LOGO': f"https://domicilios.logifarma.com.co/static/img/{logo_path}", 'WIDTH': width})
+
+
+if __name__ == '__main__':
+    e = Email()
+    print(e.template.render({'LOGO': 'https://domicilios.logifarma.com.co/static/img/fomag_logo.png'}))

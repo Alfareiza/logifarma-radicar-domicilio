@@ -223,6 +223,13 @@ SAP_PASS = config('SAP_PASS')
 SAP_COMPANY = config('SAP_COMPANY')
 SAP_URL = config('SAP_URL')
 
+
+# MUTUAL SER
+MS_USER = config('MS_USER')
+MS_PASS = config('MS_PASS')
+MS_API_URL = config('MS_API_URL')
+MS_API_URL_VALIDADOR = config('MS_API_URL_VALIDADOR')
+
 # Sentry
 if SENTRY_DSN := config("SENTRY_DSN", default=None):
     sentry_sdk.init(
