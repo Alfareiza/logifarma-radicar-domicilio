@@ -187,8 +187,11 @@ class Orden(forms.Form):
     no_orden = forms.IntegerField(min_value=100_000, label='Número para facturar',
                                   widget=forms.TextInput(attrs={'class': 'effect-16', 'autofocus': True}))
 
-    def clean_no_orden(self):
-        return {'NUMERO_AUTORIZACION': self.cleaned_data.get('no_orden')}
+    def clean(self):
+        orden = self.cleaned_data.get('no_orden')
+        if not orden or len(orden) < 6:
+            raise forms.ValidationError("Por favor ingrese un número para facturar válido.")
+        return {'NUMERO_AUTORIZACION': orden}
 
 class FotoFormulaMedica(forms.Form):
     """
