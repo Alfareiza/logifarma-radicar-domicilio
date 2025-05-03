@@ -189,7 +189,7 @@ class Orden(forms.Form):
 
     def clean(self):
         orden = self.cleaned_data.get('no_orden')
-        if not orden or len(orden) < 6:
+        if not orden or len((str(orden))) < 6:
             raise forms.ValidationError("Por favor ingrese un número para facturar válido.")
         return {'NUMERO_AUTORIZACION': orden}
 
