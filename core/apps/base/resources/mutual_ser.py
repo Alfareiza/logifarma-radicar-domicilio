@@ -103,7 +103,23 @@ class MutualSerAPI:
             'Authorization': f"Bearer {self.sess_id}"
         }
 
+    def _parse_error_response(self, resp) -> dict:
+        """Trata la respuesta de la API cuando se detectó un error."""
+        if not isinstance(resp['ERROR'], dict):  # Cuando la respuesta de la API es un html
+            return {}
+        try:
+            # Al colocarse en un try me aseguro que el camino para llegar al texto del error puede estar errado
+            if 'issue' in resp['ERROR']['entry'][0]['resource']:
+                log.warning(f"[MUTUAL] Afiliado no encontrado, respuesta de API:"
+                            f" {resp['ERROR']['entry'][0]['resource']['issue'][0]['details']['text']!r}")
+                return {'NOMBRE': 'no existe',
+                        'RESP API': resp['ERROR']['entry'][0]['resource']['issue'][0]['details']['text']}
+        except (TypeError, KeyError):
+            return {}
+
     def _parse_response(self, response: dict, endpoint: str):
+        if 'ERROR' in response:
+            return self._parse_error_response(response)
         parsed_response = {}
         match endpoint:
             case self.VALIDADOR_DERECHOS:
@@ -148,11 +164,6 @@ class MutualSerAPI:
             headers=self.set_header(),
             payload=json.dumps(body)
         )
-        if 'ERROR' in resp and 'issue' in resp['ERROR']['entry'][0]['resource']:
-            log.warning(f"[MUTUAL] Afiliado no encontrado, respuesta de API:"
-                        f" {resp['ERROR']['entry'][0]['resource']['issue'][0]['details']['text']!r}")
-            return {'NOMBRE': 'no existe',
-                    'RESP API': resp['ERROR']['entry'][0]['resource']['issue'][0]['details']['text']}
         return self._parse_response(resp, self.VALIDADOR_DERECHOS)
 
 

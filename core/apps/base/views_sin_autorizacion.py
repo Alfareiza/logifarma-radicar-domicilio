@@ -85,10 +85,9 @@ class SinAutorizacion(CustomSessionWizard):
             **form_data['eligeMunicipio'],
             **form_data['digitaDireccionBarrio'],
             **form_data['digitaCelular'],
+            **form_data.get('orden', {}),
             'email': [*form_data['digitaCorreo']]
         }
-        if 'orden' in form_data:
-            info_email |= form_data.get('orden', {}).get('no_orden')
 
         if 'fotoFormulaMedica' in form_data:
             self.foto_fmedica = form_data['fotoFormulaMedica']['src']
