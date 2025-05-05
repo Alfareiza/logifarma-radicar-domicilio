@@ -123,24 +123,36 @@ class MutualSerAPI:
         parsed_response = {}
         match endpoint:
             case self.VALIDADOR_DERECHOS:
-                user = {}
-                for k, v in response['entry'][0]['resource'].items():
-                    if k == 'name':
-                        user['NOMBRE'] = v[0]['text']
-                        user['PRIMER_NOMBRE'] = v[0]['given'][0]
-                        pairs = v[0]['family'].split('|')
-                        apellidos = [pair.split('=')[1] for pair in pairs]
-                        user['PRIMER_APELLIDO'] = apellidos[0]
-                    elif k == 'extension':
-                        for extension in v:  # extension tiene una lista de dicts
-                            if 'afilliateStatus' in extension['url']:
-                                user['status'] = extension['valueCoding']['display']
-                    else:
-                        continue
+                try:
+                    user = self._extract_info_afiliado_from_api_response(response)
+                except (TypeError, KeyError) as e:
+                    log.warning(f"API respondió exitosamente pero no se puedo parsear su respuesta: {str(e)}")
+                    return {}
                 parsed_response = user
             case _:
                 ...
         return parsed_response
+    
+    @staticmethod
+    def _extract_info_afiliado_from_api_response(response):
+        """Dada la respuesta de la API, extrae el nombre completo, primer nombre, primer appelido y estatus del 
+        afiliado."""
+        user = {}
+        for k, v in response['entry'][0]['resource'].items():
+            if k == 'extension':
+                for extension in v:  # extension tiene una lista de dicts
+                    if 'afilliateStatus' in extension['url']:
+                        user['status'] = extension['valueCoding']['display']
+            elif k == 'name':
+                user['NOMBRE'] = v[0]['text']
+                user['PRIMER_NOMBRE'] = v[0]['given'][0]
+                pairs = v[0]['family'].split('|')
+                apellidos = [pair.split('=')[1] for pair in pairs]
+                user['PRIMER_APELLIDO'] = apellidos[0]
+            else:
+                continue
+        return user
+
 
     @login_required
     def get_info_afiliado(self, tipo_documento: str, valor_documento: str):
