@@ -97,9 +97,14 @@ class Radicacion(Model):
 
     @property
     def numero_autorizacion(self):
-        if self.medicamento_autorizado:
+        if 'mutual' in self.convenio:
             return self.numero_radicado
-        return f"F{self.id}"
+        return self.numero_radicado if self.medicamento_autorizado else f"F{self.id}"
+
+    @property
+    def is_anulado(self):
+        return 'anulad' in self.acta_entrega.lower()
+
 
 
 class Med_Controlado(Model):

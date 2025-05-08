@@ -4,7 +4,7 @@ from core.apps.base.resources.api_calls import call_api_medicar
 from core.settings import logger as log
 
 
-def obtener_datos_formula(num_aut: int) -> dict:
+def obtener_datos_formula(num_aut: int, nit: str = '901543211') -> dict:
     """
     Recibe el número de autorización que aparece en los pedidos de
     los usuarios, luego el llamado a la API y retorna un diccionário
@@ -67,7 +67,7 @@ def obtener_datos_formula(num_aut: int) -> dict:
                 }
     """
     resp = call_api_medicar(
-        {"nit_eps": "901543211", "autorizacion": f"{num_aut}"},
+        {"nit_eps": nit, "autorizacion": f"{num_aut}"},
         'logifarma/obtenerDatosFormula'
     )
     try:
