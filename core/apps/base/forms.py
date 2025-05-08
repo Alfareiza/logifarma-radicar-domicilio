@@ -98,16 +98,12 @@ class SinAutorizacion(forms.Form):
         return resp
 
     def extra_validations(self, entidad, resp_api, tipo, value):
-        """
-        Realiza validaciones extra una vez se tenga información de respuesta de api.
-        """
+        """Realiza validaciones extra una vez se tenga información de respuesta de api."""
         if entidad == 'cajacopi':
             validate_identificacion_exists(entidad, resp_api, f"{tipo}:{value}")
             validate_status_afiliado(resp_api, 'ESTADO', f"{tipo}:{value}")
-        elif entidad == 'fomag':
+        elif entidad in ('fomag', 'mutualser'):
             # Validaciones extra cuando se consulta usuario fomag sin autorización
-            ...
-        elif entidad == 'mutualser':
             ...
 
 
@@ -189,8 +185,15 @@ class Orden(forms.Form):
 
     def clean(self):
         orden = self.cleaned_data.get('no_orden')
-        if not orden or len((str(orden))) < 6:
+        str_orden = str(orden)
+        if not orden or len((str_orden)) < 6:
             raise forms.ValidationError("Por favor ingrese un número para facturar válido.")
+
+        if rad := Radicacion.objects.filter(numero_radicado=str_orden).first():
+            # Consulta para verificar si tiene ssc (acta)
+            resp_mcar = obtener_datos_formula(orden, '806008394')  # Nit mutual ser
+            validate_status(resp_mcar, rad)
+
         return {'NUMERO_AUTORIZACION': orden}
 
 class FotoFormulaMedica(forms.Form):

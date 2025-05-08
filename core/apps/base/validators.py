@@ -25,7 +25,9 @@ def validate_status(resp_mcar: dict, rad_default: Radicacion) -> ValidationError
             - Caso si, entonces, consulta en firebase
                 - Si la respuesta es null, notifica que está en reparto
                 - Sino, actualiza algunos campos y notifica que está entregado.
-            - Si no tiene factura, notifica que en preparación.
+            - Si no tiene factura:
+                - Si está anulado notifica que está anulado, sino
+                - Notifica que está en preparación.
         - Caso no, notifica simplemente que ya fue radicado.
     """
     radicado_dt = pretty_date(
@@ -62,12 +64,16 @@ def validate_status(resp_mcar: dict, rad_default: Radicacion) -> ValidationError
                     '(Solo para personal autorizado)<br><br>'
                     'Si tiene alguna duda se puede comunicar con nosotros '
                     'al 3330333124 <br><br>').format(reverse('soporte', args=(value,)))
-
+        elif rad_default.is_anulado:
+            logger.info(f"{rad_default.numero_radicado} radicado anulado, acta #{ssc}.")
+            text_resp = f'Número de autorización {rad_default.numero_radicado} anulado.' \
+                        '<br><br>Si tiene alguna duda se puede comunicar con nosotros ' \
+                        'al 3330333124 <br><br>'
         else:
             # Radicado  tiene SSC pero no tiene factura y por eso se asume que no está en firebase
             logger.info(f"{rad_default.numero_radicado} radicado en preparación, acta #{ssc}.")
             text_resp = f'Número de autorización {rad_default.numero_radicado} radicado ' \
-                        f'{radicado_dt}.<br><br>Este domicilio se encuentra en preparación<br><br>' \
+                        f'{radicado_dt}.<br><br>Este domicilio se encuentra en preparación.<br><br>' \
                         'Si tiene alguna duda se puede comunicar con nosotros ' \
                         'al 3330333124 <br><br>'
     else:
@@ -242,7 +248,7 @@ def announce_pending_radicado_and_render_buttons(existing_radicados: 'QuerySet')
     new_formula = template_btn.render({'id': 'new_formula', 'txt': 'Solicitar fórmula nueva',
                                        'bgcolor': 'white', 'txtcolor': '#2a57a9', 'widthbox': 22})
     raise forms.ValidationError(mark_safe("Tenemos pendiente la entrega de medicamento(s) con el "
-                                          f"número de radicación F{rad.id} solicitado "
+                                          f"número de radicación {rad.numero_autorizacion} solicitado "
                                           f"{format(rad.datetime, when(rad.datetime))}.<br><br>"
                                           f'<a style="text-decoration:none" target="_blank" '
                                           f'href="{rad.foto_formula}"">Click aquí para ver la fórmula</a><br><br>'
