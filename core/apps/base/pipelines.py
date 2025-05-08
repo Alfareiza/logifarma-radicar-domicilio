@@ -16,7 +16,7 @@ class PostStep(ABC):
 
 class NotifyEmail(PostStep, Email):
     def proceed(self, info_email: dict, rad_id: str) -> Tuple[bool, dict]:
-        log.info(f"{info_email['log_text']} ...enviando e-mail.")
+        # log.info(f"{info_email['log_text']} ...enviando e-mail.")
         check = False
         self.foto = info_email.get('foto', '')
         self.log_text = info_email.get('log_text')
