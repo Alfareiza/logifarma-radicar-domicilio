@@ -27,7 +27,7 @@
     </div>
 </div>
 {% endblock content %}
-
+<script>
 {% block extra_js %}
 document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.querySelector('.card-block button[type="submit"]');
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const documento = searchInput.value.trim();
         if (documento) {
-            const apiUrl = `http://localhost:8001/api/v1/radicaciones/?paciente_cc=${documento}`;
+            const apiUrl = `http://domicilios.logifarma.com.co/api/v1/radicaciones/?paciente_cc=${documento}`;
 
             // Mostrar el spinner
             cardBlock.innerHTML = `
@@ -155,3 +155,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 {% endblock extra_js %}
+</script>
