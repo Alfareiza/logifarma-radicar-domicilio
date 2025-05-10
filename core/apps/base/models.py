@@ -103,7 +103,7 @@ class Radicacion(Model):
 
     @property
     def is_anulado(self):
-        return 'anulad' in self.acta_entrega.lower()
+        return 'anulad' in str(self.acta_entrega).lower()
 
 
 
