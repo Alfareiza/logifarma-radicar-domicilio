@@ -97,7 +97,7 @@ class Radicacion(Model):
 
     @property
     def numero_autorizacion(self):
-        if self.medicamento_autorizado:
+        if self.medicamento_autorizado or (self.convenio and 'mutual' in self.convenio):
             return self.numero_radicado
         return f"F{self.id}"
 

@@ -49,15 +49,17 @@
                 {{ radicados|length }}
               </h3>
             </div>
-            {% with percent_month=radicados|length|calc_percent:4000 %}
+            {% with percent_month=radicados|length|calc_percent:avg_last_six_months %}
             <div class="col-3 text-right">
 <!--              <p class="m-b-0">{{ percent_month }}%</p>-->
-              <label class="label theme-bg text-white f-14 f-w-400 float-right" style="border-radius: 1rem;">{{ percent_month }}%</label>
+              <label class="label theme-bg text-white f-14 f-w-400 float-right"  data-toggle="tooltip"
+                     title="Cantidad promedio de radicados de los últimos 6 meses es {{avg_last_six_months}}"
+                     style="border-radius: 1rem;">{{ percent_month }}%</label>
             </div>
           </div>
           <div class="progress m-t-30" style="height: 7px;">
             <div class="progress-bar progress-c-theme2" role="progressbar" style="width: {{ percent_month }}%;"
-              aria-valuenow="0" aria-valuemin="0" aria-valuemax="4000"></div>
+              aria-valuenow="0" aria-valuemin="0" aria-valuemax="{{avg_last_six_months}}"></div>
           </div>
           {% endwith %}
         </div>
@@ -318,9 +320,10 @@
             </div>
             <div class="col text-right">
               <h3>{{ radicados|length }}</h3>
-              <h6 class="{% if porcentaje_crecimiento|first in '+' %} text-c-green {% else %} text-c-red {% endif %}mb-0">
-                {{porcentaje_crecimiento}}</h6>
-              <h5><span class="text-muted">Total Radicados del Mes</span></h5>
+              <h5 class="d-flex align-items-center justify-content-end">
+                <p class="{% if porcentaje_crecimiento|first in '+' %} text-c-green {% else %} text-c-red {% endif %}mb-0 m-r-10">{{porcentaje_crecimiento}}</p>
+                <span class="text-muted">Total Radicados del Mes</span>
+              </h5>
             </div>
           </div>
         </div>
@@ -355,22 +358,33 @@
         <div class="card-block border-bottom">
           <div class="row d-flex align-items-center">
             <div class="col-auto">
-              <img style="width: 8rem;" src="{% static 'img/fomag_logo.png' %}" alt="">
+              <img style="width: 10rem;" src="{% static 'img/cajacopi_logo.png' %}" alt="">
             </div>
             <div class="col">
-              <h3 class="f-w-300 text-center">{{ qty_pacientes_fomag }}</h3>
-<!--              <span class="d-block text-uppercase">Usuarios atendidos</span>-->
+              <h3 class="f-w-300 text-center">{{ qty_pacientes_cajacopi }}</h3>
+<!--              <span class="d-block text-uppercase">Cajacopi</span>-->
+            </div>
+          </div>
+        </div>
+        <div class="card-block border-bottom">
+          <div class="row d-flex align-items-center">
+            <div class="col-auto">
+              <img style="width: 10rem;" src="{% static 'img/mutual_ser_logo.png' %}" alt="">
+            </div>
+            <div class="col">
+              <h3 class="f-w-300 text-center">{{ qty_pacientes_mutualser }}</h3>
+<!--              <span class="d-block text-uppercase">Cajacopi</span>-->
             </div>
           </div>
         </div>
         <div class="card-block">
           <div class="row d-flex align-items-center">
             <div class="col-auto">
-              <img style="width: 10rem;" src="{% static 'img/cajacopi_logo.png' %}" alt="">
+              <img style="width: 8rem;" src="{% static 'img/fomag_logo.png' %}" alt="">
             </div>
             <div class="col">
-              <h3 class="f-w-300 text-center">{{ qty_pacientes_cajacopi }}</h3>
-<!--              <span class="d-block text-uppercase">Cajacopi</span>-->
+              <h3 class="f-w-300 text-center">{{ qty_pacientes_fomag }}</h3>
+<!--              <span class="d-block text-uppercase">Usuarios atendidos</span>-->
             </div>
           </div>
         </div>
