@@ -213,8 +213,10 @@ class CustomSessionWizard(SessionWizardView):
                 files=files
             )
             if files:
-                logger.info(f"tmp/ -> {list(self.file_storage.base_location.iterdir())}")
-                logger.info(f"files => {files}")
+                ...
+                # Las siguientes 2 lineas fueron comentadas para ahorrar logs en papertrail
+                # logger.info(f"tmp/ -> {list(self.file_storage.base_location.iterdir())}")
+                # logger.info(f"files => {files}")
             if form_obj.is_valid():
                 final_forms[form_key] = form_obj
                 # return self.render_revalidation_failure(form_key, form_obj, **kwargs)
