@@ -27,8 +27,9 @@
     </div>
 </div>
 {% endblock content %}
-<script>
+
 {% block extra_js %}
+<script>
 document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.querySelector('.card-block button[type="submit"]');
     const searchInput = document.getElementById('icon-search');
@@ -154,5 +155,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
-{% endblock extra_js %}
 </script>
+{% endblock extra_js %}
