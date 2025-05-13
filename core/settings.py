@@ -50,7 +50,6 @@ AUTHENTICATION_BACKENDS = [
 
 # Application definition
 INSTALLED_APPS = [
-    'corsheaders',
     'core.apps.base',
     'core.apps.home',
     'core.apps.api',
@@ -63,6 +62,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'drf_spectacular',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -246,9 +246,11 @@ if SENTRY_DSN := config("SENTRY_DSN", default=None):
     )
 
 
-CORS_ALLOWED_ORIGINS = [
-    "https://domicilios.logifarma.com.co",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://127.0.0.1:8001',
+#     "https://domicilios.logifarma.com.co",
+# ]
+CORS_ALLOW_ALL = True
 
 CORS_ALLOW_METHODS = ['GET']
 
