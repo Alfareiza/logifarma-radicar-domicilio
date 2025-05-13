@@ -50,6 +50,7 @@ AUTHENTICATION_BACKENDS = [
 
 # Application definition
 INSTALLED_APPS = [
+    'corsheaders',
     'core.apps.base',
     'core.apps.home',
     'core.apps.api',
@@ -68,6 +69,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -242,3 +244,23 @@ if SENTRY_DSN := config("SENTRY_DSN", default=None):
         # We recommend adjusting this value in production.
         profiles_sample_rate=1.0,
     )
+
+
+CORS_ALLOWED_ORIGINS = [
+    "https://domicilios.logifarma.com.co",
+]
+
+CORS_ALLOW_METHODS = ['GET']
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'Access-Control-Allow-Origin',
+]
