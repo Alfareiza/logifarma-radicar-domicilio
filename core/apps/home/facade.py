@@ -1,9 +1,11 @@
 import datetime
+from statistics import mean
 from typing import List
 
 from django.db.models import Count
 
 from core.apps.base.models import Radicacion
+from core.apps.home.utils import get_last_month_and_year
 
 
 def listar_radicados_mes(month: int,
@@ -82,9 +84,10 @@ def crecimiento_con_mes_anterior(current_day, current_hour, rads_current_month, 
     count_rads_current_month_until_current_day = rads_current_month.filter(datetime__day__lte=current_day).count()
     if count_rads_last_month_until_current_day:
         crecimiento = int(round((
-                                    (count_rads_current_month_until_current_day - count_rads_last_month_until_current_day)
-                                    / count_rads_last_month_until_current_day
-                            ) * 100, 2))
+                                        (
+                                                    count_rads_current_month_until_current_day - count_rads_last_month_until_current_day)
+                                        / count_rads_last_month_until_current_day
+                                ) * 100, 2))
     else:
         crecimiento = 0
     return f"+{crecimiento}%" if crecimiento > 0 else f"{crecimiento}%"
@@ -95,3 +98,21 @@ def radicados_sin_acta():
     return Radicacion.objects.select_related('municipio').filter(acta_entrega=None).exclude(
         datetime__day=dt.day, datetime__month=dt.month, datetime__year=dt.year
     ).order_by('datetime')
+
+
+def avg_last_n_months(n_months_back: int) -> int:
+    """
+    Calcula el promedio de radicados desde el mes anterior hacia atrás.
+    :param n_months_back: Cantidad de meses a considerar en la query.
+    Si se define 1, considera el mes anterior.
+    Si se define 2, considera los dos meses anteriores.
+    :return: Promedio de radicados de los  últimos n meses.
+    """
+    dt = datetime.datetime.now()
+    qt_per_month = []
+    for _ in range(n_months_back):
+        last_year, last_month = get_last_month_and_year(dt)
+        qt_per_month.append(listar_radicados_mes(month=last_month, year=last_year, args=('pk',)).count())
+        dt = datetime.datetime(year=last_year, month=last_month, day=1)
+
+    return int(mean(qt_per_month))

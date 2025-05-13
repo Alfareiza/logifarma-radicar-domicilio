@@ -1,0 +1,35 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load my_filters %}
+{% block extrastyle %}
+<!-- datatable css https://datatables.net -->
+<!--<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">-->
+<link rel="stylesheet" href="{% static 'assets/plugins/chart-morris/css/morris.css' %}">
+{% endblock extrastyle %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Busca un usuario por su documento</h5>
+            </div>
+            <div class="card-block">
+                <div class="row justify-content-center">
+                    <div class="col-sm-3">
+                        <input type="text" id="icon-search" class="form-control mb-4" placeholder="Digita el numero de documento...">
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'js/buscador.js' %}"></script>
+{% endblock extra_js %}

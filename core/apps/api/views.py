@@ -35,6 +35,7 @@ from ..base.models import Barrio, Municipio, Radicacion
 class RadicacionViewSet(viewsets.ModelViewSet):
     serializer_class = RadicacionDetailSerializer
     pagination_class = PageNumberPagination
+    queryset = Radicacion.objects.all()
     http_method_names = ["get", "post", "patch"]
     pagination_class.page_size = 10
     lookup_field = 'numero_radicado'
@@ -44,10 +45,16 @@ class RadicacionViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """Filter the last 7 days of Radicacion objects"""
+        queryset = super().get_queryset()
         end, start = create_range_dates()
-        return Radicacion.objects.filter(
-            datetime__range=[start, end]
-        ).order_by('-datetime')
+
+        if documento := self.request.query_params.get('paciente_cc'):
+            # /api/v1/radicaciones/?paciente_cc=32651845
+            queryset = queryset.filter(paciente_cc__icontains=documento)
+        else:
+            queryset = queryset.filter(datetime__range=[start, end])
+
+        return queryset.order_by('-datetime')
 
     def get_serializer_class(self):
         """Return the serializer class for the request"""

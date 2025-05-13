@@ -62,12 +62,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'drf_spectacular',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -223,6 +225,13 @@ SAP_PASS = config('SAP_PASS')
 SAP_COMPANY = config('SAP_COMPANY')
 SAP_URL = config('SAP_URL')
 
+
+# MUTUAL SER
+MS_USER = config('MS_USER')
+MS_PASS = config('MS_PASS')
+MS_API_URL = config('MS_API_URL')
+MS_API_URL_VALIDADOR = config('MS_API_URL_VALIDADOR')
+
 # Sentry
 if SENTRY_DSN := config("SENTRY_DSN", default=None):
     sentry_sdk.init(
@@ -235,3 +244,25 @@ if SENTRY_DSN := config("SENTRY_DSN", default=None):
         # We recommend adjusting this value in production.
         profiles_sample_rate=1.0,
     )
+
+
+# CORS_ALLOWED_ORIGINS = [
+#     'http://127.0.0.1:8001',
+#     "https://domicilios.logifarma.com.co",
+# ]
+CORS_ALLOW_ALL = True
+
+CORS_ALLOW_METHODS = ['GET']
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'Access-Control-Allow-Origin',
+]

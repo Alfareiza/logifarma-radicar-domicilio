@@ -15,6 +15,7 @@ from core.settings import logger, BASE_DIR
 
 FORMS = [
     ("sinAutorizacion", SinAutorizacion),
+    ("orden", Orden),
     ("fotoFormulaMedica", FotoFormulaMedica),
     ("eligeMunicipio", EligeMunicipio),
     ("digitaDireccionBarrio", DireccionBarrio),
@@ -27,9 +28,15 @@ MANDATORIES_STEPS_SIN_AUTORIZACION = ("sinAutorizacion", "eligeMunicipio",
 
 htmly = get_template(BASE_DIR / "core/apps/base/templates/notifiers/correo_sin_autorizacion.html")
 
+def show_orden(wizard) -> bool:
+    """El paso orden siempre es mostrado con bease en el valor 'm' extraido de la URL."""
+    query = wizard.request.get_full_path()
+    parts = query.rsplit('=')
+    return len(parts) == 2 and parts[1] == 'm'
 
 class SinAutorizacion(CustomSessionWizard):
     # template_name = 'start.html'
+    condition_dict = {'orden': show_orden}
     form_list = FORMS
     file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
     post_wizard = [NotifyEmail, NotifySMS, Drive, UpdateDB]
@@ -78,6 +85,7 @@ class SinAutorizacion(CustomSessionWizard):
             **form_data['eligeMunicipio'],
             **form_data['digitaDireccionBarrio'],
             **form_data['digitaCelular'],
+            **form_data.get('orden', {}),
             'email': [*form_data['digitaCorreo']]
         }
 
@@ -92,7 +100,10 @@ class SinAutorizacion(CustomSessionWizard):
         # if True:  # Testando inserción en producción temporalmente
             rad = guardar_short_info_bd(**info_email, ip=ip)
             info_email['ref_id'], info_email['NUMERO_RADICACION'], info_email['FECHA_RADICACION'] = rad
-            rad_id = info_email['NUMERO_RADICACION']
+            if info_email.get('CONVENIO', '') in ('mutualser',):
+                # En mutual ser, el NUMERO_RADICACION es el mismo NUMERO_AUTORIZACION digitado por usuario
+                info_email['NUMERO_RADICACION'] = info_email['ref_id']
+            rad_id = info_email['NUMERO_RADICACION']  # id en db
         else:
             rad_id = '1'
             info_email['NUMERO_RADICACION'] = rad_id

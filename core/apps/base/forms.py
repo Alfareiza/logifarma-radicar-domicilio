@@ -70,7 +70,7 @@ class SinAutorizacion(forms.Form):
         tipo = self.cleaned_data.get('tipo_identificacion')
         value = self.cleaned_data.get('identificacion')
         flag_new_formula = self.data.get('flag_new_formula')
-        entidad = {'c': 'cajacopi', 'f': 'fomag'}.get(getattr(self, 'source', ''), '')
+        entidad = {'c': 'cajacopi', 'f': 'fomag', 'm': 'mutualser'}.get(getattr(self, 'source', ''), '')
         resp = {'documento': f"{tipo}{value}"}
 
         if value == "99999999":
@@ -98,13 +98,11 @@ class SinAutorizacion(forms.Form):
         return resp
 
     def extra_validations(self, entidad, resp_api, tipo, value):
-        """
-        Realiza validaciones extra una vez se tenga información de respuesta de api.
-        """
+        """Realiza validaciones extra una vez se tenga información de respuesta de api."""
         if entidad == 'cajacopi':
             validate_identificacion_exists(entidad, resp_api, f"{tipo}:{value}")
             validate_status_afiliado(resp_api, 'ESTADO', f"{tipo}:{value}")
-        elif entidad == 'fomag':
+        elif entidad in ('fomag', 'mutualser'):
             # Validaciones extra cuando se consulta usuario fomag sin autorización
             ...
 
@@ -180,6 +178,23 @@ class AutorizacionServicio(forms.Form):
         logger.info(f"{num_aut} Número de autorización pasó las validaciones.")
         return resp_eps
 
+
+class Orden(forms.Form):
+    no_orden = forms.IntegerField(min_value=100_000, label='Número para facturar',
+                                  widget=forms.TextInput(attrs={'class': 'effect-16', 'autofocus': True}))
+
+    def clean(self):
+        orden = self.cleaned_data.get('no_orden')
+        str_orden = str(orden)
+        if not orden or len((str_orden)) < 6:
+            raise forms.ValidationError("Por favor ingrese un número para facturar válido.")
+
+        if rad := Radicacion.objects.filter(numero_radicado=str_orden).first():
+            # Consulta para verificar si tiene ssc (acta)
+            resp_mcar = obtener_datos_formula(orden, '806008394')  # Nit mutual ser
+            validate_status(resp_mcar, rad)
+
+        return {'NUMERO_AUTORIZACION': orden}
 
 class FotoFormulaMedica(forms.Form):
     """
