@@ -1,13 +1,19 @@
 """Create a singleton manager to ensure a single instance of Selenium."""
 import datetime
 import logging
+import re
 from time import sleep
 
-from RPA.Browser.Selenium import Selenium  # type: ignore
+from RPA.Browser.Selenium import Selenium
+from SeleniumLibrary.errors import ElementNotFound
+from bs4 import BeautifulSoup, Tag
+from retry import retry
 from selenium import webdriver
-from selenium.webdriver.common.by import By
+from selenium.common import StaleElementReferenceException, ElementNotInteractableException
 
-logger = logging.getLogger(__name__)
+from core.apps.base.exceptions import UserNotFound, NroAutorizacionNoEncontrado, NoRecordsInTable, FieldError
+
+from core.settings import logger as log
 
 
 def wait_element_load(browser, locator, timeout=5):
@@ -45,21 +51,21 @@ class LoginPage:
         browser.input_text(self.clave, "900073223")
 
     def perform(self, url: str, browser: Selenium):
-        logger.info('Accesando a site Mutual Ser')
+        log.info('Accesando a site Mutual Ser')
         self.visit(browser, url)
         # Select tipo de usuario
         browser.click_element(self.dropdown_tipo_usuario)
-        logger.info('Site cargó exitosamente, esperando ver botón de tipo de usuario.')
+        log.info('Site cargó exitosamente, esperando ver botón de tipo de usuario.')
         browser.get_webelement(self.dropdown_prestador).click()
         if not wait_element_load(browser, self.nit):
             raise AssertionError('Botón de NIT no apareció después de clicar en Prestador')
-        logger.info('Ingresando credenciales.')
+        log.info('Ingresando credenciales')
         self.input_credentials(browser)
-        logger.info('Credenciales ingresadas.')
+        log.info('Credenciales ingresadas')
         browser.click_element(self.iniciar_sesion)
-        logger.info('Clicando en iniciar sesión.... esperando')
+        log.info('Clicando en iniciar sesión.... esperando')
         if wait_element_load(browser, "//h3[text()='Modulos Portal']"):
-            logger.info('Login efectuado con éxito.')
+            log.info('Login efectuado con éxito.')
 
 
 class SearchPage:
@@ -70,7 +76,16 @@ class SearchPage:
     afiliado_documento = "//input[@id='main:documentoAfiliadoSolicitud']"
     buscar_btn = "//img[contains(@src, 'buscar1.gif')]"
     table = "//table[thead[@id='main:a3tabladesolicuti_head']]"
-    ver_solicitud = "//tr[td/span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'ver solicitud')]]"
+    lupa_link = "//tr[td/span[contains(normalize-space(), 'Ver solicitud:')]]/td[2]/a"
+    confirmar_fecha_prest = '//span[contains(text(), "Confirmar Fecha Prest")]'
+    fecha_prestacion = "//input[contains(@name, 'fechaPrestacion_input')]"
+    nro_para_facturar = '//span[contains(text(), "El Nro. para Facturar es: ")]'
+    close_modal = "//div[@id='main:detallesolicitud']//a[@role='button'][span[contains(@class, 'ui-icon-closethick')]]"
+    calendar_icon = "//div[@id='main:pnlPrestacion']//button[@type='button'][.//span[contains(@class, 'ui-icon-calendar')]]"
+    day_icon = "//div[@id='ui-datepicker-div']//td[a[text()='{day}']]"
+    table_productos = "//div[@id='main:tableDetProductos']"
+    detalle_factura_modal = '//div[@id="main:detalleFacturas"]'
+    nro_para_facturar_en_modal_detalle_factura = "//span[contains(@id, 'numFacturarConcurrencia')]"
 
     def goto_form(self, browser):
         browser.click_element(self.consulta_solicitudes)
@@ -79,33 +94,142 @@ class SearchPage:
         wait_element_load(browser, self.afiliado_dropdown)
 
     def input_info_afiliado(self, browser, tipo_documento, documento):
-        browser.click_element(self.afiliado_dropdown)
-        locator_tipo_documento = self.afiliado_tipo_documento.format(tipo_documento)
-        browser.get_webelement(locator_tipo_documento).click()
-        browser.input_text(self.afiliado_documento, documento)
+        global locator_tipo_documento
+        try:
+            browser.click_element(self.afiliado_dropdown)
+            locator_tipo_documento = self.afiliado_tipo_documento.format(tipo_documento)
+            browser.get_webelement(locator_tipo_documento).click()
+            browser.input_text(self.afiliado_documento, documento)
+            wait_element_load(browser, self.buscar_btn)
+        except ElementNotFound as e:
+            if locator_tipo_documento in str(e):
+                raise FieldError(f"{tipo_documento} no encontrado en formulario.") from e
+            raise
+
+    @retry(ElementNotInteractableException, tries=3, delay=1)
+    def close_modal_detalle_solicitud(self, browser):
+        browser.click_element(self.close_modal)
+
+    def click_ver(self, browser, row):
+        """Si el botón de "Ver" que está en la última columna está clicable, entonces lo clica."""
+        if 'Número para Facturar:Ver' not in row.get_text(strip=True):
+            return ''
+        label_td = row.find('td', string=lambda text: text and 'Número para Facturar' in text)
+        link_ver = label_td.find_next_sibling('td').find('a')['id']
+        browser.driver.execute_script(f"document.getElementById('{link_ver}').click();")
+        wait_element_load(browser, self.detalle_factura_modal)
+        wait_element_load(browser, self.nro_para_facturar_en_modal_detalle_factura)
+        nro_para_facturar = browser.get_text(self.nro_para_facturar_en_modal_detalle_factura)
+        close_modal = f"{self.detalle_factura_modal}//a[contains(@class, 'ui-dialog-titlebar-close')]"
+        browser.click_element(close_modal)
         wait_element_load(browser, self.buscar_btn)
+        return nro_para_facturar
+
+    @retry(NoRecordsInTable, tries=3, delay=2)
+    def extract_productos(self, browser):
+        """Extrae los productos que estan en la tabla del modal."""
+        productos_html = browser.find_element(self.table_productos)
+        html_table = BeautifulSoup(productos_html.get_attribute("outerHTML"), "html.parser")
+        table = html_table.find('table')
+        headers = [th.text.strip() for th in table.thead.find_all('th')]
+        rows = []
+        for tr in table.tbody.find_all('tr'):
+            cells = tr.find_all('td')
+            values = [td.get_text(strip=True).replace(';', '') for td in cells]
+            for value in values:
+                if 'No records found' in value:
+                    raise NoRecordsInTable
+            row_dict = dict(zip(headers, values))
+            rows.append(row_dict)
+        return rows
+
+    def click_lupa_ver_mas(self, browser, row: Tag):
+        """Clica en lupa correspondiente a la fila analizada, escoge el dia de hoy y clica en Confirmar."""
+        nro_para_facturar = self.click_ver(browser, row)
+
+        label_td = row.find('td', string=lambda text: text and 'Ver solicitud' in text)
+        link_lupa = label_td.find_next_sibling('td').find('a')['id']
+        browser.driver.execute_script(f"document.getElementById('{link_lupa}').click();")
+
+        if not nro_para_facturar:
+            nro_para_facturar = self.extract_nro_para_facturar_modal_lupa(browser)
+        if not nro_para_facturar:
+            raise NroAutorizacionNoEncontrado
+
+        productos = self.extract_productos(browser)
+        self.close_modal_detalle_solicitud(browser)
+
+        if match := re.search(r'El Nro\. para Facturar es:\s*([A-Z0-9]+)', nro_para_facturar):
+            nro_para_facturar = re.findall(r'\d+', match[1])[0]
+
+        return nro_para_facturar, productos
+
+    def extract_nro_para_facturar_modal_lupa(self, browser):
+        wait_element_load(browser, self.confirmar_fecha_prest)
+        browser.click_element(self.calendar_icon)
+        self.day_icon = self.day_icon.format(day=datetime.datetime.now().day)
+        browser.scroll_element_into_view(self.day_icon)
+        browser.click_element(self.day_icon)
+        browser.click_element(self.confirmar_fecha_prest)
+        wait_element_load(browser, self.nro_para_facturar)
+        return browser.get_text(self.nro_para_facturar)
+
+    def scrap_table(self, browser):
+        table_element = browser.find_element(self.table)
+        rows_info = []
+        html_table = BeautifulSoup(table_element.get_attribute("outerHTML"), "html.parser")
+        rows = html_table.find('tbody').find_all('tr', recursive=False)
+        for i, row in enumerate(rows, 1):
+            log.info(f'Scrapping info from row {i}')
+            estado = row.contents[7].find_all("option", selected=True)[-1].text
+            match = re.search(r"Numero solicitud:(\d+)Fecha Solicitud:(\d{2}/\d{2}/\d{4})",
+                              row.contents[3].get_text(strip=True))
+            if estado.upper() == 'APROBADO':
+                nro_para_facturar, productos = self.click_lupa_ver_mas(browser, row.contents[-1])
+            else:
+                # En caso se aplique alguna lógica para cuando sea diferente de APROBADO
+                # nro_para_facturar, productos = [], ''
+                continue
+
+            rows_info.append({
+                'CONSECUTIVO_PROCEDIMIENTO': row.contents[2].text,
+                'NUMERO_SOLICITUD': match[1] if match else '',
+                'FECHA_SOLICITUD': match[2] if match else '',
+                'ESTADO_AUTORIZACION': estado,
+                'NUMERO_AUTORIZACION': nro_para_facturar,
+                'DETALLE_AUTORIZACION': [{'NOMBRE_PRODUCTO': producto['Tecnologías'], 'CANTIDAD': producto['Cantidad']}
+                                         for producto in productos]
+            })
+
+        return rows_info
 
     def extract_table(self, browser):
-        table_element = browser.find_element(self.table)
-        ver_solicitud_btns = table_element.find_elements(By.XPATH, self.ver_solicitud)
+        try:
+            return self.scrap_table(browser)
+        except (StaleElementReferenceException, ElementNotFound, ElementNotInteractableException) as exc:
+            import traceback
+            traceback.print_exc()
+            browser.capture_page_screenshot('psi.png')
+            raise
 
     def perform(self, browser, tipo_documento, documento):
+        """Busca usuario en mutual ser, este paso asume que el login ha sido efectuado."""
         self.goto_form(browser)
         self.input_info_afiliado(browser, tipo_documento, documento)
         browser.click_element(self.buscar_btn)
         if not wait_element_load(browser, "//*[contains(text(),'la consulta realizada arroja las solicitudes')]", 2):
-            logger.info('No apareció mensaje ... la consulta realizada arroja las solicitudes de autorización y por eso'
-                        ' no se pudo comprobar si la página cargó después de clicar en buscar.')
+            log.info('No apareció mensaje ... la consulta realizada arroja las solicitudes de autorización y por eso'
+                     ' no se pudo comprobar si la página cargó después de clicar en buscar.')
         if browser.does_page_contain("No se encontraron registros"):
-            raise UserNotFound(f'No fue encontrado usuário {tipo_documento}{documento} en mutual ser.')
-        user_info = self.extract_table(browser)
+            raise UserNotFound(f'No fue encontrado usuario con {tipo_documento.lower()} {documento} en mutual ser.')
+        return self.extract_table(browser)
 
 
 class BaseApp:
     """Base class for application or portal objects and their configuration."""
 
     browser: Selenium = Selenium
-    headless: bool = False
+    headless: bool = True
     wait_time: int = 10
     # download_directory: str = str(Path().cwd() / Path("temp"))
     browser_options: list = ["--no-sandbox", "--disable-dev-shm-usage"]
@@ -141,7 +265,6 @@ class MutualSerSite(BaseApp):
     """Main application class managing pages and providing direct access to Selenium."""
 
     browser: Selenium = None
-    headless: bool = False
     login = LoginPage()
     search_page = SearchPage()
     wait_time: int = 2
@@ -159,7 +282,3 @@ class MutualSerSite(BaseApp):
         super().__init__(**config)
         self.browser = Selenium()
         self.browser.set_selenium_implicit_wait(0)
-
-
-class UserNotFound(Exception):
-    ...

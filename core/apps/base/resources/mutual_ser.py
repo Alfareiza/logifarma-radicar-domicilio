@@ -4,7 +4,10 @@ import pickle
 import re
 
 import requests
+from decorator import contextmanager
 from requests import Timeout, HTTPError
+
+from core.apps.base.exceptions import UserNotFound, NroAutorizacionNoEncontrado, FieldError
 
 from core.apps.base.resources.decorators import login_required
 from core.apps.base.resources.selenium_manager import MutualSerSite
@@ -154,7 +157,6 @@ class MutualSerAPI:
                 continue
         return user
 
-
     @login_required
     def get_info_afiliado(self, tipo_documento: str, valor_documento: str):
         url = f'{MS_API_URL_VALIDADOR}/{self.VALIDADOR_DERECHOS}'
@@ -179,31 +181,76 @@ class MutualSerAPI:
         )
         return self._parse_response(resp, self.VALIDADOR_DERECHOS)
 
+
 class MutualSerPage:
+    IDENTIFICACIONES = {
+        'CC': 'Cedula de Ciudadania',
+        'CE': 'Cedula de Extranjeria',
+        'TI': 'Tarjeta de Identidad',
+        'RC': 'Registro Civil',
+        'PA': 'Pasaporte',
+        'MS': 'Menor sin Identificacion',
+        'PE': 'Permiso Especial',
+        'CN': 'Certificado Nacido Vivo',
+        'PT': 'Permiso Temporal',
+        'SC': 'Salvo Conducto',
+    }
+
     def __init__(self, url: str):
         self.url = url
         self.page = MutualSerSite()
+
+    @contextmanager
+    def open_page(self):
+        self.page.open_browser()
+        # self.browser.set_window_size(1920, 1080)
+        yield
+        self.browser.close_all_browsers()
 
     @property
     def browser(self):
         return self.page.browser
 
     def login(self):
-        print(f'{datetime.now():%T:%s} - INIT PROCESS')
-        self.page.open_browser()
+        log.info('Abriendo sitio web de Mutual Ser')
         self.page.login.perform(self.url, self.browser)
-        self.search_user()
-        print(f'{datetime.now():%T:%s} - END PROCESS')
-        self.browser.close_all_browsers()
 
-    def search_user(self):
-        self.page.search_page.perform(self.browser, 'Cedula de Ciudadania', '32816865')
+    def search_user(self, tipo_documento, documento) -> dict:
+        log.info('Iniciando proceso de búsqueda')
+        try:
+            patient_data = self.page.search_page.perform(self.browser, tipo_documento, documento)
+        except UserNotFound as e:
+            log.warning(str(e))
+            return {'MSG': 'Usuario no encontrado en Mutual Ser.'}
+        except NroAutorizacionNoEncontrado as e:
+            log.warning(str(e))
+            return {'MSG': 'Numero de autorización no encontrado para usuario.'}
+        except FieldError as e:
+            log.warning(str(e))
+            return {'MSG': str(e)}
+        except Exception as e:
+            log.warning(str(e))
+            return {'MSG': 'Error no esperado al buscar usuario.'}
+        else:
+            return patient_data
+        finally:
+            log.info('Búsqueda finalizada')
 
+    def find_user(self, tipo_documento, documento):
+        if not (tipo_documento := self.IDENTIFICACIONES.get(tipo_documento)):
+            return {'MSG': 'Tipo de documento no reconocido.'}
+        with self.open_page():
+            self.login()
+            resp = self.search_user(tipo_documento, documento)
 
+        return resp
 
 
 if __name__ == '__main__':
-    ms = MutualSerAPI()
-    print(ms.get_info_afiliado('CC', '123456'))
+    # ms = MutualSerAPI()
+    # print(ms.get_info_afiliado('CC', '123456'))
+
     site = MutualSerPage('https://portal.mutualser.org/ZONASER/home.xhtml')
-    site.login()
+    result = site.find_user('CC', '123467')
+    from pprint import pprint
+    pprint(result)

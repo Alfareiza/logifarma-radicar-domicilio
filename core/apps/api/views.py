@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status, viewsets
+from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -10,6 +11,8 @@ from .serializers import RadicacionDetailSerializer, \
     RadicacionPartialUpdateSerializer, RadicacionSerializer, \
     RadicacionWriteSerializer
 from ..base.models import Barrio, Municipio, Radicacion
+from ..base.resources.mutual_ser import MutualSerPage
+from core.settings import logger as log
 
 
 @extend_schema_view(
@@ -163,6 +166,27 @@ class RadicacionViewSet(viewsets.ModelViewSet):
         instance = get_object_or_404(Radicacion.objects.filter(**kwargs))
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+
+
+@api_view(['POST'])
+def busca_paciente(request):
+    """
+    Endpoint para buscar paciente en Mutual Ser (inicialmente).
+    """
+    payload = request.data  # Assuming you're sending data via POST
+    log.info(
+        f"Recibiendo petición de búsqueda para paciente en mutual ser {payload.get('tipo_documento'), payload.get('documento')}")
+    if not payload.get('tipo_documento') or not payload.get('documento'):
+        return Response({"status": "FAILURE", "error": 'No fueron enviados los parámetros para realizar la búsqueda'},
+                        status=status.HTTP_400_BAD_REQUEST)
+
+    site = MutualSerPage('https://portal.mutualser.org/ZONASER/home.xhtml')
+    result = site.find_user(payload.get('tipo_documento'), payload.get('documento'))
+
+    if 'MSG' in result:
+        return Response({"status": "FAILURE", "error": result['MSG']}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({"status": "SUCCESS", "result": result}, status=status.HTTP_200_OK)
 
 
 def create_range_dates(days: int = 7):
