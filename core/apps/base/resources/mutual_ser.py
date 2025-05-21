@@ -6,12 +6,14 @@ import re
 import requests
 from decorator import contextmanager
 from requests import Timeout, HTTPError
+from retry import retry
 
 from core.apps.base.exceptions import UserNotFound, NroAutorizacionNoEncontrado, FieldError
 
 from core.apps.base.resources.decorators import login_required
 from core.apps.base.resources.selenium_manager import MutualSerSite
 from core.apps.base.resources.tools import moment
+from core.apps.tasks.utils.dt_utils import Timer
 from core.settings import BASE_DIR, MS_PASS, MS_USER, MS_API_URL, MS_API_URL_VALIDADOR
 from core.settings import logger as log
 
@@ -216,6 +218,7 @@ class MutualSerPage:
         self.page.login.perform(self.url, self.browser)
 
     def search_user(self, tipo_documento, documento) -> dict:
+        """Busca usuario en portal de Mutual Ser."""
         log.info('Iniciando proceso de búsqueda')
         try:
             patient_data = self.page.search_page.perform(self.browser, tipo_documento, documento)
@@ -230,20 +233,28 @@ class MutualSerPage:
             return {'MSG': str(e)}
         except Exception as e:
             log.warning(str(e))
-            return {'MSG': 'Error no esperado al buscar usuario.'}
+            raise
         else:
             return patient_data
         finally:
             log.info('Búsqueda finalizada')
 
+    @retry(TimeoutError, 2, delay=2)
     def find_user(self, tipo_documento, documento):
+        """Busca un usuario en página de mutual ser y si durante cada recorrido se
+        emora más de 45 segundos, aborta y vuelve a empezar.
+        """
         if not (tipo_documento := self.IDENTIFICACIONES.get(tipo_documento)):
-            return {'MSG': 'Tipo de documento no reconocido.'}
-        with self.open_page():
-            self.login()
-            resp = self.search_user(tipo_documento, documento)
+            return {'MSG': f'Tipo de documento {tipo_documento!r} no reconocido.'}
 
-        return resp
+        timer = Timer(45)
+
+        while timer.not_expired:
+            with self.open_page():
+                self.login()
+                return self.search_user(tipo_documento, documento)
+
+        raise TimeoutError("Se intentó dos veces buscar el usuario pero en embas se demoró más de 30 segundos.")
 
 
 if __name__ == '__main__':

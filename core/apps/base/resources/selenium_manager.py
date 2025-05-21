@@ -174,7 +174,7 @@ class SearchPage:
         wait_element_load(browser, self.nro_para_facturar)
         return browser.get_text(self.nro_para_facturar)
 
-    def scrap_table(self, browser):
+    def scrap_table(self, browser, tipo_documento, documento):
         table_element = browser.find_element(self.table)
         rows_info = []
         html_table = BeautifulSoup(table_element.get_attribute("outerHTML"), "html.parser")
@@ -192,20 +192,23 @@ class SearchPage:
                 continue
 
             rows_info.append({
+                'TIPO_DOCUMENTO': tipo_documento,
+                'DOCUMENTO': documento,
                 'CONSECUTIVO_PROCEDIMIENTO': row.contents[2].text,
                 'NUMERO_SOLICITUD': match[1] if match else '',
                 'FECHA_SOLICITUD': match[2] if match else '',
                 'ESTADO_AUTORIZACION': estado,
                 'NUMERO_AUTORIZACION': nro_para_facturar,
+                'DISPENSADO': None,
                 'DETALLE_AUTORIZACION': [{'NOMBRE_PRODUCTO': producto['Tecnologías'], 'CANTIDAD': producto['Cantidad']}
                                          for producto in productos]
             })
 
         return rows_info
 
-    def extract_table(self, browser):
+    def extract_table(self, browser, tipo_documento, documento):
         try:
-            return self.scrap_table(browser)
+            return self.scrap_table(browser, tipo_documento, documento)
         except (StaleElementReferenceException, ElementNotFound, ElementNotInteractableException) as exc:
             import traceback
             traceback.print_exc()
@@ -222,7 +225,7 @@ class SearchPage:
                      ' no se pudo comprobar si la página cargó después de clicar en buscar.')
         if browser.does_page_contain("No se encontraron registros"):
             raise UserNotFound(f'No fue encontrado usuario con {tipo_documento.lower()} {documento} en mutual ser.')
-        return self.extract_table(browser)
+        return self.extract_table(browser, tipo_documento, documento)
 
 
 class BaseApp:

@@ -1,4 +1,7 @@
-from datetime import datetime
+import traceback
+from datetime import timedelta
+from enum import Enum
+from time import sleep
 
 from django.db.models import (
     BooleanField, CASCADE,
@@ -10,10 +13,39 @@ from django.db.models import (
     IntegerField,
     JSONField,
     Model,
-    PositiveBigIntegerField,
-    PositiveIntegerField, DateField,
+    DateField, TextField, FloatField,
 )
-from pytz import timezone
+from django.utils.timezone import now
+
+from core.apps.base.resources.medicar import obtener_datos_formula
+from core.apps.base.resources.mutual_ser import MutualSerPage
+from core.apps.tasks.utils.dt_utils import Timer
+
+
+class Status(str, Enum):
+    """
+    Status — The status of whatever is being tracked — step, entire flow, record
+    """
+
+    COMPLETED = "completado"
+    """
+    The item has completed successfully.
+    """
+
+    FAILED = "fallido"
+    """
+    The item has failed.
+    """
+
+    WARNING = "advertencia"
+    """
+    The item requires attention.
+    """
+
+    RUNNING = "en ejecucion"
+    """
+    The item is running.
+    """
 
 
 class Municipio(Model):
@@ -106,7 +138,6 @@ class Radicacion(Model):
         return 'anulad' in str(self.acta_entrega).lower()
 
 
-
 class Med_Controlado(Model):
     cum = CharField(max_length=24)
     nombre = CharField(max_length=250)
@@ -173,3 +204,100 @@ class Centro(Model):
 
     def __str__(self):
         return f"{self.disp} - {self.drogueria}"
+
+
+class ScrapMutualSer(Model):
+    created_at = DateTimeField(auto_now_add=True)
+    updated_at = DateTimeField(auto_now=True)
+    duracion = FloatField(null=True)
+    tipo_documento = CharField(max_length=20, null=True, blank=True)
+    documento = CharField(max_length=30, null=True, blank=True)
+    texto_error = TextField()
+    estado = CharField(max_length=50, null=True, blank=True)
+    resultado = JSONField(blank=True, null=True)
+    tipo = CharField(max_length=50, null=True, blank=True)
+
+    def __str__(self):
+        return f"Scrap de {self.tipo_documento}{self.documento}"
+
+    class Meta:
+        db_table = 'base_scrapper'
+
+    @property
+    def is_cache(self) -> bool:
+        return 'cache' in self.tipo if self.tipo else False
+
+    @property
+    def aut_pendientes_por_dispensar_groub_by_nro_para_facturar(self):
+        """Create a dict where the key is the NUMERO_AUTORIZACION and the value is a list with 'DETALLE_AUTORIZACION'"""
+        return {aut['NUMERO_AUTORIZACION']: aut['DETALLE_AUTORIZACION']
+                for aut in self.resultado
+                if aut['DISPENSADO'] not in (None, True)}
+
+    def get_info_user_from_zona_ser(self):
+        """Inicializa el processo de scrapping en mutual ser"""
+        self.tipo = 'busca autorizaciones de usuario'
+        self.estado = Status.RUNNING
+        self.save()
+
+        try:
+            scrapper = MutualSerPage('https://portal.mutualser.org/ZONASER/home.xhtml')
+            result = scrapper.find_user(self.tipo_documento, self.documento)
+        except Exception:
+            self.texto_error = traceback.format_exc()
+            self.estado = Status.FAILED
+        else:
+            if 'MSG' in result:
+                self.texto_error = result['MSG'].replace("\"", '')
+            self.resultado = result
+            self.estado = Status.COMPLETED
+            self.duracion = (now() - self.created_at).total_seconds()
+        self.save()
+
+    @classmethod
+    def get_scrap_last_minutes(cls, _id, tipo_documento, documento, minutes):
+        """Revisa los radicados de un tipo de documento con documento en los ultimos minutos."""
+        minutos_atras = now() - timedelta(minutes=minutes)
+        if scrap := ScrapMutualSer.objects.filter(
+                tipo_documento=tipo_documento,
+                documento=documento,
+                estado='completado',
+                updated_at__gte=minutos_atras
+        ).exclude(id=_id):
+            return scrap.last()
+        return None
+
+    def create_or_get_and_scrap(self):
+        """Gestiona como una fila la creación de scrapping."""
+        if scrap := self.get_scrap_last_minutes(self.id, self.tipo_documento, self.documento, 30):
+            return self.duplicate_attrs_from_existing(scrap)
+        timer = Timer(15)
+        while timer.not_expired:
+            latest_5_scraps = ScrapMutualSer.objects.order_by('-created_at').values_list('id', flat=True)[:5]
+            # Si al menos uno de los últimos 5 scrappings terminó
+            if ScrapMutualSer.objects.filter(id__in=latest_5_scraps).exclude(estado=Status.RUNNING).exists():
+                self.get_info_user_from_zona_ser()
+                return
+            sleep(1)
+
+        raise TimeoutError("Tenemos nuestro sistema ocupado, intenta más tarde.")
+
+    def duplicate_attrs_from_existing(self, scrap):
+        self.tipo = f"cache de id # {scrap.id}"
+        self.resultado = scrap.resultado
+        self.estado = scrap.estado
+        self.duracion = (self.updated_at - self.created_at).total_seconds()
+        self.save()
+        return
+
+    def load_dispensado_in_resultado(self):
+        """Busca cada autorización presente en resultado en Medicar y crea la variable 'DISPENSADO' con un buleano
+        que determina si fue dispensado o no.
+        """
+        for autorizacion in self.resultado:
+            # TODO revisar posibles respuestas de API para garantizar información correcta en 'DISPENSADO'
+            if 'cache' in self.tipo:
+                continue
+            resp_mcar = obtener_datos_formula(autorizacion['NUMERO_AUTORIZACION'], '806008394')
+            autorizacion['DISPENSADO'] = resp_mcar != {"error": "No se han encontrado registros."}
+            self.save()
