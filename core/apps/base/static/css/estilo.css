@@ -7811,3 +7811,90 @@ main section#vist2 nav#vist2 div#img p#vist2 {font-size: 0.8em;}
         font-size: .37em;
     }
 }
+.medications-wrapper {
+  padding: 1rem;
+  max-width: 900px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+  color: #1f2937;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #111827;
+}
+
+.section-description {
+  text-align: center;
+  font-size: 1rem;
+  color: #4b5563;
+  margin-bottom: 2rem;
+}
+
+.authorization-block {
+  margin-bottom: 2rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  background-color: #f9fafb;
+}
+
+.authorization-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.delivery-icon {
+  object-fit: contain;
+}
+
+.medications-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.medications-table th,
+.medications-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.medications-table th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+  color: #374151;
+}
+
+.center {
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .section-title {
+    font-size: 1.25rem;
+  }
+
+  .authorization-title {
+    font-size: 1rem;
+  }
+
+  .medications-table th,
+  .medications-table td {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  .delivery-icon {
+    /*width: 18px;*/
+    /*height: 18px;*/
+  }
+}

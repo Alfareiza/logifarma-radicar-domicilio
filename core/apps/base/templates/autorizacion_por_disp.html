@@ -1,0 +1,87 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}Autorizaciones a enviar{% endblock %}
+
+{% block content %}
+<section class="vista3">
+    <form id="form-id" action="" method="post">
+
+
+        <button class="continuar" formnovalidate name="" type="submit" value="" onclick="animabotoncarga_municipio()">
+            <p class="text_continuar">Continuar <i class="fa-solid fa-chevron-right"></i></p>
+        </button>
+        {% csrf_token %}
+        {{ wizard.management_form }}
+        {% include "base/logo.html" %}
+
+        {% if wizard.form.forms %}
+            <!--NOTHING-->
+            {{ wizard.form.management_form }}
+            {% for form in wizard.form.forms %}
+                {{ form.as_table }}
+            {% endfor %}
+        {% else %}
+
+        <!-- NEW IMPLEMENTATION -->
+        <div class="medications-wrapper">
+            <h2 class="section-title">Entregas pendientes de medicamentos</h2>
+            <p class="mt-3 section-description">
+                Hola <b>{{wizard.form.autorizaciones.value.P_NOMBRE|title}}</b>, a continuación te mostramos los artículos
+                pendientes por radicar. Por favor, revisa con atención:
+            </p>
+
+            {% for nro, medicamentos in wizard.form.autorizaciones.value.AUTORIZACIONES.items %}
+                <div class="authorization-block">
+                    <h3 class="authorization-title">Radicación N.º {{nro}}
+                        <img src="{% static 'img/moto-boy-icon.png' %}" alt="Icono de envío" class="delivery-icon" />
+                    </h3>
+                    <table class="medications-table">
+                        <thead>
+                        <tr>
+                            <th>Cantidad</th>
+                            <th>Medicamento</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for medicamento in medicamentos %}
+                            <tr>
+                                <td class="center">{{ medicamento.CANTIDAD }}</td>
+                                <td>{{ medicamento.NOMBRE_PRODUCTO }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+
+        </div>
+
+        {% endif %}
+        <button class="btn" id="btn_conti" type="submit" onclick="animabotoncarga_municipio()">
+            Continuar
+            <div id="btn_carga" class="conten_carga">
+                <div class="carga"></div>
+            </div>
+        </button>
+
+    </form>
+
+
+    <div class="conten-progreso-global">
+        <div class="pagina">Paso {{ wizard.steps.step1 }} de 7</div>
+        <div class="contenedor">
+            <div class="progreso-contenedor">
+                <div class="progreso" id="progreso"></div>
+                <div class="circulo active"></div>
+                <div class="circulo"></div>
+                <div class="circulo"></div>
+                <div class="circulo"></div>
+                <div class="circulo"></div>
+                <div class="circulo"></div>
+            </div>
+        </div>
+    </div>
+
+</section>
+{% endblock %}
