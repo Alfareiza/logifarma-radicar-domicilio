@@ -21,11 +21,13 @@ from core.apps.base.pipelines import NotifyEmail, NotifySMS, Drive, UpdateDB
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.img_helpers import ImgHelper
 from core.apps.base.resources.tools import guardar_short_info_bd
-from core.apps.base.views import FORMS, TEMPLATES, MANDATORIES_STEPS
-from core.apps.base.views_sin_autorizacion import MANDATORIES_STEPS_SIN_AUTORIZACION
-from core.settings import BASE_DIR, logger, DATABASES
+from core.apps.base.views import FORMS
+from core.apps.base.views import TEMPLATES
+from core.settings import BASE_DIR, logger
 
 os.environ["PATH"] += f'{os.pathsep}/usr/local/bin'
+MANDATORIES_STEPS_SIN_AUTORIZACION = ("sinAutorizacion", "eligeMunicipio",
+                                      "digitaDireccionBarrio", "digitaCelular", "digitaCorreo")
 
 
 class VisualWizardTests(StaticLiveServerTestCase):
