@@ -9,7 +9,6 @@ from django.core.mail import EmailMessage, get_connection
 from django.utils.safestring import SafeString
 from pytz import timezone
 
-from core.apps.base.models import Radicacion, Municipio, Barrio
 from core.settings import BASE_DIR, logger, logger as log
 
 
@@ -194,8 +193,10 @@ def guardar_info_bd(**kwargs):
             }
     :return:
     """
+    from core.apps.base.models import Radicacion, Municipio, Barrio
     rad = kwargs.pop('NUMERO_AUTORIZACION', None)
-    if Radicacion.objects.filter(numero_radicado=str(rad)).exists():
+    convenio = kwargs.pop('CONVENIO', None)
+    if Radicacion.objects.filter(numero_radicado=str(rad), convenio=convenio).exists():
         logger.info(f"{rad} Número de radicación ya existe!.")
         return
     municipio = kwargs.pop('municipio').name.lower()
@@ -208,11 +209,11 @@ def guardar_info_bd(**kwargs):
 
     ip = clean_ip(kwargs.pop('ip'))
 
-    logger.info(f"{rad} Guardando radicación (medicamento autorizado) de {kwargs.get('CONVENIO', '')}.")
+    logger.info(f"{rad} Guardando radicación (medicamento autorizado) de {convenio}.")
     try:
         rad = Radicacion(
             numero_radicado=str(rad),
-            convenio=kwargs.pop('CONVENIO', None),
+            convenio=convenio,
             municipio=Municipio.objects.get(activo=True, name__iexact=municipio),
             barrio=Barrio.objects.filter(
                 municipio__name__iexact=municipio,
@@ -233,7 +234,7 @@ def guardar_info_bd(**kwargs):
                f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", str(e))
 
 
-def save_in_bd(name_bd: str, rad: Radicacion):
+def save_in_bd(name_bd: str, rad):
     """
     Guarda una instancia de Radicacion en la base de datos informada en name_bd
     :param name_bd: Puede ser 'default' que son las bases configuradas en settings.
@@ -256,6 +257,7 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
             {'sinAutorizacion': '99999999', 'fotoFormulaMedica': {'src': <UploadedFile: chat.png (image/png)>}, 'eligeMunicipio': {'cod_dane': None, 'activo': False, 'municipio': <Municipio: Valledupar, Cesar>}, 'digitaDireccionBarrio': {'barrio': 'Barrio 1', 'direccion': '213'}, 'digitaCelular': {'celular': 3213213211, 'whatsapp': None}, 'digitaCorreo': ['']}
     :return:
     """
+    from core.apps.base.models import Radicacion, Municipio, Barrio
     resp = ('', '', '')
     municipio = kwargs.pop('municipio').name.lower()
 
@@ -455,7 +457,7 @@ def decrypt(txt: str) -> str:
     return ''.join(resp)
 
 
-def update_rad_from_fbase(rad: Radicacion, resp_fbase: dict) -> None:
+def update_rad_from_fbase(rad, resp_fbase: dict) -> None:
     """Actualiza un radicado con base en resp_fbase"""
     logger.info(f"{rad.numero_radicado} siendo actualizado con información de Firebase.")
     if not rad.acta_entrega:
@@ -472,7 +474,7 @@ def update_rad_from_fbase(rad: Radicacion, resp_fbase: dict) -> None:
     rad.save()
 
 
-def update_field(rad: Radicacion, attr, value) -> None:
+def update_field(rad, attr, value) -> None:
     if hasattr(rad, attr):
         setattr(rad, attr, value)
         rad.save()
@@ -540,7 +542,7 @@ def login_check(obj) -> bool:
                 log.warning(f'[{name_obj}] Tiempo de login anterior expiró')
                 login_succeed = obj.login()
             else:
-                log.info(f"[{name_obj}] Usando login que está en cache")
+                # log.info(f"[{name_obj}] Usando login que está en cache")
                 obj.sess_id = sess_id
                 login_succeed = True
     return login_succeed
