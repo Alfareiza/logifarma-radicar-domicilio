@@ -10,8 +10,7 @@ from rest_framework.response import Response
 from .serializers import RadicacionDetailSerializer, \
     RadicacionPartialUpdateSerializer, RadicacionSerializer, \
     RadicacionWriteSerializer
-from ..base.models import Barrio, Municipio, Radicacion
-from ..base.resources.mutual_ser import MutualSerPage
+from ..base.models import Barrio, Municipio, Radicacion, ScrapMutualSer
 from core.settings import logger as log
 
 
@@ -174,19 +173,24 @@ def busca_paciente(request):
     Endpoint para buscar paciente en Mutual Ser (inicialmente).
     """
     payload = request.data  # Assuming you're sending data via POST
-    log.info(
-        f"Recibiendo petición de búsqueda para paciente en mutual ser {payload.get('tipo_documento'), payload.get('documento')}")
-    if not payload.get('tipo_documento') or not payload.get('documento'):
-        return Response({"status": "FAILURE", "error": 'No fueron enviados los parámetros para realizar la búsqueda'},
+    tipo = payload.get('tipo_documento')
+    value = payload.get('documento')
+    log.info(f"Recibiendo petición de búsqueda para paciente en mutual ser {tipo} {value}")
+    if not tipo or not value:
+        return Response({"status": "FAILURE", "error": 'No fueron enviados los campos para realizar la búsqueda'},
                         status=status.HTTP_400_BAD_REQUEST)
 
-    site = MutualSerPage('https://portal.mutualser.org/ZONASER/home.xhtml')
-    result = site.find_user(payload.get('tipo_documento'), payload.get('documento'))
-
-    if 'MSG' in result:
-        return Response({"status": "FAILURE", "error": result['MSG']}, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        return Response({"status": "SUCCESS", "result": result}, status=status.HTTP_200_OK)
+    try:
+        scrapper = ScrapMutualSer.objects.create(tipo_documento=tipo, documento=value)
+        scrapper.create_or_get_and_scrap()
+        result = scrapper.resultado
+        if 'MSG' in result:
+            return Response({"status": "FAILURE", "error": result['MSG']}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"status": "SUCCESS", "result": result}, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({"status": "FAILURE", "error": 'No fue posible procesar tu solicitud.'},
+                        status=status.HTTP_400_BAD_REQUEST)
 
 
 def create_range_dates(days: int = 7):
