@@ -15,56 +15,52 @@
                    style="background: #ffffff; background-color: #ffffff; width: 100%;">
                 <tbody>
                 <tr>
-                    <td style="direction: ltr; font-size: 0px; padding: 5px 0px 0px 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; padding-top: 5px; text-align: center;">
-                        <div class="m_-699636249018344079mj-column-per-100"
-                             style="font-size: 0px; text-align: left; direction: ltr; display: inline-block; vertical-align: top; width: 100%;">
-                            <table border="0" cellpadding="0" cellspacing="0" role="presentation"
-                                   style="vertical-align: top;" width="100%">
-                                <tbody>
-                                <tr>
-                                    <td align="left"
-                                        style="vertical-align: middle; width: 80%; display: flex; align-items: center;">
-                                        <div style="font-family: Ubuntu, Helvetica, Arial, sans-serif; font-size: 20px; letter-spacing: normal; line-height: 22px; text-align: left; color: #55575d;">
-                                            <h1><span style="font-size: 20px;">Hola {{P_NOMBRE|title}}... </span></h1>
-                                        </div>
-                                    </td>
-                                    <td align="right" style="vertical-align: middle; font-size: 0px; width: 40%;">
-                                        <img src="https://domicilios.logifarma.com.co/static/img/cajacopi_logo.png" alt="" width="36%" style="display: inline-block; border: 0; vertical-align: middle; margin-right: 5px; object-fit: contain;"/>
-                                        <span style="display: inline-block; width: 1px; height: 30px; background-color: #cccccc; vertical-align: middle; margin-left: 5px; margin-right: 5px;"></span>
-                                        <img src="https://domicilios.logifarma.com.co/static/img/LogLogifarma.png" alt="" width="50%" style="display: inline-block; border: 0; vertical-align: middle; margin-left: 5px; object-fit: contain;"/>
-                                    </td>
-                                </tr>
+                    <td style="padding: 1rem 0 2rem 0;">
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
+                            <tr>
+                                <td width="60%" align="left" style="padding-left: 1rem; vertical-align: middle;">
+                                    <div style="font-family: Ubuntu, Helvetica, Arial, sans-serif; font-size: 20px; letter-spacing: normal; line-height: 22px; text-align: left; color: #55575d;">
+                                        <h1 style="margin: 0;"><span style="font-size: 20px;">Hola {{P_NOMBRE|title}}... </span></h1>
+                                    </div>
+                                </td>
+                                <td width="40%" align="right" style="vertical-align: middle;">
+                                    <img src="{{LOGO}}" alt="" width="{{WIDTH}}" style="display: inline-block; border: 0; vertical-align: middle; margin-right: 5px; object-fit: contain;"/>
+                                    <span style="display: inline-block; width: 1px; height: 30px; background-color: #cccccc; vertical-align: middle; margin-left: 5px; margin-right: 5px;"></span>
+                                    <img src="https://domicilios.logifarma.com.co/static/img/LogLogifarma.png" alt="" width="46%" style="display: inline-block; border: 0; vertical-align: middle; object-fit: contain;"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
 
-                                <tr>
-                                    <td align="left"
-                                        style="font-size: 0px; padding: 0px 25px 0px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
-                                        <div style="font-family: Ubuntu, Helvetica, Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 22px; text-align: left; color: #55575d;">
-                                            <p>
-                                                        <span style="color: #55575d; font-family: Arial; font-size: 13px;">
-                                                            Tu radicación de domicilio Nº {{NUMERO_AUTORIZACION}} ya está en proceso. Te informaremos por este medio y/o WhatsApp la confirmación del envío en las próximas horas hábiles.
-                                                        </span>
-                                            </p>
-                                            <p><span style="color: #55575d; font-family: Arial; font-size: 13px;">Recuerda que al realizarte la entrega de los artículos debes:</span>
-                                            </p>
-                                            <ol>
-                                                <li>
-                                                            <span style="color: #55575d; font-family: Arial; font-size: 13px;">
-                                                                Presentar al domiciliario el documento de identidad <strong><u>original</u></strong> del afiliado: {{AFILIADO}}.
-                                                            </span>
-                                                </li>
-                                                <li>
-                                                            <span style="color: #55575d; font-family: Arial; font-size: 13px;">
-                                                                Entregar al domiciliario los documentos de Formula médica y/o MIPRES asociada a autorización: {{NUMERO_AUTORIZACION}}.
-                                                            </span>
-                                                </li>
-                                                <li><span style="color: #55575d; font-family: Arial; font-size: 13px;">&nbsp;Firmar acta de entrega.</span>
-                                                </li>
-                                            </ol>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                <tr>
+                    <td align="left" style="font-size: 0px; padding: 0px 13px 0px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word; width: 100%;">
+                        <div style="font-family: Ubuntu, Helvetica, Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 22px; text-align: left; color: #55575d; width: 100%;">
+                            <p>
+                                <span style="color: #55575d; font-family: Arial; font-size: 13px;">
+                                    Tu radicación de domicilio Nº {{NUMERO_AUTORIZACION}} ya está en proceso. Te informaremos por este medio y/o WhatsApp la confirmación del envío en las próximas horas hábiles.
+                                </span>
+                            </p>
+                            <p><span style="color: #55575d; font-family: Arial; font-size: 13px;">Recuerda que al realizarte la entrega de los artículos debes:</span>
+                            </p>
+                            <ol style="padding-left: 20px;">
+                                <li>
+                                    <span style="color: #55575d; font-family: Arial; font-size: 13px;">
+                                        Presentar al domiciliario el documento de identidad <strong><u>original</u></strong> del afiliado: {{AFILIADO}}.
+                                    </span>
+                                </li>
+                                <li>
+                                    <span style="color: #55575d; font-family: Arial; font-size: 13px;">
+                                        {% if CONVENIO == 'mutualser' %}
+                                            Entregar al domiciliario la formula médica <strong><u>original</u></strong>. (El domiciliario se quedará con este documento)
+                                        {% else %}
+                                            Entregar al domiciliario los documentos de Formula médica y/o MIPRES asociada a la autorización: {{NUMERO_AUTORIZACION}}.
+                                        {% endif %}
+                                    </span>
+                                </li>
+                                <li><span style="color: #55575d; font-family: Arial; font-size: 13px;">&nbsp;Firmar acta de entrega.</span>
+                                </li>
+                            </ol>
                         </div>
                     </td>
                 </tr>
@@ -175,6 +171,7 @@
             </table>
         </div>
 
+        {% if FECHA_AUTORIZACION %}
         <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
                    style="background: #ffffff; background-color: #ffffff; width: 100%;">
@@ -192,7 +189,7 @@
                                         <td align="left"
                                             style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
                                             <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: left; color: #000000;">
-                                                <p><span style="color: #55575d;">Fecha de autorización</span><span
+                                                <p><span style="color: #55575d;">Fecha de {% if CONVENIO == 'mutualser' %}radicación{% else %}autorización{% endif %}</span><span
                                                         style="color: #55575d; font-size: 14px;">:</span></p>
                                             </div>
                                         </td>
@@ -223,7 +220,8 @@
                 </tbody>
             </table>
         </div>
-
+        {% endif %}
+        {% if ESTADO_AUTORIZACION %}
         <div style="background: #e5f7ff; background-color: #e5f7ff; margin: 0px auto; max-width: 600px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
                    style="background: #e5f7ff; background-color: #e5f7ff; width: 100%;">
@@ -271,7 +269,8 @@
                 </tbody>
             </table>
         </div>
-
+        {% endif %}
+        {% if MIPRES %}
         <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
                    style="background: #ffffff; background-color: #ffffff; width: 100%;">
@@ -319,7 +318,8 @@
                 </tbody>
             </table>
         </div>
-
+        {% endif %}
+        {% if MEDICO_TRATANTE %}
         <div style="background: #e5f7ff; background-color: #e5f7ff; margin: 0px auto; max-width: 600px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
                    style="background: #e5f7ff; background-color: #e5f7ff; width: 100%;">
@@ -367,7 +367,8 @@
                 </tbody>
             </table>
         </div>
-
+        {% endif %}
+        {% if DIAGNOSTICO %}
         <div style="background: #ffffff; background-color: #ffffff; margin: 0px auto; max-width: 600px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
                    style="background: #ffffff; background-color: #ffffff; width: 100%;">
@@ -415,7 +416,8 @@
                 </tbody>
             </table>
         </div>
-
+        {% endif %}
+        {% if IPS_SOLICITA %}
         <div style="background: #e5f7ff; background-color: #e5f7ff; margin: 0px auto; max-width: 600px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
                    style="background: #e5f7ff; background-color: #e5f7ff; width: 100%;">
@@ -463,7 +465,7 @@
                 </tbody>
             </table>
         </div>
-
+        {% endif %}
         <div style="background: #e4fae6; background-color: #e4fae6; margin: 0px auto; max-width: 600px;">
             <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
                    style="background: #e4fae6; background-color: #e4fae6; width: 100%;">
@@ -542,7 +544,7 @@
                                     <td align="right"
                                         style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
                                         <div style="font-family: Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 1; text-align: right; color: #000000b5;">
-                                            <h3><span style="font-family: Arial; font-size: 18px;">Cajacopi</span>
+                                            <h3><span style="font-family: Arial; font-size: 18px;">{% if CONVENIO == 'mutualser' %} Mutual Ser {% else %} {{CONVENIO|title}} {% endif %}</span>
                                             </h3>
                                         </div>
                                     </td>
@@ -875,7 +877,7 @@
                                                     {% for articulo in DETALLE_AUTORIZACION %}
                                                     <ul>
                                                         <li><span
-                                                                style="color: #55575d; font-family: Arial, sans-serif; font-size: 13px;">{{articulo.NOMBRE_PRODUCTO}} (CUM: {{articulo.CUMS}}) Cantidad: {{articulo.CANTIDAD}}</span>
+                                                                style="color: #55575d; font-family: Arial, sans-serif; font-size: 13px;">{{articulo.NOMBRE_PRODUCTO}} {% if articulo.CUMS %}(CUM: {{articulo.CUMS}}) {% endif %} Cantidad: {{articulo.CANTIDAD}}</span>
                                                         </li>
                                                     </ul>
                                                     {% empty %}
