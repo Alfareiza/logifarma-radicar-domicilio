@@ -20,6 +20,7 @@ from django.utils.timezone import now
 from core.apps.base.resources.medicar import obtener_datos_formula
 from core.apps.base.resources.mutual_ser import MutualSerPage
 from core.apps.tasks.utils.dt_utils import Timer
+from core.settings import ZONA_SER_URL
 
 
 class Status(str, Enum):
@@ -241,7 +242,7 @@ class ScrapMutualSer(Model):
         self.save()
 
         try:
-            scrapper = MutualSerPage('https://portal.mutualser.org/ZONASER/home.xhtml')
+            scrapper = MutualSerPage(ZONA_SER_URL)
             result = scrapper.find_user(self.tipo_documento, self.documento)
         except Exception:
             self.texto_error = traceback.format_exc()
@@ -251,8 +252,9 @@ class ScrapMutualSer(Model):
                 self.texto_error = result['MSG'].replace("\"", '')
             self.resultado = result
             self.estado = Status.COMPLETED
+        finally:
             self.duracion = (now() - self.created_at).total_seconds()
-        self.save()
+            self.save()
 
     @classmethod
     def get_scrap_last_minutes(cls, _id, tipo_documento, documento, minutes):

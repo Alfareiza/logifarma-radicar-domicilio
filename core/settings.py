@@ -232,6 +232,9 @@ MS_PASS = config('MS_PASS')
 MS_API_URL = config('MS_API_URL')
 MS_API_URL_VALIDADOR = config('MS_API_URL_VALIDADOR')
 
+ZONA_SER_URL = config('ZONA_SER_URL')
+ZONA_SER_NIT = config('ZONA_SER_NIT')
+
 # Sentry
 if SENTRY_DSN := config("SENTRY_DSN", default=None):
     sentry_sdk.init(
