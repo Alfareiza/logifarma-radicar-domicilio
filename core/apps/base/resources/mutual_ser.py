@@ -1,5 +1,6 @@
 import datetime
 import json
+import logging
 import pickle
 import re
 
@@ -15,7 +16,7 @@ from core.apps.base.resources.selenium_manager import MutualSerSite
 from core.apps.base.resources.tools import moment
 from core.apps.tasks.utils.dt_utils import Timer
 from core.settings import BASE_DIR, MS_PASS, MS_USER, MS_API_URL, MS_API_URL_VALIDADOR, ZONA_SER_URL
-from core.settings import logger as log
+from core.settings import ch, logger as log
 
 
 class MutualSerAPI:
@@ -202,11 +203,27 @@ class MutualSerPage:
         self.url = url
         self.page = MutualSerSite()
 
+    def add_user_id_to_formatter(self, handler, user_id):
+        old_formatter = handler.formatter
+
+        new_defaults = {"ssid": old_formatter._my_ssid, "user_id": user_id}
+        new_fmt_str = "%(asctime)s %(levelname)s [%(ssid)s|%(user_id)s] %(message)s"
+        updated_formatter = logging.Formatter(
+            new_fmt_str,
+            old_formatter.datefmt,
+            defaults=new_defaults
+        )
+        handler.setFormatter(updated_formatter)
+
     @contextmanager
-    def open_page(self):
+    def open_page(self, acr_tipo_documento, documento):
         self.page.open_browser()
         # self.browser.set_window_size(1920, 1080)
+        handler = log.handlers[0]  # Keep a reference
+        original_formatter = handler.formatter
+        self.add_user_id_to_formatter(handler, f"{acr_tipo_documento}{documento}")
         yield
+        ch.setFormatter(original_formatter)
         self.browser.close_all_browsers()
 
     @property
@@ -214,12 +231,11 @@ class MutualSerPage:
         return self.page.browser
 
     def login(self):
-        log.info('Abriendo sitio web de Mutual Ser')
         self.page.login.perform(self.url, self.browser)
 
     def search_user(self, tipo_documento, documento) -> dict:
         """Busca usuario en portal de Mutual Ser."""
-        log.info('Iniciando proceso de búsqueda')
+        log.info('Diligenciando formulario para buscar usuario')
         try:
             patient_data = self.page.search_page.perform(self.browser, tipo_documento, documento)
         except UserNotFound as e:
@@ -240,21 +256,19 @@ class MutualSerPage:
             log.info('Búsqueda finalizada')
 
     @retry(TimeoutError, 2, delay=2)
-    def find_user(self, tipo_documento, documento):
+    def find_user(self, acr_tipo_documento, documento):
         """Busca un usuario en página de mutual ser y si durante cada recorrido se
-        emora más de 45 segundos, aborta y vuelve a empezar.
+        demora más de 45 segundos, aborta y vuelve a empezar.
         """
-        if not (tipo_documento := self.IDENTIFICACIONES.get(tipo_documento)):
-            return {'MSG': f'Tipo de documento {tipo_documento!r} no reconocido.'}
-
         timer = Timer(45)
-
         while timer.not_expired:
-            with self.open_page():
+            if not (tipo_documento := self.IDENTIFICACIONES.get(acr_tipo_documento)):
+                return {'MSG': f'Tipo de documento {tipo_documento!r} no reconocido.'}
+            with self.open_page(acr_tipo_documento, documento):
                 self.login()
                 return self.search_user(tipo_documento, documento)
 
-        raise TimeoutError("Se intentó dos veces buscar el usuario pero en embas se demoró más de 30 segundos.")
+        raise TimeoutError("Se intentó dos veces buscar el usuario pero en c/u se demoró más de 45 segundos.")
 
 
 if __name__ == '__main__':
@@ -264,4 +278,5 @@ if __name__ == '__main__':
     site = MutualSerPage(ZONA_SER_URL)
     result = site.find_user('PT', '123123123')
     from pprint import pprint
+
     pprint(result)
