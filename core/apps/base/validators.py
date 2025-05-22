@@ -318,7 +318,9 @@ def validate_resp_zona_ser(scrapper: ScrapMutualSer):
     Validate the pending deliveries on medicare api.
     """
     if scrapper.texto_error != '' and not scrapper.resultado:
-        raise forms.ValidationError(mark_safe("No ha sido posible encontrar este documento en nuestro sistema.<br><br> "
+        logger.error(f"Error en afiliado {scrapper.tipo_documento}{scrapper.documento} con scrapper id {scrapper.id}")
+        raise forms.ValidationError(mark_safe("No pudimos procesar tu solicitud en este momento. Por favor, "
+                                              "intenta nuevamente más tarde. Gracias por tu comprensión!.<br><br>"
                                               "Comunícate con nostros al número <br>333 033 3124"))
 
 
@@ -332,10 +334,10 @@ def validate_dispensados(scrapper: ScrapMutualSer):
         entiendo = get_template('base/btn_in_modal.html').render(
             {'id': 'entiendo', 'txt': 'Entiendo', 'bgcolor': '#2a57a9', 'txtcolor': 'white', 'widthbox': 70}
         )
-        logger.info(
-            f"Afiliado {scrapper.tipo_documento}{scrapper.documento} scrap={scrapper.id} no tiene articulos pendientes por radicar")
+        logger.info(f"{scrapper.tipo_documento}{scrapper.documento} scrap={scrapper.id} no tiene autorizaciones"
+                    f" pendientes por radicar")
         raise forms.ValidationError(
-            mark_safe(f"No tienes articulos pendientes por radicar<br><br>"
+            mark_safe(f"No tienes autorizaciones pendientes por radicar<br><br>"
                       "Si consideras que tienes artículos por radicar, por favor comunícate "
                       "con Mutualser al número <br>018000 116882 o #603<br><br>"
                       f"<br>{entiendo}<br>"))

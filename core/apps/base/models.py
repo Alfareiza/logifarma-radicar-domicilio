@@ -258,7 +258,7 @@ class ScrapMutualSer(Model):
 
     @classmethod
     def get_scrap_last_minutes(cls, _id, tipo_documento, documento, minutes):
-        """Revisa los radicados de un tipo de documento con documento en los ultimos minutos."""
+        """Revisa los scrappers completados de un tipo de documento con documento en los ultimos minutos."""
         minutos_atras = now() - timedelta(minutes=minutes)
         if scrap := ScrapMutualSer.objects.filter(
                 tipo_documento=tipo_documento,

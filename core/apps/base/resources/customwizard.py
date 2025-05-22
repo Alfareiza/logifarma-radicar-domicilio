@@ -269,10 +269,10 @@ class CustomSessionWizard(SessionWizardView):
         return form.files
 
     def set_formatter_with_ssid(self):
-        ch.setFormatter(
-            logging.Formatter("%(asctime)s %(levelname)s %(ssid)s %(message)s", "[%d/%b/%Y %H:%M:%S]",
+        formatter = logging.Formatter("%(asctime)s %(levelname)s %(ssid)s %(message)s", "[%d/%b/%Y %H:%M:%S]",
                               defaults={"ssid": f"[{self.request.COOKIES.get('sessionid')[:6]}]"})
-        )
+        formatter._my_ssid = f"{self.request.COOKIES.get('sessionid')[:6]}"
+        ch.setFormatter(formatter)
 
     def set_formatter_base(self):
         ch.setFormatter(

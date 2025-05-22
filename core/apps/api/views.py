@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from .serializers import RadicacionDetailSerializer, \
     RadicacionPartialUpdateSerializer, RadicacionSerializer, \
     RadicacionWriteSerializer
-from ..base.models import Barrio, Municipio, Radicacion, ScrapMutualSer
+from ..base.models import Barrio, Municipio, Radicacion, ScrapMutualSer, Status
 from core.settings import logger as log
 
 
@@ -186,6 +186,10 @@ def busca_paciente(request):
         result = scrapper.resultado
         if 'MSG' in result:
             return Response({"status": "FAILURE", "error": result['MSG']}, status=status.HTTP_400_BAD_REQUEST)
+        elif scrapper.resultado == Status.FAILED:
+            return Response({"status": "FAILURE",
+                             "error": "No fue posible obtener información del usuario, por favor intente más tarde."},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response({"status": "SUCCESS", "result": result}, status=status.HTTP_200_OK)
     except Exception as e:

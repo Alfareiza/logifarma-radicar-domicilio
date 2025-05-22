@@ -56,15 +56,15 @@ class LoginPage:
         self.visit(browser, url)
         # Select tipo de usuario
         browser.click_element(self.dropdown_tipo_usuario)
-        log.info('Site cargó exitosamente, esperando ver botón de tipo de usuario.')
+        # log.info('Site cargó exitosamente, esperando ver botón de tipo de usuario.')
         browser.get_webelement(self.dropdown_prestador).click()
         if not wait_element_load(browser, self.nit):
             raise AssertionError('Botón de NIT no apareció después de clicar en Prestador')
-        log.info('Ingresando credenciales')
+        # log.info('Ingresando credenciales')
         self.input_credentials(browser)
-        log.info('Credenciales ingresadas')
+        # log.info('Credenciales ingresadas')
         browser.click_element(self.iniciar_sesion)
-        log.info('Clicando en iniciar sesión.... esperando')
+        # log.info('Clicando en iniciar sesión.... esperando')
         if wait_element_load(browser, "//h3[text()='Modulos Portal']"):
             log.info('Login efectuado con éxito.')
 
@@ -114,6 +114,7 @@ class SearchPage:
     def click_ver(self, browser, row):
         """Si el botón de "Ver" que está en la última columna está clicable, entonces lo clica."""
         if 'Número para Facturar:Ver' not in row.get_text(strip=True):
+            log.info("Botón de 'Ver' no está presente en esta fila")
             return ''
         label_td = row.find('td', string=lambda text: text and 'Número para Facturar' in text)
         link_ver = label_td.find_next_sibling('td').find('a')['id']
@@ -124,6 +125,7 @@ class SearchPage:
         close_modal = f"{self.detalle_factura_modal}//a[contains(@class, 'ui-dialog-titlebar-close')]"
         browser.click_element(close_modal)
         wait_element_load(browser, self.buscar_btn)
+        log.info(f"Nro de autorización {nro_para_facturar} encontrado en botón de 'Ver'")
         return nro_para_facturar
 
     @retry(NoRecordsInTable, tries=3, delay=2)
@@ -166,6 +168,7 @@ class SearchPage:
         return nro_para_facturar, productos
 
     def extract_nro_para_facturar_modal_lupa(self, browser):
+        log.info("Buscando nro para facturar en opción de lupa")
         wait_element_load(browser, self.confirmar_fecha_prest)
         browser.click_element(self.calendar_icon)
         self.day_icon = self.day_icon.format(day=datetime.datetime.now().day)
@@ -181,13 +184,14 @@ class SearchPage:
         html_table = BeautifulSoup(table_element.get_attribute("outerHTML"), "html.parser")
         rows = html_table.find('tbody').find_all('tr', recursive=False)
         for i, row in enumerate(rows, 1):
-            log.info(f'Scrapping info from row {i}')
+            log.info(f'Obteniendo información de fila {i}')
             estado = row.contents[7].find_all("option", selected=True)[-1].text
             match = re.search(r"Numero solicitud:(\d+)Fecha Solicitud:(\d{2}/\d{2}/\d{4})",
                               row.contents[3].get_text(strip=True))
             if estado.upper() == 'APROBADO':
                 nro_para_facturar, productos = self.click_lupa_ver_mas(browser, row.contents[-1])
             else:
+                log.info(f'Ignorando fila {i} por que autorización no está aprobada sino {estado.upper()!r}')
                 # En caso se aplique alguna lógica para cuando sea diferente de APROBADO
                 # nro_para_facturar, productos = [], ''
                 continue
@@ -204,7 +208,7 @@ class SearchPage:
                 'DETALLE_AUTORIZACION': [{'NOMBRE_PRODUCTO': producto['Tecnologías'], 'CANTIDAD': producto['Cantidad']}
                                          for producto in productos]
             })
-
+            log.info(f'Fila {i} procesada con éxito.')
         return rows_info
 
     def extract_table(self, browser, tipo_documento, documento):
