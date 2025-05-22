@@ -140,17 +140,18 @@ ServerError = DNS.ServerError
 
 
 class Email:
-    def __init__(self, foto=None,
-                 template=BASE_DIR / "core/apps/base/templates/notifiers/correo_sin_autorizacion.html"):
-        self.log_text = None
+    def __init__(self, log_text, foto=None, template=None):
+        self.log_text = log_text or ''
         self.foto = foto
+        template = template or (BASE_DIR / "core/apps/base/templates/notifiers/correo_sin_autorizacion.html")
         self.template = get_template(template)
 
     def prepare_mail(self, info: dict) -> EmailMessage:
-        subject, copia_oculta = self.make_subject_and_cco(info)
-        destinatary = self.make_destinatary(info)
-        self.set_logo(info)
-        html_content = self.template.render(info)
+        context = info.copy()
+        subject, copia_oculta = self.make_subject_and_cco(context)
+        destinatary = self.make_destinatary(context)
+        self.set_logo(context)
+        html_content = self.template.render(context)
         email = EmailMessage(
             subject, html_content, to=destinatary, bcc=copia_oculta,
             from_email=f"Domicilios Logifarma <{settings.EMAIL_HOST_USER}>"
@@ -191,12 +192,12 @@ class Email:
                 if self.foto:
                     logger.info(f"{self.log_text} Correo enviado a {', '.join(info['email'])} con imagen adjunta")
                 else:
-                    logger.info(
-                        f"{self.log_text} correo enviado a {info['email']} sin imagem")
+                    logger.info(f"{self.log_text} correo enviado a {', '.join(info['email'])} sin imagem")
                 return True
             else:
                 # E-mail enviado pero r != 1
-                notify('error-email', f"ERROR ENVIANDO EMAIL - Radicado #{info['documento']}",
+                notify('error-email',
+                       f"ERROR ENVIANDO EMAIL - Radicado #{info.get('documento',info.get('DOCUMENTO_ID',''))}",
                        f"JSON_DATA: {info}")
                 return False
         # finally:
@@ -223,7 +224,7 @@ class Email:
             subject = (f"{info['NUMERO_AUTORIZACION']} - Este es el "
                        f"número de radicación de tu domicilio en Logifarma")
 
-        info.update({'NUMERO_RADICACION': subject.split('-')[0]})
+        info.update({'NUMERO_RADICACION': subject.split('-')[0].strip()})
 
         if info.get('documento') in ('CC99999999',) or info.get('NUMERO_AUTORIZACION') in (
                 99_999_999, 99_999_998):
@@ -258,7 +259,7 @@ class Email:
         match info.get('CONVENIO', ''):
             case 'mutualser':
                 logo_path = 'mutual_ser_logo.png'
-                width = '31%'
+                width = '37%'
             case 'fomag':
                 logo_path = 'fomag_logo.png'
                 width = '31%'

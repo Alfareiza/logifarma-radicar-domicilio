@@ -398,7 +398,7 @@ def find_cums(articulos: Tuple) -> Dict[str, str]:
         conn.close()
 
 
-def make_dbconn() -> Connection:
+def make_dbconn():
     import pymssql
     server = config('SQL_SERVER_HOST')
     database = config('SQL_SERVER_DB')

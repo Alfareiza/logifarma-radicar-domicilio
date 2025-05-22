@@ -2,18 +2,15 @@ import threading
 import traceback
 from functools import lru_cache
 
-from decouple import config
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import get_template
-from django.urls import reverse
 from retry import retry
 
 from core import settings
 from core.apps.base.forms import *
-from core.apps.base.resources.api_calls import check_meds
 from core.apps.base.resources.customwizard import CustomSessionWizard
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.email_helpers import make_subject_and_cco, make_destinatary
@@ -31,14 +28,12 @@ FORMS = [
     ("digitaCorreo", DigitaCorreo)
 ]
 
-MANDATORIES_STEPS = ("home", "autorizado_o_no", "autorizacionServicio", "eligeMunicipio",
-                     "digitaDireccionBarrio", "digitaCelular", "digitaCorreo")
-
 TEMPLATES = {
     "home": "home.html",
     "sinAutorizacion": "sin_autorizacion.html",
     "autorizado_o_no": "autorizado_o_no.html",
     "autorizacionServicio": "autorizacion.html",
+    "autorizacionesPorDisp": "autorizacion_por_disp.html",
     "orden": "orden.html",
     "fotoFormulaMedica": "foto.html",
     "eligeMunicipio": "elige_municipio.html",
@@ -92,26 +87,11 @@ class ContactWizard(CustomSessionWizard):
     form_list = FORMS
     file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
     condition_dict = {'fotoFormulaMedica': show_fotoFormulaMedica}
+    MANDATORIES_STEPS = ("home", "autorizado_o_no", "autorizacionServicio", "eligeMunicipio",
+                         "digitaDireccionBarrio", "digitaCelular", "digitaCorreo")
 
     def get_template_names(self):
         return [TEMPLATES[self.steps.current]]
-
-    def done(self, form_list, **kwargs):
-        # logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Entrando en done {form_list=}")
-
-        if self.steps_completed(**kwargs):
-            form_data = self.process_from_data(form_list, **kwargs)
-            self.request.session['ctx'] = form_data
-            return HttpResponseRedirect(reverse('base:done'))
-
-        self.request.session['ctx'] = {}
-        logger.warning(f"{self.request.COOKIES.get('sessionid')[:6]} redireccionando "
-                       f"a err_multitabs por multipestañas.")
-        return HttpResponseRedirect(reverse('base:err_multitabs'))
-
-    def steps_completed(self, **kwargs) -> bool:
-        """Valida si todos los pasos obligatorios llegan al \'done\'"""
-        return not bool(set(MANDATORIES_STEPS).difference(kwargs['form_dict']))
 
     @logtime('CORE')
     def process_from_data(self, form_list, **kwargs):
