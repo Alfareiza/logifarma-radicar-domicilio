@@ -15,14 +15,15 @@ class PostStep(ABC):
 
 
 class NotifyEmail(PostStep, Email):
-    def proceed(self, info_email: dict, rad_id: str) -> Tuple[bool, dict]:
-        # log.info(f"{info_email['log_text']} ...enviando e-mail.")
-        check = False
-        self.foto = info_email.get('foto', '')
-        self.log_text = info_email.get('log_text')
+    def __init__(self, log_text: str = "", template=None):
+        Email.__init__(self, log_text=log_text, template=template)
 
-        if self.send_mail(info_email):
-            check = True
+    def proceed(self, info_email: dict, rad_id: str) -> Tuple[bool, dict]:
+        self.foto = info_email.get('foto', '')
+        if not self.log_text:
+            self.log_text = info_email.get('log_text')
+
+        check = bool(self.send_mail(info_email))
         return check, info_email
 
 

@@ -81,7 +81,7 @@ class SinAutorizacion(forms.Form):
             validate_empty_response(resp_eps, resp['documento'])
             if not flag_new_formula:
                 self.extra_validations(entidad, resp_eps, tipo, value)
-                validate_recent_radicado(tipo, value)
+                validate_recent_radicado(tipo, value, entidad)
         else:
             raise forms.ValidationError(
                 mark_safe("No ha sido posible detectar la entidad a la cual estás afiliado<br><br>"

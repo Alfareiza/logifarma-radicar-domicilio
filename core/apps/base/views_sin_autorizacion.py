@@ -1,17 +1,14 @@
 from django.core.files.storage import FileSystemStorage
-from django.http import HttpResponseRedirect
-from django.template.loader import get_template
-from django.urls import reverse
 
 from core import settings
 from core.apps.base.forms import *
 from core.apps.base.pipelines import NotifyEmail, NotifySMS, Drive, UpdateDB
 from core.apps.base.resources.customwizard import CustomSessionWizard
-from core.apps.base.views import TEMPLATES
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.img_helpers import ImgHelper
 from core.apps.base.resources.tools import guardar_short_info_bd
-from core.settings import logger, BASE_DIR
+from core.apps.base.views import TEMPLATES
+from core.settings import logger
 
 FORMS = [
     ("sinAutorizacion", SinAutorizacion),
@@ -23,10 +20,6 @@ FORMS = [
     ("digitaCorreo", DigitaCorreo)
 ]
 
-MANDATORIES_STEPS_SIN_AUTORIZACION = ("sinAutorizacion", "eligeMunicipio",
-                                      "digitaDireccionBarrio", "digitaCelular", "digitaCorreo")
-
-htmly = get_template(BASE_DIR / "core/apps/base/templates/notifiers/correo_sin_autorizacion.html")
 
 def show_orden(wizard) -> bool:
     """El paso orden siempre es mostrado con bease en el valor 'm' extraido de la URL."""
@@ -34,32 +27,18 @@ def show_orden(wizard) -> bool:
     parts = query.rsplit('=')
     return len(parts) == 2 and parts[1] == 'm'
 
+
 class SinAutorizacion(CustomSessionWizard):
     # template_name = 'start.html'
     condition_dict = {'orden': show_orden}
     form_list = FORMS
     file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
     post_wizard = [NotifyEmail, NotifySMS, Drive, UpdateDB]
+    MANDATORIES_STEPS = ("sinAutorizacion", "eligeMunicipio",
+                         "digitaDireccionBarrio", "digitaCelular", "digitaCorreo")
 
     def get_template_names(self):
         return [TEMPLATES[self.steps.current]]
-
-    def done(self, form_list, **kwargs):
-        # logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Entrando en done {form_list=}")
-
-        if self.steps_completed(**kwargs):
-            form_data = self.process_from_data(form_list, **kwargs)
-            self.request.session['ctx'] = form_data
-            return HttpResponseRedirect(reverse('base:done'))
-
-        self.request.session['ctx'] = {}
-        logger.warning(f"{self.request.COOKIES.get('sessionid')[:6]} redireccionando "
-                       f"a err_multitabs por multipestañas.")
-        return HttpResponseRedirect(reverse('base:err_multitabs'))
-
-    def steps_completed(self, **kwargs) -> bool:
-        """Valida si todos los pasos obligatorios llegan al \'done\'"""
-        return not bool(set(MANDATORIES_STEPS_SIN_AUTORIZACION).difference(kwargs['form_dict']))
 
     @logtime('CORE')
     def process_from_data(self, form_list, **kwargs) -> dict:
@@ -97,7 +76,7 @@ class SinAutorizacion(CustomSessionWizard):
         ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
 
         if info_email['documento'][2:] not in ('99999999',):
-        # if True:  # Testando inserción en producción temporalmente
+            # if True:  # Testando inserción en producción temporalmente
             rad = guardar_short_info_bd(**info_email, ip=ip)
             info_email['ref_id'], info_email['NUMERO_RADICACION'], info_email['FECHA_RADICACION'] = rad
             if info_email.get('CONVENIO', '') in ('mutualser',):

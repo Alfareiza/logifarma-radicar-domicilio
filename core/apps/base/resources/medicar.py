@@ -71,16 +71,6 @@ def obtener_datos_formula(num_aut: int, nit: str = '901543211') -> dict:
         'logifarma/obtenerDatosFormula'
     )
     try:
-        # if isinstance(resp, dict) and 'error' in resp.keys():
-            # if resp.get('error') == 'No se han encontrado registros.':
-            #     ...
-            #  [⬇︎CÓDIGO OBSOLETO⬇︎] Este nit no es más reconocido por la API de medicar.
-            # elif resp.get('error') == 'El Nit ingresado no corresponde a ningun convenio.':
-                # resp = call_api_medicar(
-                #     {"nit_eps": "890102044", "autorizacion": f"{num_aut}"},
-                #     'logifarma/obtenerDatosFormula'
-                # )
-                # resp = resp[0]
         if isinstance(resp, list) and len(resp) == 1 and 'autorizacion' in resp[0].keys():
             resp = resp[0]
     except KeyError:

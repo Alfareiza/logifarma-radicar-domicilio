@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 
-from core.apps.base.models import Med_Controlado, Radicacion
+from core.apps.base.models import Med_Controlado, Radicacion, ScrapMutualSer
 from core.apps.base.resources.api_calls import get_firebase_acta
 from core.apps.base.resources.tools import encrypt, notify, pretty_date, \
     update_rad_from_fbase, has_accent, update_field, when
@@ -228,17 +228,6 @@ def validate_empty_response(resp_eps: dict, documento: str) -> ValidationError:
                                               "comunícate con nosotros al <br>333 033 3124"))
 
 
-def validate_recent_radicado(tipo: str, value: str):
-    """Check that the user with more than one radicado is notified that he has pending filings."""
-    existing_radicados = Radicacion.objects.filter(
-        paciente_cc=f'{tipo}{value}', acta_entrega__isnull=True
-    ).only('id', 'datetime', 'paciente_data')
-    existing_radicados_count = existing_radicados.count()
-    if existing_radicados_count >= 1:
-        logger.info(f"{tipo}{value} ha sido avisado que tiene {existing_radicados_count} radicacion(es) pendiente(es).")
-        announce_pending_radicado_and_render_buttons(existing_radicados)
-
-
 def announce_pending_radicado_and_render_buttons(existing_radicados: 'QuerySet') -> ValidationError:
     """Raise an exception with "entiendo" button and "solicitar fórmula nueva" button conditionally."""
     rad = existing_radicados.first()
@@ -254,3 +243,119 @@ def announce_pending_radicado_and_render_buttons(existing_radicados: 'QuerySet')
                                           f'href="{rad.foto_formula}"">Click aquí para ver la fórmula</a><br><br>'
                                           f'<b>No es necesario que la vuelvas a radicar</b><br><br>'
                                           f'{entiendo}<br>{new_formula}<br>'))
+
+
+def announce_articulos_por_autorizacion(existing_radicados: 'QuerySet') -> ValidationError:
+    """Raise an exception with "entiendo" button and "solicitar fórmula nueva" button conditionally."""
+    # rad = existing_radicados.first()
+    template_btn = get_template('base/btn_in_modal.html')
+    entiendo = template_btn.render({'id': 'entiendo', 'txt': 'Entiendo', 'bgcolor': '#2a57a9',
+                                    'txtcolor': 'white', 'widthbox': 70})
+    raise forms.ValidationError(mark_safe("No tienes artículos pendientes por radicar."
+                                          # f"número de radicación {rad.numero_autorizacion} solicitado "
+                                          # f"{format(rad.datetime, when(rad.datetime))}."
+                                          f'<br><br><b>No es necesario que la vuelvas a radicar</b><br><br>'
+                                          f'{entiendo}<br>'))
+
+
+def validate_recent_radicado(tipo: str, value: str, convenio: str):
+    """Check that the user with more than one radicado is notified that he has pending filings."""
+    existing_radicados = Radicacion.objects.filter(
+        paciente_cc=f'{tipo}{value}', convenio=convenio, acta_entrega__isnull=True
+    ).only('id', 'datetime', 'paciente_data')
+    existing_radicados_count = existing_radicados.count()
+    if existing_radicados_count >= 1:
+        logger.info(f"{tipo}{value} ha sido avisado que tiene {existing_radicados_count} radicacion(es) pendiente(es).")
+        announce_pending_radicado_and_render_buttons(existing_radicados)
+
+
+def validate_resp_zona_ser(scrapper: ScrapMutualSer):
+    """Given the portal response as a dict like this:
+        {
+            "status": "SUCCESS",
+            "result": [
+                {
+                    "CONSECUTIVO_PROCEDIMIENTO": "2025050533572734",
+                    "NUMERO_SOLICITUD": "33572734",
+                    "FECHA_SOLICITUD": "05/05/2025",
+                    "ESTADO_AUTORIZACION": "APROBADO",
+                    "NUMERO_AUTORIZACION": "123123123",
+                    "DETALLE_AUTORIZACION": [
+                        {
+                            "NOMBRE_PRODUCTO": "M02625 APIXABAN 5.MG/1.U TABLETA RECUBIERTA",
+                            "CANTIDAD": "60"
+                        }
+                    ]
+                },
+                {
+                    "CONSECUTIVO_PROCEDIMIENTO": "2025050533572276",
+                    "NUMERO_SOLICITUD": "33572276",
+                    "FECHA_SOLICITUD": "05/05/2025",
+                    "ESTADO_AUTORIZACION": "APROBADO",
+                    "NUMERO_AUTORIZACION": "23423431",
+                    "DETALLE_AUTORIZACION": [
+                        {
+                            "NOMBRE_PRODUCTO": "M02087 BETAHISTINA 24.MG/1.U TABLETA",
+                            "CANTIDAD": "30"
+                        }
+                    ]
+                },
+                {
+                    "CONSECUTIVO_PROCEDIMIENTO": "2025040233089773",
+                    "NUMERO_SOLICITUD": "33089773",
+                    "FECHA_SOLICITUD": "02/04/2025",
+                    "ESTADO_AUTORIZACION": "APROBADO",
+                    "NUMERO_AUTORIZACION": "41341234123412341",
+                    "DETALLE_AUTORIZACION": [
+                        {
+                            "NOMBRE_PRODUCTO": "M02625 APIXABAN 5.MG/1.U TABLETA RECUBIERTA",
+                            "CANTIDAD": "60"
+                        }
+                    ]
+                }
+            ]
+        }
+    Validate the pending deliveries on medicare api.
+    """
+    if scrapper.texto_error != '' and not scrapper.resultado:
+        raise forms.ValidationError(mark_safe("No ha sido posible encontrar este documento en nuestro sistema.<br><br> "
+                                              "Comunícate con nostros al número <br>333 033 3124"))
+
+
+def validate_dispensados(scrapper: ScrapMutualSer):
+    """Organiza las autorizaciones encontrdas en Zona Zer y cruzadas con medicar hayan sidosi no tiene articulos pendientes por radicar."""
+    dct = {'PENDIENTES': [], 'ENTREGADOS': []}
+    for aut in scrapper.resultado:
+        key = 'ENTREGADOS' if aut['DISPENSADO'] else 'PENDIENTES'
+        dct[key].append(aut)
+    if not dct['PENDIENTES']:
+        entiendo = get_template('base/btn_in_modal.html').render(
+            {'id': 'entiendo', 'txt': 'Entiendo', 'bgcolor': '#2a57a9', 'txtcolor': 'white', 'widthbox': 70}
+        )
+        logger.info(
+            f"Afiliado {scrapper.tipo_documento}{scrapper.documento} scrap={scrapper.id} no tiene articulos pendientes por radicar")
+        raise forms.ValidationError(
+            mark_safe(f"No tienes articulos pendientes por radicar<br><br>"
+                      "Si consideras que tienes artículos por radicar, por favor comunícate "
+                      "con Mutualser al número <br>018000 116882 o #603<br><br>"
+                      f"<br>{entiendo}<br>"))
+
+
+def validate_recent_radicados_mutual_ser(tipo, value, auts: dict):
+    """Valida las autorizaciones de mutual ser."""
+    qs = Radicacion.objects.filter(
+        paciente_cc=f'{tipo}{value}', convenio='mutualser', acta_entrega__isnull=True,
+        numero_radicado__in=list(auts),
+    ).only('id', 'datetime', 'paciente_data')
+
+    if qs.count() == len(auts):
+        logger.info(f"{tipo}{value} ha sido avisado que tiene {len(auts)} radicacion(es) pendiente(es)"
+                    f" ({', '.join(list(auts))}).")
+        announce_articulos_por_autorizacion(qs)
+    else:
+        # Si al hacer el scrapping y cruzarlo con medicar, aparece como false (no dispensado) pero ya se encuentra
+        # radicado, entonces lo elimina de las autorizaciones pendientes por radicar, y sigue el wizard con
+        # las que realmente están pendientes por radicar
+        for nro_aut in qs.values_list('numero_radicado', flat=True):
+            logger.info(f"Ignorando autorización {nro_aut} de {tipo}{value} por que ya se encuentra radicada.")
+            auts.pop(nro_aut, None)
