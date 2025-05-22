@@ -14,7 +14,7 @@ from core.apps.base.resources.decorators import login_required
 from core.apps.base.resources.selenium_manager import MutualSerSite
 from core.apps.base.resources.tools import moment
 from core.apps.tasks.utils.dt_utils import Timer
-from core.settings import BASE_DIR, MS_PASS, MS_USER, MS_API_URL, MS_API_URL_VALIDADOR
+from core.settings import BASE_DIR, MS_PASS, MS_USER, MS_API_URL, MS_API_URL_VALIDADOR, ZONA_SER_URL
 from core.settings import logger as log
 
 
@@ -261,7 +261,7 @@ if __name__ == '__main__':
     # ms = MutualSerAPI()
     # print(ms.get_info_afiliado('CC', '123456'))
 
-    site = MutualSerPage('https://portal.mutualser.org/ZONASER/home.xhtml')
-    result = site.find_user('CC', '123467')
+    site = MutualSerPage(ZONA_SER_URL)
+    result = site.find_user('PT', '123123123')
     from pprint import pprint
     pprint(result)

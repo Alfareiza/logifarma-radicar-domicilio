@@ -9,11 +9,12 @@ from SeleniumLibrary.errors import ElementNotFound
 from bs4 import BeautifulSoup, Tag
 from retry import retry
 from selenium import webdriver
-from selenium.common import StaleElementReferenceException, ElementNotInteractableException
+from selenium.common import StaleElementReferenceException, ElementNotInteractableException, \
+    ElementClickInterceptedException
 
 from core.apps.base.exceptions import UserNotFound, NroAutorizacionNoEncontrado, NoRecordsInTable, FieldError
 
-from core.settings import logger as log
+from core.settings import logger as log, ZONA_SER_NIT
 
 
 def wait_element_load(browser, locator, timeout=5):
@@ -46,9 +47,9 @@ class LoginPage:
         wait_element_load(browser, self.dropdown_tipo_usuario)
 
     def input_credentials(self, browser: Selenium):
-        browser.input_text(self.nit, "900073223")
-        browser.input_text(self.usuario, "9000732235")
-        browser.input_text(self.clave, "900073223")
+        browser.input_text(self.nit, ZONA_SER_NIT)
+        browser.input_text(self.usuario, f"{ZONA_SER_NIT}5")
+        browser.input_text(self.clave, ZONA_SER_NIT)
 
     def perform(self, url: str, browser: Selenium):
         log.info('Accesando a site Mutual Ser')
@@ -209,10 +210,12 @@ class SearchPage:
     def extract_table(self, browser, tipo_documento, documento):
         try:
             return self.scrap_table(browser, tipo_documento, documento)
-        except (StaleElementReferenceException, ElementNotFound, ElementNotInteractableException) as exc:
+        except (StaleElementReferenceException, ElementNotFound, ElementNotInteractableException,
+                ElementClickInterceptedException) as exc:
             import traceback
             traceback.print_exc()
             browser.capture_page_screenshot('psi.png')
+            #TODO send email
             raise
 
     def perform(self, browser, tipo_documento, documento):
