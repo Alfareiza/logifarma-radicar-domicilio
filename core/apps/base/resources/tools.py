@@ -1,3 +1,4 @@
+import logging
 import pickle
 import unicodedata
 from datetime import date, datetime, timedelta
@@ -266,7 +267,8 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
     ip = clean_ip(kwargs.pop('ip'))
 
     numero_radicado = kwargs.get('NUMERO_AUTORIZACION', datetime_id())
-    logger.info(f"{numero_radicado} Guardando radicación (medicamento NO autorizado) de {kwargs['documento']} {kwargs.get('CONVENIO', '')}.")
+    logger.info(
+        f"{numero_radicado} Guardando radicación (medicamento NO autorizado) de {kwargs['documento']} {kwargs.get('CONVENIO', '')}.")
     try:
         rad = Radicacion(
             numero_radicado=numero_radicado,
@@ -293,8 +295,6 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
         logger.error(f"{numero_radicado} Error guardando radicación: {e}")
         notify('error-bd',
                f"ERROR GUARDANDO RADICACION {numero_radicado} EN BASE DE DATOS", str(e))
-    else:
-        logger.info(f"Radicación guardada con éxito {rad.numero_radicado}")
 
     return resp
 
@@ -304,6 +304,8 @@ def discover_rad(body) -> str:
     Busca el radicado en el cuerpo del correo.
     :param body:
     :return: # de radicado
+    >>> discover_rad("ERROR ENVIANDO EMAIL- Radicado #2318901402756 CC123234")
+    '2318901402756'
     """
     import re
     if isinstance(body, (str, SafeString)):
@@ -372,7 +374,7 @@ def notify(reason: str, subject: str, body: str, to=None, bcc: list = []):
                 'error-bd': '{} Correo enviado notificando problema al guardar en BD.',
                 'error-api': '{} Correo enviado notificando problema con API.',
                 'error-archivo-url': 'Correo enviado notificando radicado sin archivo.',
-                'error-email': 'Correo enviado notificando problema al enviar e-mail de confirmación.',
+                'error-email': '{} Correo enviado notificando problema al enviar e-mail de confirmación.',
                 'error-archivo': 'Correo enviado notificando problema con archivo.',
                 'check-acta': 'Correo enviado con reporte de chequeo de actas.',
                 'check-aut': '{} Correo de alerta de autorización no radicada enviado.',
@@ -384,7 +386,7 @@ def notify(reason: str, subject: str, body: str, to=None, bcc: list = []):
     except Exception as e:
         logger.error(f"{rad} Correo de {reason} no fue enviado. Error: {e}")
     else:
-        logger.info(msg[reason].format(rad).strip())
+        logger.warning(msg[reason].format(rad).strip())
 
 
 def months() -> tuple:
@@ -435,8 +437,10 @@ def when(dt) -> str:
 dct = {'0': 'X', '1': 'y', '2': 'z', '3': 'N', '4': 'o', '5': 'k',
        '6': 'J', '7': 'C', '8': 'b', '9': 'a'}
 
+
 def moment():
     return datetime.now(tz=timezone('America/Bogota'))
+
 
 def encrypt(num: int) -> str:
     """
@@ -532,17 +536,30 @@ def login_check(obj) -> bool:
     name_obj = obj.__class__.__name__
 
     if not login_pkl.exists():
-        log.info(f'[{name_obj}] Cache de login no encontrado')
+        # log.info(f'[{name_obj}] Cache de login no encontrado')
         login_succeed = obj.login()
     else:
         with open(login_pkl, 'rb') as f:
             sess_id, sess_timeout = pickle.load(f)
             now = moment()
             if now > sess_timeout:
-                log.warning(f'[{name_obj}] Tiempo de login anterior expiró')
+                # log.warning(f'[{name_obj}] Tiempo de login anterior expiró')
                 login_succeed = obj.login()
             else:
                 # log.info(f"[{name_obj}] Usando login que está en cache")
                 obj.sess_id = sess_id
                 login_succeed = True
     return login_succeed
+
+
+def add_user_id_to_formatter(handler, user_id):
+    old_formatter = handler.formatter
+
+    new_defaults = {"ssid": old_formatter._my_ssid, "user_id": user_id}
+    new_fmt_str = "%(asctime)s %(levelname)s [%(ssid)s|%(user_id)s] %(message)s"
+    updated_formatter = logging.Formatter(
+        new_fmt_str,
+        old_formatter.datefmt,
+        defaults=new_defaults
+    )
+    handler.setFormatter(updated_formatter)

@@ -61,9 +61,7 @@ def purge_email(email) -> str:
     email = email.replace('gemail', 'gmail')
     email = email.replace('gemaul', 'gmail')
     email = email.replace('logimarga', 'logifarma')
-    if email in ('notiene@gmail.com'):
-        return ''
-    return email
+    return '' if email in ('notiene@gmail.com', 'notienecorreo@gmail.com') else email
 
 
 def make_destinatary(info_email) -> list:
@@ -80,7 +78,7 @@ def make_destinatary(info_email) -> list:
             if purge_email(e) and email_exists(e):
                 destinatary.append(e)
             else:
-                logger.info(f'Email {e} no existe.')
+                # logger.info(f'Email {e} no existe.')
                 info_email['email'].remove(e)
     return destinatary
 

@@ -37,7 +37,7 @@ class NotifySMS(PostStep):
 
 class Drive(PostStep):
     def proceed(self, info_email: dict, rad_id: str) -> Tuple[bool, dict]:
-        log.info(f"{info_email['log_text']} ...cargando imagen en GDrive.")
+        # log.info(f"{info_email['log_text']} ...cargando imagen en GDrive.")
         check = False
         foto = info_email.get('foto')
         if foto and rad_id:
@@ -57,7 +57,7 @@ class Drive(PostStep):
 class UpdateDB(PostStep):
 
     def proceed(self, info_email: dict, rad_id: str) -> Tuple[bool, dict]:
-        log.info(f"{info_email['log_text']} ...actualizando radicados en DB con id de imagen en GDrive.")
+        # log.info(f"{info_email['log_text']} ...actualizando radicados en DB con id de imagen en GDrive.")
         check = False
 
         rad_id: str = info_email.get('ref_id')
@@ -76,6 +76,6 @@ class UpdateDB(PostStep):
 
     def save_rad(self, radicacion, info_email, log_msg):
         radicacion.save()
-        log.info(f"{info_email['log_text']} ...{log_msg}")
+        # log.info(f"{info_email['log_text']} ...{log_msg}")
 
         return True

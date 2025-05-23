@@ -33,14 +33,14 @@ def validate_status(resp_mcar: dict, rad_default: Radicacion) -> ValidationError
     radicado_dt = pretty_date(
         rad_default.datetime.astimezone(timezone.get_current_timezone())
     )
-    logger.info(f"{rad_default.numero_radicado} radicado {radicado_dt}.")
+    head_msg = f"{rad_default.numero_radicado} radicado {radicado_dt}"
     text_resp = ''
     if ssc := resp_mcar.get('ssc'):
         if not rad_default.acta_entrega:
             update_field(rad_default, 'acta_entrega', ssc)
         if factura := resp_mcar.get('factura'):
             # Radicado  tiene SSC, factura y está por confirmar si está firebase
-            logger.info(f"{rad_default.numero_radicado} radicado con factura detectada.")
+            logger.info(f"{head_msg} y una factura ha sido detectada.")
             if not rad_default.factura:
                 update_field(rad_default, 'factura', factura)
             text_resp = f'Número de autorización {rad_default.numero_radicado} radicado ' \
@@ -54,8 +54,7 @@ def validate_status(resp_mcar: dict, rad_default: Radicacion) -> ValidationError
                 entregado_dt = pretty_date(
                     rad_default.despachado.astimezone(timezone.get_current_timezone())
                 )
-                logger.info(f"{rad_default.numero_radicado} actualizado,"
-                            f" entregado {entregado_dt} (acta #{ssc}).")
+                logger.info(f"{head_msg}, actualizado en bd que fue entregado {entregado_dt} (acta #{ssc}).")
                 value = f"{encrypt(rad_default.numero_radicado)}aCmG{resp_fbase['actFileId'][::-1]}aCmG{encrypt(ssc)}"
                 text_resp = (
                     f'Número de autorización {rad_default.numero_radicado} radicado '
@@ -65,20 +64,20 @@ def validate_status(resp_mcar: dict, rad_default: Radicacion) -> ValidationError
                     'Si tiene alguna duda se puede comunicar con nosotros '
                     'al 3330333124 <br><br>').format(reverse('soporte', args=(value,)))
         elif rad_default.is_anulado:
-            logger.info(f"{rad_default.numero_radicado} radicado anulado, acta #{ssc}.")
+            logger.info(f"{head_msg} y anulado, acta #{ssc}.")
             text_resp = f'Número de autorización {rad_default.numero_radicado} anulado.' \
                         '<br><br>Si tiene alguna duda se puede comunicar con nosotros ' \
                         'al 3330333124 <br><br>'
         else:
             # Radicado  tiene SSC pero no tiene factura y por eso se asume que no está en firebase
-            logger.info(f"{rad_default.numero_radicado} radicado en preparación, acta #{ssc}.")
+            logger.info(f"{head_msg} y se encuentra en preparación, acta #{ssc}.")
             text_resp = f'Número de autorización {rad_default.numero_radicado} radicado ' \
                         f'{radicado_dt}.<br><br>Este domicilio se encuentra en preparación.<br><br>' \
                         'Si tiene alguna duda se puede comunicar con nosotros ' \
                         'al 3330333124 <br><br>'
     else:
         # Radicado no tiene SSC, se asume que no tiene factura ni está en firebase
-        logger.info(f"{rad_default.numero_radicado} radicado sin acta aún.")
+        logger.info(f"{head_msg} y aún no tiene acta.")
         text_resp = f'Número de autorización {rad_default.numero_radicado} radicado ' \
                     f'{radicado_dt}.\n\n Si tiene alguna duda se puede ' \
                     'comunicar con nosotros al 3330333124'
@@ -177,8 +176,7 @@ def validate_status_afiliado(resp_eps: dict, name_key: str, id_transaction: str)
                               {tipo_identificacion}{valor_identificacion}.
     """
     if resp_eps.get(name_key) not in ('ACTIVO', 'PROTECCION LABORAL'):
-        logger.info(f"El estado del afiliado #{id_transaction} no se encuentra activo."
-                    f" Estado={resp_eps.get(name_key)}.")
+        logger.info(f"{id_transaction} Estado del afiliado no es activo, sino {resp_eps.get(name_key)!r}.")
         raise forms.ValidationError(
             mark_safe("Disculpa, el estado del afiliado no es el esperado.<br><br>"
                       "Por favor verifica e intenta nuevamente."))
@@ -203,7 +201,7 @@ def validate_identificacion_exists(entidad: str, resp: dict, info: str) -> Valid
                 Ej: 'CC:123456789'
     """
     if resp.get('NOMBRE') and 'no existe' in resp['NOMBRE']:
-        logger.info(f"El afiliado {info} no fue encontrado en {entidad}.")
+        logger.warning(f"{info} no fue encontrado en {entidad}.")
         raise forms.ValidationError(
             mark_safe(f"Disculpa, no hemos podido encontrar información con ese documento en {entidad.title()}.<br><br>"
                       "Por favor verifica e intenta nuevamente."))
@@ -220,9 +218,9 @@ def validate_email(email: str) -> ValidationError:
         raise forms.ValidationError(mark_safe("E-mail inválido."))
 
 
-def validate_empty_response(resp_eps: dict, documento: str) -> ValidationError:
+def validate_empty_response(resp_eps: dict, documento: str, entidad: str) -> ValidationError:
     if not resp_eps:
-        logger.info(f"No se pudo obtener información del usuario {documento}.")
+        logger.info(f"{documento} No se pudo obtener información del afiliado en {entidad.upper()}.")
         raise forms.ValidationError(mark_safe("Disculpa, en estos momentos no tenemos conexión<br><br>"
                                               "Por favor intentalo más tarde o en caso de dudas, <br>"
                                               "comunícate con nosotros al <br>333 033 3124"))
@@ -361,3 +359,33 @@ def validate_recent_radicados_mutual_ser(tipo, value, auts: dict):
         for nro_aut in qs.values_list('numero_radicado', flat=True):
             logger.info(f"Ignorando autorización {nro_aut} de {tipo}{value} por que ya se encuentra radicada.")
             auts.pop(nro_aut, None)
+
+
+def validate_numero_celular(cel):
+    if not cel:
+        raise forms.ValidationError("Por favor ingrese un número de celular.")
+
+    cel_str = str(cel)
+    if cel_str[0].startswith(('57', '')):
+        raise forms.ValidationError(
+            f"Número de celular incorrecto, no es necesario que coloques el indicativo de Colombia."
+            f":\n{cel}")
+
+    if len(cel_str) != 10:
+        if len(cel_str) == 11:
+            raise forms.ValidationError(f"Revisa tu número de celular, parece que tiene un dígito de más:\n{cel}")
+        elif len(cel_str) > 11:
+            raise forms.ValidationError(
+                f"Revisa tu número de celular, parece que tiene más de un dígito de más:\n{cel}")
+        else:
+            raise forms.ValidationError(f"Revisa tu número de celular, parece que está incompleto o le"
+                                        f" faltan algunos dígitos:\n{cel}")
+
+    numeros_fake = ('30000000',)
+    if cel_str in numeros_fake:
+        raise forms.ValidationError(
+            f"Lo sentimos, debes colocar un número real para garantizar que todo saldrá bien:\n{cel}")
+
+    if cel_str[0] != "3":
+        logger.info(f"Número de celular {cel} incorrecto.")
+        raise forms.ValidationError(f"Número de celular incorrecto:\n{cel}")

@@ -192,7 +192,7 @@ class GDriveHandler:
         :param folder_id: 'FormulasMedicas'
         :return:
         """
-        log.info(f"Creando archivo {content_type!r} en Gdrive con {name=}")
+        # log.info(f"Creando archivo {content_type!r} en Gdrive con {name=}")
 
         if folder_name:
             folder_id = self.get_folder_id_by_name(folder_name)
@@ -211,7 +211,7 @@ class GDriveHandler:
         file = self.service.files().create(body=body,
                                            media_body=media_body,
                                            fields='id').execute()
-        log.info(f"{name!r} creado en Gdrive con id={file['id']!r}")
+        # log.info(f"{name!r} creado en Gdrive con id={file['id']!r}")
         if file:
             return file['id']
         return ''
