@@ -155,6 +155,12 @@ class ContactWizard(CustomSessionWizard):
 
         subject, copia_oculta = make_subject_and_cco(info_email)
         destinatary = make_destinatary(info_email)
+        info_email.update(
+            {
+                'LOGO': "https://domicilios.logifarma.com.co/static/img/cajacopi_logo.png",
+                'WIDTH': '36%',
+            }
+        )
         html_content = htmly.render(info_email)
         email = EmailMessage(
             subject, html_content, to=destinatary, bcc=copia_oculta,
