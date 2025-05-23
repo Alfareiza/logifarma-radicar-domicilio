@@ -366,7 +366,7 @@ def validate_numero_celular(cel):
         raise forms.ValidationError("Por favor ingrese un número de celular.")
 
     cel_str = str(cel)
-    if cel_str[0].startswith(('57', '')):
+    if cel_str[0].startswith('57'):
         raise forms.ValidationError(
             f"Número de celular incorrecto, no es necesario que coloques el indicativo de Colombia."
             f":\n{cel}")
