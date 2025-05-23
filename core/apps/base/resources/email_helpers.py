@@ -1,6 +1,6 @@
 import contextlib
 import smtplib
-import DNS
+# import DNS
 import socket
 
 from decouple import config, Csv
@@ -134,7 +134,7 @@ def validar_email(email, debug=False):
         return None
 
 
-ServerError = DNS.ServerError
+# ServerError = DNS.ServerError
 
 
 class Email:
