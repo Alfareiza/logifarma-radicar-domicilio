@@ -15,7 +15,7 @@ from core.apps.base.validators import (
     validate_status,
     validate_status_afiliado,
     validate_status_aut,
-    validate_structure,
+    validate_structure, validate_numero_celular,
 )
 from core.settings import logger
 
@@ -78,7 +78,7 @@ class SinAutorizacion(forms.Form):
         elif entidad:
             resp_eps = obtener_datos_identificacion(entidad, tipo, value)
             validate_identificacion_exists(entidad, resp_eps, f"{tipo}{value}")
-            validate_empty_response(resp_eps, resp['documento'])
+            validate_empty_response(resp_eps, resp['documento'], entidad)
             if not flag_new_formula:
                 self.extra_validations(entidad, resp_eps, tipo, value)
                 validate_recent_radicado(tipo, value, entidad)
@@ -175,7 +175,7 @@ class AutorizacionServicio(forms.Form):
 
         resp_eps['NUMERO_AUTORIZACION'] = num_aut
         resp_eps['CONVENIO'] = 'cajacopi'
-        logger.info(f"{num_aut} Número de autorización pasó las validaciones.")
+        # logger.info(f"{num_aut} Número de autorización pasó las validaciones.")
         return resp_eps
 
 
@@ -195,6 +195,7 @@ class Orden(forms.Form):
             validate_status(resp_mcar, rad)
 
         return {'NUMERO_AUTORIZACION': orden}
+
 
 class FotoFormulaMedica(forms.Form):
     """
@@ -248,18 +249,8 @@ class DigitaCelular(forms.Form):
         cel = self.cleaned_data.get('celular')
         whatsapp = self.cleaned_data.get('whatsapp')
 
-        if not cel:
-            logger.info("Número de celular no ingresado incorrecto.")
-            raise forms.ValidationError("Por favor ingrese un número de celular.")
-
-        if str(cel)[0] != "3" or len(str(cel)) != 10:
-            logger.info(f"Número de celular {cel} incorrecto.")
-            raise forms.ValidationError(f"Número de celular incorrecto:\n{cel}")
-
-        if whatsapp and (str(whatsapp)[0] != "3" or len(str(whatsapp)) != 10):
-            logger.info(f"Número de whatsapp incorrecto -> \'{whatsapp}\'.")
-            raise forms.ValidationError(f"Número de whatsapp incorrecto:\n{whatsapp}")
-
+        validate_numero_celular(cel)
+        validate_numero_celular(whatsapp)
         # return cel
 
 

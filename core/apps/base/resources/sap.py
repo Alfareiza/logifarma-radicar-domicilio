@@ -83,7 +83,7 @@ class SAP:
             "Language": 25
         }
         headers = {'Content-Type': 'application/json'}
-        log.info("[SAP] ...Realizando login")
+        # log.info("[SAP] ...Realizando login")
         resp = self.request_api(
             'POST',
             f"{SAP_URL}/{self.LOGIN}",
@@ -98,7 +98,7 @@ class SAP:
     def _extracted_from_login(self, resp):
         self.sess_id = resp['SessionId']
         self.sess_timeout = moment() + datetime.timedelta(minutes=resp['SessionTimeout'] - 1)
-        log.info(f"[SAP] Login realizado {format(moment(), '%r')}, se vencerá a las {format(self.sess_timeout, '%r')}")
+        # log.info(f"[SAP] Login realizado {format(moment(), '%r')}, se vencerá a las {format(self.sess_timeout, '%r')}")
         with open(self.LOGIN_CACHE, 'wb') as f:
             pickle.dump([self.sess_id, self.sess_timeout], f)
         return True

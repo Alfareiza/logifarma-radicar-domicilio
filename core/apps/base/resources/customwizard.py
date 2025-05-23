@@ -40,8 +40,6 @@ class CustomSessionWizard(SessionWizardView):
             self.request.COOKIES['source'] = source
             tipo_usuario = {'f': 'fomag', 'c': 'cajacopi', 'm': 'mutualser'}
             logger.info(f"usuario {tipo_usuario[source].upper()} con {msg}")
-        else:
-            logger.info(f'{msg}, tipo de usuario indetectable para {source=}')
         return super().get(request, *args, **kwargs)
 
     @csrf_protected_method
@@ -133,10 +131,7 @@ class CustomSessionWizard(SessionWizardView):
         self.set_formatter_with_ssid() if sessionid != 'Unknown' else self.set_formatter_base()
 
         idx_view = list(self.form_list).index(self.steps.current)
-        if not form.cleaned_data:
-            logger.info(f"No fue capturado nada en vista{idx_view}={self.steps.current}")
-        else:
-            logger.info(f"vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
+        logger.info(f"vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
 
         step = self.steps.current
         if step == 'sinAutorizacion' and form.is_valid():

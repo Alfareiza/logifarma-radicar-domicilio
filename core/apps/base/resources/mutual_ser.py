@@ -13,7 +13,7 @@ from core.apps.base.exceptions import UserNotFound, NroAutorizacionNoEncontrado,
 
 from core.apps.base.resources.decorators import login_required
 from core.apps.base.resources.selenium_manager import MutualSerSite
-from core.apps.base.resources.tools import moment
+from core.apps.base.resources.tools import moment, add_user_id_to_formatter
 from core.apps.tasks.utils.dt_utils import Timer
 from core.settings import BASE_DIR, MS_PASS, MS_USER, MS_API_URL, MS_API_URL_VALIDADOR, ZONA_SER_URL
 from core.settings import ch, logger as log
@@ -83,7 +83,7 @@ class MutualSerAPI:
             "password": MS_PASS
         }
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-        log.info("[MUTUAL] ...Realizando login")
+        # log.info("[MUTUAL] ...Realizando login")
         resp = self.request_api(
             'POST',
             f"{MS_API_URL}/{self.LOGIN}",
@@ -98,8 +98,8 @@ class MutualSerAPI:
     def _extracted_from_login(self, resp):
         self.sess_id = resp['access_token']
         self.sess_timeout = moment() + datetime.timedelta(seconds=resp['expires_in'] - 60)
-        log.info(
-            f"[MUTUAL] Login realizado {format(moment(), '%r')}, se vencerá a las {format(self.sess_timeout, '%r')}")
+        # log.info(
+        #     f"[MUTUAL] Login realizado {format(moment(), '%r')}, se vencerá a las {format(self.sess_timeout, '%r')}")
         with open(self.LOGIN_CACHE, 'wb') as f:
             pickle.dump([self.sess_id, self.sess_timeout], f)
         return True
@@ -203,25 +203,13 @@ class MutualSerPage:
         self.url = url
         self.page = MutualSerSite()
 
-    def add_user_id_to_formatter(self, handler, user_id):
-        old_formatter = handler.formatter
-
-        new_defaults = {"ssid": old_formatter._my_ssid, "user_id": user_id}
-        new_fmt_str = "%(asctime)s %(levelname)s [%(ssid)s|%(user_id)s] %(message)s"
-        updated_formatter = logging.Formatter(
-            new_fmt_str,
-            old_formatter.datefmt,
-            defaults=new_defaults
-        )
-        handler.setFormatter(updated_formatter)
-
     @contextmanager
     def open_page(self, acr_tipo_documento, documento):
         self.page.open_browser()
         # self.browser.set_window_size(1920, 1080)
         handler = log.handlers[0]  # Keep a reference
         original_formatter = handler.formatter
-        self.add_user_id_to_formatter(handler, f"{acr_tipo_documento}{documento}")
+        add_user_id_to_formatter(handler, f"{acr_tipo_documento}{documento}")
         yield
         ch.setFormatter(original_formatter)
         self.browser.close_all_browsers()
