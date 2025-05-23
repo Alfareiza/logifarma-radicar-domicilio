@@ -250,7 +250,7 @@ class DigitaCelular(forms.Form):
         whatsapp = self.cleaned_data.get('whatsapp')
 
         validate_numero_celular(cel)
-        validate_numero_celular(whatsapp)
+        # validate_numero_celular(whatsapp)
         # return cel
 
 
