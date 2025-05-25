@@ -249,8 +249,11 @@ class DigitaCelular(forms.Form):
         cel = self.cleaned_data.get('celular')
         whatsapp = self.cleaned_data.get('whatsapp')
 
+        if not cel:
+            raise forms.ValidationError("Por favor ingrese un número de celular.")
+
         validate_numero_celular(cel)
-        # validate_numero_celular(whatsapp)
+        validate_numero_celular(whatsapp)
         # return cel
 
 

@@ -131,7 +131,7 @@ class CustomSessionWizard(SessionWizardView):
         self.set_formatter_with_ssid() if sessionid != 'Unknown' else self.set_formatter_base()
 
         idx_view = list(self.form_list).index(self.steps.current)
-        if idx_view != 'home':
+        if self.steps.current != 'home':
             logger.info(f"vista{idx_view}={self.steps.current}, capturado={form.cleaned_data}")
 
         step = self.steps.current
