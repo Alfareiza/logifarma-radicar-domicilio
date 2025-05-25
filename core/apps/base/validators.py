@@ -362,9 +362,6 @@ def validate_recent_radicados_mutual_ser(tipo, value, auts: dict):
 
 
 def validate_numero_celular(cel):
-    if not cel:
-        raise forms.ValidationError("Por favor ingrese un número de celular.")
-
     cel_str = str(cel)
     if cel_str[0].startswith('57'):
         raise forms.ValidationError(

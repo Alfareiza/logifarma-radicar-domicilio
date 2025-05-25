@@ -555,7 +555,7 @@ def login_check(obj) -> bool:
 def add_user_id_to_formatter(handler, user_id):
     old_formatter = handler.formatter
 
-    new_defaults = {"ssid": old_formatter._my_ssid, "user_id": user_id}
+    new_defaults = {"ssid": getattr(old_formatter,"_my_ssid", ''), "user_id": user_id}
     new_fmt_str = "%(asctime)s %(levelname)s [%(ssid)s|%(user_id)s] %(message)s"
     updated_formatter = logging.Formatter(
         new_fmt_str,
