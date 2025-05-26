@@ -12,7 +12,8 @@ from selenium import webdriver
 from selenium.common import StaleElementReferenceException, ElementNotInteractableException, \
     ElementClickInterceptedException
 
-from core.apps.base.exceptions import UserNotFound, NroAutorizacionNoEncontrado, NoRecordsInTable, FieldError
+from core.apps.base.exceptions import UserNotFound, NroAutorizacionNoEncontrado, NoRecordsInTable, FieldError, \
+    NoImageWindow
 
 from core.settings import logger as log, ZONA_SER_NIT
 
@@ -146,9 +147,37 @@ class SearchPage:
             rows.append(row_dict)
         return rows
 
-    def click_lupa_ver_mas(self, browser, row: Tag):
-        """Clica en lupa correspondiente a la fila analizada, escoge el dia de hoy y clica en Confirmar."""
-        nro_para_facturar = self.click_ver(browser, row)
+    def switch_window(self, browser):
+        """Simula el comportamiento de ALT+TAB entre 2 ventanas."""
+        for _ in range(5):
+            current_window = browser.driver.current_window_handle
+            if len(browser.driver.window_handles) == 1:
+                return
+            for window in browser.driver.window_handles:
+                if window == current_window:
+                    continue
+                browser.driver.switch_to.window(window)
+                return
+            sleep(1)
+        raise NoImageWindow
+
+    def get_img_url(self, browser, row):
+        """Si se encuentra el botón que diga 'N° Aprobación' procede a capturar su url."""
+        if 'Aprobación' not in row.get_text(strip=True):
+            log.info("Botón de 'Ver' no está presente en esta fila")
+            return ''
+        label_td = row.find('td', string=lambda text: text and 'N° Aprobación:' in text)
+        link_ver = label_td.find_next_sibling('td').find('a')['id']
+        browser.driver.execute_script(f"document.getElementById('{link_ver}').click();")
+        self.switch_window(browser)
+        img_url = browser.driver.current_url
+        self.switch_window(browser)
+        # browser.driver.close()
+        return img_url
+
+    def extract_extra_info(self, browser, row: Tag):
+        """Extra el numero de autorizacion y medicamentos."""
+        nro_para_facturar = self.click_ver(browser, row)  # A veces el nro para facturar está al clicar en Ver
 
         label_td = row.find('td', string=lambda text: text and 'Ver solicitud' in text)
         link_lupa = label_td.find_next_sibling('td').find('a')['id']
@@ -179,19 +208,21 @@ class SearchPage:
         return browser.get_text(self.nro_para_facturar)
 
     def scrap_table(self, browser, tipo_documento, documento):
+        """Navega a lo largo de las filas que están en el resultado del afiliado."""
         table_element = browser.find_element(self.table)
         rows_info = []
         html_table = BeautifulSoup(table_element.get_attribute("outerHTML"), "html.parser")
         rows = html_table.find('tbody').find_all('tr', recursive=False)
         for i, row in enumerate(rows, 1):
-            log.info(f'Obteniendo información de fila {i}')
             estado = row.contents[7].find_all("option", selected=True)[-1].text
             match = re.search(r"Numero solicitud:(\d+)Fecha Solicitud:(\d{2}/\d{2}/\d{4})",
                               row.contents[3].get_text(strip=True))
             if estado.upper() == 'APROBADO':
-                nro_para_facturar, productos = self.click_lupa_ver_mas(browser, row.contents[-1])
+                log.info(f'Obteniendo información de fila {i}')
+                img_orden_url = self.get_img_url(browser, row)
+                nro_para_facturar, productos = self.extract_extra_info(browser, row.contents[-1])
             else:
-                log.info(f'Ignorando fila {i} por que autorización no está aprobada sino {estado.upper()!r}')
+                log.info(f'Ignorando fila {i} por que autorización está {estado.upper()!r}')
                 # En caso se aplique alguna lógica para cuando sea diferente de APROBADO
                 # nro_para_facturar, productos = [], ''
                 continue
@@ -205,6 +236,7 @@ class SearchPage:
                 'ESTADO_AUTORIZACION': estado,
                 'NUMERO_AUTORIZACION': nro_para_facturar,
                 'DISPENSADO': None,
+                'URL_ORDEN': img_orden_url,
                 'DETALLE_AUTORIZACION': [{'NOMBRE_PRODUCTO': producto['Tecnologías'], 'CANTIDAD': producto['Cantidad']}
                                          for producto in productos]
             })
@@ -219,7 +251,7 @@ class SearchPage:
             import traceback
             traceback.print_exc()
             browser.capture_page_screenshot('psi.png')
-            #TODO send email
+            # TODO send email
             raise
 
     def perform(self, browser, tipo_documento, documento):

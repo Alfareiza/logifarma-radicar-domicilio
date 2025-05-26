@@ -11,3 +11,7 @@ class NoRecordsInTable(Exception):
 
 class FieldError(Exception):
     ...
+
+
+class NoImageWindow(Exception):
+    ...
