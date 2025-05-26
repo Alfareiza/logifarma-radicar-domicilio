@@ -14,6 +14,7 @@ from selenium.common import StaleElementReferenceException, ElementNotInteractab
 
 from core.apps.base.exceptions import UserNotFound, NroAutorizacionNoEncontrado, NoRecordsInTable, FieldError, \
     NoImageWindow
+from core.apps.tasks.utils.dt_utils import Timer
 
 from core.settings import logger as log, ZONA_SER_NIT
 
@@ -147,6 +148,15 @@ class SearchPage:
             rows.append(row_dict)
         return rows
 
+    def wait_until_new_window_opens(self, browser, seconds: int):
+        """Espera 5 segundos hasta que una nueva ventana exista."""
+        timer = Timer(seconds)
+        while timer.not_expired:
+            if len(browser.driver.window_handles) > 1:
+                return
+
+        raise NoImageWindow(f"No cargó ventana con información de autorización en {seconds} segundos.")
+
     def switch_window(self, browser):
         """Simula el comportamiento de ALT+TAB entre 2 ventanas."""
         for _ in range(5):
@@ -169,6 +179,7 @@ class SearchPage:
         label_td = row.find('td', string=lambda text: text and 'N° Aprobación:' in text)
         link_ver = label_td.find_next_sibling('td').find('a')['id']
         browser.driver.execute_script(f"document.getElementById('{link_ver}').click();")
+        self.wait_until_new_window_opens(browser, 5)
         self.switch_window(browser)
         img_url = browser.driver.current_url
         self.switch_window(browser)
@@ -271,7 +282,7 @@ class BaseApp:
     """Base class for application or portal objects and their configuration."""
 
     browser: Selenium = Selenium
-    headless: bool = True
+    headless: bool = False
     wait_time: int = 10
     # download_directory: str = str(Path().cwd() / Path("temp"))
     browser_options: list = ["--no-sandbox", "--disable-dev-shm-usage"]

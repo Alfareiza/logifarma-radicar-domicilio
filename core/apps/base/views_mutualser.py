@@ -60,7 +60,7 @@ class DocumentoMutualSer(forms.Form):
 
         resp_eps = obtener_datos_identificacion(entidad, tipo, value)
         validate_identificacion_exists(entidad, resp_eps, f"{tipo}{value}")
-        validate_empty_response(resp_eps, resp['documento'])
+        validate_empty_response(resp_eps, resp['documento'], entidad)
 
         scrapper = ScrapMutualSer.objects.create(tipo_documento=tipo, documento=value)
         scrapper.create_or_get_and_scrap()
