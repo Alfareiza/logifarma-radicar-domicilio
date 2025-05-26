@@ -253,7 +253,8 @@ class DigitaCelular(forms.Form):
             raise forms.ValidationError("Por favor ingrese un número de celular.")
 
         validate_numero_celular(cel)
-        validate_numero_celular(whatsapp)
+        if whatsapp:
+            validate_numero_celular(whatsapp)
         # return cel
 
 
