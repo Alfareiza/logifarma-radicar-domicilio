@@ -374,7 +374,7 @@ def validate_numero_celular(cel):
         elif len(cel_str) > 11:
             raise forms.ValidationError(
                 f"Revisa tu número de celular, parece que tiene más de un dígito de más:\n{cel}")
-        else:
+        elif len(cel_str) > 1:
             raise forms.ValidationError(f"Revisa tu número de celular, parece que está incompleto o le"
                                         f" faltan algunos dígitos:\n{cel}")
 
