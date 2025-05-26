@@ -282,7 +282,7 @@ class BaseApp:
     """Base class for application or portal objects and their configuration."""
 
     browser: Selenium = Selenium
-    headless: bool = False
+    headless: bool = True
     wait_time: int = 10
     # download_directory: str = str(Path().cwd() / Path("temp"))
     browser_options: list = ["--no-sandbox", "--disable-dev-shm-usage"]
