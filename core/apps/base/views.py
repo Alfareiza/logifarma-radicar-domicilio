@@ -30,9 +30,13 @@ FORMS = [
 
 TEMPLATES = {
     "home": "home.html",
+    # Usado en /sin-autorizacion usuarios mutualser/fomag/cajacopi
     "sinAutorizacion": "sin_autorizacion.html",
+    # Usuario escoge si su medicamento es autorizado o no
     "autorizado_o_no": "autorizado_o_no.html",
+    # Usado en / usuarios cajacopi con medicamento autorizado
     "autorizacionServicio": "autorizacion.html",
+    # Usado en /mutualser, cuando usuario tiene autorizaciones pendientes por radicar
     "autorizacionesPorDisp": "autorizacion_por_disp.html",
     "orden": "orden.html",
     "fotoFormulaMedica": "foto.html",

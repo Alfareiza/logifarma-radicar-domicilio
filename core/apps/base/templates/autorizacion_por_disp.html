@@ -1,16 +1,18 @@
 {% extends "base/base.html" %}
 {% load static %}
 
-{% block title %}Autorizaciones a enviar{% endblock %}
+{% block title %}{% if autorizaciones_por_disp %}Autorizaciones por radicar{% else %}Autorizaciones radicadas{% endif %}{% endblock %}
 
 {% block content %}
 <section class="vista3">
     <form id="form-id" action="" method="post">
 
+        {% if wizard.form.autorizaciones.value.AUTORIZACIONES.items %}
+            <button class="continuar" formnovalidate name="" type="submit" value="" onclick="animabotoncarga_municipio()">
+                <p class="text_continuar">Continuar <i class="fa-solid fa-chevron-right"></i></p>
+            </button>
+        {% endif %}
 
-        <button class="continuar" formnovalidate name="" type="submit" value="" onclick="animabotoncarga_municipio()">
-            <p class="text_continuar">Continuar <i class="fa-solid fa-chevron-right"></i></p>
-        </button>
         {% csrf_token %}
         {{ wizard.management_form }}
         {% include "base/logo.html" %}
@@ -22,66 +24,138 @@
                 {{ form.as_table }}
             {% endfor %}
         {% else %}
+            {% with wizard.form.autorizaciones.value.AUTORIZACIONES|length as autorizaciones_por_disp %}
+            <!-- NEW IMPLEMENTATION -->
+            <div class="medications-wrapper">
+                {% if wizard.form.autorizaciones.value.AUTORIZACIONES %}
+<!--                    <h2 class="section-title">Entregas pendientes de medicamentos</h2>-->
+                    <p class="section-description">
+                        Hola <b>{{wizard.form.autorizaciones.value.P_NOMBRE|title}}</b>, tienes {{autorizaciones_por_disp}}
+                        solicitud{{wizard.form.autorizaciones.value.AUTORIZACIONES|length|pluralize:"es"}} por radicar:
+                    </p>
+                {% else %}
+<!--                    <h2 class="section-title">Todos tus medicamentos han sido radicados</h2>-->
+                    <p class="section-description">
+                        Hola <b>{{wizard.form.autorizaciones.value.P_NOMBRE|title}}</b>, todas tus solicitudes han sido radicadas:
+                    </p>
+                {% endif %}
 
-        <!-- NEW IMPLEMENTATION -->
-        <div class="medications-wrapper">
-            <h2 class="section-title">Entregas pendientes de medicamentos</h2>
-            <p class="mt-3 section-description">
-                Hola <b>{{wizard.form.autorizaciones.value.P_NOMBRE|title}}</b>, a continuación te mostramos los artículos
-                pendientes por radicar. Por favor, revisa con atención:
-            </p>
-
-            {% for nro, medicamentos in wizard.form.autorizaciones.value.AUTORIZACIONES.items %}
-                <div class="authorization-block">
-                    <h3 class="authorization-title">Radicación N.º {{nro}}
-                        <img src="{% static 'img/moto-boy-icon.png' %}" alt="Icono de envío" class="delivery-icon" />
-                    </h3>
-                    <table class="medications-table">
-                        <thead>
-                        <tr>
-                            <th>Cantidad</th>
-                            <th>Medicamento</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for medicamento in medicamentos %}
+                {% for nro, medicamentos in wizard.form.autorizaciones.value.AUTORIZACIONES.items %}
+                    <div class="authorization-block">
+                        <div class="authorization-title">
+                            <div style="display: inline-flex;align-items: center;">
+                                <h3> N.º {{nro}}</h3>
+                                <p style="color: #1d9709;font-weight: 10;font-size: 1rem;padding-left: .5rem;">Por radicar</p>
+                            </div>
+                            <img src="{% static 'img/moto-boy-icon.png' %}" alt="Icono de envío" class="delivery-icon" />
+                        </div>
+                        <table class="medications-table">
+                            <thead>
                             <tr>
-                                <td class="center">{{ medicamento.CANTIDAD }}</td>
-                                <td>{{ medicamento.NOMBRE_PRODUCTO }}</td>
+                                <th>Cantidad</th>
+                                <th>Medicamento</th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% endfor %}
+                            </thead>
+                            <tbody>
+                            {% for medicamento in medicamentos %}
+                                <tr>
+                                    <td class="center">{{ medicamento.CANTIDAD }}</td>
+                                    <td>{{ medicamento.NOMBRE_PRODUCTO }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}
 
-        </div>
+                {% if wizard.form.autorizaciones.value.AUTORIZACIONES_DISPENSADAS.items and autorizaciones_por_disp %}
+                    <hr class="mt-4 mb-1">
+                    <h3 style="font-size: 1rem;font-weight: 400;" class="mb-1">Estas solicitudes ya fueron radicadas:</h3>
+                {% endif %}
 
-        {% endif %}
-        <button class="btn" id="btn_conti" type="submit" onclick="animabotoncarga_municipio()">
-            Continuar
-            <div id="btn_carga" class="conten_carga">
-                <div class="carga"></div>
+                {% for nro, medicamentos in wizard.form.autorizaciones.value.AUTORIZACIONES_DISPENSADAS.items %}
+                    <div class="authorization-block" style="background-color: #e1e1e1">
+                        <div class="authorization-title">
+                            <span>
+                                <h3 style="font-size: .9rem;">
+                                    N.º {{nro}}
+                                </h3>
+<!--                                <p style="font-weight: 10;font-size: 0.8rem;">-->
+<!--                                    {%if medicamentos.RADICADO_AT %}Radicada {{medicamentos.RADICADO_AT}}{% endif %}-->
+<!--                                </p>-->
+                            </span>
+                            <span style="display: inline-flex;align-items: center;">
+                                <p style="text-align: end;font-weight: 10;font-size: .8rem;padding-right: .3rem;">
+                                    {% if medicamentos.RADICADO_AT %}
+                                        Radicada {{medicamentos.RADICADO_AT}}
+                                    {% endif %}
+                                    {% if medicamentos.ESTADO %}
+                                        {{ medicamentos.ESTADO }}
+                                    {% endif %}
+                                </p>
+<!--                                <img src="{% static 'img/yes.png' %}" alt="Icono de recibido" class="delivery-icon" />-->
+                            </span>
+                        </div>
+                        <table class="medications-table-dispensado">
+<!--                            <thead>-->
+<!--                            <tr>-->
+<!--                                <th>Cantidad</th>-->
+<!--                                <th>Medicamento</th>-->
+<!--                            </tr>-->
+<!--                            </thead>-->
+                            <tbody>
+                            {% for medicamento in medicamentos.DETALLE_AUTORIZACION %}
+                                <tr>
+                                    <td class="center">{{ medicamento.CANTIDAD }}</td>
+                                    <td>{{ medicamento.NOMBRE_PRODUCTO }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endfor %}
+
             </div>
-        </button>
+            {% endwith %}
+        {% endif %}
+
+        {% if wizard.form.autorizaciones.value.AUTORIZACIONES.items %}
+            <button class="btn" id="btn_conti" type="submit" onclick="animabotoncarga_municipio()">
+                Continuar
+                <div id="btn_carga" class="conten_carga">
+                    <div class="carga"></div>
+                </div>
+            </button>
+        {% else %}
+            <a class="home" href="{% url 'base:mutualser' %}">
+                <button class="btn" id="btn_conti" type="button" onclick="animabotoncarga_general()">
+                        Entiendo
+                    <div id="btn_carga" class="conten_carga">
+                        <div class="carga"></div>
+                    </div>
+                </button>
+            </a>
+        {% endif %}
 
     </form>
 
 
-    <div class="conten-progreso-global">
-        <div class="pagina">Paso {{ wizard.steps.step1 }} de 7</div>
-        <div class="contenedor">
-            <div class="progreso-contenedor">
-                <div class="progreso" id="progreso"></div>
-                <div class="circulo active"></div>
-                <div class="circulo"></div>
-                <div class="circulo"></div>
-                <div class="circulo"></div>
-                <div class="circulo"></div>
-                <div class="circulo"></div>
+    {% if wizard.form.autorizaciones.value.AUTORIZACIONES.items %}
+        <div class="conten-progreso-global">
+            <div class="pagina">Paso {{ wizard.steps.step1 }} de 7</div>
+            <div class="contenedor">
+                <div class="progreso-contenedor">
+                    <div class="progreso" id="progreso"></div>
+                    <div class="circulo active"></div>
+                    <div class="circulo"></div>
+                    <div class="circulo"></div>
+                    <div class="circulo"></div>
+                    <div class="circulo"></div>
+                    <div class="circulo"></div>
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 
 </section>
 {% endblock %}

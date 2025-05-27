@@ -145,8 +145,9 @@ class Email:
         self.template = get_template(template)
 
     def prepare_mail(self, info: dict) -> EmailMessage:
+        subject, copia_oculta = self.make_subject_and_cco(info)
+        info['NUMERO_RADICACION'] = subject.split('-')[0].strip()
         context = info.copy()
-        subject, copia_oculta = self.make_subject_and_cco(context)
         destinatary = self.make_destinatary(context)
         self.set_logo(context)
         html_content = self.template.render(context)
@@ -177,7 +178,7 @@ class Email:
 
         except Exception as e:
             notify('error-email',
-                   f"ERROR ENVIANDO EMAIL- Radicado #{info['NUMERO_RADICACION']} {info['documento']}",
+                   f"ERROR ENVIANDO EMAIL- Radicado #{info['NUMERO_RADICACION']} {info.get('documento', info.get('DOCUMENTO_ID', ))}",
                    f"JSON_DATA: {info}\n\nERROR: {e}")
             return False
             # TODO Revisar que hacer cuando haya error en envío de email
@@ -221,8 +222,6 @@ class Email:
         else:
             subject = (f"{info['NUMERO_AUTORIZACION']} - Este es el "
                        f"número de radicación de tu domicilio en Logifarma")
-
-        info.update({'NUMERO_RADICACION': subject.split('-')[0].strip()})
 
         if info.get('documento') in ('CC99999999',) or info.get('NUMERO_AUTORIZACION') in (
                 99_999_999, 99_999_998):

@@ -130,6 +130,15 @@ class SearchPage:
         log.info(f"Nro de autorización {nro_para_facturar} encontrado en botón de 'Ver'")
         return nro_para_facturar
 
+    @staticmethod
+    def clean_medicamento_text(txt):
+        """Realiza ajustes al valor del texto recibido.
+        # >>> clean_medicamento_text("M00835 M00835 DAPAGLIFLOZINA 10.MG/1.U TABLETA RECUBIERTA")
+        # "M00835 DAPAGLIFLOZINA 10.MG/1.U TABLETA RECUBIERTA"
+        """
+        txt = txt.replace(';', '')
+        return re.sub(r'^M\d+\s+', '', txt)
+
     @retry(NoRecordsInTable, tries=3, delay=2)
     def extract_productos(self, browser):
         """Extrae los productos que estan en la tabla del modal."""
@@ -140,7 +149,7 @@ class SearchPage:
         rows = []
         for tr in table.tbody.find_all('tr'):
             cells = tr.find_all('td')
-            values = [td.get_text(strip=True).replace(';', '') for td in cells]
+            values = [self.clean_medicamento_text(td.get_text(strip=True)) for td in cells]
             for value in values:
                 if 'No records found' in value:
                     raise NoRecordsInTable
@@ -241,10 +250,10 @@ class SearchPage:
             rows_info.append({
                 'TIPO_DOCUMENTO': tipo_documento,
                 'DOCUMENTO': documento,
-                'CONSECUTIVO_PROCEDIMIENTO': row.contents[2].text,
-                'NUMERO_SOLICITUD': match[1] if match else '',
-                'FECHA_SOLICITUD': match[2] if match else '',
-                'ESTADO_AUTORIZACION': estado,
+                # 'CONSECUTIVO_PROCEDIMIENTO': row.contents[2].text,
+                # 'NUMERO_SOLICITUD': match[1] if match else '',
+                # 'FECHA_SOLICITUD': match[2] if match else '',
+                # 'ESTADO_AUTORIZACION': estado,
                 'NUMERO_AUTORIZACION': nro_para_facturar,
                 'DISPENSADO': None,
                 'URL_ORDEN': img_orden_url,

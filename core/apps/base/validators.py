@@ -323,11 +323,11 @@ def validate_resp_zona_ser(scrapper: ScrapMutualSer):
 
 
 def validate_dispensados(scrapper: ScrapMutualSer):
-    """Organiza las autorizaciones encontrdas en Zona Zer y cruzadas con medicar hayan sidosi no tiene articulos pendientes por radicar."""
+    """Organiza las autorizaciones encontradas en Zona Zer y las cruza con Medicar para determinar
+    que hayan sido dispensadas o no."""
     dct = {'PENDIENTES': [], 'ENTREGADOS': []}
     for aut in scrapper.resultado:
-        key = 'ENTREGADOS' if aut['DISPENSADO'] else 'PENDIENTES'
-        dct[key].append(aut)
+        dct['ENTREGADOS' if aut['DISPENSADO'] else 'PENDIENTES'].append(aut)
     if not dct['PENDIENTES']:
         entiendo = get_template('base/btn_in_modal.html').render(
             {'id': 'entiendo', 'txt': 'Entiendo', 'bgcolor': '#2a57a9', 'txtcolor': 'white', 'widthbox': 70}
@@ -339,26 +339,6 @@ def validate_dispensados(scrapper: ScrapMutualSer):
                       "Si consideras que tienes artículos por radicar, por favor comunícate "
                       "con Mutualser al número <br>018000 116882 o #603<br><br>"
                       f"<br>{entiendo}<br>"))
-
-
-def validate_recent_radicados_mutual_ser(tipo, value, auts: dict):
-    """Valida las autorizaciones de mutual ser."""
-    qs = Radicacion.objects.filter(
-        paciente_cc=f'{tipo}{value}', convenio='mutualser', acta_entrega__isnull=True,
-        numero_radicado__in=list(auts),
-    ).only('id', 'datetime', 'paciente_data')
-
-    if qs.count() == len(auts):
-        logger.info(f"{tipo}{value} ha sido avisado que tiene {len(auts)} radicacion(es) pendiente(es)"
-                    f" ({', '.join(list(auts))}).")
-        announce_articulos_por_autorizacion(qs)
-    else:
-        # Si al hacer el scrapping y cruzarlo con medicar, aparece como false (no dispensado) pero ya se encuentra
-        # radicado, entonces lo elimina de las autorizaciones pendientes por radicar, y sigue el wizard con
-        # las que realmente están pendientes por radicar
-        for nro_aut in qs.values_list('numero_radicado', flat=True):
-            logger.info(f"Ignorando autorización {nro_aut} de {tipo}{value} por que ya se encuentra radicada.")
-            auts.pop(nro_aut, None)
 
 
 def validate_numero_celular(cel):

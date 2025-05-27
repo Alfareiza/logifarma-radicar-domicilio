@@ -13,7 +13,7 @@ from core.apps.base.forms import *
 from core.apps.base.models import ScrapMutualSer
 from core.apps.base.pipelines import NotifyEmail
 from core.apps.base.resources.customwizard import CustomSessionWizard
-from core.apps.base.validators import validate_resp_zona_ser, validate_dispensados, validate_recent_radicados_mutual_ser
+from core.apps.base.validators import validate_resp_zona_ser, validate_dispensados
 from core.apps.base.resources.decorators import logtime, once_in_interval
 from core.apps.base.resources.tools import guardar_info_bd, notify
 from core.apps.base.views import TEMPLATES
@@ -66,9 +66,8 @@ class DocumentoMutualSer(forms.Form):
         scrapper.create_or_get_and_scrap()
         validate_resp_zona_ser(scrapper)
         scrapper.load_dispensado_in_resultado()
-        validate_dispensados(scrapper)
-        autorizaciones_pendientes_por_radicar = scrapper.aut_pendientes_por_dispensar_groub_by_nro_para_facturar
-        validate_recent_radicados_mutual_ser(tipo, value, autorizaciones_pendientes_por_radicar)
+        autorizaciones_pendientes_por_radicar = scrapper.aut_pendientes_por_disp_groub_by_nro_aut
+        autorizaciones_dispensadas = scrapper.aut_dispensadas_groub_by_nro_para_facturar
 
         resp |= {
             'AFILIADO': resp_eps['NOMBRE'],
@@ -78,6 +77,7 @@ class DocumentoMutualSer(forms.Form):
             'DOCUMENTO_ID': value,
             'CONVENIO': entidad,
             'AUTORIZACIONES': autorizaciones_pendientes_por_radicar,
+            'AUTORIZACIONES_DISPENSADAS': autorizaciones_dispensadas,
             'SCRAPPER_ID': scrapper.id
         }
         return resp
@@ -284,9 +284,12 @@ class MutualSerAutorizacion(CustomSessionWizard):
         # Guardará en BD cuando DEBUG sean números reales
         ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
 
+        if not info_email.get('documento'):
+            info_email |= kwargs['form_dict']['sinAutorizacion'].cleaned_data
         autorizaciones = info_email.pop('AUTORIZACIONES', None)
         del info_email['cod_dane']
         del info_email['activo']
+        del info_email['AUTORIZACIONES_DISPENSADAS']
         info_email['DOCUMENTO_ID'] = info_email.pop('documento')
         for nro_aut, meds in autorizaciones.items():
             info_email['NUMERO_AUTORIZACION'] = nro_aut

@@ -15,10 +15,12 @@ from django.db.models import (
     Model,
     DateField, TextField, FloatField,
 )
+from django.utils import timezone
 from django.utils.timezone import now
 
 from core.apps.base.resources.medicar import obtener_datos_formula
 from core.apps.base.resources.mutual_ser import MutualSerPage
+from core.apps.base.resources.tools import pretty_date
 from core.apps.tasks.utils.dt_utils import Timer
 from core.settings import ZONA_SER_URL
 
@@ -229,11 +231,18 @@ class ScrapMutualSer(Model):
         return 'cache' in self.tipo if self.tipo else False
 
     @property
-    def aut_pendientes_por_dispensar_groub_by_nro_para_facturar(self):
+    def aut_pendientes_por_disp_groub_by_nro_aut(self):
         """Create a dict where the key is the NUMERO_AUTORIZACION and the value is a list with 'DETALLE_AUTORIZACION'"""
         return {aut['NUMERO_AUTORIZACION']: aut['DETALLE_AUTORIZACION']
                 for aut in self.resultado
                 if aut['DISPENSADO'] not in (None, True)}
+
+    @property
+    def aut_dispensadas_groub_by_nro_para_facturar(self):
+        """Create a dict where the key is the NUMERO_AUTORIZACION and the value is a list with 'DETALLE_AUTORIZACION'"""
+        return {aut['NUMERO_AUTORIZACION']: aut
+                for aut in self.resultado
+                if aut['DISPENSADO']}
 
     def get_info_user_from_zona_ser(self):
         """Inicializa el processo de scrapping en mutual ser"""
@@ -293,13 +302,33 @@ class ScrapMutualSer(Model):
         return
 
     def load_dispensado_in_resultado(self):
-        """Busca cada autorización presente en resultado en Medicar y crea la variable 'DISPENSADO' con un buleano
-        que determina si fue dispensado o no.
+        """Busca cada autorización presente en resultado en Medicar y llena la variable 'DISPENSADO' con un buleano
+        que determina si fue dispensado o no. En caso no encontrarla en Medicar, busca en Radicacion.
         """
+
+        def aut_exists(nro_aut) -> bool:
+            return Radicacion.objects.filter(
+                numero_radicado=nro_aut,
+                acta_entrega__isnull=True, convenio='mutualser',
+                paciente_cc=f"{self.tipo_documento}{self.documento}",
+            ).only('id', 'datetime')
+
         for autorizacion in self.resultado:
             # TODO revisar posibles respuestas de API para garantizar información correcta en 'DISPENSADO'
             if 'cache' in self.tipo:
                 continue
             resp_mcar = obtener_datos_formula(autorizacion['NUMERO_AUTORIZACION'], '806008394')
+            # Si trae resultados de medicar, entonces se asume que fue dispensado
             autorizacion['DISPENSADO'] = resp_mcar != {"error": "No se han encontrado registros."}
+            if not autorizacion['DISPENSADO']:
+                if aut := aut_exists(autorizacion['NUMERO_AUTORIZACION']):
+                    autorizacion['DISPENSADO'] = True
+                    autorizacion['ESTADO'] = '(En Proceso)'
+                    autorizacion['RADICADO_AT'] = pretty_date(
+                        aut.first().datetime.astimezone(timezone.get_current_timezone())
+                    )
+            else:
+                autorizacion['ESTADO'] = 'Radicada'
+                autorizacion['RADICADO_AT'] = ''
+
             self.save()

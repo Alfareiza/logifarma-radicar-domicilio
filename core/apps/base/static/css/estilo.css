@@ -1300,8 +1300,16 @@ main section.vista10 p.vist10 {position: relative;
     margin-bottom: .5rem;
     color: #007BFF;
 }
-.mt-3 { margin-top:3rem }
+
 .mt-2 { margin-top:2rem }
+.mt-3 { margin-top:3rem }
+.mt-4 { margin-top:3rem }
+.mt-5 { margin-top:5rem }
+.mb-1 { margin-bottom:1rem }
+.mb-2 { margin-bottom:2rem }
+.mb-3 { margin-bottom:3rem }
+.mb-4 { margin-bottom:4rem }
+.mb-5 { margin-bottom:5rem }
 
 .button_modal {
       border: none;
@@ -2016,46 +2024,46 @@ main section.vista3 {width: 100%; height: 100vh; position: relative; margin: 0 a
 main section.vista3 div.vist3_text {position: relative;
     padding: 0% 0% 0% 9%;}
 
-    .cont_inpu_auto {position: relative;
+.cont_inpu_auto {position: relative;
         margin: 2% auto;
-        width: 40%;
+    width: 40%;
         height: 7vh;
-        display: flex;}
+    display: flex;}
 
-    main section.vista3 input.inp_vist3 {position: relative;
-        margin: 0 auto;
-        padding: 0;
-        border: 0px;
-        border-bottom: solid 1px;
-        font-size: 1em;
-        width: 100%;
-        height: 100%;
-        outline: none;
-    border-radius: 0px;}
+main section.vista3 input.inp_vist3 {position: relative;
+    margin: 0 auto;
+    padding: 0;
+    border: 0px;
+    border-bottom: solid 1px;
+    font-size: 1em;
+    width: 100%;
+    height: 100%;
+    outline: none;
+border-radius: 0px;}
 
-    .inp_vist3:valid + .inputext_auto, .inp_vist3:focus + .inputext_auto {
+.inp_vist3:valid + .inputext_auto, .inp_vist3:focus + .inputext_auto {
 color: #0572ce;
 transform: translateX(10px) translateY(-20px);
 font-size: 0.8em;
 transition: 0.5S;
 }
 
-    main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
-    main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
-    -webkit-appearance: none;
-    margin: 0;
-    }
+main section.vista3 input.inp_vist3::-webkit-inner-spin-button,
+main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
 
-    .inputext_auto {position: absolute;
-        width: 100%;
-        height: 46%;
-        top: 0;
-        left: 0;
-        text-align: left;
-        padding: 2% 0;
-        pointer-events: none;
+.inputext_auto {position: absolute;
+    width: 100%;
+    height: 46%;
+    top: 0;
+    left: 0;
+    text-align: left;
+    padding: 2% 0;
+    pointer-events: none;
         font-size: 1em;
-        }
+    }
 
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
@@ -2403,7 +2411,7 @@ transition: 0.5S;
     padding-left: 0;
     margin: 0 auto;
     text-align: center;
-}
+    }
 
 option {
   background-color: white;
@@ -3592,7 +3600,7 @@ main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 a
 margin: 4% auto 7%;
 width: 70%;
 height: 6vh;
-display: flex;}
+    display: flex;}
 
 .inp_vist7 {position: relative;
     margin: 0 auto;
@@ -3637,7 +3645,7 @@ transition: 0.5S;
 .inp_vist7::-webkit-inner-spin-button{
 -webkit-appearance: none;
 margin: 0;
-}
+    }
 
 option {
   background-color: white;
@@ -3682,7 +3690,7 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
 margin: 4% auto 4%;
 width: 70%;
 height: 6vh;
-display: flex;}
+    display: flex;}
 
 .cont_inpu_whatsapp {position: relative;
     margin: 4% auto 7%;
@@ -3702,10 +3710,10 @@ display: flex;}
     border-radius: 0px;}
 
 .inp_vist8:valid ~ .inputext_celular, .inp_vist8:focus ~ .inputext_celular {
-color: #0572ce;
+    color: #0572ce;
 transform: translateX(10px) translateY(-45px);
 font-size: 1.3em;
-transition: 0.5S;
+    transition: 0.5S;
 }
 
 
@@ -4837,7 +4845,7 @@ main section.vista7 {width: 100%; height: 100vh; position: relative; margin: 0 a
 margin: 4% auto 7%;
 width: 70%;
 height: 6vh;
-display: flex;}
+    display: flex;}
 
 .inp_vist7 {position: relative;
     margin: 0 auto;
@@ -4882,7 +4890,7 @@ transition: 0.5S;
 .inp_vist7::-webkit-inner-spin-button{
 -webkit-appearance: none;
 margin: 0;
-}
+    }
 
 option {
   background-color: white;
@@ -4927,7 +4935,7 @@ main section.vista8 {width: 100%; height: 100vh; position: relative; margin: 0 a
 margin: 4% auto 7%;
 width: 70%;
 height: 6vh;
-display: flex;}
+    display: flex;}
 
 .cont_inpu_whatsapp {position: relative;
     margin: 4% auto 7%;
@@ -4948,10 +4956,10 @@ display: flex;}
     border-radius: 0px;}
 
 .inp_vist8:valid ~ .inputext_celular, .inp_vist8:focus ~ .inputext_celular {
-color: #0572ce;
+    color: #0572ce;
 transform: translateX(10px) translateY(-45px);
 font-size: 1.3em;
-transition: 0.5S;
+    transition: 0.5S;
 }
 
 .inputext_celular {position: absolute;
@@ -6349,7 +6357,7 @@ margin: 0;
     margin: 10px auto 0;
     display: none;
 }
-    
+
 .tex {
     position: relative;
     margin: auto;
@@ -6485,12 +6493,12 @@ main section.vista10 p.vist10 {position: relative;
 
 .home {text-decoration: none;
     color: #468bc4;
-    }
+}
 
     .button_modal{
         font-size: 1.3em;
         box-shadow: 16px 14px 15px -3px rgb(0 0 0 / 26%);
-    }
+}
 
 }
 
@@ -6589,7 +6597,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     border-color: #468bc4;
     color: #468bc4;}
 
-    .conten_carga { background: #ffffff;
+.conten_carga { background: #ffffff;
     height: 100%;
     width: 100%;
     left: -1%;
@@ -7124,7 +7132,7 @@ main section.vista3 div.vist3_img {position: relative;
     filter: drop-shadow(0px 1px 2px #e4dddd)}
 
 main section.vista3 div.vist3_img img.vist3 {width: 100%;
-    height: 100%;
+height: 100%;
     padding: 0%}
 
 main section.vista3 p.vist3_t2 {padding: 6% 6% 1% 6%; font-size: 1em;
@@ -7828,25 +7836,26 @@ main section#vist2 nav#vist2 div#img p#vist2 {font-size: 0.8em;}
 }
 
 .section-description {
-  text-align: center;
-  font-size: 1rem;
+  text-align: left;
+  font-size: 1.6rem;
   color: #4b5563;
   margin-bottom: 2rem;
 }
 
 .authorization-block {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
-  padding: 1rem;
+  padding: 0.6rem;
   background-color: #f9fafb;
+  box-shadow: 5px 5px 15px 0px rgb(0 0 0 / 26%);
 }
 
 .authorization-title {
   font-size: 1.125rem;
   font-weight: 600;
   color: #111827;
-  margin-bottom: 1rem;
+  margin-bottom: .5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -7866,6 +7875,12 @@ main section#vist2 nav#vist2 div#img p#vist2 {font-size: 0.8em;}
 .medications-table td {
   padding: 0.75rem;
   border-bottom: 1px solid #e5e7eb;
+}
+
+.medications-table-dispensado th,
+.medications-table-dispensado td {
+    font-size: .8rem;
+    padding: 0.5rem;
 }
 
 .medications-table th {
@@ -7889,12 +7904,259 @@ main section#vist2 nav#vist2 div#img p#vist2 {font-size: 0.8em;}
 
   .medications-table th,
   .medications-table td {
-    font-size: 0.9rem;
+    font-size: 1rem;
     padding: 0.5rem;
   }
+
+  .medications-table-dispensado th,
+  .medications-table-dispensado td {
+    font-size: 0.6rem;
+    padding: 0.5rem;
+  }
+   .medications-table-dispensado th{
+    font-size: 0.8rem;
+   }
 
   .delivery-icon {
     /*width: 18px;*/
     /*height: 18px;*/
   }
 }
+
+/* CSS FOR ESTADO ENTREGA EN MODAL */
+
+.delivery-timeline-wrapper {
+    --dt-primary-color: #3b82f6;
+    --dt-success-color: #10b981;
+    --dt-pending-color: #6b7280;
+    --dt-background-color: #ffffff;
+    --dt-text-color: #1f2937;
+    --dt-border-color: #e5e7eb;
+    --dt-circle-size: 3rem;
+    --dt-connector-height: 4px;
+    --dt-shadow-color: rgba(59, 130, 246, 0.2);
+}
+
+.delivery-timeline-wrapper * {
+    box-sizing: border-box;
+}
+
+.delivery-timeline-wrapper {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--dt-background-color);
+    color: var(--dt-text-color);
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.delivery-timeline-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.delivery-timeline-header h1 {
+    font-size: 2rem;
+    margin: 0 0 0.5rem 0;
+    color: var(--dt-text-color);
+    font-weight: 700;
+}
+
+.delivery-timeline-header p {
+    color: var(--dt-pending-color);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.delivery-timeline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    margin: 2rem 0;
+}
+
+.delivery-timeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+    z-index: 2;
+}
+
+.delivery-step-circle {
+    width: var(--dt-circle-size);
+    height: var(--dt-circle-size);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--dt-border-color);
+    background-color: var(--dt-background-color);
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.delivery-step-circle svg {
+    width: 1.8rem;
+    height: 1.8rem;
+    fill: var(--dt-pending-color);
+    transition: fill 0.3s ease;
+}
+
+.delivery-step-label {
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--dt-pending-color);
+    transition: color 0.3s ease;
+    max-width: 120px;
+    margin: 0;
+}
+
+.delivery-step-description {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--dt-pending-color);
+    margin: 0.25rem 0 0 0;
+    opacity: 0.8;
+}
+
+/* Timeline connector */
+.delivery-timeline::before {
+    content: '';
+    position: absolute;
+    top: calc(var(--dt-circle-size) / 2);
+    left: calc(var(--dt-circle-size) / 2);
+    right: calc(var(--dt-circle-size) / 2);
+    height: var(--dt-connector-height);
+    background-color: var(--dt-border-color);
+    z-index: 1;
+}
+
+/* Step states */
+.delivery-timeline-step.dt-completed .delivery-step-circle {
+    border-color: var(--dt-success-color);
+    background-color: var(--dt-success-color);
+}
+
+.delivery-timeline-step.dt-completed .delivery-step-circle svg {
+    fill: white;
+}
+
+.delivery-timeline-step.dt-completed .delivery-step-label {
+    color: var(--dt-success-color);
+}
+
+.delivery-timeline-step.dt-current .delivery-step-circle {
+    border-color: var(--dt-primary-color);
+    background-color: var(--dt-primary-color);
+    box-shadow: 0 0 0 4px var(--dt-shadow-color);
+}
+
+.delivery-timeline-step.dt-current .delivery-step-circle svg {
+    fill: white;
+}
+
+.delivery-timeline-step.dt-current .delivery-step-label {
+    color: var(--dt-primary-color);
+}
+
+.delivery-timeline-step.dt-pending .delivery-step-circle {
+    border-color: var(--dt-border-color);
+    background-color: var(--dt-background-color);
+}
+
+.delivery-timeline-step.dt-pending .delivery-step-circle svg {
+    fill: var(--dt-pending-color);
+}
+
+/* Progress bar */
+.delivery-progress-bar {
+    position: absolute;
+    top: calc(var(--dt-circle-size) / 2);
+    left: calc(var(--dt-circle-size) / 2);
+    height: var(--dt-connector-height);
+    background-color: var(--dt-success-color);
+    z-index: 1;
+    transition: width 0.5s ease;
+}
+
+.delivery-step-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .delivery-timeline-wrapper {
+        --dt-circle-size: 60px;
+        padding: 1rem;
+    }
+
+    .delivery-timeline {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .delivery-timeline::before {
+        top: calc(var(--dt-circle-size) / 2);
+        bottom: calc(var(--dt-circle-size) / 2);
+        left: calc(var(--dt-circle-size) / 2);
+        right: auto;
+        width: var(--dt-connector-height);
+        height: auto;
+    }
+
+    .delivery-progress-bar {
+        top: calc(var(--dt-circle-size) / 2);
+        left: calc(var(--dt-circle-size) / 2);
+        width: var(--dt-connector-height) !important;
+        height: auto;
+        bottom: calc(100% - var(--dt-circle-size) / 2);
+    }
+
+    .delivery-timeline-step {
+        flex-direction: row;
+        text-align: left;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .delivery-step-circle {
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+
+    .delivery-step-content {
+        flex: 1;
+        align-items: flex-start;
+    }
+
+    .delivery-step-label {
+        text-align: left;
+        max-width: none;
+    }
+
+    .delivery-step-description {
+        text-align: left;
+    }
+}
+
+@media (max-width: 480px) {
+    .delivery-timeline-wrapper {
+        --dt-circle-size: 50px;
+    }
+
+    .delivery-timeline-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .delivery-step-circle svg {
+        width: 30px;
+        height: 30px;
+    }
+}
+/* CSS FOR ESTADO ENTREGA EN MODAL */
