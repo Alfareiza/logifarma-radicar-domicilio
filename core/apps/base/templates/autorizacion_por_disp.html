@@ -60,7 +60,7 @@
                             {% for medicamento in medicamentos %}
                                 <tr>
                                     <td class="center">{{ medicamento.CANTIDAD }}</td>
-                                    <td>{{ medicamento.NOMBRE_PRODUCTO }}</td>
+                                    <td>{{ medicamento.NOMBRE_PRODUCTO|remove_code }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -107,7 +107,7 @@
                             {% for medicamento in medicamentos.DETALLE_AUTORIZACION %}
                                 <tr>
                                     <td class="center">{{ medicamento.CANTIDAD }}</td>
-                                    <td>{{ medicamento.NOMBRE_PRODUCTO }}</td>
+                                    <td>{{ medicamento.NOMBRE_PRODUCTO|remove_code }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>

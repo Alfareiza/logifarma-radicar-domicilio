@@ -132,12 +132,9 @@ class SearchPage:
 
     @staticmethod
     def clean_medicamento_text(txt):
-        """Realiza ajustes al valor del texto recibido.
-        # >>> clean_medicamento_text("M00835 M00835 DAPAGLIFLOZINA 10.MG/1.U TABLETA RECUBIERTA")
-        # "M00835 DAPAGLIFLOZINA 10.MG/1.U TABLETA RECUBIERTA"
-        """
+        """Realiza ajustes al valor del texto recibido."""
         txt = txt.replace(';', '')
-        return re.sub(r'^M\d+\s+', '', txt)
+        return txt
 
     @retry(NoRecordsInTable, tries=3, delay=2)
     def extract_productos(self, browser):

@@ -1,3 +1,5 @@
+import re
+
 from django import template
 
 register = template.Library()
@@ -25,3 +27,11 @@ def calc_devices(rads):
 def jsonify(dct):
     import json
     return json.dumps(dct)
+
+@register.filter
+def remove_code(txt):
+    """Remove the code of the product.
+    >>> remove_code("M00835 DAPAGLIFLOZINA 10.MG/1.U TABLETA RECUBIERTA")
+    'DAPAGLIFLOZINA 10.MG/1.U TABLETA RECUBIERTA'
+    """
+    return re.sub(r'^M\d+\s+', '', txt)
