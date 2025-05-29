@@ -315,10 +315,26 @@ def validate_resp_zona_ser(scrapper: ScrapMutualSer):
         }
     Validate the pending deliveries on medicare api.
     """
-    if scrapper.texto_error != '' and not scrapper.resultado:
-        logger.error(f"Error en afiliado {scrapper.tipo_documento}{scrapper.documento} con scrapper id {scrapper.id}")
+    if scrapper.texto_error == '':
+        return
+    if not scrapper.resultado:
+        logger.error(
+            f"Error en afiliado {scrapper.tipo_documento}{scrapper.documento} con scrapper id {scrapper.id}")
         raise forms.ValidationError(mark_safe("No pudimos procesar tu solicitud en este momento. Por favor, "
                                               "intenta nuevamente más tarde. Gracias por tu comprensión!.<br><br>"
+                                              "Comunícate con nostros al número <br>333 033 3124"))
+
+    if msg := scrapper.resultado.get('MSG'):
+        extra_txt = "Por favor, intenta nuevamente más tarde."
+        match msg.lower():
+            case 'usuario no encontrado en mutual ser.':
+                msg = "No pudimos encontrar este usuario en Mutual Ser."
+            case _:
+                msg = f"Encontramos una inconsistencia en nuestro sistema. {extra_txt}"
+
+        logger.error(
+            f"Inconsistencia en {scrapper.tipo_documento}{scrapper.documento} con scrapper id {scrapper.id}: {msg}")
+        raise forms.ValidationError(mark_safe(f"{msg} Gracias por tu comprensión!.<br><br>"
                                               "Comunícate con nostros al número <br>333 033 3124"))
 
 
