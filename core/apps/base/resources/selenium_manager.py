@@ -1,10 +1,11 @@
 """Create a singleton manager to ensure a single instance of Selenium."""
 import datetime
 import logging
+import os
 import re
 from time import sleep
 
-from RPA.Browser.Selenium import Selenium
+from RPA.Browser.Selenium import Selenium, BrowserNotFoundError
 from SeleniumLibrary.errors import ElementNotFound
 from bs4 import BeautifulSoup, Tag
 from retry import retry
@@ -214,6 +215,11 @@ class SearchPage:
         return nro_para_facturar, productos
 
     def extract_nro_para_facturar_modal_lupa(self, browser):
+        """Confirma la fecha hoy, clica en Confirmar Fecha Prestación y espera que aparezca el nro para facturar.
+        
+        Si no aparece, intenta buscar los productos, a ver si es una autorización que tiene medicamentos.
+        En caso de no tener medicamentos lanza una excepción NoRecordsInTable.
+        En caso de si tener medicamentos lanza una excepción ElementNotFound"""
         log.info("Buscando nro para facturar en opción de lupa")
         wait_element_load(browser, self.confirmar_fecha_prest)
         browser.click_element(self.calendar_icon)
@@ -222,7 +228,18 @@ class SearchPage:
         browser.click_element(self.day_icon)
         browser.click_element(self.confirmar_fecha_prest)
         wait_element_load(browser, self.nro_para_facturar)
-        return browser.get_text(self.nro_para_facturar)
+        try:
+            return browser.get_text(self.nro_para_facturar)
+        except ElementNotFound:
+            try:
+                self.extract_productos(browser)
+            except NoRecordsInTable as e:
+                # todo notificar autorización irregular.
+                raise NroAutorizacionNoEncontrado from e
+            else:
+                raise
+            finally:
+                self.close_modal_detalle_solicitud(browser)
 
     def scrap_table(self, browser, tipo_documento, documento):
         """Navega a lo largo de las filas que están en el resultado del afiliado."""
@@ -235,11 +252,15 @@ class SearchPage:
             match = re.search(r"Numero solicitud:(\d+)Fecha Solicitud:(\d{2}/\d{2}/\d{4})",
                               row.contents[3].get_text(strip=True))
             if estado.upper() == 'APROBADO':
-                log.info(f'Obteniendo información de fila {i}')
+                log.info(f'{i}. Obteniendo información')
                 img_orden_url = self.get_img_url(browser, row)
-                nro_para_facturar, productos = self.extract_extra_info(browser, row.contents[-1])
+                try:
+                    nro_para_facturar, productos = self.extract_extra_info(browser, row.contents[-1])
+                except NroAutorizacionNoEncontrado:
+                    log.info(f'{i}. Ignorando fila por que autorización no se pudo encontrar nro para facturar')
+                    continue
             else:
-                log.info(f'Ignorando fila {i} por que autorización está {estado.upper()!r}')
+                log.info(f'{i}. Ignorando fila por que autorización está {estado.upper()!r}')
                 # En caso se aplique alguna lógica para cuando sea diferente de APROBADO
                 # nro_para_facturar, productos = [], ''
                 continue
@@ -257,7 +278,7 @@ class SearchPage:
                 'DETALLE_AUTORIZACION': [{'NOMBRE_PRODUCTO': producto['Tecnologías'], 'CANTIDAD': producto['Cantidad']}
                                          for producto in productos]
             })
-            log.info(f'Fila {i} procesada con éxito.')
+            log.info(f'{i}. Fila procesada con éxito.')
         return rows_info
 
     def extract_table(self, browser, tipo_documento, documento):
@@ -295,6 +316,7 @@ class BaseApp:
     experimental_options: dict = {
         "excludeSwitches": ["enable-automation"],
         "useAutomationExtension": False,
+        "binary_location": os.getenv("/app/.apt/usr/bin/google-chrome"),
     }
     user_agent: str = (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -302,6 +324,7 @@ class BaseApp:
         "Chrome/119.0.0.0 Safari/537.36"
     )
 
+    @retry(BrowserNotFoundError, 3, 5)
     def open_browser(self) -> None:
         """Open browser and set Selenium options."""
         browser_options = webdriver.ChromeOptions()
