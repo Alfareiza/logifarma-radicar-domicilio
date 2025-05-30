@@ -205,6 +205,7 @@ class MutualSerPage:
 
     @contextmanager
     def open_page(self, acr_tipo_documento, documento):
+        self.browser.close_all_browsers()
         self.page.open_browser()
         # self.browser.set_window_size(1920, 1080)
         handler = log.handlers[0]  # Keep a reference
