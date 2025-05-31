@@ -30,13 +30,14 @@ FORMS = [
 
 TEMPLATES = {
     "home": "home.html",
+    "home_prueba": "home_prueba.html",
     # Usado en /sin-autorizacion usuarios mutualser/fomag/cajacopi
     "sinAutorizacion": "sin_autorizacion.html",
     # Usuario escoge si su medicamento es autorizado o no
     "autorizado_o_no": "autorizado_o_no.html",
     # Usado en / usuarios cajacopi con medicamento autorizado
     "autorizacionServicio": "autorizacion.html",
-    # Usado en /mutualser, cuando usuario tiene autorizaciones pendientes por radicar
+    # Usado en /mutualser, exhibe un resumen de sus autorizaciones
     "autorizacionesPorDisp": "autorizacion_por_disp.html",
     "orden": "orden.html",
     "fotoFormulaMedica": "foto.html",
@@ -286,3 +287,18 @@ def err_multitabs(request):
         # Se puede agregar un mensaje para que aparezca un modal al
         # ser redireccionado al home.
         return HttpResponseRedirect('/')
+
+
+class WizardConMutualSerScrapping(ContactWizard):
+    form_list = [
+        ("home_prueba", Home),
+        ("autorizado_o_no", AutorizadoONo),
+        ("autorizacionServicio", AutorizacionServicio),
+        ("fotoFormulaMedica", FotoFormulaMedica),
+        ("eligeMunicipio", EligeMunicipio),
+        ("digitaDireccionBarrio", DireccionBarrio),
+        ("digitaCelular", DigitaCelular),
+        ("digitaCorreo", DigitaCorreo)
+    ]
+    MANDATORIES_STEPS = ("home_prueba", "autorizado_o_no", "autorizacionServicio", "eligeMunicipio",
+                         "digitaDireccionBarrio", "digitaCelular", "digitaCorreo")

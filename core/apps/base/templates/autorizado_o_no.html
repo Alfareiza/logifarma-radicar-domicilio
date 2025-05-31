@@ -10,8 +10,8 @@
         {% csrf_token %}
         {{ wizard.management_form }}
 
-        <a href="/" class="atras">
-                <p class="b_atras"><i class="fa-solid fa-chevron-left"></i> Atrás</p>
+        <a href="#" class="atras" onclick="window.location.href = window.location.href; return false;">
+            <p class="b_atras"><i class="fa-solid fa-chevron-left"></i> Atrás</p>
         </a>
         <div class="vist1">
             <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">

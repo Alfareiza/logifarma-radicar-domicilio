@@ -3,6 +3,32 @@
 
 {% block title %}Autorización de servicio{% endblock %}
 
+{% block js %}
+<script>
+    /**
+     * Handles the click event for the "Atrás" button.
+     * Navigates to '/prueba' if the current URL contains 'mutualser',
+     * otherwise reloads the current page.
+     */
+    function handleBackButtonClick() {
+        console.log(window.location.href)
+        const currentUrl = window.location.href;
+
+        // Check if the current URL contains the string "mutualser"
+        if (currentUrl.includes('mutualser')) {
+            // If "mutualser" is found, navigate to '/prueba'
+            window.location.href = '/prueba';
+
+        } else if (currentUrl.includes('?s')){
+            history.back() ;
+        } else {
+            // Otherwise, reload the current page
+            location.reload();
+        }
+    }
+</script>
+{% endblock %}
+
 {% block content %}
 <section class="vista3">
     <form id="form-id" action="" method="post">
@@ -15,8 +41,8 @@
         {% csrf_token %}
         {{ wizard.management_form }}
 
-        <a href="/" class="atras">
-                <p class="b_atras"><i class="fa-solid fa-chevron-left"></i> Atrás</p>
+        <a href="#" class="atras" onclick="handleBackButtonClick(); return false;">
+            <p class="b_atras"><i class="fa-solid fa-chevron-left"></i> Atrás</p>
         </a>
         <div class="vist1">
             <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">

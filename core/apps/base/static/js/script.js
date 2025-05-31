@@ -76,7 +76,7 @@ function  verificarTiempo(){
 
         const elapsedTime = (Date.now() - savedTimestamp) / 1000;
       
-        if (elapsedTime >= 1800) {
+        if (elapsedTime >= 1800 && window.location.href.includes('finalizado')) {
           localStorage.removeItem('timestamp');
       
           window.location.href = "/";
