@@ -17,7 +17,10 @@
 
         {% include "base/logo.html" %}
 
-        {{ form.errors.barrio }}
+        {% if form.errors %}
+            {% include "base/modal.html" with txt=form.errors.direccion.as_text|cut:"* "|linebreaksbr  %}
+        {% endif %}
+
         {% if wizard.form.forms %}
             {{ wizard.form.management_form }}
         {% else %}

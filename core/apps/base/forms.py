@@ -228,7 +228,7 @@ class DireccionBarrio(forms.Form):
     Vista 5:
     """
     barrio = forms.ChoiceField(widget=forms.RadioSelect(attrs={'class': 'select_opt'}))
-    direccion = forms.CharField(max_length=40)
+    direccion = forms.CharField(min_length=5, max_length=40)
 
     def clean_barrio(self):
         barr = self.cleaned_data.get('barrio')

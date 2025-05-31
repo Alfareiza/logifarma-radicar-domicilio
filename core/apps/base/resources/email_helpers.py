@@ -177,6 +177,7 @@ class Email:
             r = email.send(fail_silently=False)
 
         except Exception as e:
+            import traceback
             notify('error-email',
                    f"ERROR ENVIANDO EMAIL- Radicado #{info['NUMERO_RADICACION']} {info.get('documento', info.get('DOCUMENTO_ID', ))}",
                    f"JSON_DATA: {info}\n\nERROR: {traceback.format_exc()}")

@@ -916,7 +916,7 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     margin: auto 0% auto 0%;
     font-size: 1.1em;
     padding: 0px 1px 0px 7%;
-    z-index: 99; }
+    z-index: 1; }
 
 .btn_muni {position: fixed;
     padding: 0.5% 5%;
@@ -2338,7 +2338,7 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     margin: auto 0% auto 0%;
     font-size: 1em;
     padding: 0px 1px 0px 8%;
-    z-index: 99; }
+    z-index: 1; }
 
 .btn_muni {position: fixed;
     padding: 0.5% 5%;
@@ -3572,7 +3572,7 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     margin: auto 0% auto 0%;
     font-size: 1.9em;
     padding: 0px 1px 0px 9%;
-    z-index: 99; }
+    z-index: 1; }
 
 .btn_muni {position: absolute;
     padding: 3% 13%;
@@ -4817,7 +4817,7 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     margin: auto 0% auto 0%;
     font-size: 1.9em;
     padding: 0px 1px 0px 9%;
-    z-index: 99; }
+    z-index: 1; }
 
 .btn_muni {position: absolute;
     padding: 3% 13%;
@@ -6122,7 +6122,7 @@ main section.vista6 {width: 100%; height: 90vh; position: relative; margin: 0 au
     margin: auto 0% auto 0%;
     font-size: 1em;
     padding: 0px 1px 0px 11%;
-    z-index: 99; }
+    z-index: 1; }
 
 .btn_muni {position: absolute;
     padding: 3% 14%;
@@ -7404,7 +7404,7 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     margin: auto 0% auto 0%;
     font-size: 0.9em;
     padding: 0px 1px 0px 13%;
-    z-index: 99; }
+    z-index: 1; }
 
 .btn_muni {position: fixed;
     padding: 3% 14%;
