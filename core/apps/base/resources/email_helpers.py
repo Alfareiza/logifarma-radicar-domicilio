@@ -179,7 +179,7 @@ class Email:
         except Exception as e:
             notify('error-email',
                    f"ERROR ENVIANDO EMAIL- Radicado #{info['NUMERO_RADICACION']} {info.get('documento', info.get('DOCUMENTO_ID', ))}",
-                   f"JSON_DATA: {info}\n\nERROR: {e}")
+                   f"JSON_DATA: {info}\n\nERROR: {traceback.format_exc()}")
             return False
             # TODO Revisar que hacer cuando haya error en envío de email
             # if rad := Radicacion.objects.filter(numero_radicado=info['documento']).first():
