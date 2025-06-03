@@ -3,6 +3,7 @@ import datetime
 import logging
 import os
 import re
+import tempfile
 from time import sleep
 
 from RPA.Browser.Selenium import Selenium, BrowserNotFoundError
@@ -312,7 +313,7 @@ class BaseApp:
     headless: bool = True
     wait_time: int = 10
     # download_directory: str = str(Path().cwd() / Path("temp"))
-    browser_options: list = ["--no-sandbox", "--disable-dev-shm-usage"]
+    browser_options: list = ["--no-sandbox", "--disable-dev-shm-usage", f'--user-data-dir={tempfile.mkdtemp()}']
     experimental_options: dict = {
         "excludeSwitches": ["enable-automation"],
         "useAutomationExtension": False,
