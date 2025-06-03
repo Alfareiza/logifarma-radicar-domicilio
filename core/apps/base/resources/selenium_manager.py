@@ -352,9 +352,8 @@ class MutualSerSite(BaseApp):
     search_page = SearchPage()
     wait_time: int = 2
     browser_options = ["--no-sandbox", "--disable-dev-shm-usage",
-                       "--log-level=3",
-                       # "--disable-logging",
-                       "--lang=en"]
+                       "--log-level=3", "--disable-gpu", "--disable-extensions",
+                       "--remote-debugging-port=9222", "--lang=en"]
     experimental_options = {
         "excludeSwitches": ("enable-automation",),
         "useAutomationExtension": False,

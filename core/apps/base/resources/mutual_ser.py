@@ -15,6 +15,7 @@ from core.apps.base.resources.decorators import login_required
 from core.apps.base.resources.selenium_manager import MutualSerSite
 from core.apps.base.resources.tools import moment, add_user_id_to_formatter
 from core.apps.tasks.utils.dt_utils import Timer
+from core.apps.tasks.utils.tools import kill_zombies
 from core.settings import BASE_DIR, MS_PASS, MS_USER, MS_API_URL, MS_API_URL_VALIDADOR, ZONA_SER_URL
 from core.settings import ch, logger as log
 
@@ -205,6 +206,7 @@ class MutualSerPage:
 
     @contextmanager
     def open_page(self, acr_tipo_documento, documento):
+        kill_zombies()
         self.browser.close_all_browsers()
         self.page.open_browser()
         # self.browser.set_window_size(1920, 1080)
@@ -265,7 +267,8 @@ if __name__ == '__main__':
     # print(ms.get_info_afiliado('CC', '123456'))
 
     site = MutualSerPage(ZONA_SER_URL)
-    result = site.find_user('PT', '123123123')
+    # result = site.find_user('CC', '22685317')
+    result = site.find_user('CC', '33214972')
     from pprint import pprint
 
     pprint(result)

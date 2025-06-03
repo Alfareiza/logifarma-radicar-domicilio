@@ -284,12 +284,12 @@ class ScrapMutualSer(Model):
             return self.duplicate_attrs_from_existing(scrap)
         timer = Timer(15)
         while timer.not_expired:
-            latest_5_scraps = ScrapMutualSer.objects.order_by('-created_at').values_list('id', flat=True)[:5]
-            # Si al menos uno de los últimos 5 scrappings terminó
-            if ScrapMutualSer.objects.filter(id__in=latest_5_scraps).exclude(estado=Status.RUNNING).exists():
+            latest_scraps = ScrapMutualSer.objects.order_by('-created_at').values_list('id', flat=True)[:1]
+            # Si al menos uno de los últimos 1 scrappings terminó
+            if ScrapMutualSer.objects.filter(id__in=latest_scraps).exclude(estado=Status.RUNNING).exists():
                 self.get_info_user_from_zona_ser()
                 return
-            sleep(1)
+            sleep(0.5)
 
         raise TimeoutError("Tenemos nuestro sistema ocupado, intenta más tarde.")
 
