@@ -315,8 +315,8 @@ class ScrapMutualSer(Model):
 
         for autorizacion in self.resultado:
             # TODO revisar posibles respuestas de API para garantizar información correcta en 'DISPENSADO'
-            if 'cache' in self.tipo:
-                continue
+            # if 'cache' in self.tipo:
+            #     continue
             resp_mcar = obtener_datos_formula(autorizacion['NUMERO_AUTORIZACION'], '806008394')
             # Si trae resultados de medicar, entonces se asume que fue dispensado
             autorizacion['DISPENSADO'] = resp_mcar != {"error": "No se han encontrado registros."}
