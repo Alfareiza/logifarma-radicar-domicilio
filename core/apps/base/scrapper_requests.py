@@ -10,8 +10,10 @@ from typing import Dict, Optional
 import logging
 
 from decorator import contextmanager
+from retry import retry
 
-from core.apps.base.exceptions import NroAutorizacionNoEncontrado, PasoNoProcesado, NoRecordsInTable, UserNotFound
+from core.apps.base.exceptions import NroAutorizacionNoEncontrado, PasoNoProcesado, NoRecordsInTable, UserNotFound, \
+    RestartScrapper
 import warnings
 
 from core.apps.base.resources.tools import add_user_id_to_formatter
@@ -719,13 +721,22 @@ class JSFPortalScraper:
                 continue
             self.close_modal()
             if not nro_aut:
-                resp = self.click_in('ver', row.ver_id)
-                soup = BeautifulSoup(resp)
-                ele = soup.find('span', id="main:tableDetProductosConcurrencia:0:numFacturarConcurrencia")
-                try:
-                    nro_aut = ele.get_text(strip=True)
-                except AttributeError as e:
-                    raise Exception(resp)
+                for _ in range(2):
+                    if nro_aut:
+                        break
+                    resp = self.click_in('ver', row.ver_id)
+                    soup = BeautifulSoup(resp)
+                    ele = soup.find('span', id="main:tableDetProductosConcurrencia:0:numFacturarConcurrencia")
+                    try:
+                        nro_aut = ele.get_text(strip=True)
+                    except AttributeError:
+                        log.warning(f"Fila {i}. Se esperaba Nro de Autorización en modal de 'Ver' pero no fue encontrado.")
+            if not nro_aut:
+                log.error(
+                    'Se intentó dos veces encontrar el Nro de Aut en modal de ver pero no fue posible... reiniciando '
+                    'scrapper'
+                )
+                raise RestartScrapper
             auts.append(self.parse_aut_and_meds(nro_aut, meds))
             nro_aut = ''
         return auts
@@ -747,6 +758,7 @@ class MutualScrapper(JSFPortalScraper):
         yield
         ch.setFormatter(original_formatter)
 
+    @retry(RestartScrapper, 2, 1)
     def find_user(self):  # sourcery skip: extract-method
         """Realiza login, busca usuario, analiza filas, tiene en cuenta las APPOBADO y retorna la información
             en un dict donde la llave es el nro de autorización y el value es la lista con los medicamentos.
@@ -771,6 +783,8 @@ class MutualScrapper(JSFPortalScraper):
             except NoRecordsInTable as e:
                 log.warning(str(e))
                 return {'MSG': 'Autorización sin medicamentos.'}
+            except RestartScrapper:
+                raise
             except Exception:
                 traceback.print_exc()
                 raise
@@ -792,6 +806,6 @@ class MutualScrapper(JSFPortalScraper):
 
 
 if __name__ == '__main__':
-    scrapper = MutualScrapper('TI', '123456')
+    scrapper = MutualScrapper('PT', '7136845')
     result = scrapper.find_user()
     pprint(result)
