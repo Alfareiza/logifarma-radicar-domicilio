@@ -200,8 +200,8 @@ class MutualSerPage:
         'SC': 'Salvo Conducto',
     }
 
-    def __init__(self, url: str):
-        self.url = url
+    def __init__(self):
+        self.url = f"{ZONA_SER_URL}/ZONASER/home.xhtml"
         self.page = MutualSerSite()
 
     @contextmanager
@@ -266,7 +266,7 @@ if __name__ == '__main__':
     # ms = MutualSerAPI()
     # print(ms.get_info_afiliado('CC', '123456'))
 
-    site = MutualSerPage(ZONA_SER_URL)
+    site = MutualSerPage()
     # result = site.find_user('CC', '22685317')
     result = site.find_user('CC', '33214972')
     from pprint import pprint
