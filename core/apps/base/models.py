@@ -18,8 +18,8 @@ from django.db.models import (
 from django.utils import timezone
 from django.utils.timezone import now
 
+from core.apps.base.scrapper_requests import MutualScrapper
 from core.apps.base.resources.medicar import obtener_datos_formula
-from core.apps.base.resources.mutual_ser import MutualSerPage
 from core.apps.base.resources.tools import pretty_date
 from core.apps.tasks.utils.dt_utils import Timer
 from core.settings import ZONA_SER_URL
@@ -251,8 +251,10 @@ class ScrapMutualSer(Model):
         self.save()
 
         try:
-            scrapper = MutualSerPage(ZONA_SER_URL)
-            result = scrapper.find_user(self.tipo_documento, self.documento)
+            # scrapper = MutualSerPage()
+            # result = scrapper.find_user(self.tipo_documento, self.documento)
+            scrapper = MutualScrapper(self.tipo_documento, self.documento)
+            result = scrapper.find_user()
         except Exception:
             self.texto_error = traceback.format_exc()
             self.estado = Status.FAILED
