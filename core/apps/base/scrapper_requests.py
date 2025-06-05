@@ -62,6 +62,18 @@ class JSFPortalScraper:
     BASE_URL = ZONA_SER_URL
     LOGIN_URL = f"{BASE_URL}/ZONASER/login.xhtml"
     HOME_URL = f"{BASE_URL}/ZONASER/home.xhtml"
+    IDENTIFICACIONES = {
+        'CC': 'Cedula de Ciudadania',
+        'CE': 'Cedula de Extranjeria',
+        'TI': 'Tarjeta de Identidad',
+        'RC': 'Registro Civil',
+        'PA': 'Pasaporte',
+        'MS': 'Menor sin Identificacion',
+        'PE': 'Permiso Especial',
+        'CN': 'Certificado Nacido Vivo',
+        'PT': 'Permiso Temporal',
+        'SC': 'Salvo Conducto',
+    }
 
     def __init__(self, tipo_documento, documento):
         """Initialize the JSF Portal Scraper."""
@@ -655,7 +667,7 @@ class JSFPortalScraper:
     def parse_aut_and_meds(self, nro_aut, meds) -> dict:
         """Crea un diccionario estándar para resumir la información."""
         return {
-            'TIPO_DOCUMENTO': self.tipo_documento,
+            'TIPO_DOCUMENTO': self.IDENTIFICACIONES.get(self.tipo_documento, '-'),
             'DOCUMENTO': self.documento,
             'NUMERO_AUTORIZACION': nro_aut,
             'DISPENSADO': None,
@@ -710,7 +722,10 @@ class JSFPortalScraper:
                 resp = self.click_in('ver', row.ver_id)
                 soup = BeautifulSoup(resp)
                 ele = soup.find('span', id="main:tableDetProductosConcurrencia:0:numFacturarConcurrencia")
-                nro_aut = ele.get_text(strip=True)
+                try:
+                    nro_aut = ele.get_text(strip=True)
+                except AttributeError as e:
+                    raise Exception(resp)
             auts.append(self.parse_aut_and_meds(nro_aut, meds))
             nro_aut = ''
         return auts
