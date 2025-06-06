@@ -2,7 +2,6 @@ import traceback
 from collections import namedtuple
 from datetime import datetime
 from pprint import pprint
-from time import sleep
 
 import requests
 from bs4 import BeautifulSoup, GuessedAtParserWarning, XMLParsedAsHTMLWarning
@@ -13,8 +12,8 @@ import logging
 from decorator import contextmanager
 from retry import retry
 
-from core.apps.base.exceptions import NroAutorizacionNoEncontrado, PasoNoProcesado, NoRecordsInTable, UserNotFound, \
-    RestartScrapper
+from core.apps.base.exceptions import NroAutorizacionNoEncontrado, PasoNoProcesado, NoRecordsInTable, \
+    RestartScrapper, SinAutorizacionesPorRadicar
 import warnings
 
 from core.apps.base.resources.tools import add_user_id_to_formatter
@@ -480,7 +479,8 @@ class JSFPortalScraper:
         # log.info("Formulario submetido con éxito.")
 
         if 'No se encontraron registros' in response.text:
-            raise UserNotFound(f"Afiliado {self.tipo_documento}{self.documento} no fue encontrado.")
+            raise SinAutorizacionesPorRadicar(
+                f"Afiliado {self.tipo_documento}{self.documento} no tiene autorizaciones por raricar.")
         if 'No records found' in response.text:
             raise NroAutorizacionNoEncontrado("No se encontraron autorizaciones para este afiliado.")
         return response.text
@@ -731,7 +731,8 @@ class JSFPortalScraper:
                     try:
                         nro_aut = ele.get_text(strip=True)
                     except AttributeError:
-                        log.warning(f"Fila {i}. Se esperaba Nro de Autorización en modal de 'Ver' pero no fue encontrado.")
+                        log.warning(
+                            f"Fila {i}. Se esperaba Nro de Autorización en modal de 'Ver' pero no fue encontrado.")
             if not nro_aut:
                 log.error(
                     'Se intentó dos veces encontrar el Nro de Aut en modal de ver pero no fue posible... reiniciando '
@@ -775,9 +776,9 @@ class MutualScrapper(JSFPortalScraper):
                 result = self.extract_nro_aut_and_meds(id_rows)
                 log.info('Proceso finalizado con éxito')
                 return result
-            except UserNotFound as e:
+            except SinAutorizacionesPorRadicar as e:
                 log.warning(str(e))
-                return {'MSG': 'Usuario no encontrado en Mutual Ser.'}
+                return {'MSG': 'Usuario no posee autorizaciones en Mutual Ser.'}
             except NroAutorizacionNoEncontrado as e:
                 log.warning(str(e))
                 return {'MSG': 'Numero de autorización no encontrado para usuario.'}
