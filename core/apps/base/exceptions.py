@@ -24,3 +24,6 @@ class PasoNoProcesado(Exception):
 
 class RestartScrapper(Exception):
     ...
+
+class SinAutorizacionesPorRadicar(Exception):
+    ...

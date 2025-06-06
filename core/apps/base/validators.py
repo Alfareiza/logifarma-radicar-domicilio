@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 
-from core.apps.base.models import Med_Controlado, Radicacion, ScrapMutualSer
+from core.apps.base.models import Med_Controlado, Radicacion, ScrapMutualSer, Status
 from core.apps.base.resources.api_calls import get_firebase_acta
 from core.apps.base.resources.tools import encrypt, notify, pretty_date, \
     update_rad_from_fbase, has_accent, update_field, when
@@ -315,7 +315,7 @@ def validate_resp_zona_ser(scrapper: ScrapMutualSer):
         }
     Validate the pending deliveries on medicare api.
     """
-    if scrapper.texto_error == '':
+    if scrapper.texto_error == '' and not scrapper.resultado.get('MSG'):
         return
     if not scrapper.resultado:
         logger.error(
@@ -327,14 +327,14 @@ def validate_resp_zona_ser(scrapper: ScrapMutualSer):
     if msg := scrapper.resultado.get('MSG'):
         extra_txt = "Por favor, intenta nuevamente más tarde."
         match msg.lower():
-            case 'usuario no encontrado en mutual ser.':
-                msg = "No pudimos encontrar este usuario en Mutual Ser."
+            case 'usuario no posee autorizaciones en mutual ser.':
+                msg = "No solicitud de artículos pendientes por radicar. <br><br>Si consideras que tienes artículos por radicar, por favor comunícate con Mutualser al número 018000 116882 o #603<br><br>"
             case _:
                 msg = f"Encontramos una inconsistencia en nuestro sistema. {extra_txt}"
+                logger.error(f"Revisar afiliado {scrapper.tipo_documento}{scrapper.documento} (scrapper {scrapper.id}):"
+                             f" {scrapper.resultado.get('MSG')}")
 
-        logger.error(
-            f"Inconsistencia en {scrapper.tipo_documento}{scrapper.documento} con scrapper id {scrapper.id}: {msg}")
-        raise forms.ValidationError(mark_safe(f"{msg} Gracias por tu comprensión!.<br><br>"
+        raise forms.ValidationError(mark_safe(f"{msg} <br>Gracias por tu comprensión!.<br><br>"
                                               "Comunícate con nostros al número <br>333 033 3124"))
 
 
