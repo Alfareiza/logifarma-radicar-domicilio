@@ -2,6 +2,7 @@ import traceback
 from collections import namedtuple
 from datetime import datetime
 from pprint import pprint
+from time import sleep
 
 import requests
 from bs4 import BeautifulSoup, GuessedAtParserWarning, XMLParsedAsHTMLWarning
@@ -730,6 +731,7 @@ class JSFPortalScraper:
                     try:
                         nro_aut = ele.get_text(strip=True)
                     except AttributeError:
+                        sleep(2)
                         log.warning(f"Fila {i}. Se esperaba Nro de Autorización en modal de 'Ver' pero no fue encontrado.")
             if not nro_aut:
                 log.error(
