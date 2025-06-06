@@ -242,7 +242,7 @@ class Email:
         """
         destinatary = []
         # If the email key comes and his first item of the list has something, then:
-        if 'email' in info and info['email'][0]:
+        if 'email' in info and len(info['email']) and info['email'][0]:
             for e in info['email']:
                 if purge_email(e) and email_exists(e):
                     destinatary.append(e)
