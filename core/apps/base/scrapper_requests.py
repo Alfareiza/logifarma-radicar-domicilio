@@ -731,13 +731,14 @@ class JSFPortalScraper:
                     try:
                         nro_aut = ele.get_text(strip=True)
                     except AttributeError:
-                        log.warning(
-                            f"Fila {i}. Se esperaba Nro de Autorización en modal de 'Ver' pero no fue encontrado.")
+                        ...
+                        # log.warning(
+                        #     f"Fila {i}. Se esperaba Nro de Autorización en modal de 'Ver' pero no fue encontrado.")
             if not nro_aut:
-                log.error(
-                    'Se intentó dos veces encontrar el Nro de Aut en modal de ver pero no fue posible... reiniciando '
-                    'scrapper'
-                )
+                # log.error(
+                #     'Se intentó dos veces encontrar el Nro de Aut en modal de ver pero no fue posible... reiniciando '
+                #     'scrapper'
+                # )
                 raise RestartScrapper
             auts.append(self.parse_aut_and_meds(nro_aut, meds))
             nro_aut = ''
