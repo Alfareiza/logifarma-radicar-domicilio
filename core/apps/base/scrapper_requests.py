@@ -45,8 +45,9 @@ def parse_xml(response):
             ver = last_column.find_all('a')[-1].get('id')  # Revisar id para lupa e id para ver
             # Define cuales 'consecutivos' va a buscar en documento
             if 'Número para Facturar:Ver' not in last_column.get_text(strip=True):
-                log.info("Botón de 'Ver' no está presente en esta fila, buscándolo a través de la lupa")
+                # log.info("Botón de 'Ver' no está presente en esta fila, buscándolo a través de la lupa")
                 id_rows.append(Row(lupa, ver, True))
+                continue
             # Si botón de 'Ver' está presente en fila, entonces el número de aut está en el archivo
             id_rows.append(Row(lupa, ver, False))
             # consecutivo = cols[2].text
@@ -480,7 +481,7 @@ class JSFPortalScraper:
 
         if 'No se encontraron registros' in response.text:
             raise SinAutorizacionesPorRadicar(
-                f"Afiliado {self.tipo_documento}{self.documento} no tiene autorizaciones por raricar.")
+                f"Afiliado {self.tipo_documento}{self.documento} no tiene autorizaciones por radicar, por que al buscarlo en Zona Ser, no hubo resultados.")
         if 'No records found' in response.text:
             raise NroAutorizacionNoEncontrado("No se encontraron autorizaciones para este afiliado.")
         return response.text
@@ -731,17 +732,16 @@ class JSFPortalScraper:
                     try:
                         nro_aut = ele.get_text(strip=True)
                     except AttributeError:
+                        # Fila {i}. Se esperaba Nro de Autorización en modal de 'Ver' pero no fue encontrado."
                         ...
-                        # log.warning(
-                        #     f"Fila {i}. Se esperaba Nro de Autorización en modal de 'Ver' pero no fue encontrado.")
             if not nro_aut:
-                # log.error(
-                #     'Se intentó dos veces encontrar el Nro de Aut en modal de ver pero no fue posible... reiniciando '
-                #     'scrapper'
-                # )
+                # Se intentó dos veces encontrar el Nro de Aut en modal de ver pero no fue posible, reinicia scrapper
                 raise RestartScrapper
             auts.append(self.parse_aut_and_meds(nro_aut, meds))
             nro_aut = ''
+        if not auts:
+            raise SinAutorizacionesPorRadicar(
+                f"Afiliado {self.tipo_documento}{self.documento} no tiene autorizaciones por radicar, a pesar de tener autorizaciones aprobadas.")
         return auts
 
     def close_session(self):

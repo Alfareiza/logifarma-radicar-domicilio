@@ -328,7 +328,7 @@ def validate_resp_zona_ser(scrapper: ScrapMutualSer):
         extra_txt = "Por favor, intenta nuevamente más tarde."
         match msg.lower():
             case 'usuario no posee autorizaciones en mutual ser.':
-                msg = "No solicitud de artículos pendientes por radicar. <br><br>Si consideras que tienes artículos por radicar, por favor comunícate con Mutualser al número 018000 116882 o #603<br><br>"
+                msg = "No tienes solicitudes de artículos pendientes por radicar. <br><br>Si consideras que tienes artículos por radicar, por favor comunícate con Mutualser al número 018000 116882 o #603<br><br>"
             case _:
                 msg = f"Encontramos una inconsistencia en nuestro sistema. {extra_txt}"
                 logger.error(f"Revisar afiliado {scrapper.tipo_documento}{scrapper.documento} (scrapper {scrapper.id}):"
