@@ -88,7 +88,7 @@ class SinAutorizacion(CustomSessionWizard):
             info_email['NUMERO_RADICACION'] = rad_id
 
         if rad_id:
-            self.log_text = f"{rad_id=} {info_email['documento']}"
+            self.log_text = f"{rad_id} {info_email['documento']}"
             info_email['log_text'] = self.log_text
 
             logger.info(f"{self.log_text} {info_email['NOMBRE']} Radicación finalizada. "

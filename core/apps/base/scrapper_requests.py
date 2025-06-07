@@ -775,7 +775,7 @@ class MutualScrapper(JSFPortalScraper):
                 log.info('Extrayendo información de resultado')
                 id_rows = parse_xml(html_response)
                 result = self.extract_nro_aut_and_meds(id_rows)
-                log.info('Proceso finalizado con éxito')
+                log.info(f"Proceso finalizado con éxito. Autorizaciones: {', '.join([i['NUMERO_AUTORIZACION'] for i in result])}")
                 return result
             except SinAutorizacionesPorRadicar as e:
                 log.warning(str(e))
@@ -809,6 +809,6 @@ class MutualScrapper(JSFPortalScraper):
 
 
 if __name__ == '__main__':
-    scrapper = MutualScrapper('PT', '7136845')
+    scrapper = MutualScrapper('CC', '123456789')
     result = scrapper.find_user()
     pprint(result)

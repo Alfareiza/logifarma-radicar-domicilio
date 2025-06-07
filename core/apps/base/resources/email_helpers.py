@@ -56,12 +56,16 @@ def make_subject_and_cco(info_email) -> tuple:
     return subject, copia_oculta
 
 
-def purge_email(email) -> str:
-    email = email.replace('gamil', 'gmail')
-    email = email.replace('gemail', 'gmail')
-    email = email.replace('gemaul', 'gmail')
-    email = email.replace('logimarga', 'logifarma')
-    return '' if email in ('notiene@gmail.com', 'notienecorreo@gmail.com') else email
+def purge_email(email: str) -> str:
+    """Cleans and normalizes an email address by correcting common typos
+    and handling specific 'no email' placeholder values.
+    """
+    processed_email = email.lower()
+    typo_map = {'gamil': 'gmail', 'igmail': 'gmail', 'gemail': 'gmail', 'gemaul': 'gmail', 'logimarga': 'logifarma'}
+    for wrong, correct in typo_map.items():
+        processed_email = processed_email.replace(wrong, correct)
+    no_email_placeholders = {'notiene@gmail.com', 'notienecorreo@gmail.com'}
+    return '' if processed_email in no_email_placeholders else processed_email
 
 
 def make_destinatary(info_email) -> list:
@@ -78,13 +82,15 @@ def make_destinatary(info_email) -> list:
             if purge_email(e) and email_exists(e):
                 destinatary.append(e)
             else:
-                # logger.info(f'Email {e} no existe.')
                 info_email['email'].remove(e)
     return destinatary
 
 
-def email_exists(email):
-    return validar_email(email)
+def email_exists(email) -> bool:
+    is_valid = validar_email(email)
+    if not is_valid:
+        logger.info(f'Email {email} no existe')
+    return is_valid
 
 
 def get_mx(hostname):
@@ -197,7 +203,7 @@ class Email:
             else:
                 # E-mail enviado pero r != 1
                 notify('error-email',
-                       f"ERROR ENVIANDO EMAIL - Radicado #{info.get('documento',info.get('DOCUMENTO_ID',''))}",
+                       f"ERROR ENVIANDO EMAIL - Radicado #{info.get('documento', info.get('DOCUMENTO_ID', ''))}",
                        f"JSON_DATA: {info}")
                 return False
         # finally:
@@ -247,7 +253,6 @@ class Email:
                 if purge_email(e) and email_exists(e):
                     destinatary.append(e)
                 else:
-                    # logger.info(f'Email {e} no existe.')
                     info['email'].remove(e)
         return destinatary
 
