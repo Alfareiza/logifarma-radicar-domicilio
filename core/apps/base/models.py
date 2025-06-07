@@ -221,6 +221,8 @@ class ScrapMutualSer(Model):
     tipo = CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
+        if self.resultado_con_datos:
+            return f"Scrap de {self.tipo_documento}{self.documento} | Autorizaciones ({self.qty_auts}: {', '.join([i['NUMERO_AUTORIZACION'] for i in self.resultado])}"
         return f"Scrap de {self.tipo_documento}{self.documento}"
 
     class Meta:
@@ -231,23 +233,27 @@ class ScrapMutualSer(Model):
         return 'cache' in self.tipo if self.tipo else False
 
     @property
-    def aut_pendientes_por_disp_groub_by_nro_aut(self):
+    def aut_pendientes_por_disp_groub_by_nro_aut(self) -> dict:
         """Create a dict where the key is the NUMERO_AUTORIZACION and the value is a list with 'DETALLE_AUTORIZACION'"""
         return {aut['NUMERO_AUTORIZACION']: aut['DETALLE_AUTORIZACION']
                 for aut in self.resultado
                 if aut['DISPENSADO'] not in (None, True)}
 
     @property
-    def aut_dispensadas_groub_by_nro_para_facturar(self):
+    def aut_dispensadas_groub_by_nro_para_facturar(self) -> dict:
         """Create a dict where the key is the NUMERO_AUTORIZACION and the value is a list with 'DETALLE_AUTORIZACION'"""
         return {aut['NUMERO_AUTORIZACION']: aut
                 for aut in self.resultado
                 if aut['DISPENSADO']}
 
     @property
-    def resultado_con_datos(self):
+    def resultado_con_datos(self) -> bool:
         """Determina si el scrapper fue realizado y retornó resultados."""
         return self.texto_error == '' and isinstance(self.resultado, list) and self.resultado
+
+    @property
+    def qty_auts(self) -> int:
+        return len(self.resultado) if self.resultado_con_datos else 0
 
     def get_info_user_from_zona_ser(self):
         """Inicializa el processo de scrapping en mutual ser"""
