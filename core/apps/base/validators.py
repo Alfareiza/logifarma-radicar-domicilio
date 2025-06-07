@@ -315,7 +315,7 @@ def validate_resp_zona_ser(scrapper: ScrapMutualSer):
         }
     Validate the pending deliveries on medicare api.
     """
-    if scrapper.texto_error == '' and scrapper.resultado:
+    if scrapper.texto_error == '' and isinstance(scrapper.resultado, list) and scrapper.resultado:
         return
     if not scrapper.resultado:
         logger.error(
