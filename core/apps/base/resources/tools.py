@@ -247,7 +247,7 @@ def save_in_bd(name_bd: str, rad):
         logger.error(e)
         raise Exception(f"No fue posible guardar radicado {rad} en {name_bd}, error={e}") from e
     else:
-        logger.info(f"Radicación guardada con éxito en base de datos {name_bd} {rad.numero_radicado} {rad.id=}")
+        logger.info(f"{rad.numero_radicado} Radicación guardada con éxito {rad.id=}")
 
 
 def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:

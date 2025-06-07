@@ -244,6 +244,11 @@ class ScrapMutualSer(Model):
                 for aut in self.resultado
                 if aut['DISPENSADO']}
 
+    @property
+    def resultado_con_datos(self):
+        """Determina si el scrapper fue realizado y retornó resultados."""
+        return self.texto_error == '' and isinstance(self.resultado, list) and self.resultado
+
     def get_info_user_from_zona_ser(self):
         """Inicializa el processo de scrapping en mutual ser"""
         self.tipo = 'busca autorizaciones de usuario'

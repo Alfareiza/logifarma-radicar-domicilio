@@ -247,7 +247,7 @@ class Email:
                 if purge_email(e) and email_exists(e):
                     destinatary.append(e)
                 else:
-                    logger.info(f'Email {e} no existe.')
+                    # logger.info(f'Email {e} no existe.')
                     info['email'].remove(e)
         return destinatary
 

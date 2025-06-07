@@ -269,7 +269,7 @@ def finalizado(request):
     """
     request.session['rendered_done'] = False
     if ctx := request.session.get('ctx', {}):
-        logger.info(f"Autorización # {ctx['NUMERO_AUTORIZACION']!r} "
+        logger.info(f"{ctx['NUMERO_AUTORIZACION']} <- Autorización, "
                     f"acessando a vista /finalizado al haber terminado el wizard.")
         return render(request, 'done.html', ctx)
     else:
