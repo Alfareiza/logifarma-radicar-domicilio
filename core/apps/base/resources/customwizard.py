@@ -40,6 +40,9 @@ class CustomSessionWizard(SessionWizardView):
             self.request.COOKIES['source'] = source
             tipo_usuario = {'f': 'fomag', 'c': 'cajacopi', 'm': 'mutualser'}
             logger.info(f"usuario {tipo_usuario[source].upper()} con {msg}")
+            if source == 'm':
+                logger.info(f'Redirigiendo usuario {tipo_usuario[source].upper()} a /mutualser')
+                return HttpResponseRedirect(reverse('base:mutualser'))
         return super().get(request, *args, **kwargs)
 
     @csrf_protected_method
