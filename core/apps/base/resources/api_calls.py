@@ -87,7 +87,7 @@ def request_api(url, headers, payload, method='POST') -> dict:
     # logger.info(f'API Header: {headers}')
     # logger.info(f'API Payload: {payload}')
     try:
-        response = requests.request(method, url, headers=headers, data=payload, timeout=20)
+        response = requests.request(method, url, headers=headers, data=payload, timeout=10)
         if response.status_code == 200:
             return json.loads(response.text.encode('utf-8'), strict=False)
         res = requests.request('GET', 'https://httpbin.org/ip')

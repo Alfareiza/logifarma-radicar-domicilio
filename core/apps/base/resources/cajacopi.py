@@ -59,7 +59,8 @@ def obtener_datos_identificacion(eps: str, tipo: str, value: str) -> dict:
     :param tipo: Puede ser: CC, TI, RC, CN, CD, PA, PE, PT, SC, CE, MS o AS
     :param value: Valor de identifiación del usuario.
     """
-    func = {'cajacopi': obtener_datos_identificacion_cajacopi, 'fomag': obtener_datos_identificacion_fomag,
+    func = {'cajacopi': obtener_datos_identificacion_cajacopi,
+            'fomag': obtener_datos_identificacion_fomag,
             'mutualser': obtener_datos_identificacion_mutual_ser}
     return func[eps](tipo, value)
 
