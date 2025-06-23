@@ -10,6 +10,7 @@ from formtools.wizard.forms import ManagementForm
 
 from core import settings
 from core.apps.base.forms import *
+from core.apps.base.legacy_models import Mutualser
 from core.apps.base.models import ScrapMutualSer
 from core.apps.base.pipelines import NotifyEmail
 from core.apps.base.resources.customwizard import CustomSessionWizard
@@ -60,6 +61,7 @@ class DocumentoMutualSer(forms.Form):
 
         resp_eps = obtener_datos_identificacion(entidad, tipo, value)
         validate_identificacion_exists(entidad, resp_eps, f"{tipo}{value}")
+        resp_eps = resp_eps or Mutualser.get_afiliado_by_doc(tipo, value)
         validate_empty_response(resp_eps, resp['documento'], entidad)
 
         scrapper = ScrapMutualSer.objects.create(tipo_documento=tipo, documento=value)

@@ -35,7 +35,7 @@ class MutualSerAPI:
             payload = {}
         # sourcery skip: raise-specific-error
         res = {"ERROR": ""}
-        timeout = 20
+        timeout = 10
         head_log = '[MUTUAL]'
         try:
             response = requests.request(method, url, headers=headers,

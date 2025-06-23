@@ -41,7 +41,7 @@ class CustomSessionWizard(SessionWizardView):
             tipo_usuario = {'f': 'fomag', 'c': 'cajacopi', 'm': 'mutualser'}
             logger.info(f"usuario {tipo_usuario[source].upper()} con {msg}")
             if source == 'm':
-                logger.info(f'Redirigiendo usuario {tipo_usuario[source].upper()} a /mutualser')
+                logger.info(f'Redireccionando usuario {tipo_usuario[source].upper()} a /mutualser')
                 return HttpResponseRedirect(reverse('base:mutualser'))
         return super().get(request, *args, **kwargs)
 
