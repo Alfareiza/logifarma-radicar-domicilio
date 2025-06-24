@@ -35,7 +35,7 @@ class SAP:
                                         timeout=timeout)
             response.raise_for_status()
         except Timeout:
-            log.error(txt := f"{head_log} No hubo respuesta de la API en {timeout} timeout.")
+            log.error(txt := f"{head_log} No hubo respuesta de la API en {timeout} segundos")
             res = {"ERROR": f"[TIMEOUT] {txt}"}
         except HTTPError as e:
             code = e.response.status_code
