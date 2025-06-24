@@ -176,7 +176,7 @@ class Centros(models.Model):
     dispensario = models.CharField(max_length=100, blank=True, null=True)
     email_coordinador_a_field = models.CharField(db_column='Email_Coordinador(a)', max_length=100, blank=True,
                                                  null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it ended with '_'.
-    diaped = models.CharField(max_length=-1, blank=True, null=True)
+    diaped = models.CharField(max_length=10, blank=True, null=True)
     estado = models.CharField(max_length=50, blank=True, null=True)
     modalidad = models.CharField(max_length=50, blank=True, null=True)
     dpto = models.CharField(max_length=50, blank=True, null=True)
@@ -196,7 +196,7 @@ class Centros(models.Model):
     transp2 = models.CharField(max_length=50, blank=True, null=True)
     abrevmun = models.CharField(max_length=50, blank=True, null=True)
     contaceps = models.CharField(max_length=100, blank=True, null=True)
-    caf = models.CharField(max_length=-1, blank=True, null=True)
+    caf = models.CharField(max_length=10, blank=True, null=True)
     field_poblacion = models.FloatField(db_column=' poblacion', blank=True,
                                         null=True)  # Field renamed to remove unsuitable characters. Field renamed because it started with '_'.
 
@@ -526,7 +526,10 @@ class Mutualser(models.Model):
     @classmethod
     def get_afiliado_by_doc(cls, tipo_documento, documento):
         """Busca un afiliado en tabla mutualser con base en tipo_documento y documento"""
-        logger.info(f'Buscando afiliado {tipo_documento}{documento} en BD por que en API mutualser no hubo resultados.')
         if instance := cls.objects.get_by_doc(tipo_documento, documento):
+            logger.info(f'Afiliado {tipo_documento}{documento} buscado y encontrado en BD '
+                        f'por que en API mutualser no hubo resultados.')
             return {instance.tipo_documento: instance.documento}
+        logger.warning(f'Afiliado {tipo_documento}{documento} buscado y NO ENCONTRADO en BD '
+                       f'por que en API mutualser no hubo resultados.')
         return {}

@@ -3,6 +3,7 @@ from collections import OrderedDict
 
 from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
@@ -42,7 +43,7 @@ class CustomSessionWizard(SessionWizardView):
             logger.info(f"usuario {tipo_usuario[source].upper()} con {msg}")
             if source == 'm':
                 logger.info(f'Redireccionando usuario {tipo_usuario[source].upper()} a /mutualser')
-                return HttpResponseRedirect(reverse('base:mutualser'))
+                return redirect('/mutualser')
         return super().get(request, *args, **kwargs)
 
     @csrf_protected_method
