@@ -529,7 +529,13 @@ class Mutualser(models.Model):
         if instance := cls.objects.get_by_doc(tipo_documento, documento):
             logger.info(f'Afiliado {tipo_documento}{documento} buscado y encontrado en BD '
                         f'por que en API mutualser no hubo resultados.')
-            return {instance.tipo_documento: instance.documento}
+            return {
+                'NOMBRE': instance.nombres,
+                'PRIMER_NOMBRE': instance.nombres.split(' ')[0],
+                'APELLIDO': instance.apellido,
+                'PRIMER_APELLIDO': '',
+                'status': 'ACTIVO'
+            }
         logger.warning(f'Afiliado {tipo_documento}{documento} buscado y NO ENCONTRADO en BD '
                        f'por que en API mutualser no hubo resultados.')
         return {}
