@@ -78,15 +78,19 @@ def encontrar_radicado(num):
     return Radicacion.objects.get(numero_radicado=num).values()
 
 
-def crecimiento_con_mes_anterior(current_day, current_hour, rads_current_month, rads_last_month) -> str:
-    count_rads_last_month_until_current_day = rads_last_month.filter(
+def qty_radicados_hasta_ahora(current_day, current_hour, rads_last_month) -> int:
+    """Calcula la cantidad de radicados del mes anterior hasta el dia equivalente a hoy."""
+    return rads_last_month.filter(
         datetime__day__lte=current_day).exclude(datetime__day=current_day, datetime__hour__gt=current_hour).count()
+
+
+def crecimiento_con_mes_anterior(current_day, current_hour, rads_current_month, rads_last_month) -> str:
+    count_rads_last_month_until_current_day = qty_radicados_hasta_ahora(current_day, current_hour, rads_last_month)
     count_rads_current_month_until_current_day = rads_current_month.filter(datetime__day__lte=current_day).count()
     if count_rads_last_month_until_current_day:
         crecimiento = int(round((
                                         (
-                                                    count_rads_current_month_until_current_day - count_rads_last_month_until_current_day)
-                                        / count_rads_last_month_until_current_day
+                                                    count_rads_current_month_until_current_day - count_rads_last_month_until_current_day) / count_rads_last_month_until_current_day
                                 ) * 100, 2))
     else:
         crecimiento = 0

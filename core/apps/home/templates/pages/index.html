@@ -23,7 +23,7 @@
                 <!--<i class="feather icon-arrow-up text-c-green f-30 m-r-10"></i>-->
                 {{ radicados_day|get_item:current_day }}</h3>
             </div>
-            {% with percent_today=radicados_day|get_item:current_day|calc_percent:400 %}
+            {% with percent_today=radicados_day|get_item:current_day|calc_percent:600 %}
             <div class="col-3 text-right">
               <p class="m-b-0">{{ percent_today }}%</p>
             </div>
@@ -321,7 +321,8 @@
             <div class="col text-right">
               <h3>{{ radicados|length }}</h3>
               <h5 class="d-flex align-items-center justify-content-end">
-                <p class="{% if porcentaje_crecimiento|first in '+' %} text-c-green {% else %} text-c-red {% endif %}mb-0 m-r-10">{{porcentaje_crecimiento}}</p>
+                <p title="Hasta el {% now 'j' %} del mes pasado se realizaron {{qty_rads_mes_anterior_hasta_current_day}} radicaciones, lo cual representa el {{porcentaje_crecimiento}}."
+                   class="{% if porcentaje_crecimiento|first in '+' %} text-c-green {% else %} text-c-red {% endif %}mb-0 m-r-10">{{porcentaje_crecimiento}}</p>
                 <span class="text-muted">Total Radicados del Mes</span>
               </h5>
             </div>

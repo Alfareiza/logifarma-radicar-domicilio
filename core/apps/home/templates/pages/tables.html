@@ -30,7 +30,7 @@
           </thead>
           <tbody>
           {% for rad in radicados %}
-            <tr class="unread">
+            <tr class="unread" style="background-color: {{rad|row_color}};">
               <td>
                 <h6 class="m-0">{{ rad.numero_autorizacion }}</h6>
                 <p class="mb-1">{{ rad.paciente_nombre }}</p>

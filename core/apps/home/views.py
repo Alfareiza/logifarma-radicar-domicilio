@@ -44,9 +44,9 @@ def index(request):
     qty_medicamentos_autorizados = radicados.annotate(text_len=Length('numero_radicado')).filter(text_len__lt=15)
     qty_medicamentos_no_autorizados = radicados.annotate(text_len=Length('numero_radicado')).filter(text_len__gt=15)
     last_year, last_month = get_last_month_and_year(dt)
-    crecimiento = facade.crecimiento_con_mes_anterior(
-        dt.day, dt.hour, radicados, facade.listar_radicados_mes(month=last_month, year=last_year, args=('pk',))
-    )
+    rads_last_month = facade.listar_radicados_mes(month=last_month, year=last_year, args=('pk',))
+    qty_rads_mes_anterior_hasta_current_day = facade.qty_radicados_hasta_ahora(dt.day, dt.hour, rads_last_month)
+    crecimiento = facade.crecimiento_con_mes_anterior(dt.day, dt.hour, radicados, rads_last_month)
 
     return render(request, "pages/index.html",
                   {
@@ -58,6 +58,7 @@ def index(request):
                       'qty_pacientes': unique_pacientes_in_month.count(),
                       'qty_new_pacientes': qty_new_pacientes.count(),
                       'porcentaje_crecimiento': crecimiento,
+                      'qty_rads_mes_anterior_hasta_current_day': qty_rads_mes_anterior_hasta_current_day,
                       'qty_medicamentos_autorizados': qty_medicamentos_autorizados.count(),
                       'qty_medicamentos_no_autorizados': qty_medicamentos_no_autorizados.count(),
                       'qty_pacientes_fomag': radicados.filter(convenio='fomag').count(),
