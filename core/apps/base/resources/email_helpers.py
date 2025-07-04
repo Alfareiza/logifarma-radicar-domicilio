@@ -1,6 +1,5 @@
 import contextlib
 import smtplib
-import DNS
 import socket
 
 from decouple import config, Csv
@@ -87,60 +86,59 @@ def make_destinatary(info_email) -> list:
 
 
 def email_exists(email) -> bool:
+    # TODO: Refactorar esto usando preferiblemente otra lib/script
+    import DNS
+    ServerError = DNS.ServerError
+
+    def get_mx(hostname):
+        try:
+            servidor_mx = DNS.mxlookup(hostname)
+        except ServerError as e:
+            if e.rcode in [3, 2]:  # NXDOMAIN (Non-Existent Domain) or SERVFAIL
+                servidor_mx = None
+            else:
+                raise
+        return servidor_mx
+
+    def validar_email(email, debug=False):
+        try:
+            hostname = email[email.find('@') + 1:]
+            mx_hosts = get_mx(hostname)
+            if mx_hosts is None:
+                # print(f'No se encuentra MX para el dominio {hostname}')
+                return None
+            for mx in mx_hosts:
+                try:
+                    # print(f'Servidor {mx[1]}')
+                    # print(f'Cuenta {email}')
+                    servidor = smtplib.SMTP(timeout=10)
+                    servidor.connect(mx[1])
+                    servidor.set_debuglevel(debug)
+                    status, _ = servidor.helo()
+                    if status != 250:
+                        servidor.quit()
+                        continue
+                    servidor.mail('')
+                    status, _ = servidor.rcpt(email)
+                    if status == 250:
+                        servidor.quit()
+                        return True
+                    servidor.quit()
+                except smtplib.SMTPServerDisconnected:  # Server not permits verify user
+                    if debug:
+                        print(f'{mx[1]} disconected.')
+                except smtplib.SMTPConnectError:
+                    if debug:
+                        print(f'Unable to connect to {mx[1]}.')
+            return False
+        except (ServerError, socket.error) as e:
+            print(f'ServerError or socket.error exception raised ({e}).')
+            return None
+
     is_valid = validar_email(email)
     if not is_valid:
         logger.info(f'Email {email} no existe')
     return is_valid
-
-
-def get_mx(hostname):
-    try:
-        servidor_mx = DNS.mxlookup(hostname)
-    except ServerError as e:
-        if e.rcode in [3, 2]:  # NXDOMAIN (Non-Existent Domain) or SERVFAIL
-            servidor_mx = None
-        else:
-            raise
-    return servidor_mx
-
-
-def validar_email(email, debug=False):
-    try:
-        hostname = email[email.find('@') + 1:]
-        mx_hosts = get_mx(hostname)
-        if mx_hosts is None:
-            # print(f'No se encuentra MX para el dominio {hostname}')
-            return None
-        for mx in mx_hosts:
-            try:
-                # print(f'Servidor {mx[1]}')
-                # print(f'Cuenta {email}')
-                servidor = smtplib.SMTP(timeout=10)
-                servidor.connect(mx[1])
-                servidor.set_debuglevel(debug)
-                status, _ = servidor.helo()
-                if status != 250:
-                    servidor.quit()
-                    continue
-                servidor.mail('')
-                status, _ = servidor.rcpt(email)
-                if status == 250:
-                    servidor.quit()
-                    return True
-                servidor.quit()
-            except smtplib.SMTPServerDisconnected:  # Server not permits verify user
-                if debug:
-                    print(f'{mx[1]} disconected.')
-            except smtplib.SMTPConnectError:
-                if debug:
-                    print(f'Unable to connect to {mx[1]}.')
-        return False
-    except (ServerError, socket.error) as e:
-        print(f'ServerError or socket.error exception raised ({e}).')
-        return None
-
-
-ServerError = DNS.ServerError
 
 
 class Email:

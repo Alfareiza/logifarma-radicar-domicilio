@@ -61,7 +61,6 @@ psutil
 psycopg2-binary
 ptyprocess==0.7.0
 pure-eval==0.2.2
-py3dns==3.2.1
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.21
