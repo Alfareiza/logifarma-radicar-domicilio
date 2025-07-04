@@ -13,18 +13,19 @@ echo "--- Starting Vercel Build Script ---"
 # For this setup, we assume manage.py is in the root where vercel.json is.
 
 # Install Python dependencies
-echo "Installing Python dependencies from requirements.txt..."
-pip install -r requirements.txt
+echo "Installing Python dependencies from requirements.txt using python3.11..."
+# Explicitly use python3.11 to run pip to ensure the correct version is used.
+python3.11 -m pip install --disable-pip-version-check --target . --upgrade -r /vercel/path0/requirements.txt
 
 # Run Django migrations
 echo "Running Django migrations..."
-python manage.py makemigrations
-python manage.py migrate --noinput
+python3.11 manage.py makemigrations
+python3.11 manage.py migrate --noinput
 
 # Collect static files
 echo "Collecting static files..."
 # The --clear flag removes existing static files before collecting new ones.
-python manage.py collectstatic --noinput --clear
+python3.11 manage.py collectstatic --noinput --clear
 
 echo "--- Vercel Build Script Finished Successfully ---"
 
