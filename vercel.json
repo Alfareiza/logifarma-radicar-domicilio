@@ -8,7 +8,7 @@
         "runtime": "python3.11"
       },
       "config": {
-        "installCommand": "pip install -r requirements.txt",
+        "installCommand": "python -m pip install -r requirements.txt",
         "buildCommand": "python manage.py makemigrations --noinput && python manage.py migrate --noinput && python manage.py collectstatic --noinput"
       }
     }
