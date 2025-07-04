@@ -1,29 +1,30 @@
 {
+  "version": 2,
   "builds": [
     {
-      "src": "core/wsgi.py",
+      "src": "core/wsgi.py", // Path to your Django WSGI file
       "use": "@vercel/python",
       "config": {
-        "maxLambdaSize": "15mb",
-        "runtime": "python3.11"
+        "pythonVersion": "3.11" // Specify the Python version
       }
     },
     {
-      "src": "build_files.sh",
+      "src": "static/**", // Serve static files directly
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "staticfiles"
+        "distDir": "staticfiles" // Directory where collectstatic outputs files
       }
     }
   ],
   "routes": [
     {
-      "src": "/static/(.*)",
+      "src": "/static/(.*)", // Route for static files
       "dest": "/static/$1"
     },
     {
-      "src": "/(.*)",
+      "src": "/(.*)", // Route all other requests to the Django app
       "dest": "core/wsgi.py"
     }
-  ]
+  ],
+  "outputDirectory": "staticfiles" // Vercel will look for static files here
 }
