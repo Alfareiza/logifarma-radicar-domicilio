@@ -6,10 +6,13 @@
       "config": {
         "maxLambdaSize": "15mb",
         "runtime": "python3.11"
-      },
+      }
+    },
+    {
+      "src": "build_files.sh",
+      "use": "@vercel/static-build",
       "config": {
-        "installCommand": "python -m pip install -r requirements.txt",
-        "buildCommand": "python manage.py makemigrations --noinput && python manage.py migrate --noinput && python manage.py collectstatic --noinput"
+        "distDir": "staticfiles"
       }
     }
   ],
