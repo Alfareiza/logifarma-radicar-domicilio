@@ -2,29 +2,29 @@
   "version": 2,
   "builds": [
     {
-      "src": "core/wsgi.py", // Path to your Django WSGI file
+      "src": "core/wsgi.py",
       "use": "@vercel/python",
       "config": {
-        "pythonVersion": "3.11" // Specify the Python version
+        "pythonVersion": "3.11"
       }
     },
     {
-      "src": "static/**", // Serve static files directly
+      "src": "static/**",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "staticfiles" // Directory where collectstatic outputs files
+        "distDir": "staticfiles"
       }
     }
   ],
   "routes": [
     {
-      "src": "/static/(.*)", // Route for static files
+      "src": "/static/(.*)",
       "dest": "/static/$1"
     },
     {
-      "src": "/(.*)", // Route all other requests to the Django app
+      "src": "/(.*)",
       "dest": "core/wsgi.py"
     }
   ],
-  "outputDirectory": "staticfiles" // Vercel will look for static files here
+  "outputDirectory": "staticfiles"
 }
