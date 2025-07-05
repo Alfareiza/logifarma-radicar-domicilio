@@ -43,12 +43,12 @@ class LoginPage:
         browser.get(url)
         wait_element_load(browser, self.dropdown_tipo_usuario)
 
-    def input_credentials(self, browser: webdriver.Chrome):
+    def input_credentials(self, browser: webdriver.Remote):
         browser.find_element(By.XPATH, self.nit).send_keys(ZONA_SER_NIT)
         browser.find_element(By.XPATH, self.usuario).send_keys(f"{ZONA_SER_NIT}5")
         browser.find_element(By.XPATH, self.clave).send_keys(ZONA_SER_NIT)
 
-    def perform(self, url: str, browser: webdriver.Chrome):
+    def perform(self, url: str, browser: webdriver.Remote):
         log.info('Accesando a site Mutual Ser')
         self.visit(browser, url)
         # Select tipo de usuario
@@ -203,7 +203,7 @@ class SearchPage:
         productos = self.extract_productos(browser)
         self.close_modal_detalle_solicitud(browser)
 
-        if match := re.search(r'El Nro\\. para Facturar es:\\s*([A-Z0-9]+)', nro_para_facturar):
+        if match := re.search(r'El Nro\\. para Facturar es:\s*([A-Z0-9]+)', nro_para_facturar):
             nro_para_facturar = re.findall(r'\\d+', match[1])[0]
 
         return nro_para_facturar, productos
@@ -235,9 +235,7 @@ class SearchPage:
         table_element = browser.find_element(By.XPATH, self.table)
         rows_info = []
         html_table = BeautifulSoup(table_element.get_attribute("outerHTML"), "html.parser")
-        table = html_table.find('table')
-        headers = [th.text.strip() for th in table.thead.find_all('th')]
-        rows = []
+        rows = html_table.find('tbody').find_all('tr', recursive=False)
         for i, row in enumerate(rows, 1):
             estado = row.contents[7].find_all("option", selected=True)[-1].text
             match = re.search(r"Numero solicitud:(\d+)Fecha Solicitud:(\d{2}/\d{2}/\d{4})",
@@ -302,7 +300,7 @@ class SearchPage:
 class BaseApp:
     """Base class for application or portal objects and their configuration."""
 
-    browser: webdriver.Chrome = None
+    browser: webdriver.Remote = None # Changed to Remote
     headless: bool = True
     wait_time: int = 10
     # download_directory: str = str(Path().cwd() / Path("temp"))
@@ -310,7 +308,7 @@ class BaseApp:
     experimental_options: dict = {
         "excludeSwitches": ["enable-automation"],
         "useAutomationExtension": False,
-        "binary_location": os.getenv("/app/.apt/usr/bin/google-chrome"),
+        # "binary_location": os.getenv("/app/.apt/usr/bin/google-chrome"), # Removed
     }
     user_agent: str = (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -321,25 +319,29 @@ class BaseApp:
     @retry(NoSuchElementException, 3, 5)
     def open_browser(self) -> None:
         """Open browser and set Selenium options."""
-        browser_options = webdriver.ChromeOptions()
+        chrome_options = webdriver.ChromeOptions()
 
         for option in self.browser_options:
-            browser_options.add_argument(option)
+            chrome_options.add_argument(option)
 
         for key, value in self.experimental_options.items():
-            browser_options.add_experimental_option(key, value)
+            chrome_options.add_experimental_option(key, value)
 
         if self.headless:
-            browser_options.add_argument("--headless")
+            chrome_options.add_argument("--headless")
 
-        self.browser = webdriver.Chrome(options=browser_options)
+        # IMPORTANT: Replace with your actual Selenium Grid URL
+        self.browser = webdriver.Remote(
+            command_executor='http://YOUR_SELENIUM_GRID_URL:4444/wd/hub',
+            options=chrome_options
+        )
         self.browser.implicitly_wait(self.wait_time)
 
 
 class MutualSerSite(BaseApp):
     """Main application class managing pages and providing direct access to Selenium."""
 
-    browser: webdriver.Chrome = None
+    browser: webdriver.Remote = None # Changed to Remote
     login = LoginPage()
     search_page = SearchPage()
     wait_time: int = 2
@@ -354,5 +356,4 @@ class MutualSerSite(BaseApp):
     def __init__(self, **config) -> None:
         """Initialize Involve class with default configuration."""
         super().__init__(**config)
-        # self.browser = Selenium()
-        # self.browser.set_selenium_implicit_wait(0)
+
