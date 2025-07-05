@@ -36,6 +36,5 @@ RUN mkdir -p /usr/src/app/tmp
 
 EXPOSE 8000
 
-# Start Gunicorn
-# We bind to 0.0.0.0 to be accessible from outside the container
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "core.wsgi:application"]
+# DEBUGGING: List all files to check the container's file structure
+CMD ["ls", "-R"]
