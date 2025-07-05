@@ -35,5 +35,6 @@ RUN mkdir -p /usr/src/app/tmp
 
 EXPOSE 8000
 
-# Start Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "core.wsgi:application"]
+# DEBUGGING: Run with Django's development server for more verbose output
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
