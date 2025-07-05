@@ -36,4 +36,4 @@ RUN mkdir -p -v /usr/src/core/static \
 
 ENV PYTHONPATH "/usr/src/core"
 
-CMD ["gunicorn", "--bind", ":8000", "--workers", "4", "core.wsgi:application"]
+CMD ["gunicorn", "--bind", ":8000", "--workers", "4", "core.wsgi"]
