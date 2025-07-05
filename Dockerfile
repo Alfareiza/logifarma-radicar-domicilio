@@ -6,34 +6,36 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /usr/src/app
 
-
-RUN apt update \
- && apt install -y libpq-dev gcc curl python3-dev build-essential g++ git\
- && pip install --upgrade pip \
- && rm -rf /var/lib/apt/lists/*
-
-
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        libpq-dev \
+        gcc \
+        curl \
+        python3-dev \
         build-essential \
+        g++ \
+        git \
         unixodbc-dev \
         freetds-dev \
         libodbc1 \
-        odbcinst \
-    && rm -rf /var/lib/apt/lists/*
-RUN pip install --no-cache-dir --break-system-packages -r requirements.txt
+        odbcinst && \
+    rm -rf /var/lib/apt/lists/*
 
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir --break-system-packages -r requirements.txt
+
+# Copy application code
 COPY . .
+
+# Create media directory (STATIC_ROOT is handled by collectstatic)
+# Your settings.py defines MEDIA_ROOT as BASE_DIR / 'tmp'
+RUN mkdir -p /usr/src/app/tmp
 
 EXPOSE 8000
 
-RUN mkdir -p -v /usr/src/core/static \
- && mkdir -p -v /usr/src/core/media
-
-
-ENV PYTHONPATH "/usr/src/core"
-
-CMD ["gunicorn", "--bind", ":8000", "--workers", "4", "core.wsgi:application"]
+# Start Gunicorn
+# We bind to 0.0.0.0 to be accessible from outside the container
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "core.wsgi:application"]
