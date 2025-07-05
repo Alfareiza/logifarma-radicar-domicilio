@@ -6,7 +6,7 @@ from typing import Tuple, Dict
 import requests
 from decouple import config
 from django.template.loader import get_template
-from pymssql import Connection
+# from pymssql import Connection
 from requests import Timeout
 from urllib3.exceptions import NewConnectionError, MaxRetryError
 

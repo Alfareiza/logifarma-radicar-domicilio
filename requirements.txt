@@ -66,7 +66,6 @@ pyasn1-modules==0.2.8
 pycparser==2.21
 pycryptodome==3.17
 Pygments==2.13.0
-pymssql==2.2.7
 pyodbc==4.0.39
 pyparsing==3.0.9
 Pyrebase4==4.6.0
