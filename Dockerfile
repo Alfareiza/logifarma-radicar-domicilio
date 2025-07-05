@@ -35,6 +35,5 @@ RUN mkdir -p /usr/src/app/tmp
 
 EXPOSE 8000
 
-# DEBUGGING: Run with Django's development server for more verbose output
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
+# Use shell form for the CMD to avoid any parsing issues
+CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:8000"]
