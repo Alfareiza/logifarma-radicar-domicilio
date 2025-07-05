@@ -30,12 +30,10 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy application code
 COPY . .
 
-# Create media directory (STATIC_ROOT is handled by collectstatic)
-# Your settings.py defines MEDIA_ROOT as BASE_DIR / 'tmp'
+# Create media directory
 RUN mkdir -p /usr/src/app/tmp
 
 EXPOSE 8000
 
-# DEBUGGING: Keep the container alive
-CMD ["tail", "-f", "/dev/null"]
-
+# Start Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "core.wsgi:application"]

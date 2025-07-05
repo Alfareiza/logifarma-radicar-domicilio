@@ -8,5 +8,11 @@
         "dockerfile": "Dockerfile"
       }
     }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
   ]
 }
