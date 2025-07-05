@@ -6,7 +6,7 @@ import re
 import tempfile
 from time import sleep
 
-from RPA.Browser.Selenium import Selenium, BrowserNotFoundError
+# from RPA.Browser.Selenium import Selenium, BrowserNotFoundError
 from SeleniumLibrary.errors import ElementNotFound
 from bs4 import BeautifulSoup, Tag
 from retry import retry
@@ -50,12 +50,12 @@ class LoginPage:
         browser.go_to(url)
         wait_element_load(browser, self.dropdown_tipo_usuario)
 
-    def input_credentials(self, browser: Selenium):
+    def input_credentials(self, browser: 'Selenium'):
         browser.input_text(self.nit, ZONA_SER_NIT)
         browser.input_text(self.usuario, f"{ZONA_SER_NIT}5")
         browser.input_text(self.clave, ZONA_SER_NIT)
 
-    def perform(self, url: str, browser: Selenium):
+    def perform(self, url: str, browser: 'Selenium'):
         log.info('Accesando a site Mutual Ser')
         self.visit(browser, url)
         # Select tipo de usuario
@@ -309,7 +309,7 @@ class SearchPage:
 class BaseApp:
     """Base class for application or portal objects and their configuration."""
 
-    browser: Selenium = Selenium
+    # browser: 'Selenium' = Selenium
     headless: bool = True
     wait_time: int = 10
     # download_directory: str = str(Path().cwd() / Path("temp"))
@@ -325,7 +325,7 @@ class BaseApp:
         "Chrome/119.0.0.0 Safari/537.36"
     )
 
-    @retry(BrowserNotFoundError, 3, 5)
+    # @retry(BrowserNotFoundError, 3, 5)
     def open_browser(self) -> None:
         """Open browser and set Selenium options."""
         browser_options = webdriver.ChromeOptions()
@@ -347,7 +347,7 @@ class BaseApp:
 class MutualSerSite(BaseApp):
     """Main application class managing pages and providing direct access to Selenium."""
 
-    browser: Selenium = None
+    # browser: Selenium = None
     login = LoginPage()
     search_page = SearchPage()
     wait_time: int = 2
@@ -362,5 +362,5 @@ class MutualSerSite(BaseApp):
     def __init__(self, **config) -> None:
         """Initialize Involve class with default configuration."""
         super().__init__(**config)
-        self.browser = Selenium()
+        # self.browser = Selenium()
         self.browser.set_selenium_implicit_wait(0)
