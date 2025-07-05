@@ -12,7 +12,7 @@ from retry import retry
 from core.apps.base.exceptions import UserNotFound, NroAutorizacionNoEncontrado, FieldError
 
 from core.apps.base.resources.decorators import login_required
-from core.apps.base.resources.selenium_manager import MutualSerSite
+# from core.apps.base.resources.selenium_manager import MutualSerSite
 from core.apps.base.resources.tools import moment, add_user_id_to_formatter
 from core.apps.tasks.utils.dt_utils import Timer
 from core.apps.tasks.utils.tools import kill_zombies
