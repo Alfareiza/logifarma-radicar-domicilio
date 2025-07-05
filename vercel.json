@@ -2,29 +2,11 @@
   "version": 2,
   "builds": [
     {
-      "src": "core/wsgi.py",
-      "use": "@vercel/python",
+      "src": ".",
+      "use": "@vercel/docker",
       "config": {
-        "pythonVersion": "3.11"
-      }
-    },
-    {
-      "src": "static/**",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "staticfiles"
+        "dockerfile": "Dockerfile"
       }
     }
-  ],
-  "routes": [
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "core/wsgi.py"
-    }
-  ],
-  "outputDirectory": "staticfiles"
+  ]
 }
