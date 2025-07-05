@@ -10,6 +10,7 @@ echo "--- Starting Vercel Build Script ---"
 # Install Python dependencies
 echo "Installing Python dependencies from requirements.txt using python3.12..."
 # Explicitly use python3.12 to run pip to ensure the correct version is used.
+python3.12 -m pip install --disable-pip-version-check --target . --upgrade setuptools
 python3.12 -m pip install --disable-pip-version-check --target . --upgrade -r requirements.txt
 
 # Run Django migrations
