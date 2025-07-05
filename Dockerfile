@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-WORKDIR /usr/src/
+WORKDIR /usr/src/app
 
 
 RUN apt update \
@@ -26,11 +26,14 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 RUN pip install --no-cache-dir --break-system-packages -r requirements.txt
 
+COPY . .
+
 EXPOSE 8000
 
 RUN mkdir -p -v /usr/src/core/static \
  && mkdir -p -v /usr/src/core/media
 
-COPY app/ /usr/src/core/
 
 ENV PYTHONPATH "/usr/src/core"
+
+CMD ["gunicorn", "--bind", ":8000", "--workers", "4", "core.wsgi:application"]
