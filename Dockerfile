@@ -36,5 +36,6 @@ RUN mkdir -p /usr/src/app/tmp
 
 EXPOSE 8000
 
-# DEBUGGING: List all files to check the container's file structure
-CMD ["ls", "-R"]
+# DEBUGGING: Keep the container alive
+CMD ["tail", "-f", "/dev/null"]
+
