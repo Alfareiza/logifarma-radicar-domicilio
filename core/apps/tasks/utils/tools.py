@@ -1,7 +1,7 @@
 import contextlib
 from datetime import datetime
 
-from RPA.Desktop.OperatingSystem import psutil
+# from RPA.Desktop.OperatingSystem import psutil
 from psutil import process_iter
 from pytz import timezone
 
