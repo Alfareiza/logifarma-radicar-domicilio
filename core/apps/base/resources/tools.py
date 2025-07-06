@@ -309,7 +309,7 @@ def discover_rad(body) -> str:
     """
     import re
     if isinstance(body, (str, SafeString)):
-        if expr := re.findall("\d{9}\d+", body):
+        if expr := re.findall(r"\d{9}\d+", body):
             return expr[0]
     return ''
 
