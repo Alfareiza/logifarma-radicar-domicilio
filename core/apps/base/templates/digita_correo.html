@@ -1,6 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
-
+{% load my_filters %}
 {% block title %}Digite un correo electrónico{% endblock %}
 
 {% block content %}
@@ -21,8 +21,8 @@
         {{ wizard.management_form }}
         {% include "base/logo.html" %}
 
-        {% if form.errors %}
-            {% include "base/modal.html" with txt=form.non_field_errors.as_text|cut:"* "|linebreaksbr %}
+         {% if form.errors %}
+            {% include "modals/base.html" with modal_context=form|get_modal_context  %}
         {% endif %}
 
         {% if wizard.form.forms %}
@@ -39,12 +39,14 @@
                     <span class="icon1 fas fa-exclamation"></span>
                     <span class="icon2 fas fa-check"></span>
                 </div>
-                <input class="inp_vist9" type="text" placeholder="ejemplo@gmail.com, ejemplo2@gmail.com" name="digitaCorreo-email" id="id_digitaCorreo-email">
+                <input required class="inp_vist9" type="email" placeholder="ejemplo@gmail.com, ejemplo2@gmail.com" name="digitaCorreo-email" id="id_digitaCorreo-email">
 
                <div class="text-error">Uno de los correos ingresados no es válido.</div>
             </div>
 
         {% endif %}
+            <!--        TODO    29 de Agosto  -->
+<!--        <p class="vist3_t">Enviaremos a este correo el soporte de la solicitud.<br>-->
 
         <div class="load" id="load_a">
             <div class="carga_animacion">
@@ -53,11 +55,9 @@
             </div>
 
 
-        <button class="btn" id="btn_final" type="submit" onclick="animabotoncarga_correo()">
-            Continuar
-        <div id="btn_carga" class="conten_carga">
-                <div class="carga"></div>
-            </div>
+       <button class="btn" id="btn_conti" type="submit">
+            <span class="btn-text">Continuar</span>
+            <span class="loader" style="display: none;"></span>
         </button>
 
     </form>

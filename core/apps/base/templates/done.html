@@ -20,66 +20,10 @@
         notificará la radicación exitosa de su solicitud.
     </p>
 
-    <a class="home" href="#" id="finalizarLink">
-        <button class="btn" id="btn_conti" type="button">
-            Finalizar
-            <div id="btn_carga" class="conten_carga">
-                <div class="carga"></div>
-            </div>
-        </button>
+    <a href="{% url 'base:home' %}" class="btn" id="btn_conti">
+        <button class="btn-text">Continuar</button>
+        <button class="loader" style="display: none;"></button>
     </a>
 
 </section>
-{% endblock %}
-{% block extrajs %}
-<script>
-    const homeUrl = "{% url 'base:home' %}";
-    const homePruebaUrl = "{% url 'base:home_prueba' %}";
-
-    // Your existing animation function
-    function animabotoncarga_general() {
-        console.log("Animation for button load started!");
-        // Add your animation logic here
-    }
-
-    const finalizarLink = document.getElementById('finalizarLink');
-
-    // Add a mousedown event listener to the link
-    finalizarLink.addEventListener('mousedown', function(event) {
-        // Always call the animation function first
-        animabotoncarga_general();
-
-        // Get the current page's URL path (e.g., /my-app/home/)
-        const currentPathname = window.location.pathname;
-
-        // Normalize paths for robust comparison (remove trailing slashes if present)
-        // This helps compare /home/ with /home, which might resolve to the same page.
-        const normalizedHomeUrl = homeUrl.endsWith('/') ? homeUrl.slice(0, -1) : homeUrl;
-        const normalizedCurrentPathname = currentPathname.endsWith('/') ? currentPathname.slice(0, -1) : currentPathname;
-
-        let targetUrl;
-
-        // Check which mouse button was pressed
-        if (event.button === 0) { // Left click (usually the primary button)
-            console.log('Left click clicked')
-            // If the current page's normalized path matches the normalized home URL
-            targetUrl = homeUrl; // Stay on (or reload) the home page
-        } else { // Right click (event.button === 2) or Middle click (event.button === 1)
-            targetUrl = homePruebaUrl; // For any other click, navigate to home_prueba
-        }
-
-        // Prevent the browser's default action for the click (e.g., navigating to href="#")
-        // This is crucial because we're handling navigation manually with JavaScript.
-        event.preventDefault();
-
-        // Navigate to the determined URL
-        window.location.href = targetUrl;
-    });
-
-    // Optional: Prevent the default browser context menu for right-clicks on this element
-    // if you don't want it to appear after you've handled the navigation.
-    finalizarLink.addEventListener('contextmenu', function(event) {
-        event.preventDefault();
-    });
-</script>
 {% endblock %}

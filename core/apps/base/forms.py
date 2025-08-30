@@ -15,7 +15,7 @@ from core.apps.base.validators import (
     validate_status,
     validate_status_afiliado,
     validate_status_aut,
-    validate_structure, validate_numero_celular,
+    validate_structure, validate_numero_celular, validate_numeros_bloqueados, direccion_min_length_validator,
 )
 from core.settings import logger
 
@@ -58,7 +58,7 @@ class SinAutorizacion(forms.Form):
         ("AS", "AS - Adulto sin ID"),  # Adulto sin ID
     )
     tipo_identificacion = forms.ChoiceField(
-        choices=IDENTIFICACIONES, label='Tipo de identificación',
+        choices=IDENTIFICACIONES, label='Tipo de documento',
         widget=forms.Select(attrs={'class': 'custom-select'})
     )
     identificacion = forms.CharField(
@@ -84,8 +84,12 @@ class SinAutorizacion(forms.Form):
                 validate_recent_radicado(tipo, value, entidad)
         else:
             raise forms.ValidationError(
-                mark_safe("No ha sido posible detectar la entidad a la cual estás afiliado<br><br>"
-                          "<a style='text-decoration:none' href='/'>Click aqui</a> para radicar tu domicilio."))
+                message='Entidad no reconocida.',
+                params={
+                    'modal_type': 'no_entidad',
+                    'modal_title': "No ha sido posible detectar la entidad a la cual estás afiliado.",
+                    'modal_body': "<a class='tel' style='text-decoration:none' href='/'>Click aqui</a> para radicar tu domicilio.",
+                })
 
         resp |= {
             'AFILIADO': resp_eps['NOMBRE'],
@@ -158,20 +162,26 @@ class AutorizacionServicio(forms.Form):
             resp_mcar = obtener_datos_formula(num_aut)
 
         if not resp_mcar:
-            logger.info(f"No se pudo obtener información del radicado #{num_aut}.")
-            raise forms.ValidationError("Pedimos disculpas, pero no pudimos obtener información\n"
-                                        f"con este número de autorización.\n{num_aut}\n"
-                                        "Puedes esperar unos minutos e intentar de nuevo\n"
-                                        "o comunícarte con nosotros al \n333 033 3124")
+            logger.info(msg := f"No se pudo obtener información del radicado #{num_aut}.")
+            raise forms.ValidationError(
+                message=msg,
+                params={
+                    'modal_type': 'issue_api',
+                    'modal_title': f"Pedimos disculpas, pero no pudimos obtener información del número de autorización {num_aut}.",
+                    'modal_body': "Puedes esperar unos minutos e intentar de nuevo o comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+                })
 
         if resp_mcar.get('autorizacion'):
             radicada_en = resp_mcar.get('nombre_centro_factura')[:-5].strip()
             logger.info(f"{num_aut} se encuentra radicado en {radicada_en}.")
             # TODO actualizar número de acta en bd
-            raise forms.ValidationError(f"Esta autorización ({num_aut}) se encuentra radicada en "
-                                        f"{radicada_en} con el número de acta: {resp_mcar.get('ssc')}\n\n"
-                                        f"Para mayor información te puedes comunicar \n"
-                                        f"con nosotros al: 333 033 3124")
+            raise forms.ValidationError(
+                message='Autorizacion radicada.',
+                params={
+                    'modal_type': 'autorizacion_radicada',
+                    'modal_title': f"Esta autorización ({num_aut}) se encuentra radicada en {radicada_en} con el número de acta: {resp_mcar.get('ssc')}.",
+                     'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+                })
 
         resp_eps['NUMERO_AUTORIZACION'] = num_aut
         resp_eps['CONVENIO'] = 'cajacopi'
@@ -218,7 +228,8 @@ class EligeMunicipio(forms.ModelForm):
     municipio = forms.ModelChoiceField(queryset=Municipio.objects.filter(activo=True),
                                        empty_label="Seleccione un municipio",
                                        widget=forms.RadioSelect(
-                                           attrs={'class': 'select_opt'}),
+                                           attrs={'class': 'h-5 w-5 text-blue-600 focus:ring-2 focus:ring-blue-400 border-gray-300'}
+                                       ),
                                        label=False
                                        )
 
@@ -227,8 +238,8 @@ class DireccionBarrio(forms.Form):
     """
     Vista 5:
     """
-    barrio = forms.ChoiceField(widget=forms.RadioSelect(attrs={'class': 'select_opt'}))
-    direccion = forms.CharField(min_length=5, max_length=40)
+    barrio = forms.ChoiceField(widget=forms.RadioSelect(attrs={'class': 'h-5 w-5 text-blue-600 focus:ring-2 focus:ring-blue-400 border-gray-300'}))
+    direccion = forms.CharField(min_length=5, max_length=40, validators=[direccion_min_length_validator])
 
     def clean_barrio(self):
         barr = self.cleaned_data.get('barrio')
@@ -253,6 +264,7 @@ class DigitaCelular(forms.Form):
             raise forms.ValidationError("Por favor ingrese un número de celular.")
 
         validate_numero_celular(cel)
+        validate_numeros_bloqueados(cel)
         if whatsapp:
             validate_numero_celular(whatsapp)
         # return cel
@@ -262,7 +274,7 @@ class DigitaCorreo(forms.Form):
     """
     Vista 7:
     """
-    email = forms.CharField(max_length=255)
+    email = forms.CharField(required=True, max_length=255)
 
     def clean(self):
         if not (email := self.cleaned_data.get('email')):

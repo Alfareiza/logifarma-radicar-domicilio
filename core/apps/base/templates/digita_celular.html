@@ -1,5 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
+{% load my_filters %}
 
 {% block title %}Digite celular{% endblock %}
 
@@ -17,7 +18,7 @@
         {% include "base/logo.html" %}
 
         {% if form.errors %}
-            {% include "base/modal.html" with txt=form.non_field_errors.as_text|cut:"* "|linebreaksbr %}
+            {% include "modals/base.html" with modal_context=form|get_modal_context  %}
         {% endif %}
 
 
@@ -64,12 +65,9 @@
 
         {% endif %}
 
-
-        <button class="btn" id="btn_conti" type="submit" onclick="animabotoncarga_celular()">
-            Continuar
-            <div id="btn_carga" class="conten_carga">
-                <div class="carga"></div>
-            </div>
+        <button class="btn" id="btn_conti" type="submit">
+            <span class="btn-text">Continuar</span>
+            <span class="loader" style="display: none;"></span>
         </button>
 
     </form>

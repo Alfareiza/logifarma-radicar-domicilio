@@ -1,4 +1,5 @@
 {% load static %}
+{% load my_filters %}
 <!doctype html>
 <html lang="en">
 <head> 
@@ -28,7 +29,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
     {% block js %}{% endblock %}
 </head>
 <body>
@@ -43,8 +45,35 @@
             integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
 
     <script src="{% static 'js/carga.js' %}"></script>
-    <link rel="stylesheet"href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css"/>
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+    <script>
+        const btn = document.getElementById("btn_conti");
+        const form = btn.form;
+
+        form.addEventListener("submit", function(e) {
+        // This event only fires after the form has passed validation.
+        const text = btn.querySelector(".btn-text");
+        const loader = btn.querySelector(".loader");
+        text.style.display = "none";
+        loader.style.display = "inline-block";
+        btn.disabled = true;
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+        {% if form.errors %}
+            {% with form|get_modal_context as modal_context  %}
+                {% if modal_context %}
+                    const dialog = document.getElementById('error-modal');
+                    if (dialog) {
+                        dialog.show();
+                    }
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+        });
+    </script>
+
     {% block extrajs %}{% endblock %}
 
 </body>
