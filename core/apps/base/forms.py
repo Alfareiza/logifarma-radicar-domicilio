@@ -15,7 +15,7 @@ from core.apps.base.validators import (
     validate_status,
     validate_status_afiliado,
     validate_status_aut,
-    validate_structure, validate_numero_celular, validate_numeros_bloqueados, direccion_min_length_validator,
+    validate_structure, validate_numero_celular, direccion_min_length_validator,
 )
 from core.settings import logger
 
@@ -264,7 +264,7 @@ class DigitaCelular(forms.Form):
             raise forms.ValidationError("Por favor ingrese un número de celular.")
 
         validate_numero_celular(cel)
-        validate_numeros_bloqueados(cel)
+        # validate_numeros_bloqueados(cel)
         if whatsapp:
             validate_numero_celular(whatsapp)
         # return cel
