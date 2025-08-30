@@ -121,19 +121,15 @@
         {% endif %}
 
         {% if wizard.form.autorizaciones.value.AUTORIZACIONES.items %}
-            <button class="btn" id="btn_conti" type="submit" onclick="animabotoncarga_municipio()">
-                Continuar
-                <div id="btn_carga" class="conten_carga">
-                    <div class="carga"></div>
-                </div>
+            <button class="btn" id="btn_conti" type="submit">
+                <span class="btn-text">Continuar</span>
+                <span class="loader" style="display: none;"></span>
             </button>
         {% else %}
             <a class="home" href="{% url 'base:mutualser' %}">
-                <button class="btn" id="btn_conti" type="button" onclick="animabotoncarga_general()">
-                        Entiendo
-                    <div id="btn_carga" class="conten_carga">
-                        <div class="carga"></div>
-                    </div>
+                <button class="btn" id="btn_conti" type="button">
+                    <span class="btn-text">Entiendo</span>
+                    <span class="loader" style="display: none;"></span>
                 </button>
             </a>
         {% endif %}

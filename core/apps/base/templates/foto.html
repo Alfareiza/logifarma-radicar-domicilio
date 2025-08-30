@@ -27,22 +27,36 @@
         {% if wizard.form.forms %}
             {{ wizard.form.management_form }}
         {% else %}
-            <div class="container">
-                <div class="conten_foto" style="object-fit: contain;">
+            <div class="flex justify-center w-full">
+                <div class="max-w-[600px] h-[600px] max-h-600 p-3" style="object-fit: contain;max-height: 700px;">
                     <img id="file-preview" class="img_fot">
                 </div>
-                <div class="btn_archi" id="id_btn_archi">
+<!--                <div class="btn_archi" id="id_btn_archi">-->
+                <div>
 <!--                <label for="file" id="fotoFormulaMedica-src">Select an Image</label>-->
+<!--                    <input required type="file" name="fotoFormulaMedica-src" accept="image/*"-->
+<!--                       id="id_fotoFormulaMedica-src" class="arch_btn" >-->
                     <input required type="file" name="fotoFormulaMedica-src" accept="image/*"
-                       id="id_fotoFormulaMedica-src" class="arch_btn" >
+                           id="id_fotoFormulaMedica-src" style="display: none;">
                 </div>
             </div>
-            <button class="btn" id="btn_conti" type="submit" style="display: none;" onclick="animabotoncarga_general()">
-                Continuar
-                <div id="btn_carga" class="conten_carga">
-                    <div class="carga"></div>
-                </div>
-            </button>
+<!--            <button class="btn" id="btn_conti" type="submit" style="display: none;" onclick="animabotoncarga_general()">-->
+<!--                Continuar-->
+<!--                <div id="btn_carga" class="conten_carga">-->
+<!--                    <div class="carga"></div>-->
+<!--                </div>-->
+<!--            </button>-->
+          <!-- Button to trigger file selection -->
+          <button class="btn" id="btn_tomar" type="button" style="padding: .7rem 1.1rem; width: 18rem;">
+            <span class="btn-text">Tomar foto</span>
+            <span class="loader" style="display: none;"></span>
+          </button>
+
+          <!-- Submit button (hidden at first) -->
+          <button class="btn" id="btn_conti" type="submit" style="padding: .7rem 1.1rem; width: 18rem; display: none;">
+            <span class="btn-text">Continuar</span>
+            <span class="loader" style="display: none;"></span>
+          </button>
         {% endif %}
     </form>
 
@@ -76,5 +90,21 @@
           oul.style.display = "none";
         }
     })
+    const fileInput = document.getElementById("id_fotoFormulaMedica-src");
+    const tomarBtn = document.getElementById("btn_tomar");
+    const contiBtn = document.getElementById("btn_conti");
+
+    // "Tomar foto" opens file picker
+    tomarBtn.addEventListener("click", () => {
+        fileInput.click();
+    });
+
+    // After selecting a file -> swap buttons
+    fileInput.addEventListener("change", () => {
+    if (fileInput.files.length > 0) {
+      tomarBtn.style.display = "none";
+      contiBtn.style.display = "inline-block";
+    }
+    });
 </script>
 {% endblock %}

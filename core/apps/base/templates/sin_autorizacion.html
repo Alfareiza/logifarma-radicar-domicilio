@@ -1,6 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
-
+{% load my_filters %}
 {% block title %}Autorización de servicio{% endblock %}
 
 {% block js %}
@@ -16,8 +16,8 @@
 
         // Check if the current URL contains the string "mutualser"
         if (currentUrl.includes('mutualser')) {
-            // If "mutualser" is found, navigate to '/prueba'
-            window.location.href = '/prueba';
+            // If "mutualser" is found, navigate to '/'
+            window.location.href = '/';
 
         } else if (currentUrl.includes('?s')){
             history.back() ;
@@ -33,7 +33,7 @@
 <section class="vista3">
     <form id="form-id" action="" method="post">
 
-        <button class="continuar" formnovalidate name=""
+        <button class="continuar" name=""
             type="submit" value="" onclick="animabotoncarga_autorizacion()">
             <p class="text_continuar">Continuar <i class="fa-solid fa-chevron-right"></i></p>
         </button>
@@ -49,23 +49,7 @@
         </div>
 
         {% if form.errors %}
-            <!-- Es usado non_field_errors porque se implementó el método clean en el form y no clean_field-->
-            {% with txt_error=form.non_field_errors.as_text|cut:"* " %}
-            <script src="{% static 'js/modal.js' %}"></script>
-            <div class="modal" id="modal_vist">
-                <div class="conten" id="cont_mod" {% if txt_error|length < 130 %} style="height: 22%;" {% endif %}>
-                    <header></header>
-                    <div class="modal_btn">
-                        <button type="button" id="btn_modal" class="close">X</button>
-                    </div>
-                    <div class="contenido">
-                        <p class="texto" style="margin: 0rem 1rem;">
-                           {{ txt_error }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-            {% endwith %}
+            {% include "modals/base.html" with modal_context=form|get_modal_context  %}
         {% endif %}
 
         {% if wizard.form.forms %}
@@ -87,18 +71,11 @@
             </div>
         {% endif %}
 
-        <button class="btn" id="btn_conti" type="submit" onclick="animabotoncarga_sin_autorizacion()">
-        Continuar
-        <div id="btn_carga" class="conten_carga">
-                <div class="carga"></div>
-        </div>
+        <button class="btn" id="btn_conti" type="submit">
+            <span class="btn-text">Continuar</span>
+            <span class="loader" style="display: none;"></span>
         </button>
-
-
-
     </form>
-
-    
     <div class="conten-progreso-global">
         <div class="pagina">Paso {{ wizard.steps.step1 }} de 7</div>
         <div class="contenedor">

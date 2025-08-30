@@ -1,7 +1,10 @@
 import re
 from datetime import datetime
+from typing import Any
 
 from django import template
+from django.core.exceptions import ValidationError
+from django.forms import Form
 
 register = template.Library()
 
@@ -55,3 +58,20 @@ def row_color(rad) -> str:
         return "#e6ffda"  # Green
     else:
         return "#d4fcc0"  # Green
+
+@register.filter
+def get_modal_context(element: Form) -> dict[str, Any] | None:
+    """Extract the error code from error form response.
+    Example of return:
+    {'modal_type': 'blocked_number', 'modal_title': 'Teléfono no permitido',
+ 'modal_body': 'Lo sentimos, no está permitido este número celular:<br><br>3205458076<br><br>Para más información comunícate con nosotros al 333 033 3124',
+ 'button_text': 'Entendido',
+ 'button_color_class': 'bg-blue-600',
+ 'button_color_hover': 'bg-blue-400'}
+    """
+    try:
+        return list(element.errors.as_data().values())[0][0].params
+    except AttributeError as e:
+        print(e)
+
+

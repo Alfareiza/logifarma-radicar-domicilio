@@ -1,6 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
-
+{% load my_filters %}
 {% block title %}Elige Municipio{% endblock %}
 
 {% block content %}
@@ -35,19 +35,16 @@
 
             <div id="elecci" class="elec">
                 {% for municipio in wizard.form.municipio %}
-                <div class="con">
-                <span class="radio">{{ municipio.tag }}</span>
-            <label class="labelfil" for="{{ municipio.id_for_label }}">{{ municipio.choice_label }}</label>
-            </div>
-            {% endfor %}
+                    <div class="row-radio-btn"> {{ municipio.tag }}
+                        <label class="label-radio" for="{{ municipio.id_for_label }}">{{ municipio.choice_label }}</label>
+                    </div>
+                {% endfor %}
             </div>
 
         {% endif %}
-        <button class="btn" id="btn_conti" type="submit" onclick="animabotoncarga_municipio()">
-            Continuar
-            <div id="btn_carga" class="conten_carga">
-                <div class="carga"></div>
-            </div>
+         <button class="btn" id="btn_conti" type="submit">
+            <span class="btn-text">Continuar</span>
+            <span class="loader" style="display: none;"></span>
         </button>
     </form>
 
@@ -67,3 +64,20 @@
 
 </section>
 {% endblock %}
+{% block extrajs %}
+<script>
+  const input = document.getElementById('escri');
+  const radios = document.querySelectorAll('input[name="eligeMunicipio-municipio"]');
+
+  radios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      const label = document.querySelector(`label[for="${radio.id}"]`);
+      input.value = label.textContent;
+    });
+
+    // Initialize input with the checked radio on page load
+    if (radio.checked) input.value = document.querySelector(`label[for="${radio.id}"]`).textContent;
+  });
+</script>
+{% endblock %}
+

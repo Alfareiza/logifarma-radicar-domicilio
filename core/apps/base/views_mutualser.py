@@ -45,11 +45,11 @@ class DocumentoMutualSer(forms.Form):
         ("AS", "AS - Adulto sin ID"),  # Adulto sin ID
     )
     tipo_identificacion = forms.ChoiceField(
-        choices=IDENTIFICACIONES, label='Tipo de identificación',
+        choices=IDENTIFICACIONES, label='Tipo de documento',
         widget=forms.Select(attrs={'class': 'custom-select'})
     )
     identificacion = forms.CharField(
-        min_length=6, max_length=20, label='Identificación',
+        min_length=6, max_length=20, label='Número de documento',
         widget=forms.TextInput(attrs={'class': 'effect-16', 'autofocus': True})
     )
 

@@ -1,6 +1,7 @@
 import threading
 from datetime import datetime
 
+from decouple import config, Csv
 from django import forms
 from django.core.exceptions import ValidationError
 from django.template.loader import get_template
@@ -44,9 +45,7 @@ def validate_status(resp_mcar: dict, rad_default: Radicacion) -> ValidationError
             if not rad_default.factura:
                 update_field(rad_default, 'factura', factura)
             text_resp = f'Número de autorización {rad_default.numero_radicado} radicado ' \
-                        f'{radicado_dt}.<br><br>Este domicilio se encuentra en reparto<br><br>' \
-                        f'Si tiene alguna duda se puede comunicar con nosotros ' \
-                        'al 3330333124 <br><br>'
+                        f'{radicado_dt}.<br><br>Este domicilio se encuentra en reparto.'
             resp_fbase = get_firebase_acta(ssc)
             if resp_fbase and resp_fbase['state'] == 'Completed':
                 # Radicado  tiene SSC, factura y está en firebase
@@ -60,28 +59,26 @@ def validate_status(resp_mcar: dict, rad_default: Radicacion) -> ValidationError
                     f'Número de autorización {rad_default.numero_radicado} radicado '
                     f'{radicado_dt} y entregado {entregado_dt}<br><br>'
                     '<a style="text-decoration:none" href="{0}"">Ver soporte</a><br>'
-                    '(Solo para personal autorizado)<br><br>'
-                    'Si tiene alguna duda se puede comunicar con nosotros '
-                    'al 3330333124 <br><br>').format(reverse('soporte', args=(value,)))
+                    '(Solo para personal autorizado).').format(reverse('soporte', args=(value,)))
         elif rad_default.is_anulado:
             logger.info(f"{head_msg} y anulado, acta #{ssc}.")
-            text_resp = f'Número de autorización {rad_default.numero_radicado} anulado.' \
-                        '<br><br>Si tiene alguna duda se puede comunicar con nosotros ' \
-                        'al 3330333124 <br><br>'
+            text_resp = f'Número de autorización {rad_default.numero_radicado} anulado.'
         else:
             # Radicado  tiene SSC pero no tiene factura y por eso se asume que no está en firebase
             logger.info(f"{head_msg} y se encuentra en preparación, acta #{ssc}.")
             text_resp = f'Número de autorización {rad_default.numero_radicado} radicado ' \
-                        f'{radicado_dt}.<br><br>Este domicilio se encuentra en preparación.<br><br>' \
-                        'Si tiene alguna duda se puede comunicar con nosotros ' \
-                        'al 3330333124 <br><br>'
+                        f'{radicado_dt}.<br><br>Este domicilio se encuentra en preparación.'
     else:
         # Radicado no tiene SSC, se asume que no tiene factura ni está en firebase
         logger.info(f"{head_msg} y aún no tiene acta.")
-        text_resp = f'Número de autorización {rad_default.numero_radicado} radicado ' \
-                    f'{radicado_dt}.\n\n Si tiene alguna duda se puede ' \
-                    'comunicar con nosotros al 3330333124'
-    raise forms.ValidationError(mark_safe(text_resp))
+        text_resp = f'Número de autorización {rad_default.numero_radicado} radicado {radicado_dt}.'
+    raise forms.ValidationError(
+        message='Informando estado de radicado.',
+        params={
+            'modal_type': 'status_radicado',
+            'modal_title': text_resp,
+            'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+        })
 
 
 def validate_aut_exists(resp_eps: dict, num_aut: int) -> ValidationError:
@@ -91,10 +88,14 @@ def validate_aut_exists(resp_eps: dict, num_aut: int) -> ValidationError:
     """
     if resp_eps.get('codigo') == "1":
         logger.info(f"Número de autorización {num_aut} no encontrado.")
-        raise forms.ValidationError(f"Número de autorización {num_aut} no encontrado\n\n"
-                                    "Por favor verifique\n\n"
-                                    "Si el número está correcto, comuníquese con cajacopi EPS\n"
-                                    "al 01 8000 111 446")
+        raise forms.ValidationError(
+            message=f'Número de autorización {num_aut} no encontrado',
+            params={
+                'modal_type': 'autorizacion_no_existe',
+                'modal_title': f"El número de autorización {num_aut} no ha sido encontrada, por favor verifica.",
+                'modal_body': "Si el número es correcto comunícate con Cajacopi EPS al <a class='tel' href='tel:018000111446'>01 8000 111 446</a>.",
+            }
+        )
 
 
 def validate_structure(resp_eps: dict, num_aut: int) -> ValidationError:
@@ -122,9 +123,12 @@ def validate_structure(resp_eps: dict, num_aut: int) -> ValidationError:
 
     if inconsistencia:
         logger.info(f"Incosistencia en radicado #{num_aut}.")
-        raise forms.ValidationError(f"Detectamos un problema interno con este número de autorización\n"
-                                    f"{num_aut}\n\n"
-                                    "Comuníquese con Logifarma al 3330333124")
+        raise forms.ValidationError(
+            message='Problema con respuesta de API',
+            params={'modal_type': 'api_unexpected_response',
+                    'modal_title': f"Detectamos un problema interno con el número de autorización {num_aut}.",
+                    'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>."
+                    })
 
 
 def validate_med_controlados(resp_eps: dict, num_aut: int) -> ValidationError:
@@ -144,11 +148,8 @@ def validate_med_controlados(resp_eps: dict, num_aut: int) -> ValidationError:
         )
         logger.info(f"{num_aut} posee medicamentos controlados: {cums_found}.")
         text_resp = f'La autorización {num_aut} contiene ' \
-                    f'medicamento(s) controlado(s):<br>' \
-                    f"{obj_info}" \
-                    f'<br><br> Por favor dirigete a uno de nuestros dispensarios.' \
-                    f'<br><br> Si tiene alguna duda se puede comunicar con nosotros ' \
-                    'al 3330333124 <br><br>'
+                    f'medicamento(s) controlado(s):<br>{obj_info}' \
+                    f'<br><br> Por favor dirigete a uno de nuestros dispensarios.'
 
         htmly = get_template(BASE_DIR / "core/apps/base/templates/notifiers/med_controlados.html")
         x = threading.Thread(target=notify, args=(
@@ -157,7 +158,13 @@ def validate_med_controlados(resp_eps: dict, num_aut: int) -> ValidationError:
         ))
         x.start()
 
-        raise forms.ValidationError(mark_safe(text_resp))
+        raise forms.ValidationError(
+            message='Medicamento controlado.',
+            params={
+                'modal_type': 'medicamento_controlado',
+                'modal_title': text_resp,
+                'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+            })
 
 
 def validate_status_afiliado(resp_eps: dict, name_key: str, id_transaction: str) -> ValidationError:
@@ -178,8 +185,12 @@ def validate_status_afiliado(resp_eps: dict, name_key: str, id_transaction: str)
     if resp_eps.get(name_key) not in ('ACTIVO', 'PROTECCION LABORAL'):
         logger.info(f"{id_transaction} Estado del afiliado no es activo, sino {resp_eps.get(name_key)!r}.")
         raise forms.ValidationError(
-            mark_safe("Disculpa, el estado del afiliado no es el esperado.<br><br>"
-                      "Por favor verifica e intenta nuevamente."))
+            message='Estado de afiliado no es el esperado.',
+            params={
+                'modal_type': 'estado_afiliado',
+                'modal_title': "Disculpa, el estado del afiliado no es el esperado. Por favor verifica e intenta nuevamente.",
+                'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+            })
 
 
 def validate_status_aut(resp_eps: dict, num_aut: int) -> ValidationError:
@@ -187,8 +198,14 @@ def validate_status_aut(resp_eps: dict, num_aut: int) -> ValidationError:
     Valida que el estado de la autorización sea "PROCESADA"
     """
     if resp_eps.get('ESTADO_AUTORIZACION') not in ('PROCESADA', 'ACTIVA'):
-        logger.info(f"El estado de la autorización #{num_aut} es diferente de PROCESADA.")
-        raise forms.ValidationError("El estado de la autorización no está activa.")
+        logger.info(msg := f"El estado de la autorización #{num_aut} es diferente de PROCESADA.")
+        raise forms.ValidationError(
+            message=msg,
+            params={
+                'modal_type': 'autorizacion_inactiva',
+                'modal_title': "El estado de la autorización no está activa.",
+                'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+            })
 
 
 def validate_identificacion_exists(entidad: str, resp: dict, info: str) -> ValidationError:
@@ -201,59 +218,64 @@ def validate_identificacion_exists(entidad: str, resp: dict, info: str) -> Valid
                 Ej: 'CC:123456789'
     """
     if resp.get('NOMBRE') and 'no existe' in resp['NOMBRE']:
-        logger.warning(f"{info} no fue encontrado en {entidad}.")
+        logger.warning(msg := f"{info} no fue encontrado en {entidad}.")
         raise forms.ValidationError(
-            mark_safe(f"Disculpa, no hemos podido encontrar información con ese documento en {entidad.title()}.<br><br>"
-                      "Por favor verifica e intenta nuevamente."))
+            message=msg,
+            params={
+                'modal_type': "status_radicado",
+                'modal_title': f"No hemos podido encontrar información con ese documento en {entidad.title()}.",
+                'modal_body': "Por favor verifica e intenta nuevamente o comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+            })
 
 
 def validate_email(email: str) -> ValidationError:
     """ Valida que el e-mail esté correcto. """
-    if has_accent(email):
-        raise forms.ValidationError(mark_safe("E-mail inválido."))
+    # Esto ya es validado vía js
+    # if has_accent(email):
+    #     raise forms.ValidationError(mark_safe("E-mail inválido."))
 
     import re
     regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
     if not re.fullmatch(regex, email):
-        raise forms.ValidationError(mark_safe("E-mail inválido."))
+        raise forms.ValidationError(
+            message='E-mail inválido.',
+            params={
+                'modal_type': "invalid_email",
+                'modal_title': "E-mail inválido.",
+            }
+        )
 
 
 def validate_empty_response(resp_eps: dict, documento: str, entidad: str) -> ValidationError:
     if not resp_eps:
-        logger.info(f"{documento} No se pudo obtener información del afiliado en {entidad.upper()}.")
-        raise forms.ValidationError(mark_safe("Disculpa, en estos momentos no tenemos conexión<br><br>"
-                                              "Por favor intentalo más tarde o en caso de dudas, <br>"
-                                              "comunícate con nosotros al <br>333 033 3124"))
+        logger.info(msg := f"{documento} No se pudo obtener información del afiliado en {entidad.upper()}.")
+        raise forms.ValidationError(
+            message=msg,
+            params={
+                'modal_type': 'status_radicado',
+                'modal_title': "Disculpa, en estos momentos no tenemos conexión.",
+                'modal_body': "Por favor intentalo más tarde o en caso de dudas comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+            })
 
 
 def announce_pending_radicado_and_render_buttons(existing_radicados: 'QuerySet') -> ValidationError:
     """Raise an exception with "entiendo" button and "solicitar fórmula nueva" button conditionally."""
     rad = existing_radicados.first()
     template_btn = get_template('base/btn_in_modal.html')
-    entiendo = template_btn.render({'id': 'entiendo', 'txt': 'Entiendo', 'bgcolor': '#2a57a9',
-                                    'txtcolor': 'white', 'widthbox': 70})
     new_formula = template_btn.render({'id': 'new_formula', 'txt': 'Solicitar fórmula nueva',
                                        'bgcolor': 'white', 'txtcolor': '#2a57a9', 'widthbox': 22})
-    raise forms.ValidationError(mark_safe("Tenemos pendiente la entrega de medicamento(s) con el "
-                                          f"número de radicación {rad.numero_autorizacion} solicitado "
-                                          f"{format(rad.datetime, when(rad.datetime))}.<br><br>"
-                                          f'<a style="text-decoration:none" target="_blank" '
-                                          f'href="{rad.foto_formula}"">Click aquí para ver la fórmula</a><br><br>'
-                                          f'<b>No es necesario que la vuelvas a radicar</b><br><br>'
-                                          f'{entiendo}<br>{new_formula}<br>'))
-
-
-def announce_articulos_por_autorizacion(existing_radicados: 'QuerySet') -> ValidationError:
-    """Raise an exception with "entiendo" button and "solicitar fórmula nueva" button conditionally."""
-    # rad = existing_radicados.first()
-    template_btn = get_template('base/btn_in_modal.html')
-    entiendo = template_btn.render({'id': 'entiendo', 'txt': 'Entiendo', 'bgcolor': '#2a57a9',
-                                    'txtcolor': 'white', 'widthbox': 70})
-    raise forms.ValidationError(mark_safe("No tienes artículos pendientes por radicar."
-                                          # f"número de radicación {rad.numero_autorizacion} solicitado "
-                                          # f"{format(rad.datetime, when(rad.datetime))}."
-                                          f'<br><br><b>No es necesario que la vuelvas a radicar</b><br><br>'
-                                          f'{entiendo}<br>'))
+    raise forms.ValidationError(
+        message='Informando estado de radicado.',
+        params={
+            'modal_type': 'autorizacion_pendiente_por_entregar',
+            'modal_title': "Tenemos pendiente la entrega de artículo(s) con el "
+                           f"número de radicación {rad.numero_autorizacion} solicitado "
+                           f"{format(rad.datetime, when(rad.datetime))}.",
+            'modal_body': f'<a class="tel" style="text-decoration:none" target="_blank" '
+                          f'href="{rad.foto_formula}">Click aquí para ver la fórmula</a>. '
+                          f'<b>No es necesario que la vuelvas a radicar</b>.',
+            'second_button': 'solicitar_formula_nueva'
+        })
 
 
 def validate_recent_radicado(tipo: str, value: str, convenio: str):
@@ -320,22 +342,33 @@ def validate_resp_zona_ser(scrapper: ScrapMutualSer):
     if not scrapper.resultado:
         logger.error(
             f"Error en afiliado {scrapper.tipo_documento}{scrapper.documento} con scrapper id {scrapper.id}")
-        raise forms.ValidationError(mark_safe("No pudimos procesar tu solicitud en este momento. Por favor, "
-                                              "intenta nuevamente más tarde. Gracias por tu comprensión!.<br><br>"
-                                              "Comunícate con nostros al número <br>333 033 3124"))
+        raise forms.ValidationError(
+            message=f'Scrapper {scrapper.id} ha fallado.',
+            params={
+                'modal_type': 'scrapper_failed',
+                'modal_title': "No pudimos procesar tu solicitud en este momento.",
+                'modal_body': "Por favor intenta nuevamente más tarde o comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+            })
 
     if msg := scrapper.resultado.get('MSG'):
         extra_txt = "Por favor, intenta nuevamente más tarde."
         match msg.lower():
             case 'usuario no posee autorizaciones en mutual ser.':
-                msg = "No tienes solicitudes de artículos pendientes por radicar. <br><br>Si consideras que tienes artículos por radicar, por favor comunícate con Mutualser al número 018000 116882 o #603<br><br>"
+                msg = "No tienes solicitudes de fórmulas médicas pendientes por radicar."
             case _:
                 msg = f"Encontramos una inconsistencia en nuestro sistema. {extra_txt}"
                 logger.error(f"Revisar afiliado {scrapper.tipo_documento}{scrapper.documento} (scrapper {scrapper.id}):"
                              f" {scrapper.resultado.get('MSG')}")
 
-        raise forms.ValidationError(mark_safe(f"{msg} <br>Gracias por tu comprensión!.<br><br>"
-                                              "Comunícate con nostros al número <br>333 033 3124"))
+        txt_mutualser = "Si consideras que tienes artículos por radicar, por favor comunícate con Mutualser EPS al número <a class='tel' href='tel:018000116882'>018000 116882</a> o <a class='tel' href='tel:#603'>#603</a>."
+        txt_logi = "Para comunicarte con Logifarma, llámanos al <a class='tel' href='tel:3330333124'>333 033 3124</a>."
+        raise forms.ValidationError(
+            message='Scrapper falló y se obtuvo el mensaje de la falla.',
+            params={
+                'modal_type': 'scrapper_failed',
+                'modal_title': msg,
+                'modal_body': txt_logi if 'inconsistencia' in msg else f"{txt_mutualser}<br><br>{txt_logi}"
+            })
 
 
 def validate_dispensados(scrapper: ScrapMutualSer):
@@ -345,40 +378,88 @@ def validate_dispensados(scrapper: ScrapMutualSer):
     for aut in scrapper.resultado:
         dct['ENTREGADOS' if aut['DISPENSADO'] else 'PENDIENTES'].append(aut)
     if not dct['PENDIENTES']:
-        entiendo = get_template('base/btn_in_modal.html').render(
-            {'id': 'entiendo', 'txt': 'Entiendo', 'bgcolor': '#2a57a9', 'txtcolor': 'white', 'widthbox': 70}
-        )
         logger.info(f"{scrapper.tipo_documento}{scrapper.documento} scrap={scrapper.id} no tiene autorizaciones"
                     f" pendientes por radicar")
         raise forms.ValidationError(
-            mark_safe(f"No tienes autorizaciones pendientes por radicar<br><br>"
-                      "Si consideras que tienes artículos por radicar, por favor comunícate "
-                      "con Mutualser al número <br>018000 116882 o #603<br><br>"
-                      f"<br>{entiendo}<br>"))
+            message='sin_autorizaciones_pendientes_por_radicar',
+            params={
+                'modal_type': 'status_radicado',
+                'modal_title': "No tienes autorizaciones pendientes por radicar.",
+                'modal_body': "Si consideras que tienes artículos por radicar, por favor comunícate con Mutualser al número <a class='tel' href='tel:018000116882'>018000 116882</a> o <a class='tel' href='tel:#603'>#603</a>.",
+            })
 
 
-def validate_numero_celular(cel):
+def validate_numero_celular(cel: int):
     cel_str = str(cel)
+    if len(cel_str) != 10:
+        if len(cel_str) >= 11:
+            raise forms.ValidationError(
+                message='Numero muy largo.',
+                params={
+                    'modal_type': 'long_number',
+                    'modal_title': "Teléfono incorrecto",
+                    'modal_body': f"Revisa tu número de celular ({cel}), parece que tiene uno o más dígitos sobrando.",
+                },
+            )
+        elif len(cel_str) >= 1:
+            raise forms.ValidationError(
+                message='Numero muy corto.',
+                params={
+                    'modal_type': 'short_number',
+                    'modal_title': "Teléfono incorrecto",
+                    'modal_body': f"Revisa tu número de celular ({cel}), parece que está incompleto o le faltan algunos dígitos.",
+                },
+            )
+
     if cel_str[0].startswith('57'):
         raise forms.ValidationError(
-            f"Número de celular incorrecto, no es necesario que coloques el indicativo de Colombia."
-            f":\n{cel}")
+            message='Numero contiene indicativo de Colombia.',
+            params={
+                'modal_type': 'wrong_number',
+                'modal_title': "Teléfono incorrecto",
+                'modal_body': f"Número de celular incorrecto ({cel}), no es necesario que coloques el indicativo de Colombia.",
+            },
+        )
 
-    if len(cel_str) != 10:
-        if len(cel_str) == 11:
-            raise forms.ValidationError(f"Revisa tu número de celular, parece que tiene un dígito de más:\n{cel}")
-        elif len(cel_str) > 11:
-            raise forms.ValidationError(
-                f"Revisa tu número de celular, parece que tiene más de un dígito de más:\n{cel}")
-        elif len(cel_str) > 1:
-            raise forms.ValidationError(f"Revisa tu número de celular, parece que está incompleto o le"
-                                        f" faltan algunos dígitos:\n{cel}")
-
-    numeros_fake = ('30000000',)
-    if cel_str in numeros_fake:
+    numeros_fake = (300_000_0000,)
+    if cel_str in tuple(map(str, numeros_fake)):
         raise forms.ValidationError(
-            f"Lo sentimos, debes colocar un número real para garantizar que todo saldrá bien:\n{cel}")
+            message='Numero no es de verdad.',
+            params={
+                'modal_type': 'fake_number',
+                'modal_title': "Teléfono incorrecto",
+                'modal_body': "Lo sentimos, debes colocar un número real para garantizar que todo saldrá bien.",
+            },
+        )
 
     if cel_str[0] != "3":
-        logger.info(f"Número de celular {cel} incorrecto.")
-        raise forms.ValidationError(f"Número de celular incorrecto:\n{cel}")
+        logger.info(msg := f"Número de celular {cel} incorrecto.")
+        raise forms.ValidationError(message=msg, params={
+            'modal_type': 'unexpected_number',
+            'modal_title': "Teléfono incorrecto",
+            'modal_body': f"El número de celular que has digitado es incorrecto ({cel}).",
+        }
+                                    )
+def direccion_min_length_validator(value):
+    if len(value) < 5:
+        raise ValidationError(
+            message=f"Asegúrese de que este valor tenga como mínimo 5 caracteres (tiene {len(value)}).",
+            code='short_number',
+            params={
+                'modal_type': 'short_number',
+                'modal_title': f"Asegúrese de que este valor tenga como mínimo 5 caracteres (tiene {len(value)})."
+            }
+        )
+
+# def validate_numeros_bloqueados(cel: int):
+#     """Valida que el número ingresado no se encuentre entre los numeros bloqueados."""
+#     numeros_bloqueados = config('CELULARES_NO_PERMITIDOS', cast=Csv(), default=())
+#     if str(cel) in numeros_bloqueados:
+#         raise forms.ValidationError(
+#             message="Numero no permitido",  # Uso interno
+#             params={
+#                 'modal_type': 'blocked_number',
+#                 'modal_title': f"Disculpa, el número de celular {cel} está restringido.",
+#                 'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+#             }
+#         )

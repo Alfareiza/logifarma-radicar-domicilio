@@ -67,7 +67,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 
 .img1 {position: relative;
     margin: 0% auto;
-    width: 17%;
+    width: 100%;
     padding: 1% 41.5%;}
 
 .label_vist {position: relative;
@@ -83,16 +83,26 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     height: 80%;
 }
 
-.btn {position: absolute;
-    padding: 0.6% 4%;
+.btn {position: absolute; /* General settings */
+    padding: .7rem 6.1rem;
     margin: 0 auto;
     font-size: 2em;
-    border-radius: 0px;
-    left: 40%;
+    border-radius: .4rem;
+    left: 50%;
+    transform: translateX(-50%);
     top: 90%;
-    background: #ffffff;
-    border-color: #468bc4;
-    color: #468bc4;}
+    background: var(--azul-logifarma-ligth);
+    border-color: var(--azul-logifarma-ligth);
+    color: white}
+
+.btn:hover {
+    background: var(--azul-logifarma-dark);
+    border-color: var(--azul-logifarma-dark);
+}
+
+.tel {
+    color: var(--azul-logifarma-ligth);
+}
 
 .conten_carga { background: #ffffff;
     height: 100%;
@@ -173,6 +183,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     --linea--borde-vacio:#e0e0e0;
     --azul-one: #468bc4;
     --azul-two: #007BFF;
+    --azul-logifarma-ligth: #2a57a9;
+    --azul-logifarma-dark: #023798;
 
       --text-xs: 0.6875rem;
       --text-sm: 0.8125rem;
@@ -198,6 +210,21 @@ body {
     top: 97%;
     transform: rotate(0deg);
     left: 20%;
+}
+.azul-logi-dark {
+    color: var(--azul-logifarma-dark);
+}
+
+.azul-logi-ligth {
+    color: var(--azul-logifarma-ligth);
+}
+
+.bg-azul-logi-dark {
+    background-color: var(--azul-logifarma-dark);
+}
+
+.bg-azul-logi-ligth {
+    background-color: var(--azul-logifarma-ligth);
 }
 
 .pagina {
@@ -629,7 +656,7 @@ margin: 0;
     text-align: left;
     padding: 2% 0;
     pointer-events: none;
-    font-size: 1.1em;
+    font-size: 1em;
     }
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
@@ -669,11 +696,13 @@ main section.vista3 div.tet a.vist3 {left: 43%;
 main section.vista4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section.vista4 h1.vist4 {width: 75%;
+main section.vista4 h1.vist4 {
+    width: 75%;
     text-align: center;
     margin: 0 auto;
     font-size: 1.4em;
-    font-weight: 400;}
+    font-weight: 400;
+    }
 
 
 main section.vista4 p.vist4_1 { width: 44%;
@@ -855,34 +884,6 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     font-size: --var(--text-base)
     }
 
-.select_opt[type='radio']:after {
-    width: 75%;
-    height: 75%;
-    border-radius: 15px;
-    top: 0px;
-    left: 0px;
-    position: relative;
-    background-color: #ffffff;
-    content: '';
-    display: inline-block;
-    visibility: visible;
-    border: 3px solid #0572ce
-}
-
-.select_opt[type='radio']:checked:after {
-    width: 90%;
-    height: 90%;
-    border-radius: 15px;
-    top: 0px;
-    left: 0px;
-    position: relative;
-    background-color: #0572ce;
-    content: '';
-    display: inline-block;
-    visibility: visible;
-    border: 1px solid #0572ce;
-}
-
 .elec {position: relative;
     width: 30%;
     height: 31vh;
@@ -899,24 +900,21 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     border-radius: 8px;
 }
 
-.con {display: flex;
-    margin: 5px 0px;
-    height: 29px;}
-
-.con:hover {background: #d4cfcf;}
-
-.radio {margin: 1px auto 0% 2%;
-    position: absolute;
-    width: 28px;
-    height: 28px;
-    padding: 0;
+.row-radio-btn {
+    display: flex;
+    padding: .125rem 1rem;
+    justify-content: space-between;
+    align-items: center;
+    margin-botton: .4rem;
 }
 
-.labelfil {width: 91%;
-    margin: auto 0% auto 0%;
-    font-size: 1.1em;
-    padding: 0px 1px 0px 7%;
-    z-index: 1; }
+.row-radio-btn:hover {background: #d4cfcf;}
+
+.label-radio {
+    width: 91%;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+}
 
 .btn_muni {position: fixed;
     padding: 0.5% 5%;
@@ -1298,7 +1296,7 @@ main section.vista10 p.vist10 {position: relative;
 }
 .label-and-select label{
     margin-bottom: .5rem;
-    color: #007BFF;
+    color: var(--azul-logifarma-dark);
 }
 
 .mt-2 { margin-top:2rem }
@@ -1377,7 +1375,7 @@ main section.vista10 p.vist10 {position: relative;
     .input-effect input:valid + label {
       top: -1.5rem;
       font-size: 1.2em;
-      color: #007BFF; /* You can adjust the color to your preference */
+      color: var(--azul-logifarma-dark); /* You can adjust the color to your preference */
     }
 
     .input-effect input {
@@ -1427,7 +1425,7 @@ main section.vista10 p.vist10 {position: relative;
     .input-effect input:valid + label {
       top: -1.5rem;
       font-size: 1.2em;
-      color: #007BFF; /* You can adjust the color to your preference */
+      color: var(--azul-logifarma-dark); /* You can adjust the color to your preference */
     }
 
     .input-effect input {
@@ -1515,7 +1513,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 
 .img1 {position: relative;
     margin: 0% auto;
-    width: 17%;
+    width: 100%;
     padding: 1% 41.5%;}
 
 .label_vist {position: relative;
@@ -1531,16 +1529,9 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     height: 100%;
 }
 
-.btn {position: absolute;
-    padding: 0.4% 5%;
-    margin: 0 auto;
+.btn { /* max width 1899px */
     font-size: 1.8em;
-    border-radius: 0px;
-    left: 40%;
-    top: 89%;
-    background: #ffffff;
-    border-color: #468bc4;
-    color: #468bc4;}
+    top: 89%;}
 
 .conten_carga { background: #ffffff;
     height: 100%;
@@ -2054,17 +2045,6 @@ main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
 margin: 0;
 }
 
-.inputext_auto {position: absolute;
-    width: 100%;
-    height: 46%;
-    top: 0;
-    left: 0;
-    text-align: left;
-    padding: 2% 0;
-    pointer-events: none;
-        font-size: 1em;
-    }
-
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
@@ -2104,12 +2084,6 @@ main section.vista3 div.tet a.vist3 {left: 43%;
 
 main section.vista4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-
-main section.vista4 h1.vist4 {width: 75%;
-    text-align: center;
-    margin: 0 auto;
-    font-size: 1.4em;
-    font-weight: 400;}
 
 
 main section.vista4 p.vist4_1 { width: 44%;
@@ -2286,33 +2260,7 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     color: #a3a3a3;}
 
 
-.select_opt[type='radio']:after {
-    width: 100%;
-    height: 100%;
-    border-radius: 15px;
-    top: -4px;
-    left: -2px;
-    position: relative;
-    background-color: #ffffff;
-    content: '';
-    display: inline-block;
-    visibility: visible;
-    border: 3px solid #0572ce
-}
 
-.select_opt[type='radio']:checked:after {
-    width: 100%;
-    height: 100%;
-    border-radius: 15px;
-    top: -7px;
-    left: 0px;
-    position: relative;
-    background-color: #0572ce;
-    content: '';
-    display: inline-block;
-    visibility: visible;
-    border: 1px solid #0572ce;
-}
 
 .elec {position: relative;
     width: 30%;
@@ -2321,24 +2269,8 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     overflow: auto;}
 
 
-
-.con {display: flex;
-    margin: 5px 0px;
-    height: 29px;}
-
 .con:hover {background: #d4cfcf;}
 
-.radio { margin: 1% auto;
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    padding: 0;}
-
-.labelfil {width: 91%;
-    margin: auto 0% auto 0%;
-    font-size: 1em;
-    padding: 0px 1px 0px 8%;
-    z-index: 1; }
 
 .btn_muni {position: fixed;
     padding: 0.5% 5%;
@@ -2743,7 +2675,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 
 .img1 {position: relative;
     margin: 0% auto;
-    width: 17%;
+    width: 100%;
     padding: 2% 41.5%;}
 
 .label_vist {position: relative;
@@ -2759,17 +2691,8 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     height: 100%;
     margin: 0;}
 
-.btn {position: absolute;
-    padding: 3% 14%;
-    margin: 0 auto;
-    font-size: 2em;
-    border-radius: 0px;
-    left: 29%;
-    top: 89%;
-    background: #ffffff;
-    border-color: #468bc4;
-    color: #468bc4;}
-
+.btn { /* max width 1024px and 1366px*/
+    top: 89%;}
 .conten_carga { background: #ffffff;
     height: 100%;
     width: 100%;
@@ -3278,17 +3201,7 @@ main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
 margin: 0;
 }
 
-.inputext_auto {position: absolute;
-    width: 100%;
-    height: 46%;
-    top: 0;
-    left: 0;
-    text-align: left;
-    padding: 2% 0;
-    pointer-events: none;
-    font-size: 2em;
-    }
-    
+
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
@@ -3325,12 +3238,6 @@ main section.vista3 div.tet a.vist3 {left: 0%;
 
 main section.vista4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-
-main section.vista4 h1.vist4 {width: 75%;
-    text-align: center;
-    margin: 0 auto;
-    font-size: 2.4em;
-    font-weight: 400;}
 
 
 main section.vista4 p.vist4_1 { width: 63%;
@@ -3511,33 +3418,6 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     color: #a3a3a3;}
 
 
-.select_opt[type='radio']:after {
-    width: 90%;
-    height: 90%;
-    border-radius: 15px;
-    top: -1px;
-    left: -1px;
-    position: relative;
-    background-color: #ffffff;
-    content: '';
-    display: inline-block;
-    visibility: visible;
-    border: 3px solid #0572ce
-}
-
-.select_opt[type='radio']:checked:after {
-    width: 100%;
-    height: 100%;
-    border-radius: 15px;
-    top: -1px;
-    left: -1px;
-    position: relative;
-    background-color: #0572ce;
-    content: '';
-    display: inline-block;
-    visibility: visible;
-    border: 1px solid #0572ce;
-}
 
 .elec {position: relative;
     width: 70%;
@@ -3554,25 +3434,6 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     background: #0572ce;
     border-radius: 8px;
 }
-
-.con {display: flex;
-    margin: 5px 0px;
-    height: 29px;}
-
-.con:hover {background: #d4cfcf;}
-
-.radio {margin: 1px auto 0% 2%;
-    position: absolute;
-    width: 28px;
-    height: 28px;
-    padding: 0;
-}
-
-.labelfil {width: 90%;
-    margin: auto 0% auto 0%;
-    font-size: 1.9em;
-    padding: 0px 1px 0px 9%;
-    z-index: 1; }
 
 .btn_muni {position: absolute;
     padding: 3% 13%;
@@ -3987,7 +3848,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 
 .img1 {position: relative;
     margin: 0% auto;
-    width: 36%;
+    width: 100%;
     padding: 3% 32%;}
 
 .label_vist {position: relative;
@@ -4003,17 +3864,9 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     height: 100%;
     margin: 0;}
 
-.btn {position: absolute;
-    padding: 3% 14%;
-    margin: 0 auto;
-    font-size: 2em;
-    border-radius: 0px;
-    left: 27%;
-    top: 86%;
-    background: #ffffff;
-    border-color: #468bc4;
-    color: #468bc4;}
-
+.btn { /*max width 822px*/
+    font-size: 1.4rem;
+    top: 90%;}
 .conten_carga { background: #ffffff;
     height: 100%;
     width: 100%;
@@ -4523,17 +4376,6 @@ main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
 margin: 0;
 }
 
-.inputext_auto {position: absolute;
-    width: 100%;
-    height: 46%;
-    top: 0;
-    left: 0;
-    text-align: left;
-    padding: 2% 0;
-    pointer-events: none;
-    font-size: 2em;
-    }
-
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
@@ -4570,12 +4412,6 @@ main section.vista3 div.tet a.vist3 {left: 0%;
 
 main section.vista4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
 
-
-main section.vista4 h1.vist4 {width: 75%;
-    text-align: center;
-    margin: 0 auto;
-    font-size: 2.4em;
-    font-weight: 400;}
 
 
 main section.vista4 p.vist4_1 { width: 63%;
@@ -4756,33 +4592,6 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     color: #a3a3a3;}
 
 
-.select_opt[type='radio']:after {
-    width: 90%;
-    height: 90%;
-    border-radius: 15px;
-    top: -1px;
-    left: -1px;
-    position: relative;
-    background-color: #ffffff;
-    content: '';
-    display: inline-block;
-    visibility: visible;
-    border: 3px solid #0572ce
-}
-
-.select_opt[type='radio']:checked:after {
-    width: 100%;
-    height: 100%;
-    border-radius: 15px;
-    top: -1px;
-    left: -1px;
-    position: relative;
-    background-color: #0572ce;
-    content: '';
-    display: inline-block;
-    visibility: visible;
-    border: 1px solid #0572ce;
-}
 
 .elec {position: relative;
     width: 70%;
@@ -4800,24 +4609,6 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     border-radius: 8px;
 }
 
-.con {display: flex;
-    margin: 5px 0px;
-    height: 29px;}
-
-.con:hover {background: #d4cfcf;}
-
-.radio {margin: 1px auto 0% 2%;
-    position: absolute;
-    width: 28px;
-    height: 28px;
-    padding: 0;
-}
-
-.labelfil {width: 90%;
-    margin: auto 0% auto 0%;
-    font-size: 1.9em;
-    padding: 0px 1px 0px 9%;
-    z-index: 1; }
 
 .btn_muni {position: absolute;
     padding: 3% 13%;
@@ -5268,7 +5059,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 
 .img1 {position: relative;
     margin: 0% auto;
-    width: 36%;
+    width: 100%;
     padding: 3% 32%;}
 
 .label_vist {position: relative;
@@ -5286,17 +5077,9 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     height: 85%;
 }
 
-.btn {position: absolute;
-    padding: 3% 30%;
-    margin: 0 auto;
+.btn { /* max width 499px*/
     font-size: 1.1em;
-    border-radius: 0px;
-    left: 9%;
-    top: 89%;
-    background: #ffffff;
-    border-color: #468bc4;
-    color: #468bc4;}
-
+    top: 89%;}
 .conten_carga { background: #ffffff;
     height: 100%;
     width: 100%;
@@ -5805,18 +5588,6 @@ main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
 margin: 0;
 }
 
-.inputext_auto {position: absolute;
-    width: 100%;
-    height: 46%;
-    top: 0;
-    left: 0;
-    text-align: left;
-    padding: 3% 0;
-    pointer-events: none;
-    font-size: 1.2em;
-    color: #333;
-    }
-
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
@@ -5872,11 +5643,13 @@ main section.vista3 button.btn_vist3 {position: absolute;
 main section.vista4 {width: 100%; height: 90vh; position: relative; margin: 0 auto; float: none; display: block;}
 
 
-main section.vista4 h1.vist4 {width: 91%;
+main section.vista4 h1.vist4 { /*max-width 499px*/
+    width: 91%;
     text-align: left;
     margin: 15px auto 0;
     font-size: 1.3em;
-    font-weight: 300;}
+    font-weight: 300;
+    }
 
 
 main section.vista4 p.vist4_1 { width: 89%;
@@ -6059,34 +5832,6 @@ main section.vista6 {width: 100%; height: 90vh; position: relative; margin: 0 au
     left: 0%;
     color: #a3a3a3;}
 
-.select_opt[type='radio']:after {
-    width: 90%;
-    height: 90%;
-    border-radius: 15px;
-    top: -1px;
-    left: -1px;
-    position: relative;
-    background-color: #ffffff;
-    content: '';
-    display: inline-block;
-    visibility: visible;
-    border: 3px solid #0572ce
-}
-
-.select_opt[type='radio']:checked:after {
-    width: 100%;
-    height: 100%;
-    border-radius: 15px;
-    top: -1px;
-    left: -1px;
-    position: relative;
-    background-color: #0572ce;
-    content: '';
-    display: inline-block;
-    visibility: visible;
-    border: 1px solid #0572ce;
-}
-
 .elec {position: relative;
     width: 85%;
     height: 28vh;
@@ -6105,24 +5850,6 @@ main section.vista6 {width: 100%; height: 90vh; position: relative; margin: 0 au
     border-radius: 8px;
 }
 
-.con {display: flex;
-    margin: 5px 0px;
-    height: 29px;}
-
-.con:hover {background: #d4cfcf;}
-
-.radio { margin: 5px auto 0% 2%;
-    position: absolute;
-    width: 23px;
-    height: 23px;
-    padding: 0;
-}
-
-.labelfil {width: 85%;
-    margin: auto 0% auto 0%;
-    font-size: 1em;
-    padding: 0px 1px 0px 11%;
-    z-index: 1; }
 
 .btn_muni {position: absolute;
     padding: 3% 14%;
@@ -6570,7 +6297,7 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
 
 .img1 {position: relative;
     margin: 0% auto;
-    width: 36%;
+    width: 100%;
     padding: 4% 32%;}
 
 .label_vist {position: relative;
@@ -6586,17 +6313,9 @@ main { width: 100%; height: auto; position: relative; margin: 0 auto; float: non
     height: 80%;
 }
 
-.btn {position: absolute;
-    padding: 3% 14%;
-    margin: 0 auto;
+.btn {/* max width 320px*/
     font-size: 1.1em;
-    border-radius: 0px;
-    left: 20%;
-    top: 85%;
-    background: #ffffff;
-    border-color: #468bc4;
-    color: #468bc4;}
-
+    top: 85%;}
 .conten_carga { background: #ffffff;
     height: 100%;
     width: 100%;
@@ -7104,16 +6823,6 @@ main section.vista3 input.inp_vist3::-webkit-inner-spin-button{
 margin: 0;
 }
 
-.inputext_auto {position: absolute;
-    width: 100%;
-    height: 46%;
-    top: 0;
-    left: 0;
-    text-align: left;
-    padding: 4% 0;
-    pointer-events: none;
-    font-size: 0.9em;
-    }
 main section.vista3 input.aut :focus {border-bottom: 1px solid #0572ce;
     box-shadow: 0 1px 0 0 #0572ce;}
 
@@ -7160,13 +6869,6 @@ main section.vista3 button.btn_vist3 {position: absolute;
 /* ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
 
 main section.vista4 {width: 100%; height: 100vh; position: relative; margin: 0 auto; float: none; display: block;}
-
-
-main section.vista4 h1.vist4 {width: 75%;
-    text-align: center;
-    margin: 0 auto;
-    font-size: 1.4em;
-    font-weight: 400;}
 
 
 main section.vista4 p.vist4_1 { width: 63%;
@@ -7343,52 +7045,12 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     left: 0%;
     color: #a3a3a3;}
 
-.select_opt[type='radio']:after {
-    width: 66%;
-    height: 66%;
-    border-radius: 15px;
-    top: 0px;
-    left: 0px;
-    position: relative;
-    background-color: #ffffff;
-    content: '';
-    display: inline-block;
-    visibility: visible;
-    border: 3px solid #0572ce
-}
-
-.select_opt[type='radio']:checked:after {
-    width: 100%;
-    height: 100%;
-    border-radius: 15px;
-    top: -1px;
-    left: -1px;
-    position: relative;
-    background-color: #0572ce;
-    content: '';
-    display: inline-block;
-    visibility: visible;
-    border: 1px solid #0572ce;
-}
 
 .elec {position: relative;
     width: 85%;
     height: 21vh;
     margin: 5% auto 0 auto;
     overflow: auto;}
-
-.con {display: flex;
-    margin: 5px 0px;
-    height: 29px;}
-
-.con:hover {background: #d4cfcf;}
-
-.radio { margin: 5px auto 0% 2%;
-    position: absolute;
-    width: 23px;
-    height: 23px;
-    padding: 0;
-}
 
 .elec::-webkit-scrollbar{
    width: 10px;
@@ -7400,11 +7062,6 @@ main section.vista6 {width: 100%; height: 100vh; position: relative; margin: 0 a
     border-radius: 8px;
 }
 
-.labelfil {width: 91%;
-    margin: auto 0% auto 0%;
-    font-size: 0.9em;
-    padding: 0px 1px 0px 13%;
-    z-index: 1; }
 
 .btn_muni {position: fixed;
     padding: 3% 14%;
@@ -7792,10 +7449,10 @@ main section#vist2 nav#vist2 div#img p#vist2 {font-size: 0.8em;}
         padding-left: 1rem;
     }
     .icon-x {
-        width: 1.8rem;
+        width: 2rem;
     }
     .icon-y {
-        width: 1.6rem;
+        width: 2rem;
     }
     .text-x {
         font-size: .67em;
@@ -7810,10 +7467,10 @@ main section#vist2 nav#vist2 div#img p#vist2 {font-size: 0.8em;}
         padding-left: 1.3rem;
     }
     .icon-x {
-        width: 1.2rem;
+        width: 2rem;
     }
     .icon-y {
-        width: 1rem;
+        width: 2rem;
     }
     .text-x {
         font-size: .37em;
@@ -8160,3 +7817,49 @@ main section#vist2 nav#vist2 div#img p#vist2 {font-size: 0.8em;}
     }
 }
 /* CSS FOR ESTADO ENTREGA EN MODAL */
+
+/* INICIO Loader para botón continuar https://cssloaders.github.io */
+.loader {
+  margin: 0 2rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: block;
+  position: relative;
+  color: #FFF;
+  left: -100px;
+  box-sizing: border-box;
+  animation: shadowRolling 2s linear infinite;
+}
+
+@keyframes shadowRolling {
+  0% {
+    box-shadow: 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+  12% {
+    box-shadow: 100px 0 white, 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+  25% {
+    box-shadow: 110px 0 white, 100px 0 white, 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+  36% {
+    box-shadow: 120px 0 white, 110px 0 white, 100px 0 white, 0px 0 rgba(255, 255, 255, 0);
+  }
+  50% {
+    box-shadow: 130px 0 white, 120px 0 white, 110px 0 white, 100px 0 white;
+  }
+  62% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 130px 0 white, 120px 0 white, 110px 0 white;
+  }
+  75% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 130px 0 white, 120px 0 white;
+  }
+  87% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 130px 0 white;
+  }
+  100% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0);
+  }
+}
+
+/* FIN Loader para botón continuar*/

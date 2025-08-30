@@ -1,5 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
+{% load my_filters %}
 
 {% block title %}Autorización de servicio{% endblock %}
 
@@ -7,10 +8,11 @@
 <section class="vista3">
     <form id="form-id" action="" method="post">
 
-        <button class="continuar" formnovalidate name=""
-            type="submit" value="" onclick="animabotoncarga_autorizacion()">
-            <p class="text_continuar">Continuar <i class="fa-solid fa-chevron-right"></i></p>
-    </button>
+        <!-- formnovalidate has been removed -->
+        <button class="continuar" name=""
+                type="submit" value="" onclick="animabotoncarga_autorizacion()">
+                <p class="text_continuar">Continuar <i class="fa-solid fa-chevron-right"></i></p>
+        </button>
 
         {% csrf_token %}
         {{ wizard.management_form }}
@@ -18,26 +20,8 @@
         {% include "base/logo.html" %}
 
         {% if form.errors %}
-            <script src="{% static 'js/modal.js' %}"></script>
-            <div class="modal" id="modal_vist">
-                <div class="conten" id="cont_mod">
-                    <header></header>
-                    <div class="modal_btn">
-                        <button type="button" id="btn_modal" class="close">X</button>
-                    </div>
-                    <div class="contenido">
-                        <p class="texto">
-                           {{ form.errors.num_autorizacion.as_text|cut:"* "|linebreaksbr }}
-                        </p>
-                    </div>
-                </div>
-            </div>
+            {% include "modals/base.html" with modal_context=form|get_modal_context  %}
         {% endif %}
-
-        <!-- <div class="vist3_text">
-            <p class="vist3">Ingresa el número de</p>
-            <h1 class="vist3">Autorización de servicio</h1>
-        </div> -->
 
         {% if wizard.form.forms %}
             <!--NOTHING-->
@@ -49,7 +33,7 @@
         <div class="cont_inpu_auto">
             <input required type="number" inputmode="numeric" class="inp_vist3"
                name="autorizacionServicio-num_autorizacion"
-               min="" id="id_autorizacionServicio-num_autorizacion" autofocus>
+               min="100000" id="id_autorizacionServicio-num_autorizacion" autofocus>
 
                <p class="inputext_auto">Ingresa el número de Autorización</p>
             </div>
@@ -70,11 +54,9 @@
             <a class="vist3" href="tel:018000111446">018000 111 446</a>
         </div>
 
-        <button class="btn" id="btn_conti" type="submit" onclick="animabotoncarga_autorizacion()">
-            Continuar
-            <div id="btn_carga" class="conten_carga">
-                <div class="carga"></div>
-            </div>
+        <button class="btn" id="btn_conti" type="submit">
+            <span class="btn-text">Continuar</span>
+            <span class="loader" style="display: none;"></span>
         </button>
 
     </form>
@@ -95,4 +77,36 @@
       </div>
 
 </section>
+{% endblock %}
+
+{%  block extrajs %}
+<script>
+    const btn = document.getElementById("btn_conti");
+    const form = btn.form;
+
+    form.addEventListener("submit", function(e) {
+        // This event only fires after the form has passed validation.
+        const text = btn.querySelector(".btn-text");
+        const loader = btn.querySelector(".loader");
+        text.style.display = "none";
+        loader.style.display = "inline-block";
+        btn.disabled = true;
+        alert('Submetendo formulario');
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    {% if form.errors %}
+        {% with form|get_modal_context as modal_context  %}
+            console.log("Formulario con errores, calculando modal_context");
+            {% if modal_context %}
+                const dialog = document.getElementById('error-modal');
+                if (dialog) {
+                    console.log('Abriendo modal');
+                    dialog.show();
+                }
+            {% endif %}
+        {% endwith %}
+    {% endif %}
+    });
+</script>
 {% endblock %}

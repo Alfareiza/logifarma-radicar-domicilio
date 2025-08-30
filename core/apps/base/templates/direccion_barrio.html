@@ -1,6 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
-
+{% load my_filters %}
 {% block title %}Elige el barrio{% endblock %}
 
 {% block content %}
@@ -18,7 +18,7 @@
         {% include "base/logo.html" %}
 
         {% if form.errors %}
-            {% include "base/modal.html" with txt=form.errors.direccion.as_text|cut:"* "|linebreaksbr  %}
+            {% include "modals/base.html" with modal_context=form|get_modal_context  %}
         {% endif %}
 
         {% if wizard.form.forms %}
@@ -43,19 +43,16 @@
 
             <div id="elecci" class="elec">
                 {% for barrio in wizard.form.barrio %}
-                <div class="con">
-                <span class="radio">{{ barrio.tag }}</span>
-            <label class="labelfil" for="{{ barrio.id_for_label }}">{{ barrio.choice_label }}</label>
-            </div>
-            {% endfor %}
+                    <div class="row-radio-btn">{{ barrio.tag }}
+                    <label class="label-radio" for="{{ barrio.id_for_label }}">{{ barrio.choice_label }}</label>
+                    </div>
+                {% endfor %}
             </div>
 
         {% endif %}
-        <button class="btn" id="btn_conti" type="submit" onclick="animabotoncarga_direccion()">
-            Continuar
-            <div id="btn_carga" class="conten_carga">
-                <div class="carga"></div>
-            </div>
+         <button class="btn" id="btn_conti" type="submit">
+            <span class="btn-text">Continuar</span>
+            <span class="loader" style="display: none;"></span>
         </button>
     </form>
 
@@ -74,4 +71,20 @@
       </div>
 
 </section>
+{% endblock %}
+{% block extrajs %}
+<script>
+  const input = document.getElementById('escri');
+  const radios = document.querySelectorAll('input[name="digitaDireccionBarrio-barrio"]');
+
+  radios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      const label = document.querySelector(`label[for="${radio.id}"]`);
+      input.value = label.textContent;
+    });
+
+    // Initialize input with the checked radio on page load
+    if (radio.checked) input.value = document.querySelector(`label[for="${radio.id}"]`).textContent;
+  });
+</script>
 {% endblock %}

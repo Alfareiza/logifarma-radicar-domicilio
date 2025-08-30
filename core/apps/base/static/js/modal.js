@@ -1,36 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    try {
-        var vist_modal = document.getElementById('modal_vist');
-        var conten = document.getElementById('cont_mod');
-    } catch(error) {
-        console.error('btn "conten" or "modal_vist" with error: ' + error);
-    }
-
-    function hideModal() {
-        vist_modal.style.opacity = "0";
-        vist_modal.style.visibility = "hidden";
-        conten.style.transform = "translateY(-30%)";
-    }
-
-    try {
-        var btn = document.getElementById('btn_modal');
-        btn.addEventListener('click', () => {
-            hideModal();
-        });
-    } catch(error) {
-        console.error('btn "btn" with error: ' + error);
-    }
-
-    try {
-        var entiendo = document.getElementById('entiendo');
-        entiendo.addEventListener('click', () => {
-            hideModal();
-        });
-    } catch(error) {
-        console.error('btn "entiendo" with error: ' + error);
-    }
-
     try {
         document.getElementById('new_formula').addEventListener('click', function () {
         // Create a hidden input field dynamically
@@ -40,9 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
         flagInput.value = '1';
         flagInput.id = 'temp_flag_input'; // Add an ID for easy removal
         // hide modal
-        vist_modal.style.opacity = "0";
-        vist_modal.style.visibility = "hidden";
-        conten.style.transform = "translateY(-30%)";
+        const dialog = document.getElementById("error-modal");
+        const closeBtn = document.getElementById("entiendo");
+        closeBtn.addEventListener("click", () => {
+            dialog.close(); // closes the modal
+        });
         // Append the flag input to the form
         const form = document.getElementById('form-id');
         form.appendChild(flagInput);
@@ -53,6 +23,5 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
         console.error(error)
     }
-
 });
 
