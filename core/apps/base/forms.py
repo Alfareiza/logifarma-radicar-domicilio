@@ -1,5 +1,4 @@
 from django import forms
-from django.utils.safestring import mark_safe
 
 from core.apps.base.models import Barrio, Municipio, Radicacion
 from core.apps.base.resources.cajacopi import obtener_datos_identificacion, obtener_datos_autorizacion
@@ -277,11 +276,7 @@ class DigitaCorreo(forms.Form):
     email = forms.CharField(required=True, max_length=255)
 
     def clean(self):
-        if not (email := self.cleaned_data.get('email')):
-            raise forms.ValidationError('Por favor ingrese un correo electrónico '
-                                        'válido e intente nuevamente.')
-
-        email = email.lower()
+        email = self.cleaned_data.get('email', '').lower()
         emails = email.split(',') if ',' in email else [email]
 
         for email in emails:

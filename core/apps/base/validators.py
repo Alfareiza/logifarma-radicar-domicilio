@@ -230,10 +230,6 @@ def validate_identificacion_exists(entidad: str, resp: dict, info: str) -> Valid
 
 def validate_email(email: str) -> ValidationError:
     """ Valida que el e-mail esté correcto. """
-    # Esto ya es validado vía js
-    # if has_accent(email):
-    #     raise forms.ValidationError(mark_safe("E-mail inválido."))
-
     import re
     regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
     if not re.fullmatch(regex, email):
