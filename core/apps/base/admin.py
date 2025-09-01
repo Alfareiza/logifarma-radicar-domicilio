@@ -2,8 +2,9 @@ import csv
 
 from django.contrib import admin
 from django.http import HttpResponse
+from django import forms
 
-from core.apps.base.models import Municipio, Barrio, Med_Controlado
+from core.apps.base.models import Municipio, Barrio, Med_Controlado, CelularesRestringidos
 from core.settings import logger
 
 
@@ -63,3 +64,22 @@ class MedicamentoControladoAdmin(admin.ModelAdmin):
     search_fields = ('name', 'cum')
     ordering = ('nombre', 'cum')
     actions = [export_csv]
+
+
+@admin.register(CelularesRestringidos)
+class CelularesRestringidosAdmin(admin.ModelAdmin):
+    list_display = ('registrado_por', 'numero', 'motivo')
+    list_filter = ('registrado_por',)
+    search_fields = ('registrado_por__username', 'numero')
+    ordering = ('registrado_por',)
+    exclude = ('registrado_por',)
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.registrado_por = request.user
+        obj.save()
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['numero'].widget.attrs['style'] = 'width: 250px;'
+        return form

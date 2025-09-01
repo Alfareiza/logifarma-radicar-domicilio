@@ -3,6 +3,7 @@ from datetime import timedelta
 from enum import Enum
 from time import sleep
 
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
     BooleanField, CASCADE,
     CharField,
@@ -15,8 +16,10 @@ from django.db.models import (
     Model,
     DateField, TextField, FloatField,
 )
+from django.db.models.fields import BigIntegerField
 from django.utils import timezone
 from django.utils.timezone import now
+from django.contrib.auth.models import User
 
 from core.apps.base.scrapper_requests import MutualScrapper
 from core.apps.base.resources.medicar import obtener_datos_formula
@@ -345,3 +348,21 @@ class ScrapMutualSer(Model):
                 autorizacion['RADICADO_AT'] = ''
 
             self.save()
+
+
+class CelularesRestringidos(Model):
+    created_at = DateTimeField(auto_now_add=True)
+    numero = BigIntegerField(db_index=True, primary_key=True,
+                             validators=[MinValueValidator(3000000000), MaxValueValidator(3259999999)])
+    registrado_por = ForeignKey(User, on_delete=CASCADE, null=True, blank=True)
+    motivo = CharField(max_length=120, blank=True, null=True)
+
+    def __str__(self):
+        return f'<Cel Restringido : {self.numero}>'
+
+    class Meta:
+        db_table = 'base_celulares_restringidos'
+
+    def save(self, *args, **kwargs):
+        self.motivo = self.motivo.lower() if self.motivo else None
+        return super(CelularesRestringidos, self).save(*args, **kwargs)

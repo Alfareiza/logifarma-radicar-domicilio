@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 
-from core.apps.base.models import Med_Controlado, Radicacion, ScrapMutualSer, Status
+from core.apps.base.models import Med_Controlado, Radicacion, ScrapMutualSer, Status, CelularesRestringidos
 from core.apps.base.resources.api_calls import get_firebase_acta
 from core.apps.base.resources.tools import encrypt, notify, pretty_date, \
     update_rad_from_fbase, has_accent, update_field, when
@@ -385,7 +385,21 @@ def validate_dispensados(scrapper: ScrapMutualSer):
             })
 
 
+def direccion_min_length_validator(value):
+    """Valida que lad dirección contenga mínimo 5 caracteres."""
+    if len(value) < 5:
+        raise ValidationError(
+            message=f"Asegúrese de que este valor tenga como mínimo 5 caracteres (tiene {len(value)}).",
+            code='short_number',
+            params={
+                'modal_type': 'short_number',
+                'modal_title': f"Asegúrese de que este valor tenga como mínimo 5 caracteres (tiene {len(value)})."
+            }
+        )
+
+
 def validate_numero_celular(cel: int):
+    """Valida el formato del numero celular, por su tamaño y como comienza."""
     cel_str = str(cel)
     if len(cel_str) != 10:
         if len(cel_str) >= 11:
@@ -428,34 +442,26 @@ def validate_numero_celular(cel: int):
             },
         )
 
-    if cel_str[0] != "3":
+    if cel_str[0] != '3':
         logger.info(msg := f"Número de celular {cel} incorrecto.")
         raise forms.ValidationError(message=msg, params={
             'modal_type': 'unexpected_number',
-            'modal_title': "Teléfono incorrecto",
+            'modal_title': "Teléfono incorrecto.",
             'modal_body': f"El número de celular que has digitado es incorrecto ({cel}).",
         }
                                     )
-def direccion_min_length_validator(value):
-    if len(value) < 5:
-        raise ValidationError(
-            message=f"Asegúrese de que este valor tenga como mínimo 5 caracteres (tiene {len(value)}).",
-            code='short_number',
+
+def validate_numeros_bloqueados(cel: int):
+    """Valida que el número ingresado no se encuentre entre los numeros bloqueados."""
+    num_restringido = CelularesRestringidos.objects.filter(numero=cel)
+    if num_restringido.exists():
+        motivo = num_restringido.first().motivo
+        motivo_html = f"<br><br>Motivo: {motivo}" if motivo else ""
+        raise forms.ValidationError(
+            message="Numero no permitido",  # Uso interno
             params={
-                'modal_type': 'short_number',
-                'modal_title': f"Asegúrese de que este valor tenga como mínimo 5 caracteres (tiene {len(value)})."
+                'modal_type': 'blocked_number',
+                'modal_title': f"Disculpa, el número de celular {cel} está restringido.{motivo_html}",
+                'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
             }
         )
-
-# def validate_numeros_bloqueados(cel: int):
-#     """Valida que el número ingresado no se encuentre entre los numeros bloqueados."""
-#     numeros_bloqueados = config('CELULARES_NO_PERMITIDOS', cast=Csv(), default=())
-#     if str(cel) in numeros_bloqueados:
-#         raise forms.ValidationError(
-#             message="Numero no permitido",  # Uso interno
-#             params={
-#                 'modal_type': 'blocked_number',
-#                 'modal_title': f"Disculpa, el número de celular {cel} está restringido.",
-#                 'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
-#             }
-#         )
