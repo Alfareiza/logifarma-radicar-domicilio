@@ -59,19 +59,6 @@
         loader.style.display = "inline-block";
         btn.disabled = true;
         });
-
-        document.addEventListener('DOMContentLoaded', function () {
-        {% if form.errors %}
-            {% with form|get_modal_context as modal_context  %}
-                {% if modal_context %}
-                    const dialog = document.getElementById('error-modal');
-                    if (dialog) {
-                        dialog.show();
-                    }
-                {% endif %}
-            {% endwith %}
-        {% endif %}
-        });
     </script>
 
     {% block extrajs %}{% endblock %}

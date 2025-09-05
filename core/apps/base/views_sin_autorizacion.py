@@ -40,6 +40,13 @@ class SinAutorizacion(CustomSessionWizard):
     def get_template_names(self):
         return [TEMPLATES[self.steps.current]]
 
+    def get_form_kwargs(self, step, *args, **kwargs):
+        """Pass wizard instance to forms that need access to previous step data"""
+        kwargs = super().get_form_kwargs(step, *args, **kwargs)
+        if step == 'digitaCelular':
+            kwargs['wizard'] = self
+        return kwargs
+
     @logtime('CORE')
     def process_from_data(self, form_list, **kwargs) -> dict:
         """

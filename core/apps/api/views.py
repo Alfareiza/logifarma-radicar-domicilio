@@ -1,5 +1,7 @@
+import random
 from datetime import datetime, timedelta
 
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
@@ -10,8 +12,9 @@ from rest_framework.response import Response
 from .serializers import RadicacionDetailSerializer, \
     RadicacionPartialUpdateSerializer, RadicacionSerializer, \
     RadicacionWriteSerializer
-from ..base.models import Barrio, Municipio, Radicacion, ScrapMutualSer, Status
+from ..base.models import Barrio, Municipio, Radicacion, ScrapMutualSer, Status, OtpSMS
 from core.settings import logger as log
+from ..base.resources.sms_helpers import send_sms_verification_code
 
 
 @extend_schema_view(
@@ -211,3 +214,40 @@ def create_range_dates(days: int = 7):
     enddate = enddate.replace(hour=23, minute=59, second=59,
                               microsecond=0)
     return enddate, startdate
+
+
+@api_view(['POST'])
+def sms_create(request):
+    payload = request.data
+    numero_celular = payload.get('numero_celular')
+    try:
+        if otp_found := OtpSMS.objects.filter(
+            numero=numero_celular,
+            created_at__gte=timezone.now() - timedelta(minutes=5),
+        ):
+            # Si existe OTP en los últimos 5 minutos, envia de nuevo el sms sin crear registro en bd
+            send_sms_verification_code(numero_celular, otp_found.last().otp_code)
+            return Response({"status": "SUCCESS", "msg": "Código OTP ya existe. Enviado nuevamente."}, status=status.HTTP_200_OK)
+        else:
+            otp_code = random.randint(100, 999)
+            send_sms_verification_code(numero_celular, otp_code)
+            OtpSMS.objects.create(numero=numero_celular, otp_code=otp_code)
+            return Response({"status": "SUCCESS"}, status=status.HTTP_201_CREATED)
+    except Exception as e:
+        Response({"status": "FAILURE", "failure": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def sms_verify(request):
+    payload = request.data
+    numero_celular = payload.get('numero_celular')
+    otp_code = payload.get('otp_code')
+    try:
+        otp_found = OtpSMS.objects.filter(numero=numero_celular, otp_code=otp_code,
+                                          created_at__gte=timezone.now() - timedelta(minutes=10))
+        if not otp_found.exists():
+            return Response({"status": "NOT FOUND"}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({"status": "SUCCESS"}, status=status.HTTP_200_OK)
+    except Exception as e:
+        Response({"status": "FAILURE", "failure": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
