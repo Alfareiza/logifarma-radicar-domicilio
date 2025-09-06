@@ -93,6 +93,7 @@ class Radicacion(Model):
     barrio = ForeignKey(Barrio, on_delete=CASCADE)
     cel_uno = CharField(max_length=24, blank=True, null=True)
     cel_dos = CharField(max_length=24, blank=True, null=True)
+    cel_uno_validado = BooleanField(default=False)
     email = EmailField(max_length=254)
     direccion = CharField(max_length=150)
     ip = GenericIPAddressField(protocol='both')
@@ -366,3 +367,9 @@ class CelularesRestringidos(Model):
     def save(self, *args, **kwargs):
         self.motivo = self.motivo.lower() if self.motivo else None
         return super(CelularesRestringidos, self).save(*args, **kwargs)
+
+
+class OtpSMS(Model):
+    created_at = DateTimeField(auto_now_add=True)
+    numero = BigIntegerField(db_index=True, validators=[MinValueValidator(3000000000), MaxValueValidator(3259999999)])
+    otp_code = IntegerField(blank=True, null=True)

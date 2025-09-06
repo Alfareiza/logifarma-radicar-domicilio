@@ -15,6 +15,7 @@ from core.apps.base.validators import (
     validate_status_afiliado,
     validate_status_aut,
     validate_structure, validate_numero_celular, direccion_min_length_validator, validate_numeros_bloqueados,
+    certify_celular
 )
 from core.settings import logger
 
@@ -254,10 +255,54 @@ class DigitaCelular(forms.Form):
     """
     celular = forms.IntegerField()
     whatsapp = forms.IntegerField(required=False)
+    otp_code = forms.CharField(required=False, widget=forms.HiddenInput(), label='OTP Code')
+    celular_validado = forms.BooleanField(required=False, widget=forms.HiddenInput())
+
+    def __init__(self, *args, **kwargs):
+        self.wizard = kwargs.pop('wizard', None)
+        super().__init__(*args, **kwargs)
+
+    def _get_previous_step_data(self):
+        """
+        Get previous step data without triggering validation/API calls.
+        This method accesses the already validated and stored data from the wizard.
+        """
+        if not self.wizard:
+            return {}
+
+        # First, try to get data from rad_data (set when autorizacionServicio step is processed)
+        if hasattr(self.wizard, 'rad_data') and self.wizard.rad_data:
+            # rad_data contains the cleaned_data from autorizacionServicio step
+            # which includes the API response data with TIPO_IDENTIFICACION and DOCUMENTO_ID
+            return self.wizard.rad_data.get('num_autorizacion', {})
+
+        if autorizacion_servicio_data := self.wizard.storage.extra_data.get(
+            'autorizacion_servicio', {}
+        ):
+            return autorizacion_servicio_data.get('num_autorizacion', {})
+
+        if autorizaciones_data := self.wizard.storage.extra_data.get(
+            'autorizaciones', {}
+        ):
+            return autorizaciones_data
+
+        # Fallback: try to get raw step data (this might still trigger validation, so use as last resort)
+        try:
+            # For autorizacionServicio step
+            autorizacion_step_data = self.wizard.storage.get_step_data('autorizacionServicio')
+            if autorizacion_step_data:
+                # The data structure might vary, so we need to handle it carefully
+                return autorizacion_step_data
+        except Exception:
+            pass
+
+        return {}
 
     def clean(self):
-        cel = self.cleaned_data.get('celular')
-        whatsapp = self.cleaned_data.get('whatsapp')
+        cleaned_data = super().clean()
+        cel = cleaned_data.get('celular')
+        whatsapp = cleaned_data.get('whatsapp')
+        otp_code = cleaned_data.get('otp_code')
 
         if not cel:
             raise forms.ValidationError("Por favor ingrese un número de celular.")
@@ -266,7 +311,21 @@ class DigitaCelular(forms.Form):
         validate_numeros_bloqueados(cel)
         if whatsapp:
             validate_numero_celular(whatsapp)
-        # return cel
+
+        if otp_code:
+            # Si llega aquí es pq el celular ha sido validado en el front
+            cleaned_data.update({'celular_validado': True})
+        else:
+            tipo_documento, documento = '', ''
+            if self.wizard:
+                # Access raw step data without triggering validation/API calls
+                autorizacion_data = self._get_previous_step_data()
+                if autorizacion_data and 'DOCUMENTO_ID' in autorizacion_data:
+                    tipo_documento = autorizacion_data.get('TIPO_IDENTIFICACION')
+                    documento = autorizacion_data.get('DOCUMENTO_ID')
+            certify_celular(cel, tipo_documento, documento)
+
+        return cleaned_data
 
 
 class DigitaCorreo(forms.Form):

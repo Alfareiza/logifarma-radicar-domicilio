@@ -1,0 +1,341 @@
+{% load static %}
+{% load my_filters %}
+<script src="{% static 'js/modal.js' %}"></script>
+<el-dialog id="error-modal">
+  <dialog id="dialog" aria-labelledby="dialog-title" class="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent">
+    <el-dialog-backdrop class="fixed inset-0 bg-gray-500/75 transition-opacity data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"></el-dialog-backdrop>
+
+    <div tabindex="0" class="flex min-h-full items-end justify-center p-4 text-center focus:outline-none sm:items-center sm:p-0" style="align-items: center">
+      <el-dialog-panel class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-closed:translate-y-4 data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in sm:my-8 sm:w-full sm:max-w-lg data-closed:sm:translate-y-0 data-closed:sm:scale-95">
+        <div class="max-w-md mx-auto text-center bg-white px-4 sm:px-8 py-10 rounded-xl shadow">
+            <header class="mb-8">
+                <h1 class="text-2xl font-bold mb-1">Ingresa el código</h1>
+                <p class="text-[15px] text-slate-500">Enviamos un código de 3 dígitos al xxx xxx {{ modal_context.modal_cel_number|slice:"6:10" }}</p>
+            </header>
+            <form id="otp-form" action="" method="post">
+                {% csrf_token %}
+                {{ wizard.management_form }}
+                <div class="flex items-center justify-center gap-3">
+                    <input
+                        type="text"
+                        class="w-14 h-14 text-center text-2xl font-extrabold text-slate-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded p-4 outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all duration-300"
+                        pattern="\d*" maxlength="1" autofocus/>
+                    <input
+                        type="text"
+                        class="w-14 h-14 text-center text-2xl font-extrabold text-slate-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded p-4 outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all duration-300"
+                        maxlength="1" />
+                    <input
+                        type="text"
+                        class="w-14 h-14 text-center text-2xl font-extrabold text-slate-900 bg-slate-100 border border-transparent hover:border-slate-200 appearance-none rounded p-4 outline-none focus:bg-white focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all duration-300"
+                        maxlength="1" />
+                </div>
+                <div class="max-w-[260px] mx-auto mt-4">
+                    <button type="submit" id="submit-btn" disabled class="w-full inline-flex justify-center whitespace-nowrap rounded-lg bg-gray-400 px-3.5 py-2.5 text-sm font-medium text-white shadow-sm shadow-gray-950/10 focus:outline-none focus:ring focus:ring-gray-300 focus-visible:outline-none focus-visible:ring focus-visible:ring-gray-300 transition-colors duration-150 cursor-not-allowed">
+                        <span class="btn-text">Continuar</span>
+                        <span class="loader" style="display: none;"></span>
+                    </button>
+                </div>
+                <!-- Hidden fields to maintain wizard state -->
+                <input type="hidden" name="digitaCelular-celular" value="{{ wizard.form.celular.value|default:'' }}">
+                <input type="hidden" name="digitaCelular-whatsapp" value="{{ wizard.form.whatsapp.value|default:'' }}">
+            </form>
+                <div class="text-sm text-slate-500 mt-4">No recibiste el código? 
+                    <button id="resend-btn" class="font-medium text-indigo-500 hover:text-indigo-600 bg-transparent border-none p-0 cursor-pointer">
+                        <span class="resend-text">Reenviar</span>
+                        <span class="resend-spinner" style="display: none;">
+                            <svg class="animate-spin h-4 w-4 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+        </div>
+      </el-dialog-panel>
+    </div>
+  </dialog>
+</el-dialog>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    {% if form.errors %}
+        {% with form|get_modal_context as modal_context  %}
+            {% if modal_context %}
+                const dialog = document.getElementById('error-modal');
+                if (dialog) {
+                    dialog.show();
+                }
+            {% endif %}
+        {% endwith %}
+    {% endif %}
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('otp-form')
+    const inputs = [...form.querySelectorAll('input[type=text]')]
+    const submit = form.querySelector('button[type=submit]')
+    const btnText = submit.querySelector('.btn-text')
+    const loader = submit.querySelector('.loader')
+    const celularValue = form.querySelector('input[name="digitaCelular-celular"]').value
+    const resendBtn = document.getElementById('resend-btn')
+    const resendText = resendBtn.querySelector('.resend-text')
+    const resendSpinner = resendBtn.querySelector('.resend-spinner')
+
+    // Function to check if all inputs are filled
+    const checkAllFilled = () => {
+        return inputs.every(input => input.value.length === 1)
+    }
+
+    // Function to enable/disable submit button
+    const updateSubmitButton = () => {
+        const allFilled = checkAllFilled()
+        if (allFilled) {
+            submit.disabled = false
+            submit.classList.remove('bg-gray-400', 'cursor-not-allowed')
+            submit.classList.add('bg-indigo-500', 'hover:bg-indigo-600', 'focus:ring-indigo-300', 'focus-visible:ring-indigo-300')
+        } else {
+            submit.disabled = true
+            submit.classList.remove('bg-indigo-500', 'hover:bg-indigo-600', 'focus:ring-indigo-300', 'focus-visible:ring-indigo-300')
+            submit.classList.add('bg-gray-400', 'cursor-not-allowed')
+        }
+    }
+
+    // Function to reset input styles
+    const resetInputStyles = () => {
+        inputs.forEach(input => {
+            input.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-100')
+            input.classList.add('border-transparent', 'focus:border-indigo-400', 'focus:ring-indigo-100')
+        })
+    }
+
+    // Function to show error state
+    const showErrorState = () => {
+        inputs.forEach(input => {
+            input.classList.remove('border-transparent', 'focus:border-indigo-400', 'focus:ring-indigo-100')
+            input.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-100')
+        })
+    }
+
+    // Function to show loading state
+    const showLoadingState = () => {
+        submit.disabled = true
+        btnText.style.display = 'none'
+        loader.style.display = 'block'
+    }
+
+    // Function to hide loading state
+    const hideLoadingState = () => {
+        submit.disabled = false
+        btnText.style.display = 'inline'
+        loader.style.display = 'none'
+    }
+
+    // API call to verify OTP
+    const verifyOTP = async (otpCode) => {
+        try {
+            // Get CSRF token from the form
+            const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value
+            
+            const response = await fetch('/api/v1/sms/verify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify({
+                    numero_celular: parseInt(celularValue),
+                    otp_code: parseInt(otpCode)
+                })
+            })
+
+            const data = await response.json()
+            return { success: response.ok, data }
+        } catch (error) {
+            console.error('Error verifying OTP:', error)
+            return { success: false, error: error.message }
+        }
+    }
+
+    // Add form submission handler
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault() // Prevent default form submission
+        
+        // Get OTP values
+        const otp1 = inputs[0].value;
+        const otp2 = inputs[1].value;
+        const otp3 = inputs[2].value;
+        const otpCode = otp1 + otp2 + otp3;
+        
+        // Show loading state
+        showLoadingState()
+        
+        // Call API to verify OTP
+        const result = await verifyOTP(otpCode)
+        
+        if (result.success) {
+            // Success - submit the form normally
+            let otpInput = form.querySelector('input[name="otp_code"]');
+            if (!otpInput) {
+                otpInput = document.createElement('input');
+                otpInput.type = 'hidden';
+                otpInput.name = 'digitaCelular-otp_code';
+                form.appendChild(otpInput);
+            }
+            otpInput.value = otpCode;
+            
+            // Remove the preventDefault and submit normally
+            form.removeEventListener('submit', arguments.callee);
+            form.submit();
+        } else {
+            // Error - show error state and reset loading
+            hideLoadingState()
+            showErrorState()
+        }
+    });
+
+    /**
+     * Maneja la pulsación de teclas en cada input
+     * - Restringe a que solo se puedan ingresar dígitos
+     * - Permite teclas especiales como Backspace, Delete, Tab o combinaciones con metaKey (ej: Ctrl+C)
+     * - Si se presiona Backspace/Delete, borra el valor y enfoca el input anterior
+     */
+    const handleKeyDown = (e) => {
+         if (
+            !/^[0-9]{1}$/.test(e.key)   // Si no es un número del 0 al 9
+            && e.key !== 'Backspace'    // Ni Backspace
+            && e.key !== 'Delete'       // Ni Delete
+            && e.key !== 'Tab'          // Ni Tab
+            && !e.metaKey               // Ni combinaciones con Ctrl/Command
+        ) {
+            e.preventDefault()          // Bloquea la tecla
+        }
+
+        if (e.key === 'Delete' || e.key === 'Backspace') {
+            const index = inputs.indexOf(e.target);
+            if (index > 0) {
+                inputs[index].value = '';
+                inputs[index - 1].focus();
+            }
+        }
+    }
+
+    /**
+     * Maneja la entrada de texto en cada input
+     * - Si se ingresa un número, pasa automáticamente al siguiente input
+     * - Si ya es el último input, enfoca el botón de envío y lo activa automáticamente
+     */
+    const handleInput = (e) => {
+        const { target } = e
+        const index = inputs.indexOf(target)
+        
+        // Reset error state when user starts typing
+        if (target.classList.contains('border-red-500')) {
+            resetInputStyles()
+        }
+        
+        if (target.value) {
+            if (index < inputs.length - 1) {
+                inputs[index + 1].focus()
+            } else {
+                // When the last input is filled, focus the button and auto-click it
+                submit.focus()
+                // Small delay to ensure the button is enabled before clicking
+                setTimeout(() => {
+                    if (!submit.disabled) {
+                        submit.click()
+                    }
+                }, 100)
+            }
+        }
+        
+        // Update submit button state
+        updateSubmitButton()
+    }
+
+     /**
+     * Selecciona automáticamente el contenido del input
+     * - Útil cuando el usuario hace clic en un input ya llenado (para reemplazarlo fácilmente)
+     */
+    const handleFocus = (e) => {
+        e.target.select()
+    }
+
+    /**
+     * Maneja el pegado (paste) de texto
+     * - Solo permite pegar si la cantidad de dígitos coincide con el número de inputs
+     * - Distribuye automáticamente cada dígito en su input correspondiente
+     * - Enfoca el botón de envío al terminar
+     */
+    const handlePaste = (e) => {
+        e.preventDefault()
+        const text = e.clipboardData.getData('text')
+        if (!new RegExp(`^[0-9]{${inputs.length}}$`).test(text)) {
+            return
+        }
+        const digits = text.split('')
+        inputs.forEach((input, index) => input.value = digits[index])
+        submit.focus()
+        updateSubmitButton()
+    }
+
+    // Handle Enter key on submit button
+    submit.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !submit.disabled) {
+            e.preventDefault()
+            submit.click()
+        }
+    })
+
+    // Resend SMS functionality
+    const resendSMS = async () => {
+        try {
+            // Get CSRF token from the form
+            const csrfToken = form.querySelector('input[name="csrfmiddlewaretoken"]').value
+            
+            // Show spinner and disable button
+            resendText.style.display = 'none'
+            resendSpinner.style.display = 'inline-block'
+            resendBtn.disabled = true
+            resendBtn.style.cursor = 'not-allowed'
+            
+            // Make API call
+            const response = await fetch('/api/v1/sms/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify({
+                    numero_celular: celularValue
+                })
+            })
+            
+            // Hide spinner and re-enable button
+            resendText.style.display = 'inline'
+            resendSpinner.style.display = 'none'
+            resendBtn.disabled = false
+            resendBtn.style.cursor = 'pointer'
+            
+        } catch (error) {
+            console.error('Error resending SMS:', error)
+            // Hide spinner and re-enable button on error
+            resendText.style.display = 'inline'
+            resendSpinner.style.display = 'none'
+            resendBtn.disabled = false
+            resendBtn.style.cursor = 'pointer'
+        }
+    }
+
+    // Add click event listener to resend button
+    resendBtn.addEventListener('click', resendSMS)
+
+    inputs.forEach((input) => {
+        input.addEventListener('input', handleInput)
+        input.addEventListener('keydown', handleKeyDown)
+        input.addEventListener('focus', handleFocus)
+        input.addEventListener('paste', handlePaste)
+    })
+    
+    // Initialize button state
+    updateSubmitButton()
+})
+</script>

@@ -1,4 +1,5 @@
 {% load static %}
+{% load my_filters %}
 <script src="{% static 'js/modal.js' %}"></script>
 <el-dialog id="error-modal">
   <dialog id="dialog" aria-labelledby="dialog-title" class="fixed inset-0 size-auto max-h-none max-w-none overflow-y-auto bg-transparent backdrop:bg-transparent">
@@ -39,3 +40,17 @@
     </div>
   </dialog>
 </el-dialog>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+{% if form.errors %}
+    {% with form|get_modal_context as modal_context  %}
+        {% if modal_context %}
+            const dialog = document.getElementById('error-modal');
+            if (dialog) {
+                dialog.show();
+            }
+        {% endif %}
+    {% endwith %}
+{% endif %}
+});
+</script>

@@ -17,11 +17,6 @@
         {{ wizard.management_form }}
         {% include "base/logo.html" %}
 
-        {% if form.errors %}
-            {% include "modals/base.html" with modal_context=form|get_modal_context  %}
-        {% endif %}
-
-
         {% if wizard.form.forms %}
             <!--NOTHING-->
             {{ wizard.form.management_form }}
@@ -71,6 +66,17 @@
         </button>
 
     </form>
+
+    <!-- MODAL INCLUDED OUTSIDE THE MAIN FORM -->
+    {% if form.errors %}
+        {% with form|get_modal_context as modal_context %}
+                {% if modal_context.modal_type == 'sms_auth' %}
+                    {% include "modals/sms_otp.html" with modal_context=modal_context wizard=wizard %}
+                {% else %}
+                    {% include "modals/base.html" with modal_context=modal_context %}
+                {% endif %}
+        {% endwith %}
+    {% endif %}
 
     <div class="conten-progreso-global"><div class="pagina">Paso {{ wizard.steps.step1 }} de 7</div>
         <div class="contenedor">
