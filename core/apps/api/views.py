@@ -234,7 +234,7 @@ def sms_create(request):
             OtpSMS.objects.create(numero=numero_celular, otp_code=otp_code)
             return Response({"status": "SUCCESS"}, status=status.HTTP_201_CREATED)
     except Exception as e:
-        Response({"status": "FAILURE", "failure": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({"status": "FAILURE", "failure": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @api_view(['POST'])

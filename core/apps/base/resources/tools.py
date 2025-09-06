@@ -6,6 +6,7 @@ from typing import Tuple, Any
 
 from decouple import config
 from django.conf import settings
+from django.core.exceptions import MultipleObjectsReturned
 from django.core.mail import EmailMessage, get_connection
 from django.utils.safestring import SafeString
 from pytz import timezone
@@ -230,6 +231,14 @@ def guardar_info_bd(**kwargs):
             paciente_cc=kwargs.pop('DOCUMENTO_ID', None),
             paciente_data=kwargs)
         save_in_bd('default', rad)
+    except MultipleObjectsReturned as e:
+        if "more than one Barrio" in str(e):
+            barrios = Barrio.objects.filter(municipio__name__iexact=municipio, status='1').values_list('id', 'name')
+            body_content = '\n- '.join([f"{_id} - {name}" for _id, name in barrios])
+            notify('error-bd',
+                   f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS",
+                   f"Barrio repetido en municipio {municipio.title()}: \n{body_content}\nAsegúrate de borrar el barrio que no tenga radicados")
+            logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación por barrio {barrios.first()[1]!r} repetido")
     except Exception as e:
         logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación: {str(e)}")
         notify('error-bd',
@@ -280,7 +289,7 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
                 status='1',
             ).get(name=kwargs.pop('barrio', None).lower()),
             cel_uno=kwargs.pop('celular', None),
-            cel_uno_validado=kwargs.get('celular_validado'),
+            cel_uno_validado=kwargs.get('celular_validado', False),
             cel_dos=kwargs.pop('whatsapp', None),
             email=email,
             direccion=kwargs.pop('direccion', None),
