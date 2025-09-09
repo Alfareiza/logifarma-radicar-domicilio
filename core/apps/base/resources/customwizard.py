@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_protect
 from formtools.wizard.forms import ManagementForm
 from formtools.wizard.views import SessionWizardView
 
-from core.apps.base.models import Barrio
+from core.apps.base.models import Barrio, Municipio
 from core.apps.base.resources.decorators import once_in_interval
 from core.apps.base.resources.tools import notify
 from core.settings import logger, ch
@@ -144,6 +144,10 @@ class CustomSessionWizard(SessionWizardView):
         elif step == 'autorizacionServicio' and form.is_valid():
             # Store autorizacionServicio data in extra_data for easy access without re-validation
             self.storage.extra_data['autorizacion_servicio'] = form.cleaned_data
+        elif step == 'eligeMunicipio' and form.is_valid():
+            # Store eligeMunicipio data in extra_data for easy access without re-validation
+            municipio : Municipio = form.cleaned_data['municipio']
+            self.storage.extra_data['elige_municipio'] = f"{municipio.id};{municipio.name.lower()};{municipio.departamento.lower()}"
         # ls_form_list = self.form_list.keys()
         # logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
         return self.get_form_step_data(form)

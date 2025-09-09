@@ -454,6 +454,7 @@ def validate_numero_celular(cel: int):
         }
                                     )
 
+
 def validate_numeros_bloqueados(cel: int):
     """Valida que el número ingresado no se encuentre entre los numeros bloqueados."""
     num_restringido = CelularesRestringidos.objects.filter(numero=cel)
@@ -469,53 +470,55 @@ def validate_numeros_bloqueados(cel: int):
             }
         )
 
-def certify_celular(numero_celular: int, tipo_documento: str, documento: str):
-    """Valida que el número haya sido validado."""
-    if not tipo_documento or not documento:
-        logger.error(f'No se pudo validar {numero_celular} porqué {tipo_documento=!r} y {documento=!r}.')
+
+def certify_celular(numero_celular: int, tipo_documento: str, documento: str, municipio_name: str):
+    """Determina si el número de celular, que está siendo digitado, junto con el tipo de documento y documento serán verificados o no."""
+    if skip_validation(numero_celular, tipo_documento, documento, municipio_name):
         return
 
-    rad = Radicacion.objects.filter(Q(paciente_cc=f"{tipo_documento}{documento}") | Q(paciente_cc=f"{documento}"))
+    usuario = Radicacion.objects.filter(
+        Q(paciente_cc=f"{tipo_documento}{documento}") | Q(paciente_cc=f"{documento}"),
+        cel_uno=numero_celular,
+        cel_uno_validado=True
+    )
 
-    if skip_validation(rad):
-        return
-
-    usuario = rad.filter(cel_uno=numero_celular, cel_uno_validado=True)
-
-    if not usuario.exists():
-        logger.warning(f'Celular {numero_celular} en proceso de validación para {tipo_documento}{documento}')
-        if otp_found := OtpSMS.objects.filter(
-                numero=numero_celular,
-                created_at__gte=timezone.now() - timedelta(minutes=5),
-        ):
-            # Si existe OTP en los últimos 5 minutos, envia de nuevo el sms sin crear registro en bd
-            sent = send_sms_verification_code(numero_celular, otp_found.last().otp_code)
-        else:
-            otp_code = random.randint(100, 999)
-            sent = send_sms_verification_code(numero_celular, otp_code)
-            OtpSMS.objects.create(numero=numero_celular, otp_code=otp_code)
-
-        if not sent:
-            logger.warning('Debido a error con API para envío de mensajes, no se pudo validar celular.')
-            return
-
-        raise forms.ValidationError(
-            message=f"No hay registros de que el usuario {tipo_documento}{documento} haya"
-                    f" validado el {numero_celular} anteriormente.",
-            params={
-                'modal_type': 'sms_auth',
-                'modal_cel_number': f"{numero_celular}",
-            },
-        )
-    else:
+    # Existe esa cédula + número de celular validado anteriormente?
+    if usuario.exists():
         logger.warning(f'Celular {numero_celular} ha sido validado anteriormente para con {tipo_documento}{documento}')
+        return
 
-def skip_validation(rad: QuerySet[Radicacion]) -> bool:
-    """
-    El queryset tiene algo:
-        Si - Es de sampues?:
-            Si - No saltar validación
-            No - Saltar validación
-        No - Saltar validación
-    """
-    return rad.last().municipio.name != 'sampues' if rad.exists() else True
+    logger.warning(f'Celular {numero_celular} en proceso de validación para {tipo_documento}{documento}')
+    if otp_found := OtpSMS.objects.filter(
+            numero=numero_celular,
+            created_at__gte=timezone.now() - timedelta(minutes=5),
+    ):
+        # Si existe OTP en los últimos 5 minutos, envia de nuevo el sms sin crear registro en bd
+        sent = send_sms_verification_code(numero_celular, otp_found.last().otp_code)
+    else:
+        otp_code = random.randint(100, 999)
+        sent = send_sms_verification_code(numero_celular, otp_code)
+        OtpSMS.objects.create(numero=numero_celular, otp_code=otp_code)
+
+    if not sent:
+        logger.warning(f'Debido a error con API para envío de mensajes, no se pudo validar celular {numero_celular}.')
+        return
+
+    raise forms.ValidationError(
+        message=f"No hay registros de que el usuario {tipo_documento}{documento} haya"
+                f" validado el {numero_celular} anteriormente.",
+        params={
+            'modal_type': 'sms_auth',
+            'modal_cel_number': f"{numero_celular}",
+        },
+    )
+
+
+def skip_validation(numero_celular, tipo_documento: str, documento: str, municipio_name: str) -> bool:
+    """Omite validación si el municipio NO es uno de los indicados o si al menos un campo está vacío."""
+    if not tipo_documento or not documento or not municipio_name:
+        logger.error(
+            f'No se pudo validar {numero_celular} porqué {tipo_documento=!r}, {documento=!r}, {municipio_name=!r}.')
+        return True
+
+    municipios_validan_celular = config('MUNICIPIOS_VALIDAN_CELULAR', cast=Csv(), default=[])
+    return municipio_name not in municipios_validan_celular
