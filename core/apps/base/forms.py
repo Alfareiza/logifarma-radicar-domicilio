@@ -266,37 +266,55 @@ class DigitaCelular(forms.Form):
         """
         Get previous step data without triggering validation/API calls.
         This method accesses the already validated and stored data from the wizard.
+        Returns a dictionary with both authorization data and municipality data.
         """
         if not self.wizard:
             return {}
 
+        result = {
+            'autorizacion_data': {},
+            'municipio_data': {}
+        }
+
+        # Get authorization data from various sources
+        autorizacion_data = {}
+        
         # First, try to get data from rad_data (set when autorizacionServicio step is processed)
         if hasattr(self.wizard, 'rad_data') and self.wizard.rad_data:
             # rad_data contains the cleaned_data from autorizacionServicio step
             # which includes the API response data with TIPO_IDENTIFICACION and DOCUMENTO_ID
-            return self.wizard.rad_data.get('num_autorizacion', {})
+            autorizacion_data = self.wizard.rad_data.get('num_autorizacion', {})
 
-        if autorizacion_servicio_data := self.wizard.storage.extra_data.get(
+        if not autorizacion_data and (autorizacion_servicio_data := self.wizard.storage.extra_data.get(
             'autorizacion_servicio', {}
-        ):
-            return autorizacion_servicio_data.get('num_autorizacion', {})
+        )):
+            autorizacion_data = autorizacion_servicio_data.get('num_autorizacion', {})
 
-        if autorizaciones_data := self.wizard.storage.extra_data.get(
+        if not autorizacion_data and (autorizaciones_data := self.wizard.storage.extra_data.get(
             'autorizaciones', {}
-        ):
-            return autorizaciones_data
+        )):
+            autorizacion_data = autorizaciones_data
 
-        # Fallback: try to get raw step data (this might still trigger validation, so use as last resort)
-        try:
-            # For autorizacionServicio step
-            autorizacion_step_data = self.wizard.storage.get_step_data('autorizacionServicio')
-            if autorizacion_step_data:
-                # The data structure might vary, so we need to handle it carefully
-                return autorizacion_step_data
-        except Exception:
-            pass
+        # Get municipality data from eligeMunicipio step
+        municipio_data = {}
+        
+        # Try to get eligeMunicipio data from extra_data first
+        if elige_municipio_data := self.wizard.storage.extra_data.get('elige_municipio', {}):
+            municipio_data = elige_municipio_data
+        else:
+            # Fallback: try to get raw step data (this might still trigger validation, so use as last resort)
+            try:
+                elige_municipio_step_data = self.wizard.storage.get_step_data('eligeMunicipio')
+                if elige_municipio_step_data:
+                    # Extract the municipio data from the step data
+                    municipio_data = elige_municipio_step_data
+            except Exception:
+                pass
 
-        return {}
+        result['autorizacion_data'] = autorizacion_data
+        result['municipio_data'] = municipio_data  # ex.: 'Barranquilla, Atlántico'
+        
+        return result
 
     def clean(self):
         cleaned_data = super().clean()
@@ -316,14 +334,19 @@ class DigitaCelular(forms.Form):
             # Si llega aquí es pq el celular ha sido validado en el front
             cleaned_data.update({'celular_validado': True})
         else:
-            tipo_documento, documento = '', ''
+            tipo_documento, documento, municipio_data = '', '', {}
             if self.wizard:
                 # Access raw step data without triggering validation/API calls
-                autorizacion_data = self._get_previous_step_data()
+                previous_data = self._get_previous_step_data()
+                autorizacion_data = previous_data.get('autorizacion_data', {})
+                municipio_data = previous_data.get('municipio_data', {})
+                
                 if autorizacion_data and 'DOCUMENTO_ID' in autorizacion_data:
                     tipo_documento = autorizacion_data.get('TIPO_IDENTIFICACION')
                     documento = autorizacion_data.get('DOCUMENTO_ID')
-            certify_celular(cel, tipo_documento, documento)
+            
+            _, municipio_name, _ = municipio_data.split(';')
+            certify_celular(cel, tipo_documento, documento, municipio_name)
 
         return cleaned_data
 
