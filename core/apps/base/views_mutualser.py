@@ -1,3 +1,4 @@
+import random
 from collections import OrderedDict
 
 from django.core.files.storage import FileSystemStorage
@@ -12,7 +13,7 @@ from core import settings
 from core.apps.base.forms import *
 from core.apps.base.legacy_models import Mutualser
 from core.apps.base.models import ScrapMutualSer
-from core.apps.base.pipelines import NotifyEmail
+from core.apps.base.pipelines import NotifyEmail, NotifySMS
 from core.apps.base.resources.customwizard import CustomSessionWizard
 from core.apps.base.validators import validate_resp_zona_ser, validate_dispensados
 from core.apps.base.resources.decorators import logtime, once_in_interval
@@ -59,15 +60,24 @@ class DocumentoMutualSer(forms.Form):
         entidad = 'mutualser'
         resp = {'documento': f"{tipo}{value}"}
 
-        resp_eps = obtener_datos_identificacion(entidad, tipo, value)
+        if int(value) == 99_999_999:
+            resp_eps = read_json('resources/fake.json')
+            scrapper = ScrapMutualSer(tipo_documento=tipo, documento=value,
+                                      estado='completado', resultado=resp_eps['resultado_scrapper'])
+        else:
+            resp_eps = obtener_datos_identificacion(entidad, tipo, value)
         validate_identificacion_exists(entidad, resp_eps, f"{tipo}{value}")
         resp_eps = resp_eps or Mutualser.get_afiliado_by_doc(tipo, value)
         validate_empty_response(resp_eps, resp['documento'], entidad)
 
-        scrapper = ScrapMutualSer.objects.create(tipo_documento=tipo, documento=value)
-        scrapper.create_or_get_and_scrap()
-        validate_resp_zona_ser(scrapper)
-        scrapper.load_dispensado_in_resultado()
+        if int(value) == 99_999_999:
+            # scrapper ha sido creado
+            ...
+        else:
+            scrapper = ScrapMutualSer.objects.create(tipo_documento=tipo, documento=value)
+            scrapper.create_or_get_and_scrap()
+            validate_resp_zona_ser(scrapper)
+            scrapper.load_dispensado_in_resultado()
         autorizaciones_pendientes_por_radicar = scrapper.aut_pendientes_por_disp_groub_by_nro_aut
         autorizaciones_dispensadas = scrapper.aut_dispensadas_groub_by_nro_para_facturar
 
@@ -100,10 +110,11 @@ FORMS = [
 
 
 class MutualSerAutorizacion(CustomSessionWizard):
+    """Clase responsable por el wizard para Mutualser."""
     # template_name = 'start.html'
     form_list = FORMS
     file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
-    post_wizard = [NotifyEmail]
+    post_wizard = [NotifyEmail, NotifySMS]
     template_email = BASE_DIR / "core/apps/base/templates/notifiers/correo.html"
     MANDATORIES_STEPS = ("sinAutorizacion", "autorizacionesPorDisp", "eligeMunicipio",
                          "digitaDireccionBarrio", "digitaCelular", "digitaCorreo")
@@ -292,18 +303,20 @@ class MutualSerAutorizacion(CustomSessionWizard):
         }
         # Guardará en BD cuando DEBUG sean números reales
         ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
-
         if not info_email.get('documento'):
             info_email |= kwargs['form_dict']['sinAutorizacion'].cleaned_data
-        autorizaciones = info_email.pop('AUTORIZACIONES', None)
         del info_email['cod_dane']
         del info_email['activo']
         del info_email['AUTORIZACIONES_DISPENSADAS']
+        autorizaciones = info_email.pop('AUTORIZACIONES', None)
         info_email['DOCUMENTO_ID'] = info_email.pop('documento')
         for nro_aut, meds in autorizaciones.items():
             info_email['NUMERO_AUTORIZACION'] = nro_aut
             info_email['DETALLE_AUTORIZACION'] = meds
-            guardar_info_bd(**info_email, ip=ip)
+            celular = info_email.get('celular')
+            if info_email.get('DOCUMENTO_ID') != 'CC99999999':
+                guardar_info_bd(**info_email, ip=ip)
+            info_email['celular'] = celular
 
             self.log_text = f"{nro_aut} {info_email['DOCUMENTO_ID']}"
 

@@ -1,6 +1,5 @@
 import contextlib
 import smtplib
-import DNS
 import socket
 
 from decouple import config, Csv
@@ -93,18 +92,18 @@ def email_exists(email) -> bool:
     return is_valid
 
 
-def get_mx(hostname):
-    try:
-        servidor_mx = DNS.mxlookup(hostname)
-    except ServerError as e:
-        if e.rcode in [3, 2]:  # NXDOMAIN (Non-Existent Domain) or SERVFAIL
-            servidor_mx = None
-        else:
-            raise
-    return servidor_mx
-
-
 def validar_email(email, debug=False):
+    import DNS
+    ServerError = DNS.ServerError
+    def get_mx(hostname):
+        try:
+            servidor_mx = DNS.mxlookup(hostname)
+        except ServerError as e:
+            if e.rcode in [3, 2]:  # NXDOMAIN (Non-Existent Domain) or SERVFAIL
+                servidor_mx = None
+            else:
+                raise
+        return servidor_mx
     try:
         hostname = email[email.find('@') + 1:]
         mx_hosts = get_mx(hostname)
@@ -138,9 +137,6 @@ def validar_email(email, debug=False):
     except (ServerError, socket.error) as e:
         print(f'ServerError or socket.error exception raised ({e}).')
         return None
-
-
-ServerError = DNS.ServerError
 
 
 class Email:
@@ -223,12 +219,8 @@ class Email:
         copia_oculta = config('EMAIL_BCC', cast=Csv(), default=())
 
         # Definiendo asunto
-        if info.get('CONVENIO', '').lower() in ('cajacopi', 'fomag') and info.get('documento'):
-            subject = (f"F{info['NUMERO_RADICACION']} - Este es el "
-                       "número de radicación de tu domicilio en Logifarma")
-        else:
-            subject = (f"{info['NUMERO_AUTORIZACION']} - Este es el "
-                       f"número de radicación de tu domicilio en Logifarma")
+        subject = (f"{info.get('NUMERO_AUTORIZACION', info.get('NUMERO_RADICACION'))} - Este es el "
+                   f"número de radicación de tu domicilio en Logifarma")
 
         if info.get('documento') in ('CC99999999',) or info.get('NUMERO_AUTORIZACION') in (
                 99_999_999, 99_999_998):

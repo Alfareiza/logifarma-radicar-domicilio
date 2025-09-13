@@ -29,6 +29,7 @@ def show_orden(wizard) -> bool:
 
 
 class SinAutorizacion(CustomSessionWizard):
+    """Clase responsable por el wizard para Cajacopi, Fomag - Medicamentos NO Autorizados."""
     # template_name = 'start.html'
     condition_dict = {'orden': show_orden}
     form_list = FORMS
@@ -83,13 +84,10 @@ class SinAutorizacion(CustomSessionWizard):
         ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
 
         if info_email['documento'][2:] not in ('99999999',):
-            # if True:  # Testando inserción en producción temporalmente
             rad = guardar_short_info_bd(**info_email, ip=ip)
-            info_email['ref_id'], info_email['NUMERO_RADICACION'], info_email['FECHA_RADICACION'] = rad
-            if info_email.get('CONVENIO', '') in ('mutualser',):
-                # En mutual ser, el NUMERO_RADICACION es el mismo NUMERO_AUTORIZACION digitado por usuario
-                info_email['NUMERO_RADICACION'] = info_email['ref_id']
-            rad_id = info_email['NUMERO_RADICACION']  # id en db
+            info_email['NUMERO_RADICACION'] = rad.numero_autorizacion
+            info_email['FECHA_RADICACION'] = rad.datetime
+            rad_id = rad.numero_autorizacion
         else:
             rad_id = '1'
             info_email['NUMERO_RADICACION'] = rad_id
@@ -124,7 +122,7 @@ class SinAutorizacion(CustomSessionWizard):
         for step in self.post_wizard:
             check, info_email = step().proceed(info_email, rad_id)
             if not check:
-                logger.warning(f"{step} presentó fallas al ser ejecutado.")
+                logger.warning(f"{step.__name__} presentó fallas al ser ejecutado.")
         result.extend(info_email)
 
         return result

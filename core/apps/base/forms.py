@@ -334,7 +334,7 @@ class DigitaCelular(forms.Form):
             # Si llega aquí es pq el celular ha sido validado en el front
             cleaned_data.update({'celular_validado': True})
         else:
-            tipo_documento, documento, municipio_data = '', '', {}
+            tipo_documento, documento, municipio_data = '', '', ''
             if self.wizard:
                 # Access raw step data without triggering validation/API calls
                 previous_data = self._get_previous_step_data()

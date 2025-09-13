@@ -14,6 +14,7 @@ from core.apps.base.forms import *
 from core.apps.base.resources.customwizard import CustomSessionWizard
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.email_helpers import make_subject_and_cco, make_destinatary
+from core.apps.base.resources.sms_helpers import send_sms_confirmation
 from core.apps.base.resources.tools import convert_bytes, is_file_valid, notify, guardar_info_bd
 from core.settings import logger, BASE_DIR
 
@@ -88,6 +89,7 @@ def show_fotoFormulaMedica(wizard) -> bool:
 
 
 class ContactWizard(CustomSessionWizard):
+    """Clase responsable por el wizard para Cajacopi - Medicamentos autorizados."""
     # template_name = 'start.html'
     form_list = FORMS
     file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
@@ -139,7 +141,7 @@ class ContactWizard(CustomSessionWizard):
         # Guardará en BD cuando DEBUG sean números reales
         ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
         if info_email['NUMERO_AUTORIZACION'] not in [99_999_999, 99_999_998]:
-            guardar_info_bd(**info_email, ip=ip)
+            rad = guardar_info_bd(**info_email, ip=ip)
 
         logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']}"
                     f" Radicación finalizada. E-mail de confirmación será enviado a {form_data['digitaCorreo']}")
@@ -156,6 +158,7 @@ class ContactWizard(CustomSessionWizard):
             x.start()
         else:
             self.send_mail(info_email)
+            send_sms_confirmation(rad.cel_uno, rad.numero_autorizacion, kwargs.get('P_NOMBRE', ''))
 
         return form_data['autorizacionServicio']['num_autorizacion']
 

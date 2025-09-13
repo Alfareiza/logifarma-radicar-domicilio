@@ -210,6 +210,7 @@ def guardar_info_bd(**kwargs):
         email = ', '.join(email)
 
     ip = clean_ip(kwargs.pop('ip'))
+    kwargs.pop('otp_code', None)
 
     logger.info(f"{rad} Guardando radicación (medicamento autorizado) de {convenio}.")
     try:
@@ -222,7 +223,7 @@ def guardar_info_bd(**kwargs):
                 status='1',
             ).get(name=kwargs.pop('barrio', None).lower()),
             cel_uno=kwargs.pop('celular', None),
-            cel_uno_validado=kwargs.get('celular_validado', False),
+            cel_uno_validado=kwargs.pop('celular_validado', False),
             cel_dos=kwargs.pop('whatsapp', None),
             email=email,
             direccion=kwargs.pop('direccion', None),
@@ -238,11 +239,13 @@ def guardar_info_bd(**kwargs):
             notify('error-bd',
                    f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS",
                    f"Barrio repetido en municipio {municipio.title()}: \n{body_content}\nAsegúrate de borrar el barrio que no tenga radicados")
-            logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación por barrio {barrios.first()[1]!r} repetido")
+            logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación por barrio {barrios.first()[1]!r} repetido en {municipio.title()}")
     except Exception as e:
         logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación: {str(e)}")
         notify('error-bd',
                f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS", str(e))
+    else:
+        return rad
 
 
 def save_in_bd(name_bd: str, rad):
@@ -269,7 +272,7 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
     :return:
     """
     from core.apps.base.models import Radicacion, Municipio, Barrio
-    resp = ('', '', '')
+    # resp = ('', '', '')
     municipio = kwargs.pop('municipio').name.lower()
 
     email = kwargs.pop('email', None)
@@ -289,7 +292,7 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
                 status='1',
             ).get(name=kwargs.pop('barrio', None).lower()),
             cel_uno=kwargs.pop('celular', None),
-            cel_uno_validado=kwargs.get('celular_validado', False),
+            cel_uno_validado=kwargs.pop('celular_validado', False),
             cel_dos=kwargs.pop('whatsapp', None),
             email=email,
             direccion=kwargs.pop('direccion', None),
@@ -300,14 +303,21 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
         )
 
         save_in_bd('default', rad)
-        resp = numero_radicado, rad.id, rad.datetime,
-
+        # resp = numero_radicado, rad.id, rad.datetime
+    except MultipleObjectsReturned as e:
+        if "more than one Barrio" in str(e):
+            barrios = Barrio.objects.filter(municipio__name__iexact=municipio, status='1').values_list('id', 'name')
+            body_content = '\n- '.join([f"{_id} - {name}" for _id, name in barrios])
+            notify('error-bd',
+                   f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS",
+                   f"Barrio repetido en municipio {municipio.title()}: \n{body_content}\nAsegúrate de borrar el barrio que no tenga radicados")
+            logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación por barrio {barrios.first()[1]!r} repetido en {municipio.title()}")
     except Exception as e:
         logger.error(f"{numero_radicado} Error guardando radicación: {e}")
         notify('error-bd',
                f"ERROR GUARDANDO RADICACION {numero_radicado} EN BASE DE DATOS", str(e))
-
-    return resp
+    else:
+        return rad
 
 
 def discover_rad(body) -> str:
