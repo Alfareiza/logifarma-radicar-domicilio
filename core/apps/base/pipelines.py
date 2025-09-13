@@ -3,6 +3,7 @@ from typing import Tuple
 
 from core.apps.base.models import Radicacion
 from core.apps.base.resources.email_helpers import Email
+from core.apps.base.resources.sms_helpers import send_sms_confirmation
 from core.apps.tasks.utils.gdrive import GDriveHandler
 from core.settings import logger as log, DEBUG
 
@@ -28,9 +29,12 @@ class NotifyEmail(PostStep, Email):
 
 
 class NotifySMS(PostStep):
+
+    def __init__(self, **kwargs):
+        ...
+
     def proceed(self, info_email: dict, rad_id: str) -> Tuple[bool, dict]:
-        # TODO Pendiente de implementar
-        # log.info(f"{info_email['log_text']} ...enviando SMS.")
+        send_sms_confirmation(info_email.get('celular'), rad_id, info_email.get('P_NOMBRE'))
         check = True
         return check, info_email
 

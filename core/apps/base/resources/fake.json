@@ -1,38 +1,107 @@
 {
-   "TIPO_IDENTIFICACION":"CC",
-   "DOCUMENTO_ID":"12340316",
-   "AFILIADO":"GUTIERREZ TEIXEIRA JACKSON WOH",
-   "P_NOMBRE":"JACKSON",
-   "S_NOMBRE":"WOH",
-   "P_APELLIDO":"GUTIERREZ","S_APELLIDO":"TEIXEIRA",
-   "ESTADO_AFILIADO":"ACTIVO",
-   "SEDE_AFILIADO":"BARRANCABERMEJA",
-   "REGIMEN":"SUBSIDIADO",
-   "DIRECCION":"CL 123  45 678",
-   "CORREO":"jackson.gutierrez.teixeira123456789@gmail.com",
-   "TELEFONO":"4019255",
-   "CELULAR":"4014652512",
-   "ESTADO_AUTORIZACION":"PROCESADA",
-   "FECHA_AUTORIZACION":"15/11/2022",
-   "MEDICO_TRATANTE":"FRANK LAMPARD",
-   "MIPRES":"0",
-   "DIAGNOSTICO":"D571-ANEMIA FALCIFORME SIN CRISIS",
-   "ARCHIVO": "",
-   "DETALLE_AUTORIZACION":[
-      {
-         "CUMS":"20158642-1",
-         "NOMBRE_PRODUCTO":"RIVAROXABAN 20MG TABLETA RECUBIERTA",
-         "CANTIDAD":"30"
-      },
-      {
-         "CUMS":"42034-1",
-         "NOMBRE_PRODUCTO":"HIDROXIUREA 500MG CAPSULA",
-         "CANTIDAD":"60"
-      }
-   ],
-   "municipio":"Barrancamerbeja, Santander",
-   "barrio":"Any Neighbor, Florida",
-   "direccion":"321654987654",
-   "celular":9151234567,
-   "email":"23131@gmail.com"
+  "TIPO_IDENTIFICACION": "CC",
+  "DOCUMENTO_ID": "12340316",
+  "AFILIADO": "GUTIERREZ TEIXEIRA JACKSON WOH",
+  "P_NOMBRE": "JACKSON",
+  "S_NOMBRE": "WOH",
+  "P_APELLIDO": "GUTIERREZ",
+  "S_APELLIDO": "TEIXEIRA",
+  "ESTADO_AFILIADO": "ACTIVO",
+  "SEDE_AFILIADO": "BARRANCABERMEJA",
+  "REGIMEN": "SUBSIDIADO",
+  "DIRECCION": "CL 123  45 678",
+  "CORREO": "jackson.gutierrez.teixeira123456789@gmail.com",
+  "TELEFONO": "4019255",
+  "CELULAR": "4014652512",
+  "ESTADO_AUTORIZACION": "PROCESADA",
+  "FECHA_AUTORIZACION": "15/11/2022",
+  "MEDICO_TRATANTE": "FRANK LAMPARD",
+  "MIPRES": "0",
+  "DIAGNOSTICO": "D571-ANEMIA FALCIFORME SIN CRISIS",
+  "ARCHIVO": "",
+  "DETALLE_AUTORIZACION": [
+    {
+      "CUMS": "20158642-1",
+      "NOMBRE_PRODUCTO": "RIVAROXABAN 20MG TABLETA RECUBIERTA",
+      "CANTIDAD": "30"
+    },
+    {
+      "CUMS": "42034-1",
+      "NOMBRE_PRODUCTO": "HIDROXIUREA 500MG CAPSULA",
+      "CANTIDAD": "60"
+    }
+  ],
+  "municipio": "Barrancamerbeja, Santander",
+  "barrio": "Any Neighbor, Florida",
+  "direccion": "321654987654",
+  "celular": 9151234567,
+  "email": "notiene@gmail.com",
+  "NOMBRE": "GUTIERREZ TEIXEIRA JACKSON WOH",
+  "PRIMER_APELLIDO": "GUTIERREZ",
+  "PRIMER_NOMBRE": "JACKSON",
+  "status": "ACTIVO",
+  "resultado_scrapper": [
+    {
+      "ESTADO": "Radicada",
+      "DOCUMENTO": 12340316,
+      "DISPENSADO": true,
+      "RADICADO_AT": "",
+      "TIPO_DOCUMENTO": "Cedula de Ciudadania",
+      "NUMERO_AUTORIZACION": "12345678901",
+      "DETALLE_AUTORIZACION": [
+        {
+          "CANTIDAD": "28",
+          "NOMBRE_PRODUCTO": "M00835 DAPAGLIFLOZINA 10.MG/1.U TABLETA RECUBIERTA"
+        }
+      ]
+    },
+    {
+      "ESTADO": "Radicada",
+      "DOCUMENTO": 12340316,
+      "DISPENSADO": false,
+      "RADICADO_AT": "",
+      "TIPO_DOCUMENTO": "Cedula de Ciudadania",
+      "NUMERO_AUTORIZACION": "12345678902",
+      "DETALLE_AUTORIZACION": [
+        {
+          "CANTIDAD": "8",
+          "NOMBRE_PRODUCTO": "M02029 ERITROPOYETINA 2000.UI/1.U POLVO LIOFILIZADO PARA RECONSTITUIR A SOLUCION INYECTABLE"
+        }
+      ]
+    },
+    {
+      "DOCUMENTO": 12340316,
+      "DISPENSADO": false,
+      "TIPO_DOCUMENTO": "Cedula de Ciudadania",
+      "NUMERO_AUTORIZACION": "12345678903",
+      "DETALLE_AUTORIZACION": [
+        {
+          "CANTIDAD": "8",
+          "NOMBRE_PRODUCTO": "M02029 ERITROPOYETINA 2000.UI/1.U POLVO LIOFILIZADO PARA RECONSTITUIR A SOLUCION INYECTABLE"
+        }
+      ]
+    },
+    {
+      "ESTADO": "(En Proceso)",
+      "DOCUMENTO": 12340316,
+      "DISPENSADO": false,
+      "RADICADO_AT": "el 27 de Mayo a las 02:23 PM",
+      "TIPO_DOCUMENTO": "Cedula de Ciudadania",
+      "NUMERO_AUTORIZACION": "12345678904",
+      "DETALLE_AUTORIZACION": [
+        {
+          "CANTIDAD": "30",
+          "NOMBRE_PRODUCTO": "M03228 IRBESARTAN 300.MG/1.U TABLETA"
+        },
+        {
+          "CANTIDAD": "8",
+          "NOMBRE_PRODUCTO": "M02029 ERITROPOYETINA 2000.UI/1.U POLVO LIOFILIZADO PARA RECONSTITUIR A SOLUCION INYECTABLE"
+        },
+        {
+          "CANTIDAD": "1",
+          "NOMBRE_PRODUCTO": "M02790 INSULINA GLARGINA 100.UI/1.ML SOLUCION INYECTABLE"
+        }
+      ]
+    }
+  ]
 }
