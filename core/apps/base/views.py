@@ -142,6 +142,8 @@ class ContactWizard(CustomSessionWizard):
         ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
         if info_email['NUMERO_AUTORIZACION'] not in [99_999_999, 99_999_998]:
             rad = guardar_info_bd(**info_email, ip=ip)
+        else:
+            rad = Radicacion(cel_uno=form_data['digitaCelular']['celular'], numero_radicado=info_email['NUMERO_AUTORIZACION'])
 
         logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']}"
                     f" Radicación finalizada. E-mail de confirmación será enviado a {form_data['digitaCorreo']}")
@@ -158,7 +160,7 @@ class ContactWizard(CustomSessionWizard):
             x.start()
         else:
             self.send_mail(info_email)
-            send_sms_confirmation(rad.cel_uno, rad.numero_autorizacion, kwargs.get('P_NOMBRE', ''))
+            send_sms_confirmation(form_data.get('digitaCelular', {}).get('celular', ''), rad.numero_autorizacion, kwargs.get('P_NOMBRE', ''))
 
         return form_data['autorizacionServicio']['num_autorizacion']
 
