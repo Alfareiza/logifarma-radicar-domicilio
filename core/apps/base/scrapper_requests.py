@@ -735,7 +735,7 @@ class JSFPortalScraper:
                         # Fila {i}. Se esperaba Nro de Autorización en modal de 'Ver' pero no fue encontrado."
                         ...
             if not nro_aut:
-                # Se intentó dos veces encontrar el Nro de Aut en modal de ver pero no fue posible, reinicia scrapper
+                log.error(f"Fila {i}. Se intentó dos veces encontrar el Nro de Aut en modal de ver pero no fue posible, reinicia scrapper")
                 raise RestartScrapper
             auts.append(self.parse_aut_and_meds(nro_aut, meds))
             nro_aut = ''
@@ -809,6 +809,6 @@ class MutualScrapper(JSFPortalScraper):
 
 
 if __name__ == '__main__':
-    scrapper = MutualScrapper('CC', '123456789')
+    scrapper = MutualScrapper('CC', '92256603')
     result = scrapper.find_user()
     pprint(result)

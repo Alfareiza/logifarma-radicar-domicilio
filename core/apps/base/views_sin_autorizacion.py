@@ -87,6 +87,7 @@ class SinAutorizacion(CustomSessionWizard):
             rad = guardar_short_info_bd(**info_email, ip=ip)
             info_email['NUMERO_RADICACION'] = rad.numero_autorizacion
             info_email['FECHA_RADICACION'] = rad.datetime
+            info_email['ref_id'] = rad.numero_radicado
             rad_id = rad.numero_autorizacion
         else:
             rad_id = '1'
