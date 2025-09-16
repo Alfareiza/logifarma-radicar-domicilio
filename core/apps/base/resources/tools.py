@@ -199,7 +199,7 @@ def guardar_info_bd(**kwargs):
     rad = kwargs.pop('NUMERO_AUTORIZACION', None)
     convenio = kwargs.pop('CONVENIO', None)
     if Radicacion.objects.filter(numero_radicado=str(rad), convenio=convenio).exists():
-        logger.info(f"{rad} Número de radicación ya existe!.")
+        logger.warning(f"{rad} Número de radicación ya existe!.")
         return
     municipio = kwargs.pop('municipio').name.lower()
 
@@ -263,7 +263,7 @@ def save_in_bd(name_bd: str, rad):
         logger.info(f"{rad.numero_radicado} Radicación guardada con éxito {rad.id=}")
 
 
-def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
+def guardar_short_info_bd(**kwargs):
     """
     Guarda radicado en base de datos
     :param kwargs: Información final del wizard + ip:
@@ -272,7 +272,6 @@ def guardar_short_info_bd(**kwargs) -> Tuple[str, str, str]:
     :return:
     """
     from core.apps.base.models import Radicacion, Municipio, Barrio
-    # resp = ('', '', '')
     municipio = kwargs.pop('municipio').name.lower()
 
     email = kwargs.pop('email', None)
