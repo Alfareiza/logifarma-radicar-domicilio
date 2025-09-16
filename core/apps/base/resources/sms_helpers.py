@@ -43,7 +43,7 @@ def send_sms_verification_code(cel: int, otp_code: int):
     return Sms(cel).send_sms(f"{otp_code}: código de verificación de Logifarma. No lo compartas.")
 
 def send_sms_confirmation(cel: int, numero_autorizacion: str, p_nombre: str):
-    """Send a verification code."""
+    """Send a confirmation message."""
     numero_autorizacion = numero_autorizacion.replace('#', '')
     hola = f"Hola {p_nombre.title()}".strip()
     return Sms(cel).send_sms(f"Logifarma: {hola}, Tu solicitud de entrega a domicilio Nº{numero_autorizacion} fue realizada con éxito!.")

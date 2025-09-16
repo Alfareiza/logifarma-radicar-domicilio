@@ -60,7 +60,7 @@ class DocumentoMutualSer(forms.Form):
         entidad = 'mutualser'
         resp = {'documento': f"{tipo}{value}"}
 
-        if int(value) == 99_999_999:
+        if value == '99999999':
             resp_eps = read_json('resources/fake.json')
             scrapper = ScrapMutualSer(tipo_documento=tipo, documento=value,
                                       estado='completado', resultado=resp_eps['resultado_scrapper'])
@@ -70,7 +70,7 @@ class DocumentoMutualSer(forms.Form):
         resp_eps = resp_eps or Mutualser.get_afiliado_by_doc(tipo, value)
         validate_empty_response(resp_eps, resp['documento'], entidad)
 
-        if int(value) == 99_999_999:
+        if value == '99999999':
             # scrapper ha sido creado
             ...
         else:
