@@ -872,9 +872,9 @@
                                                 style="font-size: 0px; padding: 10px 25px; padding-top: 0px; padding-bottom: 0px; word-break: break-word;">
                                                 <div style="font-family: Ubuntu, Helvetica, Arial, sans-serif; font-size: 13px; letter-spacing: normal; line-height: 22px; text-align: left; color: #55575d;">
                                                     <h3><span
-                                                            style="color: #55575d; font-family: Arial, sans-serif; font-size: 13px;">Tienes {{DETALLE_AUTORIZACION|length}} artículo{{DETALLE_AUTORIZACION|length|pluralize}}:</span>
+                                                            style="color: #55575d; font-family: Arial, sans-serif; font-size: 13px;">Tienes {{PACIENTE_DATA.DETALLE_AUTORIZACION|length}} artículo{{PACIENTE_DATA.DETALLE_AUTORIZACION|length|pluralize}}:</span>
                                                     </h3>
-                                                    {% for articulo in DETALLE_AUTORIZACION %}
+                                                    {% for articulo in PACIENTE_DATA.DETALLE_AUTORIZACION %}
                                                     <ul>
                                                         <li><span
                                                                 style="color: #55575d; font-family: Arial, sans-serif; font-size: 13px;">{{articulo.NOMBRE_PRODUCTO}} {% if articulo.CUMS %}(CUM: {{articulo.CUMS}}) {% endif %} Cantidad: {{articulo.CANTIDAD}}</span>

@@ -8,6 +8,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import get_template
 
 from core.apps.base.resources.tools import notify, convert_bytes
+from core.apps.base.resources.decorators import prod_only
 from core.settings import logger, BASE_DIR
 
 
@@ -86,12 +87,13 @@ def make_destinatary(info_email) -> list:
 
 
 def email_exists(email) -> bool:
-    is_valid = validar_email(email)
+    is_valid = True if 'logifarm' in email else validar_email(email)
     if not is_valid:
         logger.info(f'Email {email} no existe')
     return is_valid
 
 
+@prod_only
 def validar_email(email, debug=False):
     import DNS
     ServerError = DNS.ServerError
@@ -148,7 +150,6 @@ class Email:
 
     def prepare_mail(self, info: dict) -> EmailMessage:
         subject, copia_oculta = self.make_subject_and_cco(info)
-        info['NUMERO_RADICACION'] = subject.split('-')[0].strip()
         context = info.copy()
         destinatary = self.make_destinatary(context)
         self.set_logo(context)
