@@ -1,29 +1,217 @@
 {% extends "base/base.html" %}
 {% load static %}
+{% load my_filters %}
 
 {% block title %}Listo{% endblock %}
 
 {% block content %}
 <section class="vista10">
 
-
     <div class="vist1">
         <img class="img1" src="{% static 'img/LogLogifarma.png' %}" alt="">
     </div>
-    <h1 class="vist10">¡Listo, {{P_NOMBRE|title}}!</h1>
 
-    <h1 class="vist10">¡Proceso terminado!</h1>
+    <!-- Enhanced Success Header -->
+    <div class="text-center px-4 {% if LEN_AUTORIZACIONES == 1 %}mb-6 mt-4{% else %}mb-1{% endif %}">
+        <!-- Success Layout with Two Columns -->
+        <div class="flex items-center justify-center max-w-3xl mx-auto bg-white rounded-xl shadow-sm border border-gray-100 {% if LEN_AUTORIZACIONES == 1 %}p-4{% else %}p-2{% endif %} mb-2">
+            <!-- Left Column - Centered Check Icon -->
+            <div class="flex items-center justify-center mr-3">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full">
+                    <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+            </div>
 
-    <p class="vist10">
-        Nos encontramos haciendo la validación de tus
-        documentos, si todo está correcto un agente le
-        notificará la radicación exitosa de su solicitud.
-    </p>
+            <!-- Right Column - Three Text Rows -->
+            <div class="flex-1 text-left">
+                <!-- First Row -->
+                <h1 class="text-xl md:text-3xl font-bold text-gray-900 mb-1">
+                    ¡Perfecto, {{P_NOMBRE|title}}!
+                </h1>
+                <!-- Second Row -->
+                <h2 class="text-l md:text-xl text-gray-600 mb-2">
+                    Tu solicitud fue realizada con éxito
+                </h2>
+                <!-- Third Row -->
+                <p class="text-green-600 text-xs md:text-base font-medium">
+                    Nuestro equipo está validando los documentos y te notificaremos cuando todo esté listo.
+                </p>
+            </div>
+        </div>
+    </div>
 
-    <a href="{% url 'base:home' %}" class="btn" id="btn_conti">
-        <button class="btn-text">Continuar</button>
-        <button class="loader" style="display: none;"></button>
-    </a>
+    <!-- Sección de Autorizaciones -->
+    {% if AUTORIZACIONES %}
+    <div class="mb-5 p-2 bg-[#f8f9fa] rounded-lg border border-[#e9ecef] max-w-4xl mx-auto">
+
+        <!-- Información del afiliado -->
+        <div class="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-50 border border-blue-200 rounded-xl mb-6 shadow-sm {% if LEN_AUTORIZACIONES == 1 %}p-6{% else %}p-3{% endif %}">
+            <!-- Decorative background pattern -->
+            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-100 rounded-full opacity-20"></div>
+            <div class="absolute bottom-0 left-0 -mb-6 -ml-6 w-32 h-32 bg-blue-50 rounded-full opacity-30"></div>
+
+            <div class="relative z-10 flex items-center space-x-4">
+                <!-- Avatar/Icon -->
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Información del afiliado -->
+                <div class="flex-1 min-w-0">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <h3 class="text-l font-bold text-gray-900 mb-1">
+                                {{ AFILIADO|title }}
+                            </h3>
+                            <div class="flex items-center space-x-2">
+                                <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2v1.586l8 4 8-4V6H4zm0 3.414l7.293 3.647a1 1 0 00.914 0L20 9.414V14H4v-4.586z" clip-rule="evenodd"/>
+                                    </svg>
+                                    {{ TIPO_IDENTIFICACION }}{{ DOCUMENTO_ID }}
+                                </span>
+                                <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-100 text-green-800">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Afiliado Activo
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-4 max-h-[38vh] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100">
+            {% for nro_autorizacion, articulos in AUTORIZACIONES.items %}
+            <div class="bg-white border border-[#dee2e6] rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                <!-- Header de la autorización -->
+                <div class="flex justify-between items-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-3 rounded-t-lg">
+                    <span class="text-sm font-medium">{% now "d/m/Y" %}</span>
+                    <span class="font-bold text-base">N.º {{ nro_autorizacion }}</span>
+                </div>
+
+                <!-- Contenido de información de entrega -->
+                <div class="p-3 space-y-2">
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1 text-xs">
+                        <div class="flex items-center space-x-1">
+                            <span class="text-gray-500 font-medium">Destino:</span>
+                            <span class="text-gray-800 font-semibold">{{ MUNICIPIO }}</span>
+                        </div>
+
+                        <div class="flex items-center space-x-1">
+                            <span class="text-gray-500 font-medium">Barrio:</span>
+                            <span class="text-gray-800">{{ BARRIO }}</span>
+                        </div>
+
+                        <div class="flex items-center space-x-1 col-span-2 md:col-span-1">
+                            <span class="text-gray-500 font-medium">Dirección:</span>
+                            <span class="text-gray-800">{{ DIRECCION }}</span>
+                        </div>
+
+                        <div class="flex items-center space-x-1">
+                            <svg class="w-3 h-3 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                            </svg>
+                            <span class="text-gray-800">{{ CELULAR }}</span>
+                        </div>
+
+                        {% if CORREO %}
+                        <div class="flex items-center space-x-1">
+                            <svg class="w-3 h-3 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                            </svg>
+                            <span class="text-gray-800 truncate">{{ CORREO }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Lista de artículos -->
+                    <div class="mt-3 pt-2 border-t border-gray-200">
+                        <h5 class="text-gray-600 font-semibold text-xs mb-2 flex items-center">
+                            <svg class="w-3 h-3 mr-1 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clip-rule="evenodd"/>
+                            </svg>
+                            Artículos:
+                        </h5>
+                        <div class="space-y-1">
+                            <!-- Ejemplo de artículos - reemplaza con tu loop dinámico -->
+<!--                            <div class="flex justify-between items-center bg-gray-50 px-2 py-1 rounded text-xs">-->
+<!--                                <span class="text-gray-700 flex-1">LANCETAS DESECHABLES UND</span>-->
+<!--                                <span class="text-gray-600 font-medium ml-2">x30</span>-->
+<!--                            </div>-->
+<!--                            <div class="flex justify-between items-center bg-gray-50 px-2 py-1 rounded text-xs">-->
+<!--                                <span class="text-gray-700 flex-1">TIRILLAS GLUCOMETRIA</span>-->
+<!--                                <span class="text-gray-600 font-medium ml-2">x30</span>-->
+<!--                            </div>-->
+                            <!-- Para datos dinámicos usarías algo como: -->
+                            {% for articulo in articulos %}
+                            <div class="flex justify-between items-center bg-gray-50 px-2 py-1 rounded text-xs">
+                                <span class="text-gray-700 flex-1">{{ articulo.NOMBRE_PRODUCTO|remove_code }}</span>
+                                <span class="text-gray-600 font-medium ml-2">x{{ articulo.CANTIDAD }}</span>
+                            </div>
+                            {% empty %}
+                             <div class="flex justify-between items-center bg-gray-50 px-2 py-1 rounded text-xs">
+                                <span class="text-gray-700 flex-1">✉️ Los artículos se encuentran en la foto de la orden cargada</span>
+                             </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Botón para descargar PDF -->
+<!--    <div class="my-6 text-center">-->
+<!--        <a href="{% url 'base:generar_pdf' %}" class="inline-flex items-center px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5" target="_blank">-->
+<!--            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">-->
+<!--                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>-->
+<!--            </svg>-->
+<!--            Descargar Comprobante-->
+<!--        </a>-->
+<!--    </div>-->
+
+    <div class="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 py-4 px-4 z-50">
+        <div class="flex justify-center">
+            <a href="{% url 'base:home' %}" class="btn-continuar-fixed" id="btn_conti">
+                <button class="btn-text">Finalizar</button>
+                <button class="loader" style="display: none;"></button>
+            </a>
+        </div>
+    </div>
+
+    <!-- Espaciador para evitar que el contenido se oculte detrás del botón fijo -->
+    <div class="h-20"></div>
 
 </section>
+
+<style>
+.btn-continuar-fixed {
+    padding: .7rem 6.1rem;
+    border-radius: .4rem;
+    background: var(--azul-logifarma-ligth);
+    border: 1px solid var(--azul-logifarma-ligth);
+    color: white;
+    font-size: 1.4rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.btn-continuar-fixed:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+</style>
 {% endblock %}

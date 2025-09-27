@@ -1,13 +1,15 @@
 import threading
 import traceback
 from functools import lru_cache
+from io import BytesIO
 
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.template.loader import get_template
 from retry import retry
+from xhtml2pdf import pisa
 
 from core import settings
 from core.apps.base.forms import *
@@ -15,7 +17,7 @@ from core.apps.base.resources.customwizard import CustomSessionWizard
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.email_helpers import make_subject_and_cco, make_destinatary
 from core.apps.base.resources.sms_helpers import send_sms_confirmation
-from core.apps.base.resources.tools import convert_bytes, is_file_valid, notify, guardar_info_bd
+from core.apps.base.resources.tools import convert_bytes, is_file_valid, notify, guardar_info_bd, clean_ip
 from core.settings import logger, BASE_DIR
 
 FORMS = [
@@ -138,12 +140,11 @@ class ContactWizard(CustomSessionWizard):
             **form_data['digitaCelular'],
             'email': [*form_data['digitaCorreo']]
         }
-        # Guardará en BD cuando DEBUG sean números reales
-        ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
-        if info_email['NUMERO_AUTORIZACION'] not in [99_999_999, 99_999_998]:
-            rad = guardar_info_bd(**info_email, ip=ip)
-        else:
-            rad = Radicacion(cel_uno=form_data['digitaCelular']['celular'], numero_radicado=info_email['NUMERO_AUTORIZACION'])
+        info = self.prepare_info_to_store_rad(info_email)
+        if info['NUMERO_AUTORIZACION'] not in [99_999_999, 99_999_998]:
+            guardar_info_bd(**info)
+        # else:
+        #     Radicacion(cel_uno=info['celular'], numero_radicado=info['NUMERO_AUTORIZACION'])
 
         logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} {info_email['NUMERO_AUTORIZACION']}"
                     f" Radicación finalizada. E-mail de confirmación será enviado a {form_data['digitaCorreo']}")
@@ -156,13 +157,13 @@ class ContactWizard(CustomSessionWizard):
 
         # Envía e-mail
         if not self.foto_fmedica:
-            x = threading.Thread(target=self.send_mail, args=(info_email,))
+            x = threading.Thread(target=self.send_mail, args=(info,))
             x.start()
         else:
-            self.send_mail(info_email)
-            send_sms_confirmation(form_data.get('digitaCelular', {}).get('celular', ''), rad.numero_autorizacion, kwargs.get('P_NOMBRE', ''))
+            self.send_mail(info)
+            send_sms_confirmation(info['celular'], info['NUMERO_AUTORIZACION'], info['P_NOMBRE'])
 
-        return form_data['autorizacionServicio']['num_autorizacion']
+        return self.prepare_info_to_done_step(info)
 
     def prepare_email(self, info_email):
 
@@ -248,40 +249,73 @@ class ContactWizard(CustomSessionWizard):
         #         del_file(self.foto_fmedica.file.file.name)
 
 
+    def prepare_info_to_store_rad(self, info):
+        """ Crea un diccionario que será usado para guardar el radicado y tomado para construir el correo html. """
+        return {
+            'celular': info['celular'],
+            'whatsapp': info.get('whatsapp'),
+            'barrio': info.get('barrio'),
+            'direccion': info.get('direccion'),
+            'celular_validado': info.get('celular_validado'),
+            'email': info.get('email', ['']),
+            'municipio': info.get('municipio'),
+            'IP': clean_ip(self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))),
+            'P_NOMBRE': info.get('P_NOMBRE', ''),  # 'JOSE'
+            'NOMBRE': info.get('NOMBRE'),  # 'JOSE'
+            'AFILIADO': info.get('AFILIADO'),  # 'JOSE JULIAN VIVES NULE'
+            'DOCUMENTO_ID': info['DOCUMENTO_ID'],  # '12345678'
+            'TIPO_IDENTIFICACION': info['TIPO_IDENTIFICACION'],  # 'CC'
+            'CONVENIO': info.get('CONVENIO'),
+            'NUMERO_AUTORIZACION': str(info['NUMERO_AUTORIZACION']),
+            'MEDICAMENTO_AUTORIZADO': True,
+            'PACIENTE_DATA': {
+                'DETALLE_AUTORIZACION': info.get('DETALLE_AUTORIZACION'),
+                "P_NOMBRE": info.get('P_NOMBRE'),
+                "S_NOMBRE": info.get('S_NOMBRE'),
+                "P_APELLIDO": info.get('P_APELLIDO'),
+                "S_APELLIDO": info.get('S_APELLIDO'),
+                "ARCHIVO": info.get('ARCHIVO', ""),
+                "MIPRES": info.get('MIPRES'),
+                "REGIMEN": info.get('REGIMEN'),
+                "DIAGNOSTICO": info.get('DIAGNOSTICO'),
+                "Observacion": info.get('Observacion'),
+                "IPS_SOLICITA": info.get('IPS_SOLICITA'),
+                "SEDE_AFILIADO": info.get('SEDE_AFILIADO'),
+                "CORREO_RESP_AUT": info.get('CORREO_RESP_AUT'),
+                "MEDICO_TRATANTE": info.get('MEDICO_TRATANTE'),
+                "RESPONSABLE_AUT": info.get('RESPONSABLE_AUT'),
+                "CORREO_RESP_GUARDA": info.get('CORREO_RESP_GUARDA'),
+                "FECHA_AUTORIZACION": info.get('FECHA_AUTORIZACION'),
+                "RESPONSABLE_GUARDA": info.get('RESPONSABLE_GUARDA'),
+            }
+        }
+
+    @staticmethod
+    def prepare_info_to_done_step(info: dict) -> dict:
+        """Prepare info last step (done.html)."""
+        return {
+            'P_NOMBRE': info.get('P_NOMBRE'),  # 'JOSE'
+            'AFILIADO': info.get('AFILIADO'),  # 'JOSE JULIAN VIVES NULE'
+            'DOCUMENTO_ID': info['DOCUMENTO_ID'],  # '1234567'
+            'TIPO_IDENTIFICACION': info['TIPO_IDENTIFICACION'],  # 'CC'
+            'BARRIO': info.get('barrio'),
+            'DIRECCION': info.get('direccion'),
+            'CELULAR': info.get('celular'),
+            'MUNICIPIO': str(info.get('municipio')),
+            'CORREO': info['email'][0] if info['email'] else "",
+            'AUTORIZACIONES': {info['NUMERO_AUTORIZACION']: info['PACIENTE_DATA']['DETALLE_AUTORIZACION']},
+            'LEN_AUTORIZACIONES': len(info['PACIENTE_DATA']['DETALLE_AUTORIZACION']),
+        }
+
+
 def finalizado(request):
-    """
-    Vista exhibida cuando el wizard es finalizado.
-    :param request:
-    Caso venga del flujo con cédula:
-        - {'AFILIADO': 'DA SILVA RODRIQUEZ MARCELO SOUZA', 'DOCUMENTO_ID': '99999999',
-         'NOMBRE': 'MARCELO DA SILVA', 'NUMERO_AUTORIZACION': '1',
-         'P_NOMBRE': 'MARCELO',
-         'TIPO_IDENTIFICACION': 'CC', 'documento': 'CC99999999'}
-    Caso venga del flujo con número de autorización:
-        - {'TIPO_IDENTIFICACION': 'CC', 'DOCUMENTO_ID': '12340316',
-            'AFILIADO': 'GUTIERREZ TEIXEIRA JACKSON WOH',
-            'P_NOMBRE': 'JACKSON',
-            'S_NOMBRE': 'WOH', 'P_APELLIDO': 'GUTIERREZ',
-            'S_APELLIDO': 'TEIXEIRA', 'ESTADO_AFILIADO': 'ACTIVO',
-            'SEDE_AFILIADO': 'BARRANCABERMEJA', 'REGIMEN': 'SUBSIDIADO',
-            'DIRECCION': 'CL 123  45 678',
-            'CORREO': 'jackson.gutierrez.teixeira123456789@gmail.com',
-            'TELEFONO': '4019255', 'CELULAR': '4014652512',
-            'ESTADO_AUTORIZACION': 'PROCESADA', 'FECHA_AUTORIZACION': '15/11/2022',
-            'MEDICO_TRATANTE': 'FRANK LAMPARD', 'MIPRES': '0',
-            'DIAGNOSTICO': 'D571-ANEMIA FALCIFORME SIN CRISIS',
-            'ARCHIVO': 'https://archivos-alfonso.s3.sa-east-1.amazonaws.com/doc1.pdf',
-            'DETALLE_AUTORIZACION': [{'CUMS': '20158642-1', '
-            NOMBRE_PRODUCTO': 'RIVAROXABAN 20MG TABLETA RECUBIERTA', 'CANTIDAD': '30'},
-            {'CUMS': '42034-1', 'NOMBRE_PRODUCTO': 'HIDROXIUREA 500MG CAPSULA', 'CANTIDAD': '60'}],
-            'municipio': 'Barrancamerbeja, Santander', 'barrio': 'Any Neighbor, Florida',
-            'direccion': '321654987654', 'celular': 9151234567, 'email': '23131@gmail.com',
-             'NUMERO_AUTORIZACION': 99999998}
-    :return:
+    """Vista exhibida cuando el wizard es finalizado.
+    Para saber que información viene aqui es necesario observar las funciones pepare_info_to_done_step',
     """
     request.session['rendered_done'] = False
     if ctx := request.session.get('ctx', {}):
-        logger.info(f"{ctx['NUMERO_AUTORIZACION']} <- Autorización, "
+        autorizaciones = ctx.get('NUMERO_AUTORIZACION') or ', '.join(list(ctx.get('AUTORIZACIONES', {}).keys()))
+        logger.info(f"{autorizaciones} <- Autorización, "
                     f"acessando a vista /finalizado al haber terminado el wizard.")
         return render(request, 'done.html', ctx)
     else:
@@ -299,23 +333,3 @@ def err_multitabs(request):
         # Se puede agregar un mensaje para que aparezca un modal al
         # ser redireccionado al home.
         return HttpResponseRedirect('/')
-
-
-
-
-
-class WizardConMutualSerScrapping(ContactWizard):
-    form_list = [
-        ("home_prueba", Home),
-        ("autorizado_o_no", AutorizadoONo),
-        ("autorizacionServicio", AutorizacionServicio),
-        ("fotoFormulaMedica", FotoFormulaMedica),
-        ("eligeMunicipio", EligeMunicipio),
-        ("digitaDireccionBarrio", DireccionBarrio),
-        ("digitaCelular", DigitaCelular),
-        ("digitaCorreo", DigitaCorreo)
-    ]
-    MANDATORIES_STEPS = ("home_prueba", "autorizado_o_no", "autorizacionServicio", "eligeMunicipio",
-                         "digitaDireccionBarrio", "digitaCelular", "digitaCorreo")
-    
-    # Inherits get_form_kwargs from ContactWizard

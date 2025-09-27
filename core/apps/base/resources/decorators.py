@@ -3,6 +3,7 @@ from datetime import timedelta, datetime
 from functools import wraps
 from time import time
 
+from core import settings
 from core.apps.base.resources.tools import login_check
 from core.settings import logger
 
@@ -129,5 +130,12 @@ def login_required(func):
         login_succeed = login_check(self)
         if login_succeed:
             return func(*fargs, **fkwargs)
+
+    return wrapper
+
+def prod_only(func):
+    @wraps(func)
+    def wrapper(*fargs, **fkwargs):
+        return func(*fargs, **fkwargs) if settings.PRODUCTION else False
 
     return wrapper
