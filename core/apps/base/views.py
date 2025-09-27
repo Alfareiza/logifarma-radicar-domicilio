@@ -9,7 +9,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.template.loader import get_template
 from retry import retry
-from xhtml2pdf import pisa
 
 from core import settings
 from core.apps.base.forms import *
