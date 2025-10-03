@@ -64,11 +64,11 @@ class UpdateDB(PostStep):
         # log.info(f"{info_email['log_text']} ...actualizando radicados en DB con id de imagen en GDrive.")
         check = False
 
-        rad_id: str = info_email.get('ref_id')
+        rad_id: str = info_email.get('ORIGINAL_ID')
         file_id: str = info_email.get('file_id')
         img_name: str = info_email.get('img_name')
 
-        rad_default = Radicacion.objects.filter(numero_radicado=rad_id).first()
+        rad_default = Radicacion.objects.filter(id=rad_id).first()
         if not rad_default:
             log.info(f"{info_email['log_text']} ...no fue encontrado {rad_id=} en postgres.")
         elif isinstance(rad_default.paciente_data, dict):

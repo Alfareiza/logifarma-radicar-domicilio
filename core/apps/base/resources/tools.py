@@ -195,51 +195,49 @@ def guardar_info_bd(**kwargs):
             }
     :return:
     """
-    from core.apps.base.models import Radicacion, Municipio, Barrio
-    rad = kwargs.pop('NUMERO_AUTORIZACION', None)
-    convenio = kwargs.pop('CONVENIO', None)
-    if Radicacion.objects.filter(numero_radicado=str(rad), convenio=convenio).exists():
+    from core.apps.base.models import Radicacion, Barrio
+    rad = kwargs.get('NUMERO_AUTORIZACION', None)
+    convenio = kwargs.get('CONVENIO', None)
+
+    if kwargs['MEDICAMENTO_AUTORIZADO'] and Radicacion.objects.filter(numero_radicado=str(rad),
+                                                                      convenio=convenio).exists():
         logger.warning(f"{rad} Número de radicación ya existe!.")
         return
-    municipio = kwargs.pop('municipio').name.lower()
-
-    email = kwargs.pop('email', None)
-    if email and email[0]:
-        email = email[0]
+    municipio = kwargs['municipio']
+    if kwargs['MEDICAMENTO_AUTORIZADO']:
+        logger.info(f"{rad} Guardando radicación (medicamento autorizado) de {convenio}.")
     else:
-        email = ', '.join(email)
-
-    ip = clean_ip(kwargs.pop('ip'))
-    kwargs.pop('otp_code', None)
-
-    logger.info(f"{rad} Guardando radicación (medicamento autorizado) de {convenio}.")
+        logger.info(
+            f"Guardando radicación (medicamento NO autorizado) de {kwargs['DOCUMENTO_ID']} {kwargs['CONVENIO']}.")
     try:
         rad = Radicacion(
             numero_radicado=str(rad),
             convenio=convenio,
-            municipio=Municipio.objects.get(activo=True, name__iexact=municipio),
+            municipio=municipio,
             barrio=Barrio.objects.filter(
-                municipio__name__iexact=municipio,
+                municipio__name__iexact=municipio.name.lower(),
                 status='1',
-            ).get(name=kwargs.pop('barrio', None).lower()),
-            cel_uno=kwargs.pop('celular', None),
-            cel_uno_validado=kwargs.pop('celular_validado', False),
-            cel_dos=kwargs.pop('whatsapp', None),
-            email=email,
-            direccion=kwargs.pop('direccion', None),
-            ip=ip,
-            paciente_nombre=kwargs.pop('AFILIADO', None),
-            paciente_cc=kwargs.pop('DOCUMENTO_ID', None),
-            paciente_data=kwargs)
+            ).get(name=kwargs.get('barrio', None).lower()),
+            cel_uno=kwargs['celular'],
+            cel_uno_validado=kwargs.get('celular_validado', False),
+            cel_dos=kwargs.get('whatsapp', None),
+            email=', '.join(kwargs['email']),
+            direccion=kwargs['direccion'],
+            ip=kwargs['IP'],
+            paciente_nombre=kwargs['AFILIADO'],
+            paciente_cc=kwargs['DOCUMENTO_ID'],
+            paciente_data=kwargs.get('PACIENTE_DATA'))
         save_in_bd('default', rad)
     except MultipleObjectsReturned as e:
         if "more than one Barrio" in str(e):
-            barrios = Barrio.objects.filter(municipio__name__iexact=municipio, status='1').values_list('id', 'name')
+            barrios = Barrio.objects.filter(municipio__name__iexact=municipio.name.lower(), status='1').values_list(
+                'id', 'name')
             body_content = '\n- '.join([f"{_id} - {name}" for _id, name in barrios])
             notify('error-bd',
                    f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS",
                    f"Barrio repetido en municipio {municipio.title()}: \n{body_content}\nAsegúrate de borrar el barrio que no tenga radicados")
-            logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación por barrio {barrios.first()[1]!r} repetido en {municipio.title()}")
+            logger.error(
+                f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación por barrio {barrios.first()[1]!r} repetido en {municipio.title()}")
     except Exception as e:
         logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación: {str(e)}")
         notify('error-bd',
@@ -261,62 +259,6 @@ def save_in_bd(name_bd: str, rad):
         raise Exception(f"No fue posible guardar radicado {rad} en {name_bd}, error={e}") from e
     else:
         logger.info(f"{rad.numero_radicado} Radicación guardada con éxito {rad.id=}")
-
-
-def guardar_short_info_bd(**kwargs):
-    """
-    Guarda radicado en base de datos
-    :param kwargs: Información final del wizard + ip:
-            Ejemplo:
-            {'sinAutorizacion': '99999999', 'fotoFormulaMedica': {'src': <UploadedFile: chat.png (image/png)>}, 'eligeMunicipio': {'cod_dane': None, 'activo': False, 'municipio': <Municipio: Valledupar, Cesar>}, 'digitaDireccionBarrio': {'barrio': 'Barrio 1', 'direccion': '213'}, 'digitaCelular': {'celular': 3213213211, 'whatsapp': None}, 'digitaCorreo': ['']}
-    :return:
-    """
-    from core.apps.base.models import Radicacion, Municipio, Barrio
-    municipio = kwargs.pop('municipio').name.lower()
-
-    email = kwargs.pop('email', None)
-    email = email[0] if email and email[0] else ', '.join(email)
-    ip = clean_ip(kwargs.pop('ip'))
-
-    numero_radicado = kwargs.get('NUMERO_AUTORIZACION', datetime_id())
-    logger.info(
-        f"{numero_radicado} Guardando radicación (medicamento NO autorizado) de {kwargs['documento']} {kwargs.get('CONVENIO', '')}.")
-    try:
-        rad = Radicacion(
-            numero_radicado=numero_radicado,
-            convenio=kwargs.pop('CONVENIO', None),
-            municipio=Municipio.objects.get(activo=True, name__iexact=municipio),
-            barrio=Barrio.objects.filter(
-                municipio__name__iexact=municipio,
-                status='1',
-            ).get(name=kwargs.pop('barrio', None).lower()),
-            cel_uno=kwargs.pop('celular', None),
-            cel_uno_validado=kwargs.pop('celular_validado', False),
-            cel_dos=kwargs.pop('whatsapp', None),
-            email=email,
-            direccion=kwargs.pop('direccion', None),
-            ip=ip,
-            paciente_nombre=kwargs.pop('AFILIADO', None),
-            paciente_cc=f"{kwargs['documento']}",
-            paciente_data={},
-        )
-
-        save_in_bd('default', rad)
-        # resp = numero_radicado, rad.id, rad.datetime
-    except MultipleObjectsReturned as e:
-        if "more than one Barrio" in str(e):
-            barrios = Barrio.objects.filter(municipio__name__iexact=municipio, status='1').values_list('id', 'name')
-            body_content = '\n- '.join([f"{_id} - {name}" for _id, name in barrios])
-            notify('error-bd',
-                   f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS",
-                   f"Barrio repetido en municipio {municipio.title()}: \n{body_content}\nAsegúrate de borrar el barrio que no tenga radicados")
-            logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación por barrio {barrios.first()[1]!r} repetido en {municipio.title()}")
-    except Exception as e:
-        logger.error(f"{numero_radicado} Error guardando radicación: {e}")
-        notify('error-bd',
-               f"ERROR GUARDANDO RADICACION {numero_radicado} EN BASE DE DATOS", str(e))
-    else:
-        return rad
 
 
 def discover_rad(body) -> str:
@@ -575,7 +517,7 @@ def login_check(obj) -> bool:
 def add_user_id_to_formatter(handler, user_id):
     old_formatter = handler.formatter
 
-    new_defaults = {"ssid": getattr(old_formatter,"_my_ssid", ''), "user_id": user_id}
+    new_defaults = {"ssid": getattr(old_formatter, "_my_ssid", ''), "user_id": user_id}
     new_fmt_str = "%(asctime)s %(levelname)s [%(ssid)s|%(user_id)s] %(message)s"
     updated_formatter = logging.Formatter(
         new_fmt_str,

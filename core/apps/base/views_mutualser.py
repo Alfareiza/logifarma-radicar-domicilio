@@ -1,5 +1,6 @@
 import random
 from collections import OrderedDict
+from typing import Any
 
 from django.core.files.storage import FileSystemStorage
 from django.urls import reverse
@@ -17,7 +18,7 @@ from core.apps.base.pipelines import NotifyEmail, NotifySMS
 from core.apps.base.resources.customwizard import CustomSessionWizard
 from core.apps.base.validators import validate_resp_zona_ser, validate_dispensados
 from core.apps.base.resources.decorators import logtime, once_in_interval
-from core.apps.base.resources.tools import guardar_info_bd, notify
+from core.apps.base.resources.tools import guardar_info_bd, notify, clean_ip
 from core.apps.base.views import TEMPLATES
 from core.settings import logger, BASE_DIR
 
@@ -303,37 +304,21 @@ class MutualSerAutorizacion(CustomSessionWizard):
         }
         # Guardará en BD cuando DEBUG sean números reales
         ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
-        if not info_email.get('documento'):
-            info_email |= kwargs['form_dict']['sinAutorizacion'].cleaned_data
-        del info_email['cod_dane']
-        del info_email['activo']
-        del info_email['AUTORIZACIONES_DISPENSADAS']
-        autorizaciones = info_email.pop('AUTORIZACIONES', None)
-        info_email['DOCUMENTO_ID'] = info_email.pop('documento')
-        for nro_aut, meds in autorizaciones.items():
-            info_email['NUMERO_AUTORIZACION'] = nro_aut
-            info_email['DETALLE_AUTORIZACION'] = meds
-            celular = info_email.get('celular')
-            if info_email.get('DOCUMENTO_ID') != 'CC99999999':
-                guardar_info_bd(**info_email, ip=ip)
-            info_email['celular'] = celular
+        for autorizacion in self.prepare_info_to_store_rad(info_email):
+            if autorizacion.get('DOCUMENTO_ID') != 'CC99999999':
+                guardar_info_bd(**autorizacion, ip=ip)
 
-            self.log_text = f"{nro_aut} {info_email['DOCUMENTO_ID']}"
-
-            logger.info(f"{self.log_text} {info_email['NOMBRE']} Radicación finalizada. "
-                        f"E-mail de confirmación será enviado a {', '.join(form_data['digitaCorreo'])}")
-
+            self.log_text = f"{autorizacion['NUMERO_AUTORIZACION']} {autorizacion['DOCUMENTO_ID']}"
+            logger.info(f"{self.log_text} {autorizacion['NOMBRE']} Radicación finalizada. "
+                        f"E-mail de confirmación será enviado a {autorizacion['email']}")
             # if not settings.DEBUG:
             #     En producción esto se realiza así para liberar al usuario en el front
             #     x = threading.Thread(target=self.run_post_wizard, args=(info_email, rad_id))
             #     x.start()
             # else:
-            self.run_post_wizard(info_email, nro_aut)
+            self.run_post_wizard(autorizacion, autorizacion['NUMERO_AUTORIZACION'])
 
-        # Se usa NUMERO_AUTORIZACION porque es el valor que /finalizado espera
-        resp = form_data['sinAutorizacion']
-        resp.update({'NUMERO_AUTORIZACION': ', '.join(list(autorizaciones))})
-        return resp
+        return self.prepare_info_to_done_step(info_email)
 
     def run_post_wizard(self, info_email, rad_id) -> None:
         """Ejecuta la función run de cada clase listada en post_wizard"""
@@ -343,3 +328,51 @@ class MutualSerAutorizacion(CustomSessionWizard):
             check, context = step(log_text=self.log_text, template=self.template_email).proceed(context, rad_id)
             if not check:
                 logger.warning(f"{step} presentó fallas al ser ejecutado.")
+
+    @staticmethod
+    def prepare_info_to_done_step(info: dict) -> dict:
+        """Prepare info last step (done.html)."""
+        return {
+            'P_NOMBRE': info.get('P_NOMBRE'),  # 'JOSE'
+            'AFILIADO': info.get('AFILIADO'),  # 'JOSE JULIAN VIVES NULE'
+            'DOCUMENTO_ID': info['DOCUMENTO_ID'][2:],  # '92521069'
+            'TIPO_IDENTIFICACION': info['DOCUMENTO_ID'][:2],  # '92521069'
+            'AUTORIZACIONES': info.get('AUTORIZACIONES'),  # {'7067005427589': [{'CANTIDAD': '30', 'NOMBRE_PRODUCTO': 'M00811 GLIMEPIRIDA TABLETA  4 MG'}]}
+            'LEN_AUTORIZACIONES': len(info.get('AUTORIZACIONES').values()),
+            'BARRIO': info.get('barrio'),
+            'DIRECCION': info.get('direccion'),
+            'CELULAR': info.get('celular'),
+            'MUNICIPIO': str(info.get('municipio')),
+            'CORREO': info['email'][0] if info['email'] else "",
+        }
+
+    def prepare_info_to_store_rad(self, info: dict) -> list[dict[str | Any, str | None | Any]]:
+        """ Crea un diccionario que será usado para guardar el radicado y tomado para construir el correo html. """
+        return [
+            {
+                'MEDICAMENTO_AUTORIZADO': True,
+                'celular': info.get('celular'),
+                'whatsapp': info.get('whatsapp'),
+                'barrio': info.get('barrio'),
+                'direccion': info.get('direccion'),
+                'celular_validado': info.get('celular_validado'),
+                'email': info.get('email', ['']),
+                'municipio': info.get('municipio'),
+                'IP': clean_ip(self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))),
+                'P_NOMBRE': info.get('P_NOMBRE'),  # 'JOSE'
+                'NOMBRE': info.get('NOMBRE'),  # 'JOSE'
+                'AFILIADO': info.get('AFILIADO'),  # 'JOSE JULIAN VIVES NULE'
+                'DOCUMENTO_ID': info.get('documento'),  # 'CC1234567'
+                'CONVENIO': info.get('CONVENIO'),
+                'NUMERO_AUTORIZACION': nro_autorizacion,
+                'AUTORIZACIONES': info.get('AUTORIZACIONES'),  # {'7067005427589': [{'CANTIDAD': '30', 'NOMBRE_PRODUCTO': 'M00811 GLIMEPIRIDA TABLETA  4 MG'}]}
+                'PACIENTE_DATA': {
+                    'DETALLE_AUTORIZACION': articulos,
+                    "NOMBRE": info.get('NOMBRE'),
+                    "P_NOMBRE": info.get('P_NOMBRE'),
+                    "TIPO_IDENTIFICACION": info.get('TIPO_IDENTIFICACION'),
+                    "SCRAPPER_ID": info.get('SCRAPPER_ID'),
+                }
+            }
+            for nro_autorizacion, articulos in info.get('AUTORIZACIONES').items()
+        ]

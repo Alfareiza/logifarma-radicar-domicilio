@@ -6,7 +6,7 @@ from core.apps.base.pipelines import NotifyEmail, NotifySMS, Drive, UpdateDB
 from core.apps.base.resources.customwizard import CustomSessionWizard
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.img_helpers import ImgHelper
-from core.apps.base.resources.tools import guardar_short_info_bd
+from core.apps.base.resources.tools import datetime_id, guardar_info_bd, clean_ip
 from core.apps.base.views import TEMPLATES
 from core.settings import logger
 
@@ -76,41 +76,34 @@ class SinAutorizacion(CustomSessionWizard):
             'email': [*form_data['digitaCorreo']]
         }
 
+        info_email = self.prepare_info_to_store_rad(info_email)
         if 'fotoFormulaMedica' in form_data:
             self.foto_fmedica = form_data['fotoFormulaMedica']['src']
             info_email['foto'] = self.foto_fmedica
 
-        # Guardará en BD cuando DEBUG sean números reales
-        ip = self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))
-
-        if info_email['documento'][2:] not in ('99999999',):
-            rad = guardar_short_info_bd(**info_email, ip=ip)
-            info_email['NUMERO_RADICACION'] = rad.numero_autorizacion
-            info_email['FECHA_RADICACION'] = rad.datetime
-            info_email['ref_id'] = rad.numero_radicado
-            rad_id = rad.numero_autorizacion
+        if info_email['DOCUMENTO_ID'][2:] not in ('99999999',):
+            rad = guardar_info_bd(**info_email)
+            info_email.update(
+                NUMERO_AUTORIZACION=rad.numero_autorizacion,  # Se actualiza para uso en sms/e-mail
+                FECHA_RADICACION=rad.datetime,
+                ORIGINAL_ID=rad.id,  # Se actualiza para uso en UpdateDB
+            )
         else:
-            rad_id = '1'
-            info_email['NUMERO_RADICACION'] = rad_id
+            info_email['NUMERO_AUTORIZACION'] = '123456'
 
-        if rad_id:
-            self.log_text = f"{rad_id} {info_email['documento']}"
-            info_email['log_text'] = self.log_text
+        self.log_text = f"{info_email['NUMERO_AUTORIZACION']} {info_email['DOCUMENTO_ID']}"
+        info_email['log_text'] = self.log_text
 
-            logger.info(f"{self.log_text} {info_email['NOMBRE']} Radicación finalizada. "
-                        f"E-mail de confirmación será enviado a {form_data['digitaCorreo']}")
+        logger.info(f"{self.log_text} {info_email['NOMBRE']} Radicación finalizada. "
+                    f"E-mail de confirmación será enviado a {form_data['digitaCorreo']}")
 
-            # if not settings.DEBUG:
-            #     En producción esto se realiza así para liberar al usuario en el front
-            # x = threading.Thread(target=self.run_post_wizard, args=(info_email, rad_id))
-            # x.start()
-            # else:
-            self.run_post_wizard(info_email, rad_id)
-
-        # Se usa NUMERO_AUTORIZACION porque es el valor que /finalizado espera
-        resp = form_data['sinAutorizacion']
-        resp.update({'NUMERO_AUTORIZACION': rad_id})
-        return resp
+        # if not settings.DEBUG:
+        #     En producción esto se realiza así para liberar al usuario en el front
+        # x = threading.Thread(target=self.run_post_wizard, args=(info_email, rad_id))
+        # x.start()
+        # else:
+        self.run_post_wizard(info_email, info_email['NUMERO_AUTORIZACION'])
+        return self.prepare_info_to_done_step(info_email)
 
     def run_post_wizard(self, info_email, rad_id) -> None:
         """Ejecuta la función run de cada clase listada en post_wizard"""
@@ -141,3 +134,51 @@ class SinAutorizacion(CustomSessionWizard):
             img.save(filepath_img)
         except Exception as e:
             logger.error(f"{self.log_text} {filepath_img} no pudo ser tratada por error: {e}")
+
+
+    @staticmethod
+    def prepare_info_to_done_step(info: dict) -> dict:
+        """Prepare info last step (done.html)."""
+        return {
+            'P_NOMBRE': info.get('P_NOMBRE'),  # 'JOSE'
+            'AFILIADO': info.get('AFILIADO'),  # 'JOSE JULIAN VIVES NULE'
+            'DOCUMENTO_ID': info['DOCUMENTO_ID'][2:],  # '92521069'
+            'TIPO_IDENTIFICACION': info['DOCUMENTO_ID'][:2],  # '92521069'
+            'AUTORIZACIONES': {info['NUMERO_AUTORIZACION']: None},
+            'LEN_AUTORIZACIONES': 1,
+            'BARRIO': info.get('barrio'),
+            'DIRECCION': info.get('direccion'),
+            'CELULAR': info.get('celular'),
+            'MUNICIPIO': str(info.get('municipio')),
+            'CORREO': info['email'][0] if info['email'] else "",
+        }
+
+    def prepare_info_to_store_rad(self, info) -> dict:
+        """ Crea un diccionario que será usado para guardar el radicado y tomado para construir el correo html. """
+        return {
+            'celular': info['celular'],
+            'whatsapp': info.get('whatsapp'),
+            'barrio': info.get('barrio'),
+            'direccion': info.get('direccion'),
+            'celular_validado': info.get('celular_validado'),
+            'email': info.get('email', ['']),
+            'municipio': info.get('municipio'),
+            'IP': clean_ip(self.request.META.get('HTTP_X_FORWARDED_FOR', self.request.META.get('REMOTE_ADDR'))),
+            'P_NOMBRE': info['P_NOMBRE'],  # 'JOSE'
+            'NOMBRE': info.get('NOMBRE'),  # 'JOSE'
+            'AFILIADO': info.get('AFILIADO'),  # 'JOSE JULIAN VIVES NULE'
+            'DOCUMENTO_ID': info['documento'],  # 'CC12345678'
+            # 'TIPO_IDENTIFICACION': info['TIPO_IDENTIFICACION'],  # 'CC'
+            'CONVENIO': info['CONVENIO'],
+            'NUMERO_AUTORIZACION': str(info.get('NUMERO_AUTORIZACION', datetime_id())),  # Valor fake para poder guardar radicado
+            'PACIENTE_DATA': {},
+            'MEDICAMENTO_AUTORIZADO': False,
+            # Valores cargados después de guardar en BD
+            'FECHA_RADICACION': None,
+            'NUMERO_RADICACION': None,
+            'ORIGINAL_ID': None,
+            'foto': None,
+            'file_id': None,
+            'img_name': None,
+            'log_text': None,
+        }
