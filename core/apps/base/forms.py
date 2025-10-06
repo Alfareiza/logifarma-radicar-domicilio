@@ -339,13 +339,13 @@ class DigitaCelular(forms.Form):
                 # Access raw step data without triggering validation/API calls
                 previous_data = self._get_previous_step_data()
                 autorizacion_data = previous_data.get('autorizacion_data', {})
-                municipio_data = previous_data.get('municipio_data', '')
+                municipio_data = previous_data.get('municipio_data', {})
                 
                 if autorizacion_data and 'DOCUMENTO_ID' in autorizacion_data:
                     tipo_documento = autorizacion_data.get('TIPO_IDENTIFICACION')
                     documento = autorizacion_data.get('DOCUMENTO_ID')
             
-            _, municipio_name, _ = municipio_data.split(';')
+            _, municipio_name, _ = municipio_data.split(';') if municipio_data else None, None, None
             certify_celular(cel, tipo_documento, documento, municipio_name)
 
         return cleaned_data
