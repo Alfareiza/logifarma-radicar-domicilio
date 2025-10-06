@@ -345,7 +345,7 @@ class DigitaCelular(forms.Form):
                     tipo_documento = autorizacion_data.get('TIPO_IDENTIFICACION')
                     documento = autorizacion_data.get('DOCUMENTO_ID')
             
-            _, municipio_name, _ = municipio_data.split(';') if municipio_data else None, None, None
+            _, municipio_name, _ = municipio_data.split(';')
             certify_celular(cel, tipo_documento, documento, municipio_name)
 
         return cleaned_data
