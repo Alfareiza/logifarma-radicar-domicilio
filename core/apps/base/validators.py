@@ -11,7 +11,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 
-from core.apps.base.models import Med_Controlado, Radicacion, ScrapMutualSer, Status, CelularesRestringidos, OtpSMS
+from core.apps.base.models import Med_Controlado, Radicacion, ScrapMutualSer, Status, CelularesRestringidos, OtpSMS, \
+    UsuariosRestringidos
 from core.apps.base.resources.api_calls import get_firebase_acta
 from core.apps.base.resources.sms_helpers import Sms, send_sms_verification_code
 from core.apps.base.resources.tools import encrypt, notify, pretty_date, \
@@ -228,6 +229,22 @@ def validate_identificacion_exists(entidad: str, resp: dict, info: str) -> Valid
                 'modal_type': "status_radicado",
                 'modal_title': f"No hemos podido encontrar información con ese documento en {entidad.title()}.",
                 'modal_body': "Por favor verifica e intenta nuevamente o comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+            })
+
+def validate_usuario_restringido(resp: dict, tipo_documento: str, documento: str) -> ValidationError:
+    """Valida que la identificacion se encuentre en la tabla de usuarios restringidos."""
+    usuario_restringido = UsuariosRestringidos.objects.filter(tipo_documento=tipo_documento, documento=documento)
+    if usuario_restringido.exists():
+        motivo = usuario_restringido.first().motivo
+        motivo_html = f"<br><br>Motivo: {motivo}" if motivo else ""
+        P_NOMBRE = resp.get('PRIMER_NOMBRE', '')
+        raise forms.ValidationError(
+            message="Usuario restringido", # Uso interno
+            params={
+                'modal_type': 'blocked_number',
+                'modal_title': f"Disculpa {P_NOMBRE.title()}, no es posible atender tu solicitud por este medio, por favor dirige al dispensario más cercano.{motivo_html}",
+                'modal_body': "Para más información acércate a uno de nuestros dispensarios "
+                              "<a class='tel' target='_blank' href='https://logifarma.com.co/red/'>logifarma.com.co/red</a>.",
             })
 
 

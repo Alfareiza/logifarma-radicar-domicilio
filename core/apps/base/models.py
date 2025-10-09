@@ -14,7 +14,7 @@ from django.db.models import (
     IntegerField,
     JSONField,
     Model,
-    DateField, TextField, FloatField,
+    DateField, TextField, FloatField, UniqueConstraint,
 )
 from django.db.models.fields import BigIntegerField
 from django.utils import timezone
@@ -373,3 +373,27 @@ class OtpSMS(Model):
     created_at = DateTimeField(auto_now_add=True)
     numero = BigIntegerField(db_index=True, validators=[MinValueValidator(3000000000), MaxValueValidator(3259999999)])
     otp_code = IntegerField(blank=True, null=True)
+
+
+class UsuariosRestringidos(Model):
+    created_at = DateTimeField(auto_now_add=True)
+    tipo_documento = CharField(max_length=20, null=True, blank=True)
+    documento = CharField(max_length=30, null=True, blank=True)
+    registrado_por = ForeignKey(User, on_delete=CASCADE, null=True, blank=True)
+    motivo = CharField(max_length=120, blank=True, null=True)
+
+    def __str__(self):
+        return f'<Usuario Restringido : {self.tipo_documento}{self.documento}>'
+
+    class Meta:
+        db_table = "base_usuarios_restringidos"
+        constraints = [
+            UniqueConstraint(
+                fields=["tipo_documento", "documento"],
+                name="unique_tipo_documento_documento",
+            ),
+        ]
+
+    def save(self, *args, **kwargs):
+        self.motivo = self.motivo.lower() if self.motivo else None
+        return super(UsuariosRestringidos, self).save(*args, **kwargs)
