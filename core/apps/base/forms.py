@@ -1,6 +1,6 @@
 from django import forms
 
-from core.apps.base.models import Barrio, Municipio, Radicacion
+from core.apps.base.models import Barrio, Municipio, Radicacion, UsuariosRestringidos
 from core.apps.base.resources.cajacopi import obtener_datos_identificacion, obtener_datos_autorizacion
 from core.apps.base.resources.medicar import obtener_datos_formula
 from core.apps.base.resources.tools import read_json
@@ -15,7 +15,7 @@ from core.apps.base.validators import (
     validate_status_afiliado,
     validate_status_aut,
     validate_structure, validate_numero_celular, direccion_min_length_validator, validate_numeros_bloqueados,
-    certify_celular
+    certify_celular, validate_usuario_restringido
 )
 from core.settings import logger
 
@@ -77,6 +77,7 @@ class SinAutorizacion(forms.Form):
             resp_eps = read_json('resources/fake_sin_autorizacion.json')
         elif entidad:
             resp_eps = obtener_datos_identificacion(entidad, tipo, value)
+            validate_usuario_restringido(resp_eps, tipo, value)
             validate_identificacion_exists(entidad, resp_eps, f"{tipo}{value}")
             validate_empty_response(resp_eps, resp['documento'], entidad)
             if not flag_new_formula:
@@ -369,3 +370,19 @@ class DigitaCorreo(forms.Form):
                          f"pero se procesó {email}")
 
         return list(map(lambda n: n.strip(), emails))
+
+
+class UsuariosRestringidosForm(forms.ModelForm):
+    """
+    Custom form for UsuariosRestringidos with dropdown for tipo_documento
+    Reuses the IDENTIFICACIONES choices from SinAutorizacion form
+    """
+    tipo_documento = forms.ChoiceField(
+        choices=SinAutorizacion.IDENTIFICACIONES,
+        label='Tipo de documento',
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = UsuariosRestringidos
+        fields = ['tipo_documento', 'documento', 'motivo']
