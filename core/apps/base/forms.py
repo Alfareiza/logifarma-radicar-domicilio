@@ -15,7 +15,7 @@ from core.apps.base.validators import (
     validate_status_afiliado,
     validate_status_aut,
     validate_structure, validate_numero_celular, direccion_min_length_validator, validate_numeros_bloqueados,
-    certify_celular, validate_usuario_restringido
+    certify_celular, validate_usuario_restringido, validate_panales
 )
 from core.settings import logger
 
@@ -152,6 +152,8 @@ class AutorizacionServicio(forms.Form):
 
         # Validación de status de autorización
         validate_status_aut(resp_eps, num_aut)
+
+        validate_panales(resp_eps, num_aut)
 
         # if (datetime.now() - resp_eps.get('FECHA_AUTORIZACION')).days > 30:
         #     raise forms.ValidationError("Esta autorización se encuentra vencida.")

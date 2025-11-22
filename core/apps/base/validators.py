@@ -171,6 +171,29 @@ def validate_med_controlados(resp_eps: dict, num_aut: int) -> ValidationError:
             })
 
 
+def validate_panales(resp_eps: dict, num_aut: int) -> ValidationError:
+    """Valida que el usuario pueda radicar pañales."""
+    cutoff = timezone.now() - timedelta(days=90)
+    not_allowed = []  # Lista de municipios
+
+    if (
+            "PANALES" in str(resp_eps['DETALLE_AUTORIZACION']) and
+            resp_eps['SEDE_AFILIADO'].strip().lower() not in not_allowed and not Radicacion.objects.filter(
+        paciente_cc=resp_eps['DOCUMENTO_ID'], datetime__gte=cutoff,
+        paciente_data__DETALLE_AUTORIZACION__contains=[{"NOMBRE_PRODUCTO": "PANALES"}]
+    ).exists()):
+        logger.warning(f'{num_aut} Usuario intentando radicar pañales por primera vez')
+        raise forms.ValidationError(
+            message='Pañales bloqueados.',
+            params={
+                'modal_type': 'medicamento_controlado',
+                'modal_title': f"Disculpa {resp_eps['P_NOMBRE'].capitalize()}, no es posible atender tu solicitud por este medio,"
+                               f" por favor dirigete al dispensario más cercano de entregas NO PBS.",
+                'modal_body': f"Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>."
+                              f"<p class='mt-3 text-sm text-gray-500'>Número de autorización {num_aut}.</p>",
+            })
+
+
 def validate_status_afiliado(resp_eps: dict, name_key: str, id_transaction: str) -> ValidationError:
     """
     Valida que el estado del usuario sea 'ACTIVO' o 'PROTECCION LABORAL'.
@@ -231,6 +254,7 @@ def validate_identificacion_exists(entidad: str, resp: dict, info: str) -> Valid
                 'modal_body': "Por favor verifica e intenta nuevamente o comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
             })
 
+
 def validate_usuario_restringido(resp: dict, tipo_documento: str, documento: str) -> ValidationError:
     """Valida que la identificacion se encuentre en la tabla de usuarios restringidos."""
     usuario_restringido = UsuariosRestringidos.objects.filter(tipo_documento=tipo_documento, documento=documento)
@@ -239,10 +263,10 @@ def validate_usuario_restringido(resp: dict, tipo_documento: str, documento: str
         motivo_html = f"<br><br>Motivo: {motivo}" if motivo else ""
         P_NOMBRE = resp.get('PRIMER_NOMBRE', '')
         raise forms.ValidationError(
-            message="Usuario restringido", # Uso interno
+            message="Usuario restringido",  # Uso interno
             params={
                 'modal_type': 'blocked_number',
-                'modal_title': f"Disculpa {P_NOMBRE.title()}, no es posible atender tu solicitud por este medio, por favor dirige al dispensario más cercano.{motivo_html}",
+                'modal_title': f"Disculpa {P_NOMBRE.title()}, no es posible atender tu solicitud por este medio, por favor dirigete al dispensario más cercano.{motivo_html}",
                 'modal_body': "Para más información acércate a uno de nuestros dispensarios "
                               "<a class='tel' target='_blank' href='https://logifarma.com.co/red/'>logifarma.com.co/red</a>.",
             })
