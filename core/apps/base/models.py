@@ -297,7 +297,7 @@ class ScrapMutualSer(Model):
 
     def create_or_get_and_scrap(self):
         """Gestiona como una fila la creación de scrapping."""
-        if scrap := self.get_scrap_last_minutes(self.id, self.tipo_documento, self.documento, 30):
+        if scrap := self.get_scrap_last_minutes(self.id, self.tipo_documento, self.documento, 1):
             return self.duplicate_attrs_from_existing(scrap)
         timer = Timer(15)
         while timer.not_expired:
