@@ -27,3 +27,7 @@ class RestartScrapper(Exception):
 
 class SinAutorizacionesPorRadicar(Exception):
     ...
+
+class TransactionRolledBack(Exception):
+    """Exception lanzada cuando al haber establecido la fecha en el modal, se clica en 'Confirmar fecha prest', se encuentra el texto 'Transacion Rolled Back', en la respuesta."""
+    ...

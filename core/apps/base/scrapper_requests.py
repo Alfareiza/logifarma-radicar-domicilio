@@ -13,7 +13,7 @@ from decorator import contextmanager
 from retry import retry
 
 from core.apps.base.exceptions import NroAutorizacionNoEncontrado, PasoNoProcesado, NoRecordsInTable, \
-    RestartScrapper, SinAutorizacionesPorRadicar
+    RestartScrapper, SinAutorizacionesPorRadicar, TransactionRolledBack
 import warnings
 
 from core.apps.base.resources.tools import add_user_id_to_formatter
@@ -589,6 +589,7 @@ class JSFPortalScraper:
             'main:ServicioSolicitud_focus': '',
             'main:a3tabladesolicuti:j_idt1398:filter': '',
             'main:a3tabladesolicuti:j_idt1407:filter': '',
+            'main:a3tabladesolicuti:0:UdpSolTabla2': 'C',
             'javax.faces.ViewState': self.view_state
         }
 
@@ -600,6 +601,8 @@ class JSFPortalScraper:
         )
         response.raise_for_status()
         # log.info("'Confirmar fecha prest' clicado")
+        if 'Transaction rolled back' in response.text:
+            raise TransactionRolledBack("Revisar body de requisición versus lo que es enviado vía UI.")
         if 'El Nro. para Facturar es:' not in response.text:
             raise NroAutorizacionNoEncontrado(
                 'Se esperaba Nro de Autorización en modal de lupa pero no fue encontrado.')
