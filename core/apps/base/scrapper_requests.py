@@ -566,7 +566,7 @@ class JSFPortalScraper:
             'javax.faces.partial.ajax': 'true',
             'javax.faces.source': ref_id,  # main:j_idt1013:fechaPrestacion
             'javax.faces.partial.execute': '@all',  # main:j_idt1013:fechaPrestacion
-            'javax.faces.partial.render': 'main:a3tabladesolicuti main:pnlbotones main:pnldatossolicitud main:pnlMotivoEstado main:tableDetProductos main:panelAdjPresEfe',
+            'javax.faces.partial.render': 'main:a3tabladesolicuti main:pnlbotones main:pnldatossolicitud main:pnlMotivoEstado main:pnlPrestacion main:formTecnologias:tableDetProductos main:panelAdjPresEfe',
             ref_id: ref_id,  # main:j_idt1013
             'main': 'main',
             self.ref_id_link: 'S,/pages/solicitudAut/consultasolicitudAut.xhtml',
@@ -589,7 +589,7 @@ class JSFPortalScraper:
             'main:ServicioSolicitud_focus': '',
             'main:a3tabladesolicuti:j_idt1398:filter': '',
             'main:a3tabladesolicuti:j_idt1407:filter': '',
-            'main:a3tabladesolicuti:0:UdpSolTabla2': 'C',
+            # 'main:a3tabladesolicuti:0:UdpSolTabla2': 'C',
             'javax.faces.ViewState': self.view_state
         }
 
@@ -658,7 +658,7 @@ class JSFPortalScraper:
     def find_medicamentos(self, response):
         """Extrae los productos que estan en la tabla del modal."""
         soup = BeautifulSoup(response)
-        table = soup.find('div', id='main:tableDetProductos')
+        table = soup.find('div', id='main:formTecnologias:tableDetProductos')
         headers = [th.text.strip() for th in table.thead.find_all('th')]
         rows = []
         for tr in table.tbody.find_all('tr'):
@@ -723,6 +723,9 @@ class JSFPortalScraper:
                 meds = self.find_medicamentos(resp)
             except NoRecordsInTable:
                 # todo enviar email avisando que nro de aut no tiene medicamentos.
+                # Acessar manualmente y revisar que tenga medicamentos
+                # Posibles causas
+                # - id de div cambió
                 continue
             self.close_modal()
             if not nro_aut:
@@ -812,6 +815,6 @@ class MutualScrapper(JSFPortalScraper):
 
 
 if __name__ == '__main__':
-    scrapper = MutualScrapper('CC', '92256603')
+    scrapper = MutualScrapper('CC', '1052960288')
     result = scrapper.find_user()
     pprint(result)
