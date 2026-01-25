@@ -41,8 +41,10 @@ class SAP:
             code = e.response.status_code
             if code >= 500:
                 msg = f"STATUS_CODE={code} {str(e)}"
+            elif code == 400:
+                msg = f"STATUS_CODE={code} {str(e)}"
             elif 'application/json' in e.response.headers['Content-Type']:
-                err = e.response.json()
+                msg = e.response.json()
             else:
                 err = e.response.content
                 if 'error' in err and err.get('error'):
