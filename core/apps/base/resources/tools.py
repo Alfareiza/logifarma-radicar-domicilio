@@ -235,9 +235,10 @@ def guardar_info_bd(**kwargs):
             body_content = '\n- '.join([f"{_id} - {name}" for _id, name in barrios])
             notify('error-bd',
                    f"ERROR GUARDANDO RADICACION {rad} EN BASE DE DATOS",
-                   f"Barrio repetido en municipio {municipio.name.title()}: \n{body_content}\nAsegúrate de borrar el barrio que no tenga radicados")
+                   f"Barrio {kwargs.get('barrio', '')!r} repetido en municipio {municipio.name.title()}:"
+                   f" \n{body_content}\nAsegúrate de borrar el barrio que no tenga radicados")
             logger.error(
-                f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación por barrio {barrios.first()[1]!r} repetido en {municipio.name.title()}")
+                f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación por barrio {kwargs.get('barrio', '')!r} repetido en {municipio.name.title()}")
     except Exception as e:
         logger.error(f"{kwargs.get('NUMERO_AUTORIZACION')} Error guardando radicación: {str(e)}")
         notify('error-bd',
