@@ -87,11 +87,11 @@ def request_api(url, headers, payload, method='POST') -> dict:
     # logger.info(f'API Header: {headers}')
     # logger.info(f'API Payload: {payload}')
     try:
+        res = requests.request('GET', 'https://httpbin.org/ip')
+        ip = json.loads(res.text.encode('utf8'))
         response = requests.request(method, url, headers=headers, data=payload, timeout=10)
         if response.status_code == 200:
             return json.loads(response.text.encode('utf-8'), strict=False)
-        res = requests.request('GET', 'https://httpbin.org/ip')
-        ip = json.loads(res.text.encode('utf8'))
         if response.status_code != 429:
             notify('error-api', f'ERROR EN API {complement_subject}',
                    f"STATUS CODE: {response.status_code}\n\n"
