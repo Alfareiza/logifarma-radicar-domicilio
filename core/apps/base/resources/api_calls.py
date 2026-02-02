@@ -101,7 +101,7 @@ def request_api(url, headers, payload, method='POST') -> dict:
         return {'error': 'No se han encontrado registros.', 'codigo': '1'}
     except Timeout as e:
         notify('error-api', f'ERROR TIMEOUT EN API {complement_subject}',
-               f"ERROR: {e}.\nNo hubo respuesta de la API en 10 segundos")
+               f"ERROR: {e}.\nNo hubo respuesta de la API en 10 segundos desde ip {ip}")
         return {}
     except requests.exceptions.SSLError as e:
         notify('error-api', f'ERROR SSL en API {complement_subject}',

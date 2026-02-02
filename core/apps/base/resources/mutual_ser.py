@@ -50,7 +50,7 @@ class MutualSerAPI:
             code = e.response.status_code
             if code >= 500:
                 msg = f"STATUS_CODE={code} {str(e)}"
-            elif re.fullmatch(r'application/(hal\+)?json', e.response.headers['Content-Type']):
+            elif re.fullmatch(r'application/(hal\+)?json', e.response.headers.get('Content-Type', '')):
                 res = {"ERROR": e.response.json()}
             else:
                 err = e.response.content
@@ -268,7 +268,7 @@ if __name__ == '__main__':
 
     site = MutualSerPage()
     # result = site.find_user('CC', '22685317')
-    result = site.find_user('CC', '33214972')
+    result = site.find_user('CC', '123')
     from pprint import pprint
 
     pprint(result)
