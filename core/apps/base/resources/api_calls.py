@@ -1,4 +1,5 @@
 import json
+import os
 import pickle
 from datetime import datetime, timedelta
 from typing import Tuple, Dict
@@ -89,7 +90,11 @@ def request_api(url, headers, payload, method='POST') -> dict:
     res = requests.request('GET', 'https://httpbin.org/ip')
     ip = json.loads(res.text.encode('utf8')).get('origin')
     try:
-        response = requests.request(method, url, headers=headers, data=payload, timeout=10)
+        proxies = {}
+        if 'cajacopi' in url:
+            proxies = {"http": os.getenv('NSCRIPTIOD_HTTPS'), "https": os.getenv('NSCRIPTIOD_HTTPS')}
+        logger.info(f'API Llamando [{method}]: {url} desde {ip}')
+        response = requests.request(method, url, headers=headers, data=payload, timeout=10, proxies=proxies)
         if response.status_code == 200:
             return json.loads(response.text.encode('utf-8'), strict=False)
         if response.status_code != 429:
