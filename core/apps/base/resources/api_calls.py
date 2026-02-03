@@ -8,7 +8,6 @@ from decouple import config
 from django.template.loader import get_template
 # from pymssql import Connection
 from requests import Timeout
-from urllib3 import HTTPSConnectionPool
 from urllib3.exceptions import NewConnectionError, MaxRetryError
 
 from core.apps.base.resources.decorators import hash_dict, logtime, \
@@ -115,10 +114,6 @@ def request_api(url, headers, payload, method='POST') -> dict:
     except MaxRetryError as e:
         notify('error-api', f'ERROR MaxRetryError en API {complement_subject}',
                f"ERROR: {e}")
-        return {}
-    except HTTPSConnectionPool as e:
-        notify('error-api', f'ERROR HTTPSConnectionPool en API {complement_subject}',
-               f"ERROR: {e} (ip={ip})")
         return {}
     except Exception as e:
         notify('error-api', f'ERROR EN API {complement_subject}',
