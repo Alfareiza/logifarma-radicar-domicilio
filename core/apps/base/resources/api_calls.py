@@ -87,12 +87,12 @@ def request_api(url, headers, payload, method='POST') -> dict:
     # logger.info(f'API Llamando [{method}]: {url}')
     # logger.info(f'API Header: {headers}')
     # logger.info(f'API Payload: {payload}')
-    res = requests.request('GET', 'https://httpbin.org/ip')
+    proxies = {}
+    if 'cajacopi' in url:
+        proxies = {"http": os.getenv('NSCRIPTIOD_HTTPS'), "https": os.getenv('NSCRIPTIOD_HTTPS')}
+    res = requests.request('GET', 'https://httpbin.org/ip', proxies=proxies)
     ip = json.loads(res.text.encode('utf8')).get('origin')
     try:
-        proxies = {}
-        if 'cajacopi' in url:
-            proxies = {"http": os.getenv('NSCRIPTIOD_HTTPS'), "https": os.getenv('NSCRIPTIOD_HTTPS')}
         logger.info(f'API Llamando [{method}]: {url} desde {ip}')
         response = requests.request(method, url, headers=headers, data=payload, timeout=10, proxies=proxies)
         if response.status_code == 200:
