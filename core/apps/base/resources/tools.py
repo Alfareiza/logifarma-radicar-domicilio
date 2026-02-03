@@ -347,7 +347,7 @@ def notify(reason: str, subject: str, body: str, to=None, bcc: list = []):
                 'task-fill-data': '{} Correo enviado por facturas no procesadas en rutina.',
             }
     except Exception as e:
-        logger.error(f"{rad} Correo de {reason} no fue enviado. Error: {e} | {body}")
+        logger.error(f"{rad} Correo de {reason} no fue enviado. Error: {e} | Body of E-mail: {body}")
     else:
         logger.warning(msg[reason].format(rad).strip())
 
