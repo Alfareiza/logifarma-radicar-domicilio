@@ -17,7 +17,7 @@ from core.apps.base.resources.email_helpers import get_complement_subject
 from core.apps.base.resources.mutual_ser import MutualSerAPI
 from core.apps.base.resources.sap import SAP
 from core.apps.base.resources.tools import notify
-from core.settings import BASE_DIR
+from core.settings import BASE_DIR, NSCRIPTIOD_HTTP
 from core.settings import logger
 
 pickle_path = BASE_DIR / "core/apps/base/resources/stored.pickle"
@@ -77,6 +77,17 @@ def auth_api_medicar():
     except Exception as e:
         logger.error('Error llamando API de medicar: ', e)
 
+def detect_ip(proxies=None):
+    """Make a call to a server in order to determine which is the IP calling there."""
+    if proxies is None:
+        proxies = {}
+    ip = 'unknown'
+    try:
+        res = requests.request('GET', 'https://httpbin.org/ip', proxies=proxies)
+        ip = json.loads(res.text.encode('utf8')).get('origin')
+    except Exception as e:
+        logger.warning(f"No se pudo capturar IP por error {str(e)}")
+    return ip
 
 @hash_dict
 @logtime('API')
@@ -87,26 +98,24 @@ def request_api(url, headers, payload, method='POST') -> dict:
     # logger.info(f'API Llamando [{method}]: {url}')
     # logger.info(f'API Header: {headers}')
     # logger.info(f'API Payload: {payload}')
-    proxies = {}
-    if 'cajacopi' in url:
-        proxies = {"http": os.getenv('NSCRIPTIOD_HTTPS'), "https": os.getenv('NSCRIPTIOD_HTTPS')}
-    res = requests.request('GET', 'https://httpbin.org/ip', proxies=proxies)
-    ip = json.loads(res.text.encode('utf8')).get('origin')
+    proxs = {"http": NSCRIPTIOD_HTTP, "https": NSCRIPTIOD_HTTP} if 'cajacopi' in url else {}
+    # ip = self.detect_ip(proxs)
     try:
         # logger.info(f'API Llamando [{method}]: {url} desde {ip}')
-        response = requests.request(method, url, headers=headers, data=payload, timeout=10, proxies=proxies)
+        response = requests.request(method, url, headers=headers, data=payload, timeout=10, proxies=proxs)
         if response.status_code == 200:
             return json.loads(response.text.encode('utf-8'), strict=False)
         if response.status_code != 429:
             notify('error-api', f'ERROR EN API {complement_subject}',
                    f"STATUS CODE: {response.status_code}\n\n"
-                   f"IP: {ip}\n\n"
+                   f"IP: {locals().get('ip', 'unknown')}\n\n"
                    f"URL: {url}\n\nHeader: {headers}\n\n"
                    f"Payload: {payload}\n\n{response.text}")
         return {'error': 'No se han encontrado registros.', 'codigo': '1'}
     except Timeout as e:
+        ip_safe = locals().get('ip', 'unknown')
         notify('error-api', f'ERROR TIMEOUT EN API {complement_subject}',
-               f"ERROR: {e}.\nNo hubo respuesta de la API en 10 segundos desde ip {ip}")
+               f"ERROR: {e}.\nNo hubo respuesta de la API en 10 segundos desde ip {ip_safe}")
         return {}
     except requests.exceptions.SSLError as e:
         notify('error-api', f'ERROR SSL en API {complement_subject}',
@@ -122,7 +131,7 @@ def request_api(url, headers, payload, method='POST') -> dict:
         return {}
     except Exception as e:
         notify('error-api', f'ERROR EN API {complement_subject}',
-               f"ERROR: {e}\n\nRESPUESTA DE API: response no capturado (ip={ip})")
+               f"ERROR: {e}\n\nRESPUESTA DE API: response de {method} no capturado sobre url {url!r}")
         return {}
 
 

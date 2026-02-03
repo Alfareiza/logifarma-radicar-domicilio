@@ -273,3 +273,7 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
     'Access-Control-Allow-Origin',
 ]
+
+# Nscript for static IP config
+NSCRIPTIOD_HTTP = config('NSCRIPTIOD_HTTP')
+NSCRIPTIOD_HTTPS = config('NSCRIPTIOD_HTTPS')
