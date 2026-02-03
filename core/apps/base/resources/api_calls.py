@@ -8,6 +8,7 @@ from decouple import config
 from django.template.loader import get_template
 # from pymssql import Connection
 from requests import Timeout
+from urllib3 import HTTPSConnectionPool
 from urllib3.exceptions import NewConnectionError, MaxRetryError
 
 from core.apps.base.resources.decorators import hash_dict, logtime, \
@@ -86,16 +87,16 @@ def request_api(url, headers, payload, method='POST') -> dict:
     # logger.info(f'API Llamando [{method}]: {url}')
     # logger.info(f'API Header: {headers}')
     # logger.info(f'API Payload: {payload}')
+    res = requests.request('GET', 'https://httpbin.org/ip')
+    ip = json.loads(res.text.encode('utf8')).get('origin')
     try:
-        res = requests.request('GET', 'https://httpbin.org/ip')
-        ip = json.loads(res.text.encode('utf8'))
         response = requests.request(method, url, headers=headers, data=payload, timeout=10)
         if response.status_code == 200:
             return json.loads(response.text.encode('utf-8'), strict=False)
         if response.status_code != 429:
             notify('error-api', f'ERROR EN API {complement_subject}',
                    f"STATUS CODE: {response.status_code}\n\n"
-                   f"IP: {ip.get('origin')}\n\n"
+                   f"IP: {ip}\n\n"
                    f"URL: {url}\n\nHeader: {headers}\n\n"
                    f"Payload: {payload}\n\n{response.text}")
         return {'error': 'No se han encontrado registros.', 'codigo': '1'}
@@ -115,9 +116,13 @@ def request_api(url, headers, payload, method='POST') -> dict:
         notify('error-api', f'ERROR MaxRetryError en API {complement_subject}',
                f"ERROR: {e}")
         return {}
+    except HTTPSConnectionPool as e:
+        notify('error-api', f'ERROR HTTPSConnectionPool en API {complement_subject}',
+               f"ERROR: {e} (ip={ip})")
+        return {}
     except Exception as e:
         notify('error-api', f'ERROR EN API {complement_subject}',
-               f"ERROR: {e}\n\nRESPUESTA DE API: response no capturado")
+               f"ERROR: {e}\n\nRESPUESTA DE API: response no capturado (ip={ip})")
         return {}
 
 
