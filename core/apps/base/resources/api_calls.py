@@ -119,6 +119,8 @@ def request_api(url, headers, payload, method='POST') -> dict:
         notify('error-api', f'ERROR EN API {complement_subject}',
                f"ERROR: {e}\n\nRESPUESTA DE API: response no capturado")
         return {}
+    finally:
+        logger.info(f'{url=} status_code={response.status_code} {ip=}')
 
 
 def call_api_medicar(payload: dict, endpoint: str):
