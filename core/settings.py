@@ -34,7 +34,8 @@ CSRF_TRUSTED_ORIGINS = ["https://*.sa.ngrok.io", "https://*.ngrok.io"]
 DEBUG = config("DEBUG", cast=bool)
 PRODUCTION = config("PRODUCTION", cast=bool, default=False)
 
-ALLOWED_HOSTS = [config('IP', cast=str), 'domicilios.logifarma.com.co',
+ALLOWED_HOSTS = [config('IP', cast=str), 'test-domicilios.logifarma.com.co',
+                 'domicilios.logifarma.com.co',
                  'radicatudomicilio.herokuapp.com',
                  '*']
 
