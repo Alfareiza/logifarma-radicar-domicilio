@@ -17,7 +17,7 @@ from core.apps.base.resources.email_helpers import get_complement_subject
 from core.apps.base.resources.mutual_ser import MutualSerAPI
 from core.apps.base.resources.sap import SAP
 from core.apps.base.resources.tools import notify
-from core.settings import BASE_DIR, NSCRIPTIOD_HTTP, NSCRIPTIOD_HTTPS
+from core.settings import BASE_DIR
 from core.settings import logger
 
 pickle_path = BASE_DIR / "core/apps/base/resources/stored.pickle"
@@ -98,7 +98,6 @@ def request_api(url, headers, payload, method='POST') -> dict:
     # logger.info(f'API Llamando [{method}]: {url}')
     # logger.info(f'API Header: {headers}')
     # logger.info(f'API Payload: {payload}')
-    # proxs = {"http": NSCRIPTIOD_HTTP, "https": NSCRIPTIOD_HTTPS} if 'cajacopi' in url else {}
     ip = detect_ip()
     try:
         logger.info(f'API Llamando [{method}]: {url} desde {ip}')
