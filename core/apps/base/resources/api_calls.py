@@ -98,9 +98,9 @@ def request_api(url, headers, payload, method='POST') -> dict:
     # logger.info(f'API Llamando [{method}]: {url}')
     # logger.info(f'API Header: {headers}')
     # logger.info(f'API Payload: {payload}')
-    ip = detect_ip()
+    # ip = detect_ip()
     try:
-        logger.info(f'API Llamando [{method}]: {url} desde {ip}')
+        # logger.info(f'API Llamando [{method}]: {url} desde {ip}')
         response = requests.request(method, url, headers=headers, data=payload, timeout=10, proxies={})
         if response.status_code == 200:
             return json.loads(response.text.encode('utf-8'), strict=False)
