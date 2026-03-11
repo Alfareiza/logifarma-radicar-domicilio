@@ -237,6 +237,9 @@ MS_API_URL_VALIDADOR = config('MS_API_URL_VALIDADOR')
 ZONA_SER_URL = config('ZONA_SER_URL')
 ZONA_SER_NIT = config('ZONA_SER_NIT')
 
+# PROTEGER API
+PROTEGER_URL = "https://genesis.protegereps.com"
+
 # Sentry
 if SENTRY_DSN := config("SENTRY_DSN", default=None):
     sentry_sdk.init(

@@ -16,7 +16,7 @@ from core.apps.base.resources.email_helpers import get_complement_subject
 from core.apps.base.resources.mutual_ser import MutualSerAPI
 from core.apps.base.resources.sap import SAP
 from core.apps.base.resources.tools import notify
-from core.settings import BASE_DIR
+from core.settings import BASE_DIR, PROTEGER_URL
 from core.settings import logger
 
 pickle_path = BASE_DIR / "core/apps/base/resources/stored.pickle"
@@ -39,7 +39,7 @@ def update_status_factura_proteger(factura: str, valor_factura: int, num_aut: st
                 - {}
                 - {"codigo": "1", "mensaje": "Error!. La autorizacion no tiene detalles. AutProCode:2083"}
     """
-    url = "https://genesis.protegereps.com/api/api_qr.php"
+    url = f"{PROTEGER_URL}/api/api_qr.php"
     payload = {
         "function": "p_inserta_factura_aut",
         "factura": factura,
