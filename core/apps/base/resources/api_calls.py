@@ -25,7 +25,7 @@ pickle_path = BASE_DIR / "core/apps/base/resources/stored.pickle"
 
 def call_api_eps(url: str, payload: dict) -> dict:
     headers = {'Content-Type': 'text/plain'}
-    return request_api(url, headers, payload)
+    return request_api(url, headers, payload, verify=False)
 
 
 def update_status_factura_cajacopi(factura: str, valor_factura: int, num_aut: str) -> dict:
@@ -92,7 +92,7 @@ def detect_ip(proxies=None):
 @hash_dict
 @logtime('API')
 @timed_lru_cache(300)
-def request_api(url, headers, payload, method='POST') -> dict:
+def request_api(url, headers, payload, method='POST', verify=True) -> dict:
     complement_subject = get_complement_subject(payload)
     payload = json.dumps(payload)
     # logger.info(f'API Llamando [{method}]: {url}')
@@ -101,7 +101,7 @@ def request_api(url, headers, payload, method='POST') -> dict:
     # ip = detect_ip()
     try:
         # logger.info(f'API Llamando [{method}]: {url} desde {ip}')
-        response = requests.request(method, url, headers=headers, data=payload, timeout=10, proxies={})
+        response = requests.request(method, url, headers=headers, data=payload, timeout=10, proxies={}, verify=verify)
         if response.status_code == 200:
             return json.loads(response.text.encode('utf-8'), strict=False)
         if response.status_code != 429:
