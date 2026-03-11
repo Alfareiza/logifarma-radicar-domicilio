@@ -39,7 +39,7 @@ def update_status_factura_cajacopi(factura: str, valor_factura: int, num_aut: st
                 - {}
                 - {"codigo": "1", "mensaje": "Error!. La autorizacion no tiene detalles. AutProCode:2083"}
     """
-    url = "https://genesis.cajacopieps.com/api/api_qr.php"
+    url = "https://genesis.protegereps.com/api/api_qr.php"
     payload = {
         "function": "p_inserta_factura_aut",
         "factura": factura,

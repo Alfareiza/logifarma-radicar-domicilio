@@ -62,7 +62,7 @@ def show_fotoFormulaMedica(wizard) -> bool:
            {'num_autorizacion':
                     {
                       ...
-                      'ARCHIVO': 'https://genesis.cajacopieps.com/temp/63dd11940fb6a.pdf',
+                      'ARCHIVO': 'https://genesis.protegereps.com/temp/63dd11940fb6a.pdf',
                       ...
                     }
            }

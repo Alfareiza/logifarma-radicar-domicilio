@@ -44,7 +44,7 @@ def obtener_datos_autorizacion(num_aut: int) -> dict:
                 ]
             }
         """
-    url = "https://genesis.cajacopieps.com/api/api_qr.php"
+    url = "https://genesis.protegereps.com/api/api_qr.php"
     payload = {"function": "p_mostrar_autorizacion",
                "serial": str(num_aut),
                "nit": "900073223"}
@@ -83,6 +83,6 @@ def obtener_datos_identificacion_cajacopi(tipo: str, value: str) -> dict:
                 "tipo": "API"
             }
     """
-    url = "https://genesis.cajacopieps.com/php/consultaAfiliados/obtenerafiliadoips.php"
+    url = "https://genesis.protegereps.com/php/consultaAfiliados/obtenerafiliadoips.php"
     payload = {"function": "obtenerafiliados", "tipodocumento": tipo, "documento": value}
     return call_api_eps(url, payload)
