@@ -27,14 +27,14 @@ def call_api_eps(url: str, payload: dict) -> dict:
     return request_api(url, headers, payload, verify=False)
 
 
-def update_status_factura_cajacopi(factura: str, valor_factura: int, num_aut: str) -> dict:
+def update_status_factura_proteger(factura: str, valor_factura: int, num_aut: str) -> dict:
     """
     Cambia el estado de una factura.
-    Incialmente llamado desde core.apps.tasks.utils.pipeline.Send2Cajacopi.cajacopi_calls.
+    Incialmente llamado desde core.apps.tasks.utils.pipeline.Send2Proteger.proteger_calls.
     :param factura: Valor que representa la factura de una autorización.
     :param valor_factura: Valor total de una factura.
     :param num_aut: Número de autorización.
-    :return: Respuesta de la api de Cajacopi:
+    :return: Respuesta de la api de Proteger:
             Ej.:
                 - {}
                 - {"codigo": "1", "mensaje": "Error!. La autorizacion no tiene detalles. AutProCode:2083"}

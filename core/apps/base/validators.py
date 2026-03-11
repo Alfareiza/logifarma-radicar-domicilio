@@ -87,7 +87,7 @@ def validate_status(resp_mcar: dict, rad_default: Radicacion) -> ValidationError
 
 def validate_aut_exists(resp_eps: dict, num_aut: int) -> ValidationError:
     """
-    Valida que la respuesta de la API de Cajacopi tenga información
+    Valida que la respuesta de la API de Proteger tenga información
     del número de autorización.
     """
     if resp_eps.get('codigo') == "1":
@@ -97,14 +97,14 @@ def validate_aut_exists(resp_eps: dict, num_aut: int) -> ValidationError:
             params={
                 'modal_type': 'autorizacion_no_existe',
                 'modal_title': f"El número de autorización {num_aut} no ha sido encontrada, por favor verifica.",
-                'modal_body': "Si el número es correcto comunícate con Cajacopi EPS al <a class='tel' href='tel:018000111446'>01 8000 111 446</a>.",
+                'modal_body': "Si el número es correcto comunícate con Proteger EPS al <a class='tel' href='tel:018000111446'>01 8000 111 446</a>.",
             }
         )
 
 
 def validate_structure(resp_eps: dict, num_aut: int) -> ValidationError:
     """
-    Valida los siguientes puntos de la resuesta de la API de Cajacopi:
+    Valida los siguientes puntos de la resuesta de la API de Proteger:
         - Tenga al menos 1 key.
         - Número de autorización menor a 20 digitos.
         - Key DOCUMENTO_ID menor a 32 digitos.
@@ -137,7 +137,7 @@ def validate_structure(resp_eps: dict, num_aut: int) -> ValidationError:
 
 def validate_med_controlados(resp_eps: dict, num_aut: int) -> ValidationError:
     """
-    Valida los cums de los articulos provenientes de la API de Cajacopi
+    Valida los cums de los articulos provenientes de la API de Proteger
     y en caso de al menos uno encontrarse en la bd, entonces lanzará
     una excepción que para el usuario será un modal en la vista 2.
     """
@@ -200,7 +200,7 @@ def validate_status_afiliado(resp_eps: dict, name_key: str, id_transaction: str)
     Esta función es llamada para cuando el usuario está en el flujo con
     número de autorización o sin.
     :param resp_eps: Respuesta de API (flujo con autorización) o de medicar o
-                     de cajacopi (flujo sin autorización).
+                     de proteger (flujo sin autorización).
     :param name_key: Nombre de la llave en el diccionario, que es la respuesta de la API.
                     Ej.: 'ESTADO_AFILIADO' o 'ESTADO'
     :param id_transaction: Representa la identificación en la transacción.
@@ -239,7 +239,7 @@ def validate_identificacion_exists(entidad: str, resp: dict, info: str) -> Valid
     """
     Valida que la identificacion existe, considerando la respuesta
     de la API.
-    :param entidad: 'cajacopi' o 'fomag' o 'mutualser'
+    :param entidad: 'proteger' o 'fomag' o 'mutualser'
     :param resp: Respuesta de la API al ser consultada.
     :param info: Representación del tipo de identificación y su valor.
                 Ej: 'CC:123456789'

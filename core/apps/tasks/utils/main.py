@@ -1,13 +1,15 @@
 from core.apps.tasks.utils.gdrive import GDriveHandler
-from core.apps.tasks.utils.pipeline import Csv2Dict, DataToDB, FillExtraDataMedicar, FillExtraDataFbase, Send2Cajacopi
+from core.apps.tasks.utils.pipeline import Csv2Dict, DataToDB, FillExtraDataMedicar, FillExtraDataFbase, Send2Proteger
 from core.apps.tasks.utils.tools import moment
 from core.settings import logger as log
 
 
+# Deprecated
 class Dispensacion:
+    """Pipeline que se encarga de procesar los csv encontrados en una carpeta en el drive y pasarlos por diferentes etapas."""
 
     def __init__(self):
-        self.pipeline = [Csv2Dict, DataToDB, FillExtraDataMedicar, FillExtraDataFbase, Send2Cajacopi]
+        self.pipeline = [Csv2Dict, DataToDB, FillExtraDataMedicar, FillExtraDataFbase, Send2Proteger]
         self.client = GDriveHandler()
         self.data = {}
         self.name = self.create_name()

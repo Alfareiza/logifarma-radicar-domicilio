@@ -12,7 +12,7 @@ from django.template.loader import get_template
 
 from core.apps.base.models import Radicacion, Municipio, Barrio
 from core.apps.base.resources.api_calls import get_firebase_acta, should_i_call_auth
-from core.apps.base.resources.cajacopi import obtener_datos_autorizacion
+from core.apps.base.resources.proteger import obtener_datos_autorizacion
 from core.apps.base.resources.decorators import logtime
 from core.apps.base.resources.medicar import obtener_datos_formula
 from core.apps.base.resources.tools import (
@@ -144,9 +144,9 @@ class Command(BaseCommand):
             1. Valida en la respuesta de la api de medicar que tenga un ssc.
                De ser así actualiza el campo acta_entrega en la bd.
             2. Si no tiene un ssc, entonces:
-                2.1. Valida con la api de cajacopi si el ESTADO_AUTORIZACION es 'RECHAZADA'
+                2.1. Valida con la api de proteger si el ESTADO_AUTORIZACION es 'RECHAZADA'
                      De ser así actualiza el campo acta_entrega en la bd.
-                2.2. Valida con la api de cajacopi si el ESTADO_AFILIADO es 'FALLECIDO'
+                2.2. Valida con la api de proteger si el ESTADO_AFILIADO es 'FALLECIDO'
                      De ser así actualiza el campo acta_entrega en la bd.
                 2.3 Sino, entonces es considerado como un radicado que no tiene acta
                     y es agregado a la lista self.errs. Junto a eso también envia un correo
@@ -167,12 +167,12 @@ class Command(BaseCommand):
                 self.alert.append(rad)
         else:
             logger.info(f"{self.get_numero_autorizacion(rad)} sin \'SSC\' en API Medicar, "
-                        f"validando estados en API Cajacopi.")
+                        f"validando estados en API Proteger.")
             try:
                 resp_eps = obtener_datos_autorizacion(rad.numero_radicado)
                 if 'ESTADO_AUTORIZACION' in resp_eps and resp_eps['ESTADO_AUTORIZACION'] in ('RECHAZADA',
                                                                                              'ANULADA'):
-                    self.update_acta_entrega(rad, f"{resp_eps['ESTADO_AUTORIZACION'].lower()} por cajacopi")
+                    self.update_acta_entrega(rad, f"{resp_eps['ESTADO_AUTORIZACION'].lower()} por proteger")
                 elif 'ESTADO_AFILIADO' in resp_eps and resp_eps['ESTADO_AFILIADO'] == 'FALLECIDO':
                     self.update_acta_entrega(rad, 'afiliado fallecido')
                 else:
