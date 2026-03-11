@@ -62,7 +62,7 @@ def index(request):
                       'qty_medicamentos_autorizados': qty_medicamentos_autorizados.count(),
                       'qty_medicamentos_no_autorizados': qty_medicamentos_no_autorizados.count(),
                       'qty_pacientes_fomag': radicados.filter(convenio='fomag').count(),
-                      'qty_pacientes_cajacopi': radicados.filter(convenio='cajacopi').count(),
+                      'qty_pacientes_proteger': radicados.filter(convenio='proteger').count() + radicados.filter(convenio='cajacopi').count(),
                       'qty_pacientes_mutualser': radicados.filter(convenio='mutualser').count(),
                       'avg_last_six_months': avg_last_n_months(6),
                   }

@@ -6,7 +6,7 @@ from typing import List
 
 from django.db.models import QuerySet
 
-from core.apps.base.resources.api_calls import get_firebase_acta, update_status_factura_cajacopi
+from core.apps.base.resources.api_calls import get_firebase_acta, update_status_factura_proteger
 from core.apps.base.resources.medicar import obtener_datos_formula
 from core.apps.base.resources.tools import notify, day_slash_month_year
 from core.apps.tasks.models import FacturasProcesadas
@@ -238,7 +238,7 @@ class FillExtraDataFbase:
 
 
 @dataclass
-class Send2Cajacopi:
+class Send2Proteger:
     errs: list = field(init=False, default_factory=list)
 
     def get_facturas(self) -> QuerySet:
@@ -261,7 +261,7 @@ class Send2Cajacopi:
 
     def cajacopi_calls(self, facturas: QuerySet[FacturasProcesadas]) -> None:
         """
-        Llama asíncronamente la función update_status_factura_cajacopi
+        Llama asíncronamente la función update_status_factura_proteger
         para actualizar el estado en el sistema de cajacopi de procesado a activo
         de determinada factura
         :param facturas: Facturas buscadas en bd con base lógica implementada en self.get_facturas()
@@ -272,7 +272,7 @@ class Send2Cajacopi:
                     - Api respondio con error referente a algo en el contenido de la petición.
         """
         with ThreadPoolExecutor(max_workers=4) as executor:
-            future_to_rad = {executor.submit(update_status_factura_cajacopi, fac.factura, fac.valor_total,
+            future_to_rad = {executor.submit(update_status_factura_proteger, fac.factura, fac.valor_total,
                                              fac.numero_autorizacion): fac for fac in
                              facturas}
             for future in concurrent.futures.as_completed(future_to_rad):
@@ -292,7 +292,7 @@ class Send2Cajacopi:
     def fill_and_save_estado(self, result: dict, fac: FacturasProcesadas):
         """
         Siendo result la respuesta de API de cajacopi por medio de
-        func(update_status_factura_cajacopi). Se guarda en base de datos
+        func(update_status_factura_proteger). Se guarda en base de datos
         este resultado en el campo resp_cajacopi que es un json y un mensaje
         representativo en el campo estado.
         :param result: Respuesta de api de cajacopi al haberse cambiado el estado de una factura.
@@ -314,7 +314,7 @@ class Send2Cajacopi:
                     fac.resp_cajacopi = result
                     fac.save()
             else:
-                log.error(f'No se pudo tomar datos de API Cajacopi {fac.factura=}, {fac.valor_total=}, {fac.numero_autorizacion=}')
+                log.error(f'No se pudo tomar datos de API Proteger {fac.factura=}, {fac.valor_total=}, {fac.numero_autorizacion=}')
                 self.errs.append(f'\t•  {fac.factura=}, {fac.valor_total=}, {fac.numero_autorizacion=}. Problema con API.\n')
         except Exception as e:
             log.error(f'{result=}, Error={e}')

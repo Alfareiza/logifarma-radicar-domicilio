@@ -139,7 +139,7 @@ class AutorizacionFormTests(TestCase):
         form = AutorizacionServicio(data={'num_autorizacion': 123_456_789})
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['num_autorizacion'], [
-            'Número de autorización 123456789 no encontrado\n\nPor favor verifique\n\nSi el número está correcto, comuníquese con cajacopi EPS\nal 01 8000 111 446'])
+            'Número de autorización 123456789 no encontrado\n\nPor favor verifique\n\nSi el número está correcto, comuníquese con proteger EPS\nal 01 8000 111 446'])
 
     @unittest.skip("Only works if is executed from a Colombian public network")
     def test_valid_number(self):

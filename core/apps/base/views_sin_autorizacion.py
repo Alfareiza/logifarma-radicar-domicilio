@@ -29,7 +29,7 @@ def show_orden(wizard) -> bool:
 
 
 class SinAutorizacion(CustomSessionWizard):
-    """Clase responsable por el wizard para Cajacopi, Fomag - Medicamentos NO Autorizados."""
+    """Clase responsable por el wizard para Proteger, Fomag - Medicamentos NO Autorizados."""
     # template_name = 'start.html'
     condition_dict = {'orden': show_orden}
     form_list = FORMS

@@ -259,8 +259,8 @@ class Email:
             case 'fomag':
                 logo_path = 'fomag_logo.png'
                 width = '31%'
-            case 'cajacopi':
-                logo_path = 'cajacopi_logo.png'
+            case 'proteger':
+                logo_path = 'proteger_logo.png'
                 width = '36%'
             case _:
                 logger.warning('Logo no reconocido para template.')

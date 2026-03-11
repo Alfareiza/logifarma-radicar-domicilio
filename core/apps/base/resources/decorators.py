@@ -30,8 +30,8 @@ def logtime(tag):
             if tag == 'API' and fargs:
                 if 'medicarws' in fargs[0]:
                     title = f"{tag} MEDICAR"
-                if 'cajacopieps' in fargs[0]:
-                    title = f"{tag} CAJACOPI"
+                if 'protegereps' in fargs[0]:
+                    title = f"{tag} PROTEGER"
                 if 'autorizacion' in fargs[2]:
                     title = f"{title} {fargs[2]['autorizacion']}"
                 if 'serial' in fargs[2]:

@@ -16,6 +16,7 @@ from core.apps.base.legacy_models import Mutualser
 from core.apps.base.models import ScrapMutualSer
 from core.apps.base.pipelines import NotifyEmail, NotifySMS
 from core.apps.base.resources.customwizard import CustomSessionWizard
+from core.apps.base.resources.proteger import obtener_datos_identificacion
 from core.apps.base.validators import validate_resp_zona_ser, validate_dispensados
 from core.apps.base.resources.decorators import logtime, once_in_interval
 from core.apps.base.resources.tools import guardar_info_bd, notify, clean_ip

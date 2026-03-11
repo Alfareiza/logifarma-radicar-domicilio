@@ -1,7 +1,7 @@
 from django import forms
 
 from core.apps.base.models import Barrio, Municipio, Radicacion, UsuariosRestringidos
-from core.apps.base.resources.cajacopi import obtener_datos_identificacion, obtener_datos_autorizacion
+from core.apps.base.resources.proteger import obtener_datos_identificacion, obtener_datos_autorizacion
 from core.apps.base.resources.medicar import obtener_datos_formula
 from core.apps.base.resources.tools import read_json
 from core.apps.base.validators import (
@@ -70,7 +70,7 @@ class SinAutorizacion(forms.Form):
         tipo = self.cleaned_data.get('tipo_identificacion')
         value = self.cleaned_data.get('identificacion')
         flag_new_formula = self.data.get('flag_new_formula')
-        entidad = {'c': 'cajacopi', 'f': 'fomag', 'm': 'mutualser'}.get(getattr(self, 'source', ''), '')
+        entidad = {'c': 'proteger', 'f': 'fomag', 'm': 'mutualser'}.get(getattr(self, 'source', ''), '')
         resp = {'documento': f"{tipo}{value}"}
 
         if value == "99999999":
@@ -104,7 +104,7 @@ class SinAutorizacion(forms.Form):
 
     def extra_validations(self, entidad, resp_api, tipo, value):
         """Realiza validaciones extra una vez se tenga información de respuesta de api."""
-        if entidad == 'cajacopi':
+        if entidad == 'proteger':
             validate_identificacion_exists(entidad, resp_api, f"{tipo}:{value}")
             validate_status_afiliado(resp_api, 'ESTADO', f"{tipo}:{value}")
         elif entidad in ('fomag', 'mutualser'):
@@ -138,10 +138,10 @@ class AutorizacionServicio(forms.Form):
         else:
             resp_eps = obtener_datos_autorizacion(num_aut)
 
-        # Validación de numero de autorización encontrado en API de Cajacopi
+        # Validación de numero de autorización encontrado en API de Proteger
         validate_aut_exists(resp_eps, num_aut)
 
-        # Validación de estructura de respuesta de API de Cajacopi
+        # Validación de estructura de respuesta de API de Proteger
         validate_structure(resp_eps, num_aut)
 
         # Validación de medicamentos controlados
@@ -187,7 +187,7 @@ class AutorizacionServicio(forms.Form):
                 })
 
         resp_eps['NUMERO_AUTORIZACION'] = num_aut
-        resp_eps['CONVENIO'] = 'cajacopi'
+        resp_eps['CONVENIO'] = 'proteger'
         # logger.info(f"{num_aut} Número de autorización pasó las validaciones.")
         return resp_eps
 

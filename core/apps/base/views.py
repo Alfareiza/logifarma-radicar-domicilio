@@ -33,11 +33,11 @@ FORMS = [
 TEMPLATES = {
     "home": "home.html",
     "home_prueba": "home_prueba.html",
-    # Usado en /sin-autorizacion usuarios mutualser/fomag/cajacopi
+    # Usado en /sin-autorizacion usuarios mutualser/fomag/proteger
     "sinAutorizacion": "sin_autorizacion.html",
     # Usuario escoge si su medicamento es autorizado o no
     "autorizado_o_no": "autorizado_o_no.html",
-    # Usado en / usuarios cajacopi con medicamento autorizado
+    # Usado en / usuarios proteger con medicamento autorizado
     "autorizacionServicio": "autorizacion.html",
     # Usado en /mutualser, exhibe un resumen de sus autorizaciones
     "autorizacionesPorDisp": "autorizacion_por_disp.html",
@@ -90,7 +90,7 @@ def show_fotoFormulaMedica(wizard) -> bool:
 
 
 class ContactWizard(CustomSessionWizard):
-    """Clase responsable por el wizard para Cajacopi - Medicamentos autorizados."""
+    """Clase responsable por el wizard para Proteger - Medicamentos autorizados."""
     # template_name = 'start.html'
     form_list = FORMS
     file_storage = FileSystemStorage(location=settings.MEDIA_ROOT)
@@ -174,7 +174,7 @@ class ContactWizard(CustomSessionWizard):
         destinatary = make_destinatary(info_email)
         info_email.update(
             {
-                'LOGO': "https://domicilios.logifarma.com.co/static/img/cajacopi_logo.png",
+                'LOGO': "https://domicilios.logifarma.com.co/static/img/proteger_logo.png",
                 'WIDTH': '36%',
             }
         )
