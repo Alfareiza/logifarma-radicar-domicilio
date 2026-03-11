@@ -107,7 +107,7 @@ def is_file_valid(url: str, rad: str) -> bool:
     :param name: Number of radicado
                  Ex.: 855800017788
     :param url: Url of the file.
-                Ex.: "https://genesis.cajacopieps.com/temp/63dcxy1234560fa.pdf"
+                Ex.: "https://genesis.protegereps.com/temp/63dcxy1234560fa.pdf"
     :return: True or False
     """
     if not url:
@@ -123,7 +123,7 @@ def is_file_valid(url: str, rad: str) -> bool:
 #     """
 #     Download a file into the tmp/ folder of the project
 #     with the name of the autorization. Ex.: 857300123456789.pdf
-#     :param download_url: "https://genesis.cajacopieps.com/temp/XYd1112120fb6a.pdf"
+#     :param download_url: "https://genesis.protegereps.com/temp/XYd1112120fb6a.pdf"
 #     :param filename: 857300123456789
 #     :return:
 #     """
