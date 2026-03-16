@@ -51,12 +51,12 @@ class MutualSerAPI:
             if code >= 500:
                 msg = f"STATUS_CODE={code} {str(e)}"
             elif re.fullmatch(r'application/(hal\+)?json', e.response.headers.get('Content-Type', '')):
-                res = {"ERROR": e.response.json()}
+                msg = e.response.json()
             else:
                 err = e.response.content
                 msg = str(err)
                 log.error(f"{head_log} {msg}")
-                res = {"ERROR": f"{head_log} {msg}"}
+            res = {"ERROR": f"{head_log} {msg}"}
         except ConnectionResetError as e:
             res = {"ERROR": f"[CONNECTION] {head_log} ConnectionResetError {str(e)}"}
         except Exception as e:

@@ -200,7 +200,7 @@ def obtener_datos_identificacion_mutual_ser(tipo: str, value: str) -> dict:
 
     """
     ms = MutualSerAPI()
-    return ms.get_info_afiliado(tipo, value)
+    return ms.get_info_afiliado(tipo, value) or {}
 
 
 def should_i_call_auth():
