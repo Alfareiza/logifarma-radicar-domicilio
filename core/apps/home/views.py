@@ -4,9 +4,10 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.db.models.functions import Length
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 
+from core.apps.base.models import Radicacion
 from core.apps.base.resources.tools import decrypt
 from core.apps.home import facade
 from core.apps.home.context_processors import order_radicados_by_day
@@ -84,6 +85,35 @@ def sinacta(request):
 def buscador(request):
     return render(request, "pages/buscador.html", {
                       'segment': 'Buscador', 'parent': 'Buscador de usuarios'})
+
+
+@login_required
+def radicacion_detail(request, pk: int | None = None, ref: str | None = None):
+    """
+    Operational detail view for a single Radicacion.
+
+    Supports both URL shapes:
+    - /radicacion/<int:pk>/
+    - /radicacion/<slug:ref>/ where ref is either numero_radicado or F{pk}
+    """
+    if pk is None and ref is None:
+        return redirect('index')
+
+    qs = Radicacion.objects.select_related('municipio', 'barrio')
+
+    if pk is not None:
+        rad = get_object_or_404(qs, pk=pk)
+    else:
+        if isinstance(ref, str) and ref.startswith('F') and ref[1:].isdigit():
+            rad = get_object_or_404(qs, pk=int(ref[1:]))
+        else:
+            rad = get_object_or_404(qs, numero_radicado=str(ref))
+
+    return render(request, "pages/radicacion_detail.html", {
+        'segment': 'Radicación',
+        'parent': f'Detalle {rad.numero_autorizacion}',
+        'rad': rad,
+    })
 
 
 # Authentication

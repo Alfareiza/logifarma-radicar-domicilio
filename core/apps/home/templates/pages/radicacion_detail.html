@@ -1,0 +1,134 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h5>Radicación {{ rad.numero_autorizacion }}</h5>
+        <span class="d-block text-muted">
+          {{ rad.datetime|date:"j M Y H:i" }}
+          {% if rad.convenio %} · {{ rad.convenio|title }}{% endif %}
+          {% if rad.estado %} · {{ rad.estado|title }}{% endif %}
+        </span>
+      </div>
+      <div class="card-block">
+        <div class="row">
+          <div class="col-lg-4">
+            <h6 class="mb-3">Paciente</h6>
+            <div class="table-responsive">
+              <table class="table table-sm table-hover mb-0">
+                <tbody>
+                  <tr>
+                    <th style="width: 40%">Nombre</th>
+                    <td>{{ rad.paciente_nombre|default_if_none:"" }}</td>
+                  </tr>
+                  <tr>
+                    <th>Documento</th>
+                    <td>{{ rad.paciente_cc|default_if_none:"" }}</td>
+                  </tr>
+                  <tr>
+                    <th>E-mail</th>
+                    <td>{{ rad.email|default_if_none:"" }}</td>
+                  </tr>
+                  <tr>
+                    <th>Celular</th>
+                    <td>
+                      {{ rad.cel_uno|default_if_none:"" }}
+                      {% if rad.cel_uno_validado %}
+                        <span class="badge badge-success ml-2">Validado</span>
+                      {% else %}
+                        <span class="badge badge-secondary ml-2">No validado</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% if rad.cel_dos %}
+                  <tr>
+                    <th>Celular (2)</th>
+                    <td>{{ rad.cel_dos|default_if_none:"" }}</td>
+                  </tr>
+                  {% endif %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <h6 class="mb-3">Ubicación</h6>
+            <div class="table-responsive">
+              <table class="table table-sm table-hover mb-0">
+                <tbody>
+                  <tr>
+                    <th style="width: 40%">Municipio</th>
+                    <td>
+                      {{ rad.municipio.name|default_if_none:"" }}
+                      {% if rad.municipio.departamento %}
+                        <span class="text-muted">/ {{ rad.municipio.departamento|title }}</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Barrio</th>
+                    <td>{{ rad.barrio.name|default_if_none:"" }}</td>
+                  </tr>
+                  <tr>
+                    <th>Dirección</th>
+                    <td>{{ rad.direccion|default_if_none:"" }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <h6 class="mb-3">Operación / logística</h6>
+            <div class="table-responsive">
+              <table class="table table-sm table-hover mb-0">
+                <tbody>
+                  <tr>
+                  <tr>
+                    <th>Acta de entrega</th>
+                    <td>{{ rad.acta_entrega|default_if_none:"" }}</td>
+                  </tr>
+                  <tr>
+                    <th>Factura</th>
+                    <td>{{ rad.factura|default_if_none:"" }}</td>
+                  </tr>
+                    <th style="width: 40%">Alistamiento</th>
+                    <td>{{ rad.alistamiento|date:"j M Y H:i"|default_if_none:"" }}</td>
+                  </tr>
+                  <tr>
+                    <th>Alistado por</th>
+                    <td>{{ rad.alistado_por|default_if_none:"" }}</td>
+                  </tr>
+                  <tr>
+                    <th>Despachado</th>
+                    <td>{{ rad.despachado|date:"j M Y H:i"|default_if_none:"" }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+      </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="row">
+          <div class="col-lg-6">
+            <h6 class="mb-3">Adjuntos</h6>
+            {% if rad.foto_formula %}
+              <a class="btn btn-primary" href="{{ rad.foto_formula }}" target="_blank" rel="noopener">
+                Ver foto fórmula
+              </a>
+            {% else %}
+              <p class="text-muted mb-0">No hay foto fórmula registrada.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
