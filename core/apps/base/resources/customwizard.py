@@ -14,7 +14,7 @@ from formtools.wizard.views import SessionWizardView
 from core.apps.base.models import Barrio, Municipio
 from core.apps.base.resources.decorators import once_in_interval
 from core.apps.base.resources.tools import notify
-from core.settings import logger, ch
+from core.settings import logger, ch, TIPO_USUARIO
 
 
 class CustomSessionWizard(SessionWizardView):
@@ -39,10 +39,9 @@ class CustomSessionWizard(SessionWizardView):
                f"entró en vista={self.request.resolver_match.url_name}/")
         if source:
             self.request.COOKIES['source'] = source
-            tipo_usuario = {'f': 'fomag', 'c': 'proteger', 'm': 'mutualser'}
-            logger.info(f"usuario {tipo_usuario[source].upper()} con {msg}")
+            logger.info(f"usuario {TIPO_USUARIO[source].upper()} con {msg}")
             if source == 'm':
-                logger.info(f'Redireccionando usuario {tipo_usuario[source].upper()} a /mutualser')
+                logger.info(f'Redireccionando usuario {TIPO_USUARIO[source].upper()} a /mutualser')
                 return redirect('/mutualser')
         return super().get(request, *args, **kwargs)
 

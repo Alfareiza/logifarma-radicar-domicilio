@@ -185,6 +185,21 @@ def obtener_datos_identificacion_fomag(tipo: str, value: str) -> dict:
 
     return parse_response(resp)
 
+def obtener_datos_identificacion_foneca(tipo: str, value: str) -> dict:
+    """
+    Consulta en base de datos el tipo de documento y documento.
+    Ejemplo de respuesta:
+            - En caso de haber registros:
+             {'NOMBRE': 'CARLOS RAMIREZ RAMIREZ',
+             'PRIMER_NOMBRE': 'CARLOS',
+             'PRIMER_APELLIDO': 'RAMIREZ'}
+            - En caso de no encontrarse registros:
+              {}
+
+    """
+    from core.apps.base.models import Foneca
+    return Foneca.get_afiliado_by_doc(tipo, value)
+
 
 def obtener_datos_identificacion_mutual_ser(tipo: str, value: str) -> dict:
     """

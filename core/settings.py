@@ -240,6 +240,8 @@ ZONA_SER_NIT = config('ZONA_SER_NIT')
 # PROTEGER API
 PROTEGER_URL = "https://genesis.protegereps.com"
 
+TIPO_USUARIO = {'f': 'fomag', 'c': 'proteger', 'm': 'mutualser', 'o': 'foneca'}
+
 # Sentry
 if SENTRY_DSN := config("SENTRY_DSN", default=None):
     sentry_sdk.init(

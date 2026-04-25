@@ -397,3 +397,132 @@ class UsuariosRestringidos(Model):
     def save(self, *args, **kwargs):
         self.motivo = self.motivo.lower() if self.motivo else None
         return super(UsuariosRestringidos, self).save(*args, **kwargs)
+
+
+from django.db import models
+
+from core.settings import logger
+
+
+class FonecaManager(models.Manager):
+    def get_by_doc(self, tipo_documento, documento):
+        """Get Foneca record by document type and document number"""
+        return self.filter(documento=documento, tipo_documento=tipo_documento).first()
+
+
+class Foneca(models.Model):
+    ESTADO_CHOICES = [
+        ('A', 'Activo'),
+        ('I', 'Inactivo'),
+    ]
+
+    GENERO_CHOICES = [
+        ('M', 'Masculino'),
+        ('F', 'Femenino'),
+        ('O', 'Otro'),
+    ]
+
+    # Primary identifier
+    documento = models.CharField(max_length=32, db_index=True, primary_key=True)
+    tipo_documento = models.CharField(max_length=10, db_index=True)  # e.g., 'CC', 'CE', 'TI'
+
+    # Personal Information
+    primer_apellido = models.CharField(max_length=150, blank=True, null=True)
+    segundo_apellido = models.CharField(max_length=150, blank=True, null=True)
+    nombres = models.CharField(max_length=150, blank=True, null=True)
+    fecha_nacimiento = models.DateField(blank=True, null=True)
+    edad = models.PositiveSmallIntegerField(blank=True, null=True)
+    grupo_etareo = models.CharField(max_length=50, blank=True, null=True)  # e.g., '61 A 70', 'MAYOR 70'
+    genero = models.CharField(max_length=1, choices=GENERO_CHOICES, blank=True, null=True)  # 'M' or 'F'
+
+    # Contact Information
+    telefono = models.CharField(max_length=128, blank=True, null=True)
+    direccion = models.CharField(max_length=255, blank=True, null=True)
+    municipio = models.CharField(max_length=100, blank=True, null=True)
+
+    # Healthcare Information
+    tipo_contratante = models.CharField(max_length=50, blank=True, null=True)  # e.g., 'PENSIONADO', 'AFILIADO'
+    parentesco = models.CharField(max_length=50, blank=True, null=True)  # e.g., 'CONTRATANTE', 'BENEFICIARIO'
+    eps = models.CharField(max_length=100, blank=True, null=True)  # e.g., 'NUEVA EPS', 'FAMISANAR'
+    estado = models.CharField(max_length=1, choices=ESTADO_CHOICES, default='A')  # 'A' = Activo, 'I' = Inactivo
+
+    # Territorial Information
+    gerencia_territorial = models.CharField(max_length=100, blank=True, null=True)  # e.g., 'MAGDALENA', 'ATLANTICO'
+
+    # Metadata
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = FonecaManager()
+
+    class Meta:
+        db_table = 'foneca'
+        unique_together = [('documento', 'tipo_documento')]
+        indexes = [
+            models.Index(fields=['documento', 'tipo_documento'], name='idx_foneca_doc_tipo'),
+            models.Index(fields=['estado'], name='idx_foneca_estado'),
+            models.Index(fields=['municipio'], name='idx_foneca_municipio'),
+            models.Index(fields=['eps'], name='idx_foneca_eps'),
+        ]
+
+    def __str__(self):
+        """String representation of Foneca record"""
+        nombre_completo = f"{self.primer_apellido or ''} {self.segundo_apellido or ''} {self.nombres or ''}".strip()
+        return f"{self.tipo_documento}{self.documento} - {nombre_completo}"
+
+    @classmethod
+    def get_afiliado_by_doc(cls, tipo_documento, documento):
+        """
+        Search for an afiliado in Foneca table based on tipo_documento and documento
+        Returns a dict with affiliate information or empty dict if not found
+        """
+        if instance := cls.objects.get_by_doc(tipo_documento, documento):
+            logger.info(
+                f'Afiliado {tipo_documento}{documento} found in Foneca BD '
+                f'as fallback source.'
+            )
+
+            # Build complete name
+            primer_apellido = (instance.primer_apellido or '').strip()
+            segundo_apellido = (instance.segundo_apellido or '').strip()
+            nombres = (instance.nombres or '').strip()
+
+            apellidos = f"{primer_apellido} {segundo_apellido}".strip()
+            primer_nombre = nombres.split()[0] if nombres else ''
+
+            return {
+                'NOMBRE': nombres,
+                'PRIMER_NOMBRE': primer_nombre,
+                'APELLIDO': apellidos,
+                'PRIMER_APELLIDO': primer_apellido,
+                'SEGUNDO_APELLIDO': segundo_apellido,
+                'EDAD': instance.edad,
+                'GENERO': instance.genero,
+                'MUNICIPIO': instance.municipio,
+                'EPS': instance.eps,
+                'TIPO_CONTRATANTE': instance.tipo_contratante,
+                'PARENTESCO': instance.parentesco,
+                'ESTADO': instance.estado,
+                'status': 'ACTIVO' if instance.estado == 'A' else 'INACTIVO'
+            }
+
+        logger.warning(
+            f'Afiliado {tipo_documento}{documento} NOT FOUND in Foneca BD '
+            f'as fallback source.'
+        )
+        return {}
+
+    @property
+    def nombre_completo(self):
+        """Returns the full name of the affiliate"""
+        parts = [
+            self.primer_apellido,
+            self.segundo_apellido,
+            self.nombres
+        ]
+        return ' '.join(filter(None, (p.strip() if p else None for p in parts)))
+
+    @property
+    def es_activo(self):
+        """Check if the affiliate is active"""
+        return self.estado == 'A'

@@ -259,6 +259,9 @@ class Email:
             case 'fomag':
                 logo_path = 'fomag_logo.png'
                 width = '31%'
+            case 'foneca':
+                logo_path = 'foneca_logo.png'
+                width = '33%'
             case 'proteger':
                 logo_path = 'proteger_logo.png'
                 width = '36%'
