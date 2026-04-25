@@ -1,5 +1,5 @@
 from core.apps.base.resources.api_calls import call_api_eps, obtener_datos_identificacion_fomag, \
-    obtener_datos_identificacion_mutual_ser
+    obtener_datos_identificacion_mutual_ser, obtener_datos_identificacion_foneca
 from core.settings import PROTEGER_URL
 
 
@@ -62,6 +62,7 @@ def obtener_datos_identificacion(eps: str, tipo: str, value: str) -> dict:
     """
     func = {'proteger': obtener_datos_identificacion_proteger,
             'fomag': obtener_datos_identificacion_fomag,
+            'foneca': obtener_datos_identificacion_foneca,
             'mutualser': obtener_datos_identificacion_mutual_ser}
     return func[eps](tipo, value)
 

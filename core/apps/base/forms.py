@@ -17,7 +17,7 @@ from core.apps.base.validators import (
     validate_structure, validate_numero_celular, direccion_min_length_validator, validate_numeros_bloqueados,
     certify_celular, validate_usuario_restringido, validate_panales
 )
-from core.settings import logger
+from core.settings import logger, TIPO_USUARIO
 
 
 class Home(forms.Form):
@@ -70,7 +70,7 @@ class SinAutorizacion(forms.Form):
         tipo = self.cleaned_data.get('tipo_identificacion')
         value = self.cleaned_data.get('identificacion')
         flag_new_formula = self.data.get('flag_new_formula')
-        entidad = {'c': 'proteger', 'f': 'fomag', 'm': 'mutualser'}.get(getattr(self, 'source', ''), '')
+        entidad = TIPO_USUARIO.get(getattr(self, 'source', ''), '')
         resp = {'documento': f"{tipo}{value}"}
 
         if value == "99999999":
@@ -183,7 +183,7 @@ class AutorizacionServicio(forms.Form):
                 params={
                     'modal_type': 'autorizacion_radicada',
                     'modal_title': f"Esta autorización ({num_aut}) se encuentra radicada en {radicada_en} con el número de acta: {resp_mcar.get('ssc')}.",
-                     'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+                    'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
                 })
 
         resp_eps['NUMERO_AUTORIZACION'] = num_aut
@@ -231,7 +231,8 @@ class EligeMunicipio(forms.ModelForm):
     municipio = forms.ModelChoiceField(queryset=Municipio.objects.filter(activo=True),
                                        empty_label="Seleccione un municipio",
                                        widget=forms.RadioSelect(
-                                           attrs={'class': 'h-5 w-5 text-blue-600 focus:ring-2 focus:ring-blue-400 border-gray-300'}
+                                           attrs={
+                                               'class': 'h-5 w-5 text-blue-600 focus:ring-2 focus:ring-blue-400 border-gray-300'}
                                        ),
                                        label=False
                                        )
@@ -241,7 +242,8 @@ class DireccionBarrio(forms.Form):
     """
     Vista 5:
     """
-    barrio = forms.ChoiceField(widget=forms.RadioSelect(attrs={'class': 'h-5 w-5 text-blue-600 focus:ring-2 focus:ring-blue-400 border-gray-300'}))
+    barrio = forms.ChoiceField(widget=forms.RadioSelect(
+        attrs={'class': 'h-5 w-5 text-blue-600 focus:ring-2 focus:ring-blue-400 border-gray-300'}))
     direccion = forms.CharField(min_length=5, max_length=40, validators=[direccion_min_length_validator])
 
     def clean_barrio(self):
@@ -281,7 +283,7 @@ class DigitaCelular(forms.Form):
 
         # Get authorization data from various sources
         autorizacion_data = {}
-        
+
         # First, try to get data from rad_data (set when autorizacionServicio step is processed)
         if hasattr(self.wizard, 'rad_data') and self.wizard.rad_data:
             # rad_data contains the cleaned_data from autorizacionServicio step
@@ -289,18 +291,18 @@ class DigitaCelular(forms.Form):
             autorizacion_data = self.wizard.rad_data.get('num_autorizacion', {})
 
         if not autorizacion_data and (autorizacion_servicio_data := self.wizard.storage.extra_data.get(
-            'autorizacion_servicio', {}
+                'autorizacion_servicio', {}
         )):
             autorizacion_data = autorizacion_servicio_data.get('num_autorizacion', {})
 
         if not autorizacion_data and (autorizaciones_data := self.wizard.storage.extra_data.get(
-            'autorizaciones', {}
+                'autorizaciones', {}
         )):
             autorizacion_data = autorizaciones_data
 
         # Get municipality data from eligeMunicipio step
         municipio_data = {}
-        
+
         # Try to get eligeMunicipio data from extra_data first
         if elige_municipio_data := self.wizard.storage.extra_data.get('elige_municipio', {}):
             municipio_data = elige_municipio_data
@@ -316,7 +318,7 @@ class DigitaCelular(forms.Form):
 
         result['autorizacion_data'] = autorizacion_data
         result['municipio_data'] = municipio_data  # ex.: 'Barranquilla, Atlántico'
-        
+
         return result
 
     def clean(self):
@@ -343,11 +345,11 @@ class DigitaCelular(forms.Form):
                 previous_data = self._get_previous_step_data()
                 autorizacion_data = previous_data.get('autorizacion_data', {})
                 municipio_data = previous_data.get('municipio_data', {})
-                
+
                 if autorizacion_data and 'DOCUMENTO_ID' in autorizacion_data:
                     tipo_documento = autorizacion_data.get('TIPO_IDENTIFICACION')
                     documento = autorizacion_data.get('DOCUMENTO_ID')
-            
+
             _, municipio_name, _ = municipio_data.split(';')
             certify_celular(cel, tipo_documento, documento, municipio_name)
 
