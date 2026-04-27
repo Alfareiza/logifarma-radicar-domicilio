@@ -23,7 +23,8 @@ from core.settings import ch, logger as log
 class MutualSerAPI:
     LOGIN_CACHE = BASE_DIR / 'login_mutual_ser.pickle'
 
-    LOGIN = 'auth/realms/right-validation/protocol/openid-connect/token/'
+    # LOGIN = 'auth/realms/right-validation/protocol/openid-connect/token/' . Obsoleto desde 27 Abr, 6:00pm
+    LOGIN = 'realms/right-validation/protocol/openid-connect/token/'
     VALIDADOR_DERECHOS = 'validateRights/'
 
     def __init__(self):
