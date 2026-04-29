@@ -2809,7 +2809,7 @@ p.text-muted {
 .pcoded-content {
   position: relative;
   display: block;
-  padding: 30px;
+  padding: 0rem 2rem;
 }
 
 .pcoded-main-container {
@@ -2955,10 +2955,6 @@ p.text-muted {
     width: 280px;
   }
 
-  .pcoded-content {
-    padding: 30px 15px;
-  }
-
   .card {
     margin-bottom: 15px;
   }
@@ -3001,6 +2997,10 @@ p.text-muted {
 }
 /* responsive horizontal menu */
 @media only screen and (max-width: 992px) {
+   .pcoded-content {
+    padding: 30px 15px;
+  }
+  
   .pcoded-navbar.theme-horizontal {
     margin-left: 0;
   }

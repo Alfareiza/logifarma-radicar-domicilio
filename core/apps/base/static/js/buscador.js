@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                placeholder="Digita el numero de documento " value="${documento}">
                     </div>
                     <div class="col-sm-2">
-                        <button type="submit" class="btn btn-primary mb-2 disabled">Submit</button>
+                        <button type="submit" class="btn btn-primary mb-2 disabled">Buscar</button>
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                        placeholder="Digita el numero de documento " value="${documento}">
                             </div>
                             <div class="col-sm-2">
-                                <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                                <button type="submit" class="btn btn-primary mb-2">Buscar</button>
                             </div>
                         </div>
                     `;
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                        placeholder="Digita el numero de documento " value="${documento}">
                             </div>
                             <div class="col-sm-2">
-                                <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                                <button type="submit" class="btn btn-primary mb-2">Buscar</button>
                             </div>
                         </div>
                     `;
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             ${radicados.map(rad => `
                                 <tr class="unread">
                                     <td>
-                                        <h6 class="m-0">${rad.numero_radicado}</h6>
+                                        <h6 class="m-0"><a href="${baseUrl}/radicacion/${rad.numero_radicado}" target="_blank">${rad.numero_radicado}</a></h6>
                                         <p class="mb-1">${rad.paciente_nombre}</p>
                                     </td>
                                     <td>
