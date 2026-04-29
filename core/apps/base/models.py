@@ -85,7 +85,6 @@ class Barrio(Model):
 
 class Radicacion(Model):
     datetime = DateTimeField(auto_now_add=True)
-    # creado = DateTimeField(blank=True, null=True)
 
     numero_radicado = CharField(unique=True, max_length=24)
     convenio = CharField(max_length=24, blank=True, null=True)
@@ -116,7 +115,13 @@ class Radicacion(Model):
     acta_entrega = CharField(max_length=150, blank=True, null=True)
     factura = CharField(max_length=150, blank=True, null=True)
 
-    # Uso interno loigarma
+    # Nuevos campos encontrados en producción
+    observacion = CharField(max_length=500, blank=True, null=True)
+    usuario_anula = CharField(max_length=200, blank=True, null=True)
+    motivo = CharField(max_length=400, blank=True, null=True)
+    fecha_anulacion = DateField(blank=True, null=True)
+
+    # Uso interno
     visto = BooleanField(default=False)
 
     def __str__(self):

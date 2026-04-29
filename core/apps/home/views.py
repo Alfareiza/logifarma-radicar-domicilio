@@ -108,10 +108,17 @@ def radicacion_detail(request, pk: int | None = None, ref: str | None = None):
         else:
             rad = get_object_or_404(qs, numero_radicado=str(ref))
 
+    # Compute Google Drive preview URL (convert /view to /preview for embed)
+    preview_url = None
+    if rad.paciente_data and 'IMG_ID' in rad.paciente_data:
+        img_id = rad.paciente_data['IMG_ID']
+        preview_url = f"https://drive.google.com/file/d/{img_id}/preview"
+
     return render(request, "pages/radicacion_detail.html", {
-        'segment': 'Radicación',
-        'parent': f'Detalle {rad.numero_autorizacion}',
+        'segment': 'Detalle de Radicación',
+        'parent': f'Radicación {rad.numero_autorizacion}',
         'rad': rad,
+        'preview_url': preview_url,
     })
 
 
