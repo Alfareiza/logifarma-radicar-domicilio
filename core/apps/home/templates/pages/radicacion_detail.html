@@ -879,9 +879,9 @@
                   <span class="info-value">
                     {% if rad.barrio or rad.direccion %}
                       <span class="copy-value">
-                        {%- if rad.barrio %}{{ rad.barrio.name|title }}{% endif -%}
-                        {%- if rad.barrio and rad.direccion %}, {% endif -%}
-                        {%- if rad.direccion %}{{ rad.direccion }}{% endif -%}
+                        {% if rad.barrio %}{{ rad.barrio.name|title }}{% endif %}
+                        {% if rad.barrio and rad.direccion %}, {% endif %}
+                        {% if rad.direccion %}{{ rad.direccion }}{% endif %}
                       </span>
                       <button type="button" class="copy-btn" data-copy-text="{% if rad.barrio %}{{ rad.barrio.name|title }}{% if rad.direccion %}, {% endif %}{% endif %}{% if rad.direccion %}{{ rad.direccion }}{% endif %}" aria-label="Copiar ubicación local">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
