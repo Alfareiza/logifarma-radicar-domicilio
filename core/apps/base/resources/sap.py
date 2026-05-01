@@ -16,6 +16,7 @@ class SAP:
 
     LOGIN = '/b1s/v2/Login'
     ENDPOINT_FOMAG = '/b1s/v2/sml.svc/InfoMagisterioQuery'
+    ENDPOINT_ARTICULO = '/b1s/v2/sml.svc/ArticulosQuery'
 
     def __init__(self):
         self.sess_id = ''
@@ -118,3 +119,7 @@ class SAP:
     @login_required
     def get_info_afiliado(self, tipo_documento, valor_documento):
         return self.get(f'{SAP_URL}{self.ENDPOINT_FOMAG}?$filter=Name eq \'{valor_documento}{tipo_documento}\'')
+
+    @login_required
+    def get_info_articulo(self, articulo: str) -> dict:
+        return self.get(f'{SAP_URL}{self.ENDPOINT_ARTICULO}?$filter=contains(Descripcion, \'{articulo}\')')
