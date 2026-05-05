@@ -1,8 +1,9 @@
 import traceback
-from datetime import timedelta
+from datetime import timedelta, datetime
 from enum import Enum
 from time import sleep
 
+from django.contrib.postgres.indexes import GinIndex
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
     BooleanField, CASCADE,
@@ -10,13 +11,14 @@ from django.db.models import (
     DateTimeField,
     EmailField,
     ForeignKey,
-    GenericIPAddressField,
+    GenericIPAddressField, Index,
     IntegerField,
     JSONField,
     Model,
     DateField, TextField, FloatField, UniqueConstraint,
 )
 from django.db.models.fields import BigIntegerField
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.timezone import now
 from django.contrib.auth.models import User
@@ -51,6 +53,11 @@ class Status(str, Enum):
     RUNNING = "en ejecucion"
     """
     The item is running.
+    """
+
+    PENDIENTE = "pendiente"
+    """
+    Queued, waiting to be processed (e.g. per-article barcode lookup).
     """
 
 
@@ -127,11 +134,35 @@ class Radicacion(Model):
     def __str__(self):
         return f"{self.numero_radicado}"
 
+    class Meta:
+        ordering = ['-datetime', '-id']
+        indexes = [Index(fields=['-datetime', '-id'])]
+
+    def get_absolute_url(self) -> str:
+        return reverse('radicacion_detail', kwargs={'ref': self.numero_autorizacion})
+
+
+    def get_next_radicacion(self) -> 'Radicacion':
+        base_next = Radicacion.objects.filter(datetime__gt=self.datetime)
+        return base_next.last()
+
+    def get_next_radicacion_sin_acta(self) -> 'Radicacion':
+        base_next = Radicacion.objects.filter(datetime__gt=self.datetime, acta_entrega__isnull=True)
+        return base_next.last()
+
+    def get_previous_radicacion(self) -> 'Radicacion':
+        base_next = Radicacion.objects.filter(datetime__lt=self.datetime)
+        return base_next.first()
+
+    def get_previous_radicacion_sin_acta(self) -> 'Radicacion':
+        base_next = Radicacion.objects.filter(datetime__lt=self.datetime, acta_entrega__isnull=True)
+        return base_next.first()
+
     @property
     def foto_formula(self) -> str:
         """Determina la url de la imagen de la formula, el cual es una foto tomada en su momento por el usuario"""
         if self.paciente_data and 'IMG_ID' in self.paciente_data:
-            return f"https://drive.google.com/file/d/{self.paciente_data['IMG_ID']}/view"
+            return f"https://drive.google.com/file/d/{self.paciente_data['IMG_ID']}/preview"
         return ''
 
     @property
@@ -531,3 +562,174 @@ class Foneca(models.Model):
     def es_activo(self):
         """Check if the affiliate is active"""
         return self.estado == 'A'
+
+class SAPArticle(models.Model):
+    """
+    Represents a pharmaceutical product or article synchronized from SAP.
+    
+    This model stores comprehensive data including molecular information, 
+    inventory units, regulatory status (CUM, INVIMA), and tax configurations 
+    (IVA). It serves as the primary source of truth for product logistics 
+    and sales within the application.
+    """
+
+    # Identity & Description
+    external_id = models.IntegerField(unique=True, help_text="Original id__ from source")
+    barra = models.CharField(max_length=50, db_index=True)
+    descripcion = models.CharField(max_length=255)
+    grupo_articulo = models.CharField(max_length=100)
+
+    # Molecular Data
+    molecula_id = models.CharField(max_length=20)
+    nombre_molecula = models.CharField(max_length=255)
+    atc = models.CharField(max_length=20, null=True, blank=True)
+
+    # Logistics & Units
+    ean14 = models.CharField(max_length=50, null=True, blank=True)
+    unidad_inventario = models.CharField(max_length=20, null=True, blank=True)
+    unidad_compra = models.CharField(max_length=20, null=True, blank=True)
+    cantidad_unidad_compra = models.DecimalField(max_digits=10, decimal_places=2)
+
+    unidad_ean14 = models.CharField(max_length=20, null=True, blank=True)
+    cantidad_ean14 = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    cantidad_compra_ean14 = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+
+    unidad_venta = models.CharField(max_length=20, null=True, blank=True)
+    cantidad_unidad_venta = models.DecimalField(max_digits=10, decimal_places=2)
+    forma_farmaceutica = models.CharField(max_length=50, null=True, blank=True)
+
+    # Regulatory
+    cum = models.CharField(max_length=50, null=True, blank=True)
+    invima = models.CharField(max_length=100, null=True, blank=True)
+    regulado = models.CharField(max_length=1, default='N')
+    valor_regulado = models.DecimalField(max_digits=15, decimal_places=2, default=0.0)
+    controlado = models.CharField(max_length=1, default='N')
+    refrigerado = models.CharField(max_length=1, default='N')
+
+    # Finance/Accounting
+    iva_ventas = models.CharField(max_length=20, null=True, blank=True)
+    iva_compras = models.CharField(max_length=20, null=True, blank=True)
+
+    # Metadata
+    ultima_compra = models.DateField(null=True, blank=True)
+    fecha_creacion = models.DateField()
+    usuario = models.CharField(max_length=100)
+    fabricante = models.CharField(max_length=255, null=True, blank=True)
+    marca = models.CharField(max_length=100, null=True, blank=True)
+    bodega_defecto = models.CharField(max_length=20, null=True, blank=True)
+
+    # Status
+    inactivo = models.CharField(max_length=1, default='N')
+    bodega_bloqueada = models.CharField(max_length=1, default='N')
+
+    class Meta:
+        # This overrides the default 'appname_producto' table name
+        db_table = 'sap_articulos'
+        verbose_name = "Articulo SAP"
+        verbose_name_plural = "Articulos SAP"
+
+    def __str__(self):
+        return f"{self.barra} ({self.molecula_id}) - {self.descripcion}"
+
+
+class AITransaction(models.Model):
+    """
+    Abstract base for auditing calls to external AI providers.
+
+    Tracks lifecycle (status), token usage, estimated cost, raw provider usage,
+    and optional structured ``result`` + ``error_message`` for each attempt.
+    Subclass per use case (e.g. prescription OCR).
+    """
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=24, choices=[(s.value, s.value) for s in Status])
+    provider = models.CharField(max_length=32, default='anthropic')
+    model_id = models.CharField(max_length=64, blank=True)
+
+    input_tokens = models.IntegerField(null=True, blank=True)
+    output_tokens = models.IntegerField(null=True, blank=True)
+    cache_read_input_tokens = models.IntegerField(null=True, blank=True)
+    cost_usd = models.DecimalField(max_digits=14, decimal_places=6, null=True, blank=True)
+
+    result = models.JSONField(null=True, blank=True)
+    error_message = models.TextField(blank=True)
+    raw_usage = models.JSONField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class PrescriptionOCRTransaction(AITransaction):
+    """
+    Stores one prescription OCR execution for a Drive file (and optionally a Radicacion).
+
+    ``discard=True`` hides the row from cache lookup while preserving history for audits.
+    """
+
+    drive_file_id = models.CharField(max_length=128, db_index=True)
+    radicacion = models.ForeignKey(
+        'Radicacion',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='prescription_ocr_transactions',
+    )
+    image_url = models.URLField(max_length=2048, blank=True)
+    discard = models.BooleanField(default=False)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['drive_file_id', 'created_at']),
+            GinIndex(fields=['result'], name='result_gin_idx'),
+        ]
+
+
+    def __str__(self) -> str:
+        return f'PrescriptionOCR {self.pk} ({self.drive_file_id}) {self.status}'
+
+    @property
+    def ips(self) -> str:
+        return self.result.get('IPS', '').upper().strip() if self.result else ''
+
+
+class SearchBarra(AITransaction):
+    """
+    One Claude MCP + Postgres lookup per OCR article line.
+
+    Parent ``PrescriptionOCRTransaction`` holds the vision OCR result; this row
+    tracks barcode resolution for a single ``article_numero`` / ``article_nombre``.
+    """
+
+    prescription_ocr_transaction = models.ForeignKey(
+        'PrescriptionOCRTransaction',
+        on_delete=models.CASCADE,
+        related_name='barra_transactions',
+    )
+    article_sap = models.ForeignKey(
+        'SAPArticle',
+        on_delete=models.CASCADE,
+        related_name='article_sap',
+        null=True,
+        blank=True,
+    )
+    article_numero = models.IntegerField()
+    article_nombre = models.CharField(max_length=512)
+    ips = models.CharField(max_length=512, blank=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['prescription_ocr_transaction', 'article_numero'],
+                name='uniq_prescription_barra_txn_article_numero',
+            ),
+        ]
+        indexes = [
+            models.Index(fields=['prescription_ocr_transaction', 'status']),
+        ]
+
+    def __str__(self) -> str:
+        return (
+            f'PrescriptionOCRBarra {self.pk} ocr={self.prescription_ocr_transaction_id} '
+            f'#{self.article_numero} {self.status}'
+        )
