@@ -3,6 +3,7 @@ from datetime import timedelta, datetime
 from enum import Enum
 from time import sleep
 
+from django.db.models import Q
 from django.contrib.postgres.indexes import GinIndex
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import (
@@ -136,26 +137,38 @@ class Radicacion(Model):
 
     class Meta:
         ordering = ['-datetime', '-id']
-        indexes = [Index(fields=['-datetime', '-id'])]
+        indexes = [
+            Index(fields=['-datetime', '-id']),
+            Index(
+                fields=['-datetime', '-id'],
+                condition=Q(acta_entrega__isnull=True),
+                name='rad_sin_acta_nav_idx',
+            ),
+        ]
 
     def get_absolute_url(self) -> str:
         return reverse('radicacion_detail', kwargs={'ref': self.numero_autorizacion})
 
-
     def get_next_radicacion(self) -> 'Radicacion':
-        base_next = Radicacion.objects.filter(datetime__gt=self.datetime)
+        base_next = Radicacion.objects.only('numero_radicado').filter(datetime__gt=self.datetime)
         return base_next.last()
 
     def get_next_radicacion_sin_acta(self) -> 'Radicacion':
-        base_next = Radicacion.objects.filter(datetime__gt=self.datetime, acta_entrega__isnull=True)
+        base_next = Radicacion.objects.only('numero_radicado').filter(
+            datetime__gt=self.datetime,
+            acta_entrega__isnull=True,
+        )
         return base_next.last()
 
     def get_previous_radicacion(self) -> 'Radicacion':
-        base_next = Radicacion.objects.filter(datetime__lt=self.datetime)
+        base_next = Radicacion.objects.only('numero_radicado').filter(datetime__lt=self.datetime)
         return base_next.first()
 
     def get_previous_radicacion_sin_acta(self) -> 'Radicacion':
-        base_next = Radicacion.objects.filter(datetime__lt=self.datetime, acta_entrega__isnull=True)
+        base_next = Radicacion.objects.only('numero_radicado').filter(
+            datetime__lt=self.datetime,
+            acta_entrega__isnull=True,
+        )
         return base_next.first()
 
     @property
