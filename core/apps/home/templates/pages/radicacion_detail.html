@@ -43,19 +43,13 @@
     background: var(--color-gray-50);
   }
 
-  @media (min-width: 768px) {
-    .page-wrapper {
-      /* padding: 2rem; */
-    }
-  }
-
   /* Main Card Container */
   .main-card {
     background: #ffffff;
     border-radius: var(--radius-lg);
     border: 1px solid var(--color-gray-200);
     box-shadow: var(--shadow-md);
-    overflow: hidden;
+    overflow: visible;
     max-width: 1600px;
     margin: 0 auto;
   }
@@ -209,29 +203,29 @@
     box-shadow: var(--shadow-sm);
   }
 
+  /* Allow tooltips / popovers to extend past the card (e.g. ANULADO hover) */
+  .section-card--overflow-visible {
+    overflow: visible;
+  }
+
   .section-header {
-    display: flex;
-    align-items: center;
     gap: 0.625rem;
-    padding: .6rem 1.25rem;
+    padding: .3rem 1.25rem;
     background: var(--color-gray-50);
     border-bottom: 1px solid var(--color-gray-100);
   }
 
   .section-header__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
     background: var(--color-primary-light);
     border-radius: var(--radius-sm);
     color: var(--color-primary);
   }
 
   .section-header__icon svg {
-    width: 1rem;
-    height: 1rem;
+    width: .7rem;
+    height: .7rem;
   }
 
   .section-header__title {
@@ -481,7 +475,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 1.25rem;
+    padding: .5rem 1.25rem;
     background: var(--color-gray-50);
     border-bottom: 1px solid var(--color-gray-100);
   }
@@ -611,6 +605,62 @@
     display: block;
   }
 
+  /* Overlay control: rotar vista previa (transform en el iframe — funciona con embeds externos) */
+  .iframe-preview-rotate-context {
+    position: relative;
+  }
+
+  .iframe-preview-rotate-wrap {
+    position: absolute;
+    inset: 0;
+    transform-origin: center center;
+    transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .iframe-preview-rotate-wrap iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  .iframe-preview-rotate-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 25;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    margin: 0;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-gray-200);
+    background: rgba(255, 255, 255, 0.93);
+    color: var(--color-gray-700);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    cursor: pointer;
+    transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .iframe-preview-rotate-btn:hover {
+    background: var(--color-primary-light);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .iframe-preview-rotate-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .iframe-preview-rotate-btn svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
   /* Image Footer */
   .image-footer {
     padding: 1rem 1.25rem;
@@ -707,6 +757,11 @@
     z-index: 1000;
   }
 
+  /* Por encima del modal OCR (z-index 2000) para copiar / avisos */
+  #copyToast {
+    z-index: 3200;
+  }
+
   .toast.show {
     transform: translateY(0);
     opacity: 1;
@@ -716,6 +771,644 @@
     width: 1.125rem;
     height: 1.125rem;
     color: var(--color-success);
+  }
+
+  .toast.toast--warn svg {
+    color: var(--color-warning);
+  }
+
+  /* OCR result modal */
+  .ocr-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(17, 24, 39, 0.55);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+  }
+
+  .ocr-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .ocr-modal-panel {
+    width: min(95%);
+    max-height: min(90vh, 920px);
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 140px);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-gray-200);
+    box-shadow:
+      var(--shadow-lg),
+      0 0 0 1px rgba(37, 99, 235, 0.06);
+    overflow: hidden;
+    transform: translateY(12px);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .ocr-modal.is-open .ocr-modal-panel {
+    transform: translateY(0);
+  }
+
+  .ocr-modal-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.75rem 1rem;
+    padding: 1.25rem 1.5rem 1rem;
+    border-bottom: 1px solid var(--color-gray-100);
+    background: linear-gradient(90deg, var(--color-primary-light) 0%, transparent 70%);
+  }
+
+  .ocr-modal-titlewrap {
+    flex: 1;
+    min-width: 180px;
+  }
+
+  .ocr-modal-titlewrap h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--color-gray-900);
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  }
+
+  .ocr-modal-sub {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--color-gray-500);
+    line-height: 1.4;
+  }
+
+  .ocr-badge {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    /* padding: 0.35rem 0.625rem; */
+    border-radius: 9999px;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    /* align-self: flex-start; */
+  }
+
+  .ocr-badge--cache {
+    background: var(--color-gray-100);
+    color: var(--color-gray-600);
+    border-color: var(--color-gray-200);
+  }
+
+  .ocr-badge--fresh {
+    background: linear-gradient(135deg, #dbeafe 0%, #cffafe 100%);
+    color: #0369a1;
+    border-color: #7dd3fc;
+  }
+
+  .ocr-modal-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+
+  .ocr-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.875rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--color-gray-200);
+    background: #fff;
+    color: var(--color-gray-700);
+    transition: all var(--transition-fast);
+    text-decoration: none;
+  }
+
+  .ocr-btn:hover {
+    border-color: var(--color-gray-300);
+    background: var(--color-gray-50);
+  }
+
+  .ocr-btn--primary {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+  }
+
+  .ocr-btn--primary:hover {
+    background: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+    color: #fff;
+  }
+
+  .ocr-btn--danger {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: var(--color-danger);
+  }
+
+  .ocr-btn--danger:hover {
+    background: var(--color-danger-light);
+    border-color: #fca5a5;
+  }
+
+  .ocr-modal-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    padding: 0 0 0.25rem;
+    overflow: hidden;
+  }
+
+  /* Two columns: embedded Drive preview + datos extraidos */
+  .ocr-modal-layout {
+    display: grid;
+    grid-template-columns: minmax(37%, 44%) minmax(0, 1fr);
+    gap: 0;
+    flex: 1;
+    min-height: 0;
+    border-top: 1px solid var(--color-gray-100);
+  }
+
+  /* Vista previa solo tras respuesta OK: ocultar columna y expandir detalles */
+  .ocr-modal-layout--no-preview .ocr-modal-preview-col {
+    display: none;
+  }
+
+  .ocr-modal-layout--no-preview .ocr-modal-details-col {
+    grid-column: 1 / -1;
+  }
+
+  @media (max-width: 920px) {
+    .ocr-modal-layout {
+      grid-template-columns: 1fr;
+      max-height: none;
+    }
+
+    .ocr-modal-preview-col {
+      max-height: 220px;
+      border-right: none;
+      border-bottom: 1px solid var(--color-gray-200);
+    }
+
+    .ocr-modal-iframe-shell iframe {
+      max-height: 200px;
+    }
+  }
+
+  .ocr-modal-preview-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 1rem 1rem 1.25rem;
+    background: linear-gradient(180deg, var(--color-gray-50) 0%, #fafbfc 100%);
+    border-right: 1px solid var(--color-gray-100);
+  }
+
+  .ocr-modal-preview-label {
+    margin: 0;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-gray-600);
+  }
+
+  .ocr-modal-iframe-shell {
+    position: relative;
+    flex: 1;
+    min-height: 260px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-gray-200);
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+    background: var(--color-gray-100);
+  }
+
+  .ocr-modal-iframe-loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-gray-50);
+    z-index: 1;
+  }
+
+  .ocr-modal-iframe-shell .iframe-preview-rotate-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  .ocr-modal-details-col {
+    padding: 1rem 1.25rem 1.25rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    max-height: calc(min(90vh, 920px) - 8.5rem);
+  }
+
+  /* IPS + fecha en una misma fila */
+  .ocr-ips-fecha {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem 1.25rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid var(--color-gray-100);
+    border-radius: var(--radius-md);
+  }
+
+  @media (max-width: 520px) {
+    .ocr-ips-fecha {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .ocr-kv-pair {
+    min-width: 0;
+  }
+
+  .ocr-mini-lbl {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-gray-500);
+    margin-bottom: 0.2rem;
+  }
+
+  .ocr-mini-val {
+    font-size: 0.875rem;
+    color: var(--color-gray-900);
+    word-break: break-word;
+    line-height: 1.35;
+  }
+
+  .ocr-doc-inline {
+    font-size: 0.875rem;
+    color: var(--color-gray-800);
+    line-height: 1.45;
+    padding: 0.35rem 0.5rem;
+    background: var(--color-gray-50);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-gray-100);
+    word-break: break-word;
+  }
+
+  .ocr-doc-inline__sep {
+    color: var(--color-gray-400);
+    margin: 0 0.25rem;
+  }
+
+  /* Diagnosticos combinados (principal + otros) compactos */
+  .ocr-diag-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .ocr-diag-chip {
+    font-size: 0.6rem;
+    line-height: 1.35;
+    padding: 0.45rem 0.6rem;
+    border-radius: var(--radius-sm);
+    background: #f8fafc;
+    border: 1px solid var(--color-gray-100);
+    word-break: break-word;
+  }
+
+  .ocr-diag-chip--principal {
+    border-color: #bfdbfe;
+    background: linear-gradient(135deg, rgba(219, 234, 254, 0.5) 0%, #f8fafc 100%);
+  }
+
+  .ocr-diag-chip strong {
+    font-weight: 600;
+    color: var(--color-gray-700);
+  }
+
+  /* Resumen JSON + copiar */
+  .ocr-json-toggle summary::before {
+    content: '';
+    display: inline-block;
+    width: 0.35em;
+    height: 0.35em;
+    border-right: 2px solid var(--color-primary);
+    border-bottom: 2px solid var(--color-primary);
+    transform: rotate(-45deg);
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+    vertical-align: middle;
+  }
+
+  .ocr-json-toggle[open] > summary::before {
+    transform: rotate(45deg);
+  }
+
+  .ocr-json-toggle summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    padding: 0.25rem 0;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    user-select: none;
+  }
+
+  .ocr-json-toggle summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ocr-json-summary-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .ocr-json-copy-wrap {
+    margin-left: auto;
+  }
+
+  .ocr-json-copy-wrap .copy-btn {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .ocr-section--tight {
+    margin-bottom: 0.75rem;
+  }
+
+  .ocr-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem 1rem;
+    color: var(--color-gray-500);
+  }
+
+  .ocr-alert {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    border: 1px solid #fecaca;
+    background: var(--color-danger-light);
+    color: #991b1b;
+    display: none;
+  }
+
+  .ocr-alert.is-visible {
+    display: block;
+  }
+
+  .ocr-modal-body > .ocr-alert {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .ocr-section {
+    margin-bottom: 1.25rem;
+  }
+
+  .ocr-section:last-child {
+    margin-bottom: 0;
+  }
+
+  .ocr-section-title {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-gray-500);
+    margin: 0 0 0.5rem;
+  }
+
+  .ocr-dl-row {
+    display: grid;
+    grid-template-columns: minmax(120px, 180px) 1fr;
+    gap: 0.5rem 1rem;
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 560px) {
+    .ocr-dl-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .ocr-dl-dt {
+    color: var(--color-gray-500);
+    font-weight: 500;
+  }
+
+  .ocr-dl-dd {
+    color: var(--color-gray-800);
+    word-break: break-word;
+  }
+
+  .ocr-json-toggle {
+    margin-top: 0.75rem;
+    border-top: 1px dashed var(--color-gray-200);
+    padding-top: 0.75rem;
+  }
+
+  .ocr-json-pre {
+    margin: 0.5rem 0 0;
+    padding: 0.75rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-gray-50);
+    border: 1px solid var(--color-gray-200);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    overflow: auto;
+    max-height: 25rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: var(--color-gray-800);
+  }
+
+  .ocr-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-md);
+  }
+
+  .ocr-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8125rem;
+    min-width: 520px;
+  }
+
+  .ocr-table thead th {
+    padding: 0.5rem 0.625rem;
+    background: var(--color-gray-50);
+    border-bottom: 1px solid var(--color-gray-200);
+    text-align: left;
+    font-weight: 600;
+    color: var(--color-gray-600);
+    white-space: nowrap;
+  }
+
+  .ocr-table tbody td {
+    padding: 0.5rem 0.625rem;
+    vertical-align: middle;
+    word-break: break-word;
+    border-bottom: 1px solid var(--color-gray-100);
+    max-width: 260px;
+  }
+
+  .ocr-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Tablas clave/valor compactas (paciente, metadatos) — reutiliza .ocr-table-wrap + .ocr-table */
+  .ocr-table--kv .ocr-kv-cell-label {
+    min-width: 8rem;
+    max-width: 40%;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-gray-500);
+    background: var(--color-gray-50);
+    vertical-align: top;
+  }
+
+  .ocr-table--kv tbody td[colspan='2'] {
+    color: var(--color-gray-800);
+    font-size: 0.875rem;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+
+  /* Artículos table with 2-row structure */
+  .ocr-table--articulos {
+    min-width: 600px;
+  }
+
+  .ocr-table--articulos thead th {
+    font-weight: 600;
+    white-space: normal;
+  }
+
+  /* .ocr-table--articulos thead th:nth-child(3) {
+    width: 45%;
+  } */
+
+  .ocr-table--articulos thead th:nth-child(1) {
+    width: 3%;
+  }
+
+  .ocr-table--articulos thead th:nth-child(2) {
+    width: 20%;
+  }
+
+  .ocr-table--articulos thead th:nth-child(4) {
+    width: 10%;
+  }
+
+  .ocr-table--articulos tbody td {
+    max-width: none;
+  }
+
+  .ocr-table--articulos .ocr-article-numero {
+    text-align: center;
+    font-weight: 600;
+    background: var(--color-gray-50);
+    vertical-align: middle;
+  }
+
+  .ocr-table--articulos .ocr-article-row--primary {
+    border-top: 2px solid var(--color-gray-200);
+  }
+
+  .ocr-table--articulos .ocr-article-row--secondary td {
+    padding-top: 0.25rem;
+    padding-bottom: 0.75rem;
+    background: var(--color-gray-25);
+    border-bottom: 2px solid var(--color-gray-200);
+  }
+
+  .ocr-meta-data-row {
+    font-size: 0.6rem;
+  }
+  .ocr-article-nombre-main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .ocr-article-secondary {
+    font-size: 0.75rem;
+    color: var(--color-gray-600);
+    font-style: italic;
+  }
+
+  .ocr-article-nombreinterno {
+    font-size: 0.8rem;
+    color: var(--color-gray-700);
+    font-weight: 500;
+  }
+
+  .ocr-barra-cell--pending {
+    min-width: 4rem;
+  }
+
+  .ocr-inline-spinner-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 1.1rem;
+  }
+
+  .ocr-inline-spinner {
+    width: 0.9rem;
+    height: 0.9rem;
+    border: 2px solid var(--color-gray-200);
+    border-top-color: #04a9f5;
+    border-radius: 50%;
+    animation: ocr-spin 0.7s linear infinite;
+  }
+
+  @keyframes ocr-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .ocr-barra-meta-host {
+    margin-top: 0.75rem;
   }
 
   /* Utility */
@@ -730,276 +1423,469 @@
     white-space: nowrap;
     border: 0;
   }
+
+  /* ── Patient compact 2-column (Nombre / Documento) ─────────────────── */
+  .patient-compact-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--color-gray-100);
+  }
+
+  .patient-compact-col {
+    padding: 0.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .patient-compact-col:first-child {
+    border-right: 1px solid var(--color-gray-100);
+  }
+
+  .patient-compact-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-gray-500);
+  }
+
+  .patient-compact-value {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-gray-800);
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    flex-wrap: wrap;
+    word-break: break-word;
+  }
+
+  /* ── More-info toggle & collapsible body ───────────────────────────── */
+  .more-info-toggle {
+    margin-left: auto;
+    background: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    color: var(--color-gray-500);
+    transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+    font-size: 1rem;
+    line-height: 1;
+    letter-spacing: 0.1em;
+    padding: 0;
+  }
+
+  .more-info-toggle:hover {
+    background: var(--color-gray-100);
+    color: var(--color-gray-700);
+    border-color: var(--color-gray-200);
+  }
+
+  .more-info-toggle[aria-expanded="true"] {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    border-color: transparent;
+  }
+
+  .more-info-body {
+    display: none;
+    border-top: 1px solid var(--color-gray-100);
+  }
+
+  .more-info-body.is-open {
+    display: block;
+  }
+
+  /* ── Acta inline badge (in patient section header) ─────────────────── */
+  .acta-inline-badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    user-select: none;
+    flex-shrink: 0;
+  }
+
+  .acta-inline-badge--active {
+    background: var(--color-success-light);
+    color: var(--color-success);
+  }
+
+  .acta-inline-badge--anulado {
+    background: var(--color-danger);
+    color: #ffffff;
+    cursor: help;
+  }
+
+  .acta-inline-badge--anulado:hover .acta-tooltip,
+  .acta-inline-badge--anulado:focus .acta-tooltip {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .acta-tooltip {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    z-index: 1050;
+    min-width: 220px;
+    max-width: 300px;
+    background: #fff;
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    padding: 0.75rem;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition: opacity 150ms ease, transform 150ms ease;
+    text-transform: none;
+    letter-spacing: normal;
+    font-weight: 400;
+  }
+
+  .acta-tooltip-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .acta-tooltip-row:last-child {
+    margin-bottom: 0;
+  }
+
+  .acta-tooltip-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-danger);
+  }
+
+  .acta-tooltip-value {
+    font-size: 0.8125rem;
+    color: var(--color-gray-800);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
+  }
+
+  /* OCR header: compact cache badge + discard next to IA button */
+  .ocr-header-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .ocr-header-actions .icon-btn {
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+
+  .ocr-header-actions .icon-btn svg {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+
+  .ocr-badge--header {
+    font-size: 0.5625rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 0.12rem 0.4rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+
+  .ocr-btn--header {
+    padding: 0.12rem 0.45rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.625rem;
+    font-weight: 600;
+    line-height: 1.15;
+    cursor: pointer;
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: var(--color-danger);
+    white-space: nowrap;
+  }
+
+  .ocr-btn--header:hover {
+    background: var(--color-danger-light);
+    border-color: #fca5a5;
+  }
+
+  .ocr-inline-body {
+    padding: 0;
+  }
+
+  .ocr-inline-body:empty {
+    display: none;
+  }
+
+  /* section-header date meta (date placed inside section header) */
+  .section-header-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--color-gray-500);
+    margin-left: 0.25rem;
+  }
+
+  .section-header-date svg {
+    width: 0.875rem;
+    height: 0.875rem;
+    flex-shrink: 0;
+  }
 </style>
 
 <div class="page-wrapper">
   <div class="main-card">
-    <!-- Header -->
-    <header class="card-header">
-      <h1 class="header-title">
-        {% if rad.convenio %}
-          <span class="convenio-name">{{ rad.convenio|title }}</span>
-          <span class="separator">&middot;</span>
-        {% endif %}
-        <span>Radicacion {{ rad.numero_autorizacion }}</span>
-        {% if rad.is_anulado %}
-          <span class="validation-badge validation-badge--neutral" style="background: var(--color-danger); color: #ffffff;">Anulado</span>
-        {% endif %}
-      </h1>
-      <div class="header-meta">
-        <span class="date-icon">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-          </svg>
-          <time datetime="{{ rad.datetime|date:'c' }}">Radicado el {{ rad.datetime|date:"j \d\e M \d\e Y \a \l\a\s H:i" }}</time>
-        </span>
-        {% if rad.estado %}
-          <span class="status-badge status-badge--info">
-            <span class="dot" aria-hidden="true"></span>
-            {{ rad.estado|title }}
-          </span>
-        {% endif %}
-      </div>
-    </header>
-
     <!-- Body -->
     <div class="card-body" style="padding: .625rem;">
       <div class="content-grid">
         <!-- Left Column: Information -->
         <div class="info-column">
           <!-- Patient Information & Location -->
-          <section class="section-card" aria-labelledby="patient-location-title">
-            <div class="section-header">
-              <span class="section-header__icon" aria-hidden="true">
+          <section class="section-card section-card--overflow-visible" aria-labelledby="patient-location-title">
+            <div class="d-flex align-items-center section-header" style="gap: 0.5rem;">
+              <span class="d-flex align-items-center justify-content-center section-header__icon" aria-hidden="true">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                 </svg>
               </span>
-              <h2 id="patient-location-title" class="section-header__title">Detalles del Paciente</h2>
-            </div>
-            <div class="section-body">
-              <!-- Patient Information Subsection -->
-              <div style="padding-bottom: 1rem; border-bottom: 1px solid var(--color-gray-100);">
-                <div class="info-row">
-                  <span class="info-label">Nombre</span>
-                  <span class="info-value">
-                    <span class="copy-value">{{ rad.paciente_nombre|default:"--" }}</span>
-                    {% if rad.paciente_nombre %}
-                    <button type="button" class="copy-btn" data-copy-text="{{ rad.paciente_nombre }}" aria-label="Copiar nombre">
-                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                      </svg>
-                    </button>
-                    {% endif %}
-                  </span>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">Documento</span>
-                  <span class="info-value">
-                    <span class="copy-value">{{ rad.paciente_cc|default:"--" }}</span>
-                    {% if rad.paciente_cc %}
-                    <button type="button" class="copy-btn" data-copy-text="{{ rad.paciente_cc }}" aria-label="Copiar documento">
-                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                      </svg>
-                    </button>
-                    {% endif %}
-                  </span>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">E-mail</span>
-                  <span class="info-value">
-                    <span class="copy-value">{{ rad.email|default:"--" }}</span>
-                    {% if rad.email %}
-                    <button type="button" class="copy-btn" data-copy-text="{{ rad.email }}" aria-label="Copiar email">
-                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                      </svg>
-                    </button>
-                    {% endif %}
-                  </span>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">Celular</span>
-                  <span class="info-value">
-                    <span class="copy-value">{{ rad.cel_uno|default:"--" }}</span>
-                    {% if rad.cel_uno %}
-                    <button type="button" class="copy-btn" data-copy-text="{{ rad.cel_uno }}" aria-label="Copiar celular">
-                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                      </svg>
-                    </button>
-                    {% endif %}
-                    {% if rad.cel_uno_validado %}
-                      <span class="validation-badge validation-badge--success">
-                        <svg width="10" height="10" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                        </svg>
-                        Validado
-                      </span>
-                    {% else %}
-                      <span class="validation-badge validation-badge--neutral">No validado</span>
-                    {% endif %}
-                  </span>
-                </div>
-                {% if rad.cel_dos %}
-                <div class="info-row">
-                  <span class="info-label">Celular (2)</span>
-                  <span class="info-value">
-                    <span class="copy-value">{{ rad.cel_dos }}</span>
-                    <button type="button" class="copy-btn" data-copy-text="{{ rad.cel_dos }}" aria-label="Copiar celular secundario">
-                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                      </svg>
-                    </button>
-                  </span>
-                </div>
-                {% endif %}
-              </div>
-
-              <!-- Location Subsection -->
-              <div style="padding-top: 1rem;">
-                <div class="info-row">
-                  <span class="info-label">Municipio</span>
-                  <span class="info-value">
-                    {% if rad.municipio %}
-                      <strong class="copy-value">{{ rad.municipio.name|title }}, {{ rad.municipio.departamento|title }}</strong>
-                      <button type="button" class="copy-btn" data-copy-text="{{ rad.municipio.name|title }}, {{ rad.municipio.departamento|title }}" aria-label="Copiar municipio">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                        </svg>
-                      </button>
-                    {% else %}
-                      <span>--</span>
-                    {% endif %}
-                  </span>
-                </div>
-                <div class="info-row">
-                  <span class="info-label">Ubicación Local</span>
-                  <span class="info-value">
-                    {% if rad.barrio or rad.direccion %}
-                      <span class="copy-value">
-                        {% if rad.barrio %}{{ rad.barrio.name|title }}{% endif %}
-                        {% if rad.barrio and rad.direccion %}, {% endif %}
-                        {% if rad.direccion %}{{ rad.direccion }}{% endif %}
-                      </span>
-                      <button type="button" class="copy-btn" data-copy-text="{% if rad.barrio %}{{ rad.barrio.name|title }}{% if rad.direccion %}, {% endif %}{% endif %}{% if rad.direccion %}{{ rad.direccion }}{% endif %}" aria-label="Copiar ubicación local">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                        </svg>
-                      </button>
-                    {% else %}
-                      <span>--</span>
-                    {% endif %}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          
-          <!-- Acta de Entrega -->
-          <section class="section-card" aria-labelledby="acta-title">
-            <div class="section-header">
-              <span class="section-header__icon{% if rad.is_anulado %}" style="background: var(--color-danger-light); color: var(--color-danger);{% endif %}" aria-hidden="true">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              <h2 id="patient-location-title" class="section-header__title">Detalles del Usuario</h2>
+              <span class="section-header-date">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                 </svg>
+                <time datetime="{{ rad.datetime|date:'c' }}">{{ rad.datetime|date:"j/m/Y H:i" }}</time>
               </span>
-              <h2 id="acta-title" class="section-header__title">Acta de Entrega</h2>
-              {% if rad.acta_entrega %}
-                {% if rad.is_anulado %} 
-                  <span class="validation-badge validation-badge--neutral" style="background: var(--color-danger); color: #ffffff;">Anulado</span>
-                {% else %}
-                  <div class="info-row" style="justify-content: flex-start;">
-                    <span class="acta-display acta-display--active">
-                      <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              {% if rad.is_anulado %}
+                <span class="acta-inline-badge acta-inline-badge--anulado" tabindex="0" aria-label="Radicado anulado — pasar el cursor para ver detalles">
+                  ANULADO
+                  <span class="acta-tooltip" role="tooltip">
+                    <div class="acta-tooltip-row">
+                      <span class="acta-tooltip-label">Anulado por</span>
+                      <span class="acta-tooltip-value">{{ rad.usuario_anula|default:"--" }}</span>
+                    </div>
+                    <div class="acta-tooltip-row">
+                      <span class="acta-tooltip-label">Fecha de anulación</span>
+                      <span class="acta-tooltip-value">{{ rad.fecha_anulacion|default:"--" }}</span>
+                    </div>
+                    <div class="acta-tooltip-row">
+                      <span class="acta-tooltip-label">Motivo</span>
+                      <span class="acta-tooltip-value">{{ rad.motivo|default:"--" }}</span>
+                    </div>
+                    {% if rad.observacion and rad.observacion != rad.motivo %}
+                    <div class="acta-tooltip-row">
+                      <span class="acta-tooltip-label">Observación</span>
+                      <span class="acta-tooltip-value">{{ rad.observacion }}</span>
+                    </div>
+                    {% endif %}
+                  </span>
+                </span>
+              {% elif rad.acta_entrega %}
+                <span class="acta-inline-badge acta-inline-badge--active">
+                  <svg width="10" height="10" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                  </svg>
+                  <span class="copy-value"> Acta {{ rad.acta_entrega }}</span>
+                  <button type="button" class="copy-btn" data-copy-text="{{ rad.acta_entrega }}" aria-label="Copiar acta" style="color: var(--color-success);">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                  </button>
+                </span>
+              {% endif %}
+              <button type="button" class="more-info-toggle" id="moreInfoToggle"
+                aria-expanded="false" aria-controls="moreInfoBody"
+                title="Más información del paciente" aria-label="Mostrar más información del paciente">
+                ···
+              </button>
+            </div>
+
+            <!-- Compact: Nombre + Documento side by side -->
+            <div class="patient-compact-row">
+              <div class="patient-compact-col">
+                <span class="patient-compact-label">Nombre</span>
+                <span class="patient-compact-value">
+                  <span class="copy-value">{{ rad.paciente_nombre|default:"--" }}</span>
+                  {% if rad.paciente_nombre %}
+                  <button type="button" class="copy-btn" data-copy-text="{{ rad.paciente_nombre }}" aria-label="Copiar nombre">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                  </button>
+                  {% endif %}
+                </span>
+              </div>
+              <div class="patient-compact-col">
+                <span class="patient-compact-label">Documento</span>
+                <span class="patient-compact-value">
+                  <span class="copy-value">{{ rad.paciente_cc|default:"--" }}</span>
+                  {% if rad.paciente_cc %}
+                  <button type="button" class="copy-btn" data-copy-text="{{ rad.paciente_cc }}" aria-label="Copiar documento">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                  </button>
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+
+            <!-- Expandable: remaining fields -->
+            <div class="more-info-body" id="moreInfoBody">
+              <div class="info-row">
+                <span class="info-label">E-mail</span>
+                <span class="info-value">
+                  <span class="copy-value">{{ rad.email|default:"--" }}</span>
+                  {% if rad.email %}
+                  <button type="button" class="copy-btn" data-copy-text="{{ rad.email }}" aria-label="Copiar email">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                  </button>
+                  {% endif %}
+                </span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Celular</span>
+                <span class="info-value">
+                  <span class="copy-value">{{ rad.cel_uno|default:"--" }}</span>
+                  {% if rad.cel_uno %}
+                  <button type="button" class="copy-btn" data-copy-text="{{ rad.cel_uno }}" aria-label="Copiar celular">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                  </button>
+                  {% endif %}
+                  {% if rad.cel_uno_validado %}
+                    <span class="validation-badge validation-badge--success">
+                      <svg width="10" height="10" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                       </svg>
-                      <span class="copy-value">{{ rad.acta_entrega }}</span>
-                      <button type="button" class="copy-btn" data-copy-text="{{ rad.acta_entrega }}" aria-label="Copiar acta">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                        </svg>
-                      </button>
+                      Validado
                     </span>
-                  </div>
-                  {% endif%}
-                {% endif %}
-              
-            </div>
-            {% if rad.is_anulado %}
-              <div class="section-body">
-                <!-- Anulado Details Block -->
-                <div class="anulado-details-block" style="padding: 1rem 1.25rem;">
-                  <div class="anulado-content" id="anulado-copy-content" style="background: var(--color-danger-light); border: 1px solid #fca5a5; border-radius: var(--radius-md); padding: 1rem; position: relative;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-                      
-                      <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
-                        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--color-danger); min-width: 110px; flex-shrink: 0;">Anulado por:</span>
-                        <span class="copy-text-value" style="font-size: 0.875rem; color: var(--color-gray-800);"><b>{{ rad.usuario_anula|default:"--" }}</b></span>
-                      </div>
-
-                      <button type="button" class="copy-btn copy-block-btn" data-copy-block="anulado-copy-content" aria-label="Copiar informacion de anulacion" style="width: 2rem; height: 2rem; background: #ffffff; border: 1px solid var(--color-gray-200);">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                        </svg>
-                      </button>
-                    </div>
-                    
-                    <div style="display: flex; flex-direction: column; gap: 0.625rem;">
-                      <!-- Fecha en que se anula -->
-                      <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
-                        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--color-danger); min-width: 110px; flex-shrink: 0;">Fecha de anulación:</span>
-                        <span class="copy-text-value" style="font-size: 0.875rem; color: var(--color-gray-800);">{{ rad.fecha_anulacion|default:"--" }}</span>
-                      </div>
-                      
-                      <!-- Motivo -->
-                      <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
-                        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--color-danger); min-width: 110px; flex-shrink: 0;">Motivo:</span>
-                        <span class="copy-text-value" style="font-size: 0.875rem; color: var(--color-gray-800);">{{ rad.motivo|default:"--" }}</span>
-                      </div>
-                      
-                      <!-- Observacion (only if different from motivo) -->
-                      {% if rad.observacion and rad.observacion != rad.motivo %}
-                      <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
-                        <span style="font-size: 0.8125rem; font-weight: 600; color: var(--color-danger); min-width: 110px; flex-shrink: 0;">Observacion:</span>
-                        <span class="copy-text-value" style="font-size: 0.875rem; color: var(--color-gray-800);">{{ rad.observacion }}</span>
-                      </div>
-                      {% endif %}
-                    </div>
-                  </div>
-                </div>
+                  {% else %}
+                    <span class="validation-badge validation-badge--neutral">No validado</span>
+                  {% endif %}
+                </span>
               </div>
-                  {% elif rad.acta_entrega %}
-                <!-- Active Acta Display -->
-                <!-- <div class="info-row" style="justify-content: flex-start;">
-                  <span class="acta-display acta-display--active">
-                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              {% if rad.cel_dos %}
+              <div class="info-row">
+                <span class="info-label">Celular (2)</span>
+                <span class="info-value">
+                  <span class="copy-value">{{ rad.cel_dos }}</span>
+                  <button type="button" class="copy-btn" data-copy-text="{{ rad.cel_dos }}" aria-label="Copiar celular secundario">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                     </svg>
-                    <span class="copy-value">{{ rad.acta_entrega }}</span>
-                    <button type="button" class="copy-btn" data-copy-text="{{ rad.acta_entrega }}" aria-label="Copiar acta">
+                  </button>
+                </span>
+              </div>
+              {% endif %}
+              <div class="info-row">
+                <span class="info-label">Municipio</span>
+                <span class="info-value">
+                  {% if rad.municipio %}
+                    <strong class="copy-value">{{ rad.municipio.name|title }}, {{ rad.municipio.departamento|title }}</strong>
+                    <button type="button" class="copy-btn" data-copy-text="{{ rad.municipio.name|title }}, {{ rad.municipio.departamento|title }}" aria-label="Copiar municipio">
                       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                       </svg>
                     </button>
-                  </span>
-                </div> -->
-              {% else %}
-                <!-- No Acta Registered -->
-                <div class="section-body">
-                  <div class="info-row" style="justify-content: flex-start;">
-                    <span class="acta-empty">
-                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                      </svg>
-                      Sin registrar
-                    </span>
-                  </div>
+                  {% else %}
+                    <span>--</span>
+                  {% endif %}
+                </span>
               </div>
-              {% endif %}
+              <div class="info-row">
+                <span class="info-label">Ubicación Local</span>
+                <span class="info-value">
+                  {% if rad.barrio or rad.direccion %}
+                    <span class="copy-value">
+                      {% if rad.barrio %}{{ rad.barrio.name|title }}{% endif %}
+                      {% if rad.barrio and rad.direccion %}, {% endif %}
+                      {% if rad.direccion %}{{ rad.direccion }}{% endif %}
+                    </span>
+                    <button type="button" class="copy-btn" data-copy-text="{% if rad.barrio %}{{ rad.barrio.name|title }}{% if rad.direccion %}, {% endif %}{% endif %}{% if rad.direccion %}{{ rad.direccion }}{% endif %}" aria-label="Copiar ubicación local">
+                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                      </svg>
+                    </button>
+                  {% else %}
+                    <span>--</span>
+                  {% endif %}
+                </span>
+              </div>
+            </div>
           </section>
+
+          {% if preview_url and not rad.is_anulado %}
+          <!-- AI OCR Inline Section -->
+          <section class="section-card" id="ocrSection" aria-labelledby="ocr-section-title">
+            <div class="d-flex align-items-center justify-content-between section-header" style="gap: 0.5rem;">
+              <div class="d-flex align-items-center justify-content-center">
+                <span class="d-flex align-items-center justify-content-center section-header__icon m-r-10" aria-hidden="true">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                </span>
+                <h2 id="ocr-section-title" class="section-header__title mb-0">Información de la autorización</h2>
+              </div>
+              <div class="ocr-header-actions ms-auto" id="ocrHeaderActions">
+                <span id="ocrSourceBadge" class="ocr-badge ocr-badge--header" hidden></span>
+                <button type="button" class="ocr-btn--header" id="ocrDiscardBtn" hidden>Descartar</button>
+                
+                
+                <button type="button" id="ocrFormulaBtn" class="icon-btn icon-btn--ai"
+                  data-drive-url="{{ rad.foto_formula|escape }}" data-numero-radicado="{{ rad.numero_radicado|escape }}"
+                  title="Leer imagen con IA" aria-label="Leer imagen con IA">
+                <svg width="800px" height="800px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <g id="páginas-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <g id="Weather" transform="translate(-816.000000, -48.000000)" fill-rule="nonzero">
+                        <g id="sparkles_fill" transform="translate(816.000000, 48.000000)">
+                          <path d="M24,0 L24,24 L0,24 L0,0 L24,0 Z M12.5934901,23.257841 L12.5819402,23.2595131 L12.5108777,23.2950439 L12.4918791,23.2987469 L12.4918791,23.2987469 L12.4767152,23.2950439 L12.4056548,23.2595131 C12.3958229,23.2563662 12.3870493,23.2590235 12.3821421,23.2649074 L12.3780323,23.275831 L12.360941,23.7031097 L12.3658947,23.7234994 L12.3769048,23.7357139 L12.4804777,23.8096931 L12.4953491,23.8136134 L12.4953491,23.8136134 L12.5071152,23.8096931 L12.6106902,23.7357139 L12.6232938,23.7196733 L12.6232938,23.7196733 L12.6266527,23.7031097 L12.609561,23.275831 C12.6075724,23.2657013 12.6010112,23.2592993 12.5934901,23.257841 L12.5934901,23.257841 Z M12.8583906,23.1452862 L12.8445485,23.1473072 L12.6598443,23.2396597 L12.6498822,23.2499052 L12.6498822,23.2499052 L12.6471943,23.2611114 L12.6650943,23.6906389 L12.6699349,23.7034178 L12.6699349,23.7034178 L12.678386,23.7104931 L12.8793402,23.8032389 C12.8914285,23.8068999 12.9022333,23.8029875 12.9078286,23.7952264 L12.9118235,23.7811639 L12.8776777,23.1665331 C12.8752882,23.1545897 12.8674102,23.1470016 12.8583906,23.1452862 L12.8583906,23.1452862 Z M12.1430473,23.1473072 C12.1332178,23.1423925 12.1221763,23.1452606 12.1156365,23.1525954 L12.1099173,23.1665331 L12.0757714,23.7811639 C12.0751323,23.7926639 12.0828099,23.8018602 12.0926481,23.8045676 L12.108256,23.8032389 L12.3092106,23.7104931 L12.3186497,23.7024347 L12.3186497,23.7024347 L12.3225043,23.6906389 L12.340401,23.2611114 L12.337245,23.2485176 L12.337245,23.2485176 L12.3277531,23.2396597 L12.1430473,23.1473072 Z" id="MingCute" fill-rule="nonzero"></path>
+                          <path d="M6.17296,13.0036 L6.34297,13.3752 L6.34297,13.3752 C7.07036,14.88 8.21624,16.1431 9.6428,17.0133 L9.90768,17.1685 L9.90768,17.1685 C10.0308,17.2377 10.0308,17.4149 9.90768,17.4842 C9.81836,17.5344 9.73005,17.5862 9.6428,17.6394 C8.21624,18.5095 7.07036,19.7727 6.34297,21.2775 L6.17296,21.649 L6.17296,21.649 C6.10635,21.7989 5.89365,21.7989 5.82704,21.649 L5.65703,21.2775 L5.65703,21.2775 C4.92964,19.7727 3.78376,18.5095 2.3572,17.6394 C2.26995,17.5862 2.18164,17.5344 2.09232,17.4842 C1.96923,17.4149 1.96923,17.2377 2.09232,17.1685 L2.3572,17.0133 L2.3572,17.0133 C3.78376,16.1431 4.92964,14.88 5.65703,13.3752 L5.82704,13.0036 L5.82704,13.0036 C5.89365,12.8538 6.10635,12.8538 6.17296,13.0036 Z M15.0779,2.72991 C15.1747,2.94774 15.2716,3.16544 15.3754,3.38009 C16.6483,6.01348 18.6536,8.22403 21.1501,9.74673 C21.3028,9.83987 21.4573,9.93043 21.6137,10.0184 C21.8291,10.1395 21.8291,10.4497 21.6137,10.5708 C21.4573,10.6588 21.3028,10.7493 21.1501,10.8425 C18.6536,12.3651 16.6483,14.5757 15.3754,17.2091 C15.2716,17.4237 15.1747,17.6414 15.0779,17.8593 C14.9613,18.1215 14.5891,18.1215 14.4725,17.8593 C14.3757,17.6414 14.2788,17.4237 14.175,17.2091 C12.9021,14.5757 10.8968,12.3651 8.40031,10.8425 C8.24761,10.7493 8.09308,10.6588 7.93676,10.5708 C7.72136,10.4497 7.72136,10.1395 7.93676,10.0184 C8.09308,9.93043 8.24761,9.83987 8.40031,9.74673 C10.8968,8.22403 12.9021,6.01348 14.175,3.38009 C14.2786,3.16578 14.3757,2.94781 14.4725,2.72991 C14.5891,2.46764 14.9613,2.46764 15.0779,2.72991 Z" id="形状" fill="#09244B"></path>
+                        </g>
+                      </g>
+                  </g>
+                </svg>
+              </button>
+              </div>
+            </div>
+            <!-- Body: alert + rendered content -->
+            <div class="p-10" id="ocrInlineBody">
+              <div id="ocrModalAlert" class="ocr-alert" role="alert"></div>
+              <div id="ocrModalContent"></div>
+            </div>
+          </section>
+          {% endif %}
 
           <!-- Articles -->
           {% if rad.paciente_data.DETALLE_AUTORIZACION %}
@@ -1057,23 +1943,6 @@
               </h2>
               {% if preview_url %}
               <div class="image-actions">
-                <button type="button" class="icon-btn icon-btn--ai" title="Leer Formula con IA" aria-label="Leer Formula con IA">
-                  <svg width="800px" height="800px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                  <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                      <g id="Weather" transform="translate(-816.000000, -48.000000)" fill-rule="nonzero">
-                          <g id="sparkles_fill" transform="translate(816.000000, 48.000000)">
-                            <path d="M24,0 L24,24 L0,24 L0,0 L24,0 Z M12.5934901,23.257841 L12.5819402,23.2595131 L12.5108777,23.2950439 L12.4918791,23.2987469 L12.4918791,23.2987469 L12.4767152,23.2950439 L12.4056548,23.2595131 C12.3958229,23.2563662 12.3870493,23.2590235 12.3821421,23.2649074 L12.3780323,23.275831 L12.360941,23.7031097 L12.3658947,23.7234994 L12.3769048,23.7357139 L12.4804777,23.8096931 L12.4953491,23.8136134 L12.4953491,23.8136134 L12.5071152,23.8096931 L12.6106902,23.7357139 L12.6232938,23.7196733 L12.6232938,23.7196733 L12.6266527,23.7031097 L12.609561,23.275831 C12.6075724,23.2657013 12.6010112,23.2592993 12.5934901,23.257841 L12.5934901,23.257841 Z M12.8583906,23.1452862 L12.8445485,23.1473072 L12.6598443,23.2396597 L12.6498822,23.2499052 L12.6498822,23.2499052 L12.6471943,23.2611114 L12.6650943,23.6906389 L12.6699349,23.7034178 L12.6699349,23.7034178 L12.678386,23.7104931 L12.8793402,23.8032389 C12.8914285,23.8068999 12.9022333,23.8029875 12.9078286,23.7952264 L12.9118235,23.7811639 L12.8776777,23.1665331 C12.8752882,23.1545897 12.8674102,23.1470016 12.8583906,23.1452862 L12.8583906,23.1452862 Z M12.1430473,23.1473072 C12.1332178,23.1423925 12.1221763,23.1452606 12.1156365,23.1525954 L12.1099173,23.1665331 L12.0757714,23.7811639 C12.0751323,23.7926639 12.0828099,23.8018602 12.0926481,23.8045676 L12.108256,23.8032389 L12.3092106,23.7104931 L12.3186497,23.7024347 L12.3186497,23.7024347 L12.3225043,23.6906389 L12.340401,23.2611114 L12.337245,23.2485176 L12.337245,23.2485176 L12.3277531,23.2396597 L12.1430473,23.1473072 Z" id="MingCute" fill-rule="nonzero"></path>
-                            <path d="M6.17296,13.0036 L6.34297,13.3752 L6.34297,13.3752 C7.07036,14.88 8.21624,16.1431 9.6428,17.0133 L9.90768,17.1685 L9.90768,17.1685 C10.0308,17.2377 10.0308,17.4149 9.90768,17.4842 C9.81836,17.5344 9.73005,17.5862 9.6428,17.6394 C8.21624,18.5095 7.07036,19.7727 6.34297,21.2775 L6.17296,21.649 L6.17296,21.649 C6.10635,21.7989 5.89365,21.7989 5.82704,21.649 L5.65703,21.2775 L5.65703,21.2775 C4.92964,19.7727 3.78376,18.5095 2.3572,17.6394 C2.26995,17.5862 2.18164,17.5344 2.09232,17.4842 C1.96923,17.4149 1.96923,17.2377 2.09232,17.1685 L2.3572,17.0133 L2.3572,17.0133 C3.78376,16.1431 4.92964,14.88 5.65703,13.3752 L5.82704,13.0036 L5.82704,13.0036 C5.89365,12.8538 6.10635,12.8538 6.17296,13.0036 Z M15.0779,2.72991 C15.1747,2.94774 15.2716,3.16544 15.3754,3.38009 C16.6483,6.01348 18.6536,8.22403 21.1501,9.74673 C21.3028,9.83987 21.4573,9.93043 21.6137,10.0184 C21.8291,10.1395 21.8291,10.4497 21.6137,10.5708 C21.4573,10.6588 21.3028,10.7493 21.1501,10.8425 C18.6536,12.3651 16.6483,14.5757 15.3754,17.2091 C15.2716,17.4237 15.1747,17.6414 15.0779,17.8593 C14.9613,18.1215 14.5891,18.1215 14.4725,17.8593 C14.3757,17.6414 14.2788,17.4237 14.175,17.2091 C12.9021,14.5757 10.8968,12.3651 8.40031,10.8425 C8.24761,10.7493 8.09308,10.6588 7.93676,10.5708 C7.72136,10.4497 7.72136,10.1395 7.93676,10.0184 C8.09308,9.93043 8.24761,9.83987 8.40031,9.74673 C10.8968,8.22403 12.9021,6.01348 14.175,3.38009 C14.2786,3.16578 14.3757,2.94781 14.4725,2.72991 C14.5891,2.46764 14.9613,2.46764 15.0779,2.72991 Z" id="形状" fill="#09244B"></path>
-                          </g>
-                        </g>
-                    </g>
-                </svg>
-                </button>
-                <!-- <a href="{{ rad.foto_formula }}" download class="icon-btn" title="Descargar imagen" aria-label="Descargar imagen">
-                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                  </svg>
-                </a> -->
                 <a href="{{ rad.foto_formula }}" target="_blank" rel="noopener" class="icon-btn" title="Abrir en nueva pestana" aria-label="Abrir en nueva pestana">
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
@@ -1084,18 +1953,30 @@
             </div>
             
             {% if preview_url %}
-            <div class="iframe-container">
+            <div class="iframe-container iframe-preview-rotate-context">
               <div class="iframe-loader" id="iframeLoader">
                 <div class="spinner"></div>
                 <span class="spinner-text">Cargando imagen...</span>
               </div>
-              <iframe 
-                id="formulaIframe"
-                src="{{ preview_url }}" 
-                allow="autoplay"
-                title="Vista previa de formula medica"
-                onload="document.getElementById('iframeLoader').style.display='none';">
-              </iframe>
+              <button
+                type="button"
+                class="iframe-preview-rotate-btn"
+                data-iframe-rotate-trigger
+                title="Rotar vista 90°"
+                aria-label="Rotar la vista previa noventa grados">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+              </button>
+              <div class="iframe-preview-rotate-wrap" data-iframe-rotate-wrap>
+                <iframe
+                  id="formulaIframe"
+                  src="{{ preview_url }}"
+                  allow="autoplay"
+                  title="Vista previa de formula medica"
+                  onload="document.getElementById('iframeLoader').style.display='none';">
+                </iframe>
+              </div>
             </div>
             <div class="image-footer">
               <a href="{{ rad.foto_formula }}" target="_blank" rel="noopener" class="drive-link">
@@ -1124,15 +2005,132 @@
         
       </div>
     </div>
+
+    <footer style="padding: 25px; text-align: right; border-top: 1px solid #f1f1f1;" aria-label="Navegación entre radicaciones">
+      <div role="group" class="d-flex justify-content-between">
+        <div class="">
+          {% if previous_radicacion_url %}
+            <a href="{{ previous_radicacion_url }}" class="btn btn-secondary m-b-0">
+              <!-- <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="margin-left: 8px; vertical-align: middle;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5H18"></path>
+              </svg> -->
+              Anterior
+            </a>
+          {% else %}
+            <span class="btn btn-secondary disabled m-b-0" tabindex="-1" aria-disabled="true">
+              <!-- <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="margin-left: 8px; vertical-align: middle;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5H18"></path>
+              </svg> -->
+              Anterior
+            </span>
+          {% endif %}
+          {% if previous_sin_acta_url %}
+            <a href="{{ previous_sin_acta_url }}" class="btn btn-secondary m-b-0">
+              <!-- <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="margin-left: 8px; vertical-align: middle;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5H18"></path>
+              </svg> -->
+              Anterior sin acta
+            </a>
+          {% else %}
+            <span class="btn btn-secondary disabled m-b-0" tabindex="-1" aria-disabled="true">
+              <!-- <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="margin-left: 8px; vertical-align: middle;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5H18"></path>
+              </svg> -->
+              Anterior sin acta
+            </span>
+          {% endif %}
+        </div>
+        <div class="">
+          {% if next_radicacion_url %}
+            <a href="{{ next_radicacion_url }}" class="btn btn-secondary m-b-0" style="margin-right: 1rem;">
+              Siguiente
+              <!-- <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="margin-left: 8px; vertical-align: middle;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              </svg> -->
+            </a>
+          {% else %}
+            <span class="btn btn-secondary disabled m-b-0" tabindex="-1" aria-disabled="true">
+              Siguiente
+              <!-- <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="margin-left: 8px; vertical-align: middle;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              </svg> -->
+            </span>
+          {% endif %}
+          {% if next_sin_acta_url %}
+            <a href="{{ next_sin_acta_url }}" class="btn btn-primary m-b-0">
+              Siguiente sin acta
+              <!-- <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="margin-left: 8px; vertical-align: middle;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              </svg> -->
+            </a>
+          {% else %}
+            <span class="btn btn-primary disabled m-b-0" tabindex="-1" aria-disabled="true">
+              Siguiente sin acta
+              <!-- <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="margin-left: 8px; vertical-align: middle;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              </svg> -->
+            </span>
+          {% endif %}
+      </div>
+    </footer>
   </div>
 </div>
+
+{% if preview_url %}{% csrf_token %}{% endif %}
+
+{% if preview_url %}
+<script>
+(function() {
+  function wireIframeRotateContext(ctx) {
+    var wrap = ctx.querySelector('[data-iframe-rotate-wrap]');
+    var btn = ctx.querySelector('[data-iframe-rotate-trigger]');
+    if (!wrap || !btn || btn.dataset.iframeRotateWired === '1') return;
+    btn.dataset.iframeRotateWired = '1';
+    var deg = 0;
+
+    function apply() {
+      var r = ctx.getBoundingClientRect();
+      var scale = 1;
+      if (deg % 180 !== 0 && r.width > 2 && r.height > 2) {
+        scale = Math.min(r.width / r.height, r.height / r.width);
+      }
+      wrap.style.transform = 'rotate(' + deg + 'deg) scale(' + scale + ')';
+    }
+
+    function resetRotation() {
+      deg = 0;
+      wrap.style.transform = '';
+    }
+
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      deg = (deg + 90) % 360;
+      apply();
+    });
+
+    if (typeof ResizeObserver !== 'undefined') {
+      var ro = new ResizeObserver(function() {
+        apply();
+      });
+      ro.observe(ctx);
+    }
+
+    ctx.resetIframePreviewRotation = resetRotation;
+    apply();
+  }
+
+  document.querySelectorAll('.iframe-preview-rotate-context').forEach(wireIframeRotateContext);
+})();
+</script>
+{% endif %}
 
 <!-- Toast Notification -->
 <div class="toast" id="copyToast" role="status" aria-live="polite">
   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
   </svg>
-  <span>Copiado al portapapeles</span>
+  <span id="copyToastMsg">Copiado al portapapeles</span>
 </div>
 
 <script>
@@ -1208,4 +2206,769 @@
     });
   })();
 </script>
+<script>
+(function() {
+  const toggle = document.getElementById('moreInfoToggle');
+  const body = document.getElementById('moreInfoBody');
+  if (!toggle || !body) return;
+  toggle.addEventListener('click', function() {
+    const isOpen = body.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+})();
+</script>
+
+{% if preview_url %}
+<script>
+(function() {
+  const btn = document.getElementById('ocrFormulaBtn');
+  const ocrSection = document.getElementById('ocrSection');
+  const modalContent = document.getElementById('ocrModalContent');
+  const modalAlert = document.getElementById('ocrModalAlert');
+  const badge = document.getElementById('ocrSourceBadge');
+  const discardBtn = document.getElementById('ocrDiscardBtn');
+  if (!btn || !ocrSection || !modalContent) return;
+
+  const API_RUN = '/api/v1/prescription-ocr/';
+  const API_DISCARD = '/api/v1/prescription-ocr/discard/';
+  const API_BARRA_POLL_BASE = '/api/v1/prescription-ocr/barra/';
+  const BARRA_POLL_INTERVAL_MS = 10000;
+  const BARRA_POLL_MAX_ATTEMPTS = 30;
+  const currentDriveUrl = btn.getAttribute('data-drive-url') || '';
+  const currentNumeroRadicado = btn.getAttribute('data-numero-radicado') || '';
+  const currentDriveId = parseDriveFileId(currentDriveUrl);
+  const STORAGE_KEY = currentDriveId
+    ? 'ocr_result_drive_' + currentDriveId
+    : 'ocr_result_rad_' + (currentNumeroRadicado || window.location.pathname);
+  let lastTransactionId = null;
+  let lastResultForJsonCopy = {};
+
+  ocrSection.addEventListener('click', function(e) {
+    const jsonCopyBtn = e.target.closest('#ocrJsonCopyBtn');
+    if (!jsonCopyBtn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    var text = '';
+    try {
+      text = JSON.stringify(lastResultForJsonCopy || {}, null, 2);
+    } catch (err) {
+      text = '{}';
+    }
+    navigator.clipboard.writeText(text).then(function() {
+      jsonCopyBtn.classList.add('copied');
+      setTimeout(function() { jsonCopyBtn.classList.remove('copied'); }, 2000);
+      showCopyToastOk('JSON copiado al portapapeles');
+    }).catch(function() {
+      showCopyToastWarn('No se pudo copiar el JSON');
+    });
+  });
+
+  function getCsrfToken() {
+    const input = document.querySelector('[name=csrfmiddlewaretoken]');
+    return input ? input.value : '';
+  }
+
+  function parseDriveFileId(url) {
+    const m = (url || '').match(/\/file\/d\/([a-zA-Z0-9_-]{10,})\//);
+    return m ? m[1] : null;
+  }
+
+  function escapeHtml(s) {
+    if (s == null || s === undefined) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  /** Claves de filas adicionales (2 columnas label + valor) — ampliar aquí cuando el API crezca. */
+  var OCR_PACIENTE_TRIPLE = {
+    headings: ['Nombre paciente', 'Tipo documento', 'Número documento'],
+    keys: ['NombrePaciente', 'TipoDocumentoPaciente', 'NumeroDocumentoPaciente'],
+  };
+  var OCR_PACIENTE_PAIRS = [{ key: 'NombreMedico', label: 'Médico' }];
+
+  /** Tabla clave-valor compacta para secciones de detalle OCR (triple cabecera + filas opcionales de 2 celdas). */
+  function buildOcrKvSection(sectionTitle, triple, pairs) {
+    pairs = pairs || [];
+    var tbodyRows = '';
+    var thead = '';
+    if (triple && triple.headings && triple.headings.length) {
+      thead =
+        '<thead><tr>' +
+        triple.headings
+          .map(function(h) {
+            return '<th scope="col">' + escapeHtml(h) + '</th>';
+          })
+          .join('') +
+        '</tr></thead>';
+      var vals = triple.values || [];
+      tbodyRows +=
+        '<tr>' +
+        triple.headings
+          .map(function(_, i) {
+            var v = vals[i];
+            return '<td>' + escapeHtml(v == null ? '' : String(v)) + '</td>';
+          })
+          .join('') +
+        '</tr>';
+    }
+    pairs.forEach(function(p) {
+      tbodyRows +=
+        '<tr>' +
+        '<td class="ocr-kv-cell-label">' +
+        escapeHtml(p.label) +
+        '</td><td colspan="2">' +
+        escapeHtml(p.value == null ? '' : String(p.value)) +
+        '</td></tr>';
+    });
+    if (!thead && !tbodyRows) return '';
+
+    if (sectionTitle !== ''){
+      header_section = '<h4 class="ocr-section-title">' + escapeHtml(sectionTitle) + '</h4>'
+    } else {
+      header_section = ''
+    }
+    return (
+      '<div class="ocr-section ocr-section--tight">' +
+      header_section +
+      '<div class="ocr-table-wrap"><table class="ocr-table ocr-table--kv">' +
+      thead +
+      '<tbody>' +
+      tbodyRows +
+      '</tbody></table></div></div>'
+    );
+  }
+
+  function buildPacienteSection(r) {
+    var vals = OCR_PACIENTE_TRIPLE.keys.map(function(k) {
+      return r[k];
+    });
+    var triple = { headings: OCR_PACIENTE_TRIPLE.headings, values: vals };
+    var pairs = OCR_PACIENTE_PAIRS.map(function(d) {
+      return { label: d.label, value: r[d.key] };
+    });
+    return buildOcrKvSection('', triple, pairs);
+  }
+
+  function buildMetaPairs(payload) {
+      var result = {
+        headings: [],
+        values: [],
+      };
+
+      if (
+        payload.transaction_id !== undefined &&
+        payload.transaction_id !== null &&
+        String(payload.transaction_id) !== ''
+      ) {
+        result.headings.push('Transacción');
+        result.values.push(
+          '#' +
+            String(payload.transaction_id) +
+            (payload.cached ? ' · cache servidor' : ' · OCR Autorización')
+        );
+      }
+
+      if (
+        payload.cost_usd !== undefined &&
+        payload.cost_usd !== null &&
+        String(payload.cost_usd) !== ''
+      ) {
+        result.headings.push('Costo estimado (USD)');
+        result.values.push(String(payload.cost_usd));
+      }
+
+      if (
+        payload.input_tokens !== undefined &&
+        payload.input_tokens !== null &&
+        String(payload.input_tokens) !== ''
+      ) {
+        result.headings.push('Tokens de entrada');
+        result.values.push(String(payload.input_tokens));
+      }
+
+      if (
+        payload.output_tokens !== undefined &&
+        payload.output_tokens !== null &&
+        String(payload.output_tokens) !== ''
+      ) {
+        result.headings.push('Tokens de salida');
+        result.values.push(String(payload.output_tokens));
+      }
+
+      return result;
+  }
+
+  function showAlert(text) {
+    if (modalAlert) {
+      modalAlert.textContent = text;
+      modalAlert.classList.add('is-visible');
+    }
+  }
+
+  function hideAlert() {
+    if (modalAlert) {
+      modalAlert.textContent = '';
+      modalAlert.classList.remove('is-visible');
+    }
+  }
+
+  function buildDiagnosticosMerged(principal, otros) {
+    var parts = [];
+    if (principal && typeof principal === 'object') {
+      var pc = principal.Codigo || '';
+      var pd = principal.Descripcion || '';
+      if (pc || pd) {
+        parts.push(
+          '<div class="ocr-diag-chip ocr-diag-chip--principal"><strong>Principal</strong> · ' +
+          escapeHtml(pc) + (pc && pd ? ' — ' : '') + escapeHtml(pd) + '</div>'
+        );
+      }
+    }
+    (otros || []).forEach(function(x, idx) {
+      if (!x || typeof x !== 'object') return;
+      var oc = x.Codigo || '';
+      var od = x.Descripcion || '';
+      if (!oc && !od) return;
+      parts.push(
+        '<div class="ocr-diag-chip"><strong>Otro ' + (idx + 1) + '</strong> · ' +
+        escapeHtml(oc) + (oc && od ? ' — ' : '') + escapeHtml(od) + '</div>'
+      );
+    });
+    if (!parts.length) return '';
+    return (
+      '<div class="ocr-section ocr-section--tight">' +
+      '<h4 class="ocr-section-title">Diagnosticos</h4>' +
+      '<div class="ocr-diag-list">' + parts.join('') + '</div></div>'
+    );
+  }
+
+  function formatOcrDuracionObj(d) {
+    if (!d || typeof d !== 'object') return '';
+    var v = d.Valor != null && d.Valor !== '' ? String(d.Valor) : '';
+    var u = d.Unidad != null ? String(d.Unidad) : '';
+    if (!v && !u) return '';
+    return (v + (u ? ' ' + u : '')).trim();
+  }
+
+  function formatOcrCantidadObj(c) {
+    if (!c || typeof c !== 'object') return '';
+    var v = c.Valor != null && c.Valor !== '' ? String(c.Valor) : '';
+    var desc = c.Descripcion != null && c.Descripcion !== '' ? String(c.Descripcion) : '';
+    if (desc) return v ? v + ' — ' + desc : desc;
+    return v;
+  }
+
+  function indexBarraJobsByArticleNumero(list) {
+    var m = {};
+    (list || []).forEach(function(j) {
+      if (j && j.article_numero != null) {
+        m[String(j.article_numero)] = j;
+      }
+    });
+    return m;
+  }
+
+  function parseMetaCellNum(text) {
+    if (text == null) return 0;
+    var t = String(text).trim();
+    if (t === '' || t === '—' || t === '-') return 0;
+    var n = parseFloat(t.replace(',', '.'));
+    return isFinite(n) ? n : 0;
+  }
+
+  function formatMetaUsdSum(n) {
+    if (!isFinite(n) || isNaN(n)) return '0';
+    return String(parseFloat(Number(n).toFixed(8)));
+  }
+
+  /** Sums numeric cells of all `.ocr-meta-data-row` rows and fills `.ocr-meta-totals-row`. */
+  function recalculateOcrMetaTotals() {
+    var tbody = document.getElementById('ocrMetaTbody');
+    if (!tbody) return;
+    var totalRow = tbody.querySelector('tr.ocr-meta-totals-row');
+    var dataRows = tbody.querySelectorAll('tr.ocr-meta-data-row');
+    var costSum = 0;
+    var inSum = 0;
+    var outSum = 0;
+    dataRows.forEach(function(tr) {
+      var cells = tr.querySelectorAll('td');
+      if (cells.length < 4) return;
+      costSum += parseMetaCellNum(cells[1].textContent);
+      inSum += parseMetaCellNum(cells[2].textContent);
+      outSum += parseMetaCellNum(cells[3].textContent);
+    });
+    if (!totalRow) return;
+    var cs = totalRow.querySelectorAll('td');
+    if (cs.length < 4) return;
+    cs[0].textContent = 'Total';
+    cs[1].textContent = formatMetaUsdSum(costSum);
+    cs[2].textContent = String(Math.round(inSum));
+    cs[3].textContent = String(Math.round(outSum));
+  }
+
+  function appendBarraJobMetaRow(data) {
+    var tbody = document.getElementById('ocrMetaTbody');
+    if (!tbody || !data) return;
+    var nombre = data.article_nombre ? String(data.article_nombre).slice(0, 25) : '';
+    var transVal = '#' + String(data.id || '') + (nombre ? ' · ' + nombre : '');
+    var cost = data.cost_usd != null ? String(data.cost_usd) : '—';
+    var inTok = data.input_tokens != null ? String(data.input_tokens) : '—';
+    var outTok = data.output_tokens != null ? String(data.output_tokens) : '—';
+    var tr = document.createElement('tr');
+    tr.className = 'ocr-meta-data-row';
+    tr.innerHTML =
+      '<td>' + escapeHtml(transVal) + '</td>' +
+      '<td>' + escapeHtml(cost) + '</td>' +
+      '<td>' + escapeHtml(inTok) + '</td>' +
+      '<td>' + escapeHtml(outTok) + '</td>';
+    var totalRow = tbody.querySelector('tr.ocr-meta-totals-row');
+    if (totalRow) tbody.insertBefore(tr, totalRow);
+    else tbody.appendChild(tr);
+    recalculateOcrMetaTotals();
+  }
+
+  function updateBarraJobDom(jobId, data) {
+    if (!modalContent || !jobId) return;
+    var barraEl = modalContent.querySelector('[data-ocr-barra-job="' + jobId + '"]');
+    var niEl = modalContent.querySelector('[data-ocr-nombreinterno-job="' + jobId + '"]');
+    if (data.status === 'completado' && data.sap_article) {
+      if (barraEl) barraEl.textContent = data.sap_article.barra || '';
+      if (niEl) niEl.textContent = data.sap_article.descripcion || '';
+    } else {
+      if (barraEl)
+      barraEl.textContent = data.barra_llm || (data.error_message ? 'N/A' : '—');
+      if (niEl)
+      console.log("data", data);
+        niEl.textContent = data.error_message ? (data.error_message?.includes('No encontrado') ? data.error_message : 'Sin coincidencia') : '';
+    }
+    if (barraEl) {
+      barraEl.classList.remove('ocr-barra-cell--pending');
+    }
+  }
+
+  function pollBarraJobOnce(jobId, articleNombre, ips, attempt) {
+    // console.log("About to pollBarraJobOnce", jobId, articleNombre, ips, attempt);
+    attempt = attempt || 0;
+    if (attempt >= BARRA_POLL_MAX_ATTEMPTS) {
+      updateBarraJobDom(jobId, {
+        status: 'fallido',
+        error_message: 'Tiempo de espera agotado',
+        barra_llm: '',
+        sap_article: null,
+      });
+      return;
+    }
+    var barraPollUrl = API_BARRA_POLL_BASE + jobId + '/';
+    var barraPollQs = new URLSearchParams();
+    if (articleNombre != null && articleNombre !== '') {
+      barraPollQs.set('article_nombre', String(articleNombre));
+    }
+    if (ips != null && ips !== '') {
+      barraPollQs.set('ips', String(ips));
+    }
+    var barraPollQuery = barraPollQs.toString();
+    if (barraPollQuery) barraPollUrl += '?' + barraPollQuery;
+    fetch(barraPollUrl, {
+      credentials: 'same-origin',
+      headers: { Accept: 'application/json' },
+    })
+      .then(function(res) {
+        return res.json();
+      })
+      .then(function(data) {
+        if (!data || data.detail === 'job_not_found') return;
+        if (data.status === 'completado' || data.status === 'fallido') {
+          updateBarraJobDom(jobId, data);
+          appendBarraJobMetaRow(data);
+          return;
+        }
+        setTimeout(function() {
+          pollBarraJobOnce(jobId, articleNombre, ips, attempt + 1);
+        }, BARRA_POLL_INTERVAL_MS);
+      })
+      .catch(function(error) {
+        console.error('Error polling barra job', jobId, articleNombre, ips, attempt,error);
+        setTimeout(function() {
+          pollBarraJobOnce(jobId, articleNombre, ips, attempt + 1);
+        }, BARRA_POLL_INTERVAL_MS);
+      });
+  }
+
+  function scheduleBarraPolling(barraJobs, ips) {
+    // console.log("About to scheduleBarraPolling", barraJobs, ips);
+    if (!barraJobs || !barraJobs.length) return;
+    barraJobs.forEach(function(j) {
+      if (!j || !j.job_id) return;
+      if (j.status === 'fallido') return;
+      pollBarraJobOnce(j.job_id, j.article_nombre, String(ips).toUpperCase().trim(), 0);
+    });
+  }
+
+  /** Pre-CamelCase OCR rows used ViaAdministracion / CodigoBarras / Observacion — not present on current schema. */
+  function isLegacyArticuloOcr(a) {
+    if (!a || typeof a !== 'object') return false;
+    return (
+      a.ViaAdministracion !== undefined ||
+      a.CodigoBarras !== undefined ||
+      a.Observacion !== undefined
+    );
+  }
+
+  function buildArticulos(arts, barraJobsList) {
+    if (!arts || !arts.length) return '';
+    var byJob = indexBarraJobsByArticleNumero(barraJobsList);
+    const head =
+      '<thead><tr><th>#</th><th>Cod. Barras</th><th>Nombre</th><th>Cant.</th></tr></thead>';
+    const bodyRows = arts.map(function(a) {
+      var numero = a.Numero != null ? String(a.Numero) : '';
+      var barra = a.Barra != null && a.Barra !== '' ? String(a.Barra) : '';
+      var nombre = a.Nombre || '';
+      var formaFarm = a.FormaFarmaceutica || '';
+      var frecuencia = a.Frecuencia || '';
+      var duracionStr = formatOcrDuracionObj(a.Duracion);
+      var cantidad = formatOcrCantidadObj(a.Cantidad);
+      var nombreInterno =
+        a.NombreInterno != null && a.NombreInterno !== ''
+          ? String(a.NombreInterno)
+          : '';
+
+      var job = byJob[numero];
+      var jobId = job && job.job_id != null ? String(job.job_id) : '';
+      var jobStatus = job && job.status ? String(job.status) : '';
+
+      if (job && job.status === 'completado' && job.sap_article) {
+        if (job.sap_article.barra != null && job.sap_article.barra !== '') {
+          barra = String(job.sap_article.barra);
+        }
+        if (
+          job.sap_article.descripcion != null &&
+          job.sap_article.descripcion !== ''
+        ) {
+          nombreInterno = String(job.sap_article.descripcion);
+        }
+      }
+
+      var showPending = !!(
+        jobId &&
+        jobStatus !== 'completado' &&
+        jobStatus !== 'fallido'
+      );
+
+      var secondaryInfo = '';
+      if (formaFarm || frecuencia) {
+        var parts = [];
+        if (formaFarm) parts.push(formaFarm);
+        if (frecuencia) parts.push(frecuencia);
+        secondaryInfo = parts.join(' ');
+        if (duracionStr) {
+          secondaryInfo += ' (' + duracionStr + ')';
+        }
+      } else if (duracionStr) {
+        secondaryInfo = '(' + duracionStr + ')';
+      }
+
+      var barraHtml;
+      if (showPending) {
+        barraHtml =
+          '<span class="ocr-inline-spinner-wrap" aria-busy="true">' +
+          '<span class="ocr-inline-spinner"></span>' +
+          '<span class="sr-only">Cargando código de barras</span></span>';
+      } else if (job && job.status === 'fallido') {
+        barraHtml = escapeHtml(
+          job.barra_llm || barra || '—'
+        );
+      } else {
+        barraHtml = escapeHtml(barra);
+      }
+
+      var row1 =
+        '<tr class="ocr-article-row ocr-article-row--primary">' +
+        '<td rowspan="2" class="ocr-article-numero">' +
+        escapeHtml(numero) +
+        '</td><td' +
+        (jobId ? ' data-ocr-barra-job="' + jobId + '"' : '') +
+        ' class="ocr-barra-cell' +
+        (showPending ? ' ocr-barra-cell--pending' : '') +
+        '">' +
+        barraHtml +
+        '</td><td class="ocr-article-nombre-main">' + 
+        escapeHtml(nombre);
+
+      if (secondaryInfo) {
+        row1 +=
+          '<div class="ocr-article-secondary">' +
+          escapeHtml(secondaryInfo) +
+          '</div>';
+      }
+      row1 += '</td><td>' + escapeHtml(cantidad) + '</td></tr>';
+
+      var niHtml;
+      if (showPending) {
+        niHtml =
+          '<span class="ocr-inline-spinner-wrap" aria-busy="true">' +
+          '<span class="ocr-inline-spinner"></span>' +
+          '<span class="sr-only">Cargando nombre interno</span></span>';
+      } else if (job && job.status === 'fallido') {
+        niHtml = escapeHtml(
+          (job.error_message || 'Sin coincidencia').slice(0, 240)
+        );
+      } else {
+        niHtml = nombreInterno ? escapeHtml(nombreInterno) : '';
+      }
+
+      var row2 =
+        '<tr class="ocr-article-row ocr-article-row--secondary">' +
+        '<td colspan="3" class="ocr-article-nombreinterno"' +
+        (jobId ? ' data-ocr-nombreinterno-job="' + jobId + '"' : '') +
+        '>' +
+        niHtml +
+        '</td></tr>';
+
+      return row1 + row2;
+    }).join('');
+    return (
+      '<div class="ocr-section ocr-section--tight">' +
+      '<h4 class="ocr-section-title">Articulos autorizados</h4>' +
+      '<div class="ocr-table-wrap"><table class="ocr-table ocr-table--articulos">' +
+      head +
+      '<tbody>' +
+      bodyRows +
+      '</tbody></table></div></div>'
+    );
+  }
+
+  function renderResult(payload) {
+    lastResultForJsonCopy = payload.result || {};
+    const r = lastResultForJsonCopy;
+    
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+        drive_file_id: currentDriveId || '',
+        numero_radicado: currentNumeroRadicado || '',
+        payload: payload,
+      }));
+    } catch(_) {}
+    
+    const paciente = buildPacienteSection(r);
+    
+    const arts = buildArticulos(r.Articulos, payload.barra_jobs || []);
+    
+    const diags = buildDiagnosticosMerged(r.DiagnosticoPrincipal, r.OtrosDiagnosticos);
+    
+
+    var metaSection = buildOcrKvSection('Metadatos', buildMetaPairs(payload), null);
+    metaSection = metaSection.replace('<tbody>', '<tbody id="ocrMetaTbody">');
+    metaSection = metaSection.replace(
+      '<tbody id="ocrMetaTbody"><tr>',
+      '<tbody id="ocrMetaTbody"><tr class="ocr-meta-data-row">'
+    );
+    var metaTotalsPlaceholder =
+      '<tr class="ocr-meta-totals-row">' +
+      '<td>Total</td><td></td><td></td><td></td></tr>';
+    metaSection = metaSection.replace(
+      '</tbody></table></div></div>',
+      metaTotalsPlaceholder + '</tbody></table></div></div>'
+    );
+
+    var raw = '';
+    try {
+      raw = JSON.stringify(r, null, 2);
+    } catch (err) {
+      raw = '{}';
+    }
+
+    const copySvg =
+      '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" width="14" height="14">' +
+      '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" ' +
+      'd="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>';
+
+    const jsonBlock =
+      '<details class="ocr-json-toggle">' +
+      '<summary><span class="ocr-json-summary-inner">Ver JSON</span>' +
+      '<span class="ocr-json-copy-wrap">' +
+      '<button type="button" class="copy-btn" id="ocrJsonCopyBtn" aria-label="Copiar JSON al portapapeles">' + copySvg + '</button>' +
+      '</span></summary>' +
+      '<pre class="ocr-json-pre" id="ocrModalJsonPre">' + escapeHtml(raw) + '</pre></details>';
+
+    modalContent.innerHTML =
+      paciente + arts + diags + metaSection + jsonBlock;
+
+    recalculateOcrMetaTotals();
+    
+    scheduleBarraPolling(payload.barra_jobs || [], payload.result.IPS);
+
+    lastTransactionId = payload.transaction_id;
+    discardBtn.hidden = !payload.transaction_id;
+    badge.hidden = false;
+    badge.textContent = payload.cached ? 'Cache' : 'Reciente';
+    badge.className =
+      'ocr-badge ocr-badge--header ' +
+      (payload.cached ? 'ocr-badge--cache' : 'ocr-badge--fresh');
+    btn.hidden = true;
+    btn.setAttribute('aria-hidden', 'true');
+  }
+
+  function showCopyToastOk(msg) {
+    const toast = document.getElementById('copyToast');
+    const msgEl = document.getElementById('copyToastMsg');
+    if (!toast || !msgEl) return;
+    msgEl.textContent = msg;
+    toast.classList.remove('toast--warn');
+    toast.classList.add('show');
+    clearTimeout(showCopyToastOk._t);
+    showCopyToastOk._t = setTimeout(() => toast.classList.remove('show'), 2600);
+  }
+
+  function showCopyToastWarn(msg) {
+    const toast = document.getElementById('copyToast');
+    const msgEl = document.getElementById('copyToastMsg');
+    if (!toast || !msgEl) return;
+    msgEl.textContent = msg;
+    toast.classList.add('toast--warn');
+    toast.classList.add('show');
+    clearTimeout(showCopyToastWarn._t);
+    showCopyToastWarn._t = setTimeout(() => toast.classList.remove('show'), 3200);
+  }
+
+  function setLoading(load) {
+    btn.disabled = load;
+    btn.setAttribute('aria-busy', load ? 'true' : 'false');
+    if (load) {
+      btn.hidden = true;
+      btn.setAttribute('aria-hidden', 'true');
+      modalContent.innerHTML = '<div class="ocr-loading"><div class="spinner" aria-hidden="true"></div><span>Leyendo imagen...</span></div>';
+      discardBtn.hidden = true;
+    }
+  }
+
+  function hideLoading() {
+    modalContent.innerHTML = '';
+  }
+
+  function showOcrRunButton() {
+    btn.hidden = false;
+    btn.removeAttribute('aria-hidden');
+    btn.disabled = false;
+    btn.setAttribute('aria-busy', 'false');
+  }
+
+  async function runOcr() {
+    hideAlert();
+    setLoading(true);
+    try {
+      const res = await fetch(API_RUN, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCsrfToken(),
+        },
+        body: JSON.stringify({
+          image_url: currentDriveUrl || '',
+          numero_radicado: currentNumeroRadicado || undefined,
+        }),
+      });
+      let data = null;
+      try {
+        data = await res.json();
+      } catch (_) {
+        data = {};
+      }
+
+      setLoading(false);
+
+      if (res.status === 409) {
+        hideLoading();
+        showOcrRunButton();
+        showAlert(data.detail || 'Hay otro proceso de OCR para esta imagen. Espere e intente de nuevo.');
+        return;
+      }
+
+      if (!res.ok) {
+        hideLoading();
+        showOcrRunButton();
+        showAlert((data && data.detail) ? data.detail : ('Error HTTP ' + res.status));
+        return;
+      }
+
+      lastTransactionId = data.transaction_id;
+      
+      renderResult(data);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      hideLoading();
+      showOcrRunButton();
+      console.error(e);
+      showAlert('Fallo la conexion al servidor.');
+    }
+  }
+
+  discardBtn.addEventListener('click', async function() {
+    if (!lastTransactionId) return;
+    try {
+      const res = await fetch(API_DISCARD, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCsrfToken(),
+        },
+        body: JSON.stringify({
+          transaction_id: lastTransactionId,
+          drive_file_id: currentDriveId || undefined,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        showCopyToastWarn((data.detail || res.statusText).slice(0, 200));
+        return;
+      }
+      showCopyToastOk('Resultado descartado.');
+      try { sessionStorage.removeItem(STORAGE_KEY); } catch(_) {}
+      modalContent.innerHTML = '';
+      badge.hidden = true;
+      discardBtn.hidden = true;
+      hideAlert();
+      lastTransactionId = null;
+      lastResultForJsonCopy = {};
+      showOcrRunButton();
+    } catch (e) {
+      console.error(e);
+      showCopyToastWarn('No se pudo descartar.');
+    }
+  });
+
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    runOcr();
+  });
+
+  // Auto-load from sessionStorage on page load (restores result after refresh)
+  (function checkCachedSession() {
+    try {
+      const stored = sessionStorage.getItem(STORAGE_KEY);
+      if (!stored) return;
+      const cached = JSON.parse(stored);
+      const payload = cached && cached.payload;
+      if (!payload || !payload.result) return;
+
+      if (
+        (cached.drive_file_id || '') !== (currentDriveId || '') ||
+        (cached.numero_radicado || '') !== (currentNumeroRadicado || '')
+      ) {
+        sessionStorage.removeItem(STORAGE_KEY);
+        return;
+      }
+
+      renderResult(payload);
+    } catch(_) {}
+  })();
+})();
+</script>
+{% endif %}
 {% endblock content %}

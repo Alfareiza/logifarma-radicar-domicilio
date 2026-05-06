@@ -2,9 +2,11 @@ import csv
 import io
 import mimetypes
 import os
+import re
 import tempfile
 from dataclasses import dataclass
 from functools import lru_cache
+from urllib.parse import parse_qs, urlparse
 
 import chardet as chardet
 # from dateutil.parser import parse
@@ -18,8 +20,16 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload, MediaIoBaseUpload
 
+from core.apps.base.exceptions import DriveFileIdNormalizationError
 from core.apps.base.resources.decorators import logtime, ignore_unhashable
 from core.settings import logger as log
+
+_GOOGLE_DRIVE_HOSTS = frozenset(
+    {'drive.google.com', 'docs.google.com', 'drive.usercontent.google.com'}
+)
+
+_FILE_D_RE = re.compile(r'/file/d/([a-zA-Z0-9_-]{10,})')
+_OPEN_ID_RE = re.compile(r'[?&]id=([a-zA-Z0-9_-]{10,})')
 
 
 @dataclass
@@ -164,6 +174,37 @@ class GDriveHandler:
         csv_data = StringIO(file_content_str)
         return csv.DictReader(csv_data, delimiter=';')
 
+    def download_file_bytes(self, file_id: str) -> tuple[bytes, str]:
+        """
+        Download binary file content by Drive ``file id`` (photos, exports, etc.).
+
+        Uses the Drive ``files().get_media`` API; returns raw bytes plus reported
+        ``mimeType`` metadata (fallback ``application/octet-stream``).
+
+        Args:
+            file_id: Drive file identifier.
+
+        Returns:
+            Tuple ``(contents, mime_type)``.
+
+        Raises:
+            googleapiclient.errors.HttpError: On permission or missing-file errors from Google.
+        """
+        meta = self.service.files().get(
+            fileId=file_id,
+            fields='mimeType,name',
+        ).execute()
+        mime_type = meta.get('mimeType') or 'application/octet-stream'
+
+        request = self.service.files().get_media(fileId=file_id)
+        file_content = io.BytesIO()
+        downloader = MediaIoBaseDownload(file_content, request)
+        done = False
+        while not done:
+            _, done = downloader.next_chunk()
+
+        return file_content.getvalue(), mime_type
+
     def move_file(self, file: dict, to_folder_name: str) -> None:
         """
         Move a file to another folder.
@@ -275,6 +316,64 @@ class GDriveHandler:
         """
         # TODO
         return lst_files
+
+
+def normalize_drive_file_id(
+        *,
+        drive_file_id: str | None,
+        image_url: str | None,
+) -> str:
+    """
+    Resolve exactly one canonical Drive ``file id`` from request fields.
+
+    Accepts either a raw ``drive_file_id`` or a share/view URL pointing at a file.
+
+    Raises:
+        DriveFileIdNormalizationError: If parsing fails or the host/path
+        does not identify a Drive file safely.
+    """
+    if drive_file_id:
+        fid = drive_file_id.strip()
+        if len(fid) < 10 or not re.match(r'^[a-zA-Z0-9_-]+$', fid):
+            raise DriveFileIdNormalizationError(
+                {'drive_file_id': 'Identificador de archivo en Drive no válido.'}
+            )
+        return fid
+
+    if not image_url or not str(image_url).strip():
+        raise DriveFileIdNormalizationError(
+            'Debe enviar image_url o drive_file_id.'
+        )
+
+    url = str(image_url).strip()
+    parsed = urlparse(url)
+    if parsed.scheme not in ('http', 'https'):
+        raise DriveFileIdNormalizationError(
+            {'image_url': 'La URL debe ser http o https.'}
+        )
+    host = (parsed.hostname or '').lower()
+    if host not in _GOOGLE_DRIVE_HOSTS and not host.endswith('.google.com'):
+        raise DriveFileIdNormalizationError(
+            {'image_url': 'La URL debe ser un enlace de Google Drive.'}
+        )
+
+    m = _FILE_D_RE.search(parsed.path)
+    if m:
+        return m.group(1)
+
+    q = parse_qs(parsed.query)
+    if 'id' in q and q['id']:
+        cand = q['id'][0]
+        if len(cand) >= 10 and re.match(r'^[a-zA-Z0-9_-]+$', cand):
+            return cand
+
+    m2 = _OPEN_ID_RE.search(url)
+    if m2:
+        return m2.group(1)
+
+    raise DriveFileIdNormalizationError(
+        {'image_url': 'No se pudo extraer el ID del archivo desde la URL de Drive.'}
+    )
 
 # _ANYONE_CAN_READ_PERMISSION_ = GoogleDriveFilePermission(
 #     GoogleDrivePermissionRole.READER,
