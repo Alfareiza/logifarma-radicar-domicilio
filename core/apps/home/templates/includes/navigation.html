@@ -173,8 +173,6 @@
     const autoRefreshIndicator = document.getElementById('auto-refresh-indicator');
     const timerContainer = document.getElementById('timer-container');
 
-    console.log('opa0')
-
     // Check the saved state in localStorage when the page loads
     window.onload = function() {
         const isAutoRefreshEnabled = localStorage.getItem('isAutoRefreshEnabled') === 'true';

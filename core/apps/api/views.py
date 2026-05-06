@@ -1,20 +1,36 @@
 import random
 from datetime import datetime, timedelta
 
+from django.http import Http404
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status, viewsets
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .serializers import RadicacionDetailSerializer, \
-    RadicacionPartialUpdateSerializer, RadicacionSerializer, \
+from .serializers import (
+    PrescriptionOCRDiscardSerializer, 
+    SearchBarraSerializer,
+    PrescriptionOCRRunSerializer, 
+    RadicacionDetailSerializer, 
+    RadicacionPartialUpdateSerializer, 
+    RadicacionSerializer, 
     RadicacionWriteSerializer
-from ..base.models import Barrio, Municipio, Radicacion, ScrapMutualSer, Status, OtpSMS
+)
+from ..base.exceptions import OcrLockBusy
+from ..base.models import Barrio, Municipio, SearchBarra, Radicacion, ScrapMutualSer, Status, OtpSMS
+from ..base.resources.prescription_ocr.barra_service import (
+    barra_jobs_for_api,
+    ensure_barra_jobs,
+    poll_barra_job,
+)
+from ..base.resources.prescription_ocr.service import PrescriptionOCRRunOutcome, PrescriptionOCRService
 from core.settings import logger as log
 from ..base.resources.sms_helpers import send_sms_verification_code
+from ..base.resources.prescription_ocr.goals.barra_lookup import BARRA_LOOKUP_MODEL_ID_DEFAULT
 
 
 @extend_schema_view(
@@ -251,3 +267,143 @@ def sms_verify(request):
             return Response({"status": "SUCCESS"}, status=status.HTTP_200_OK)
     except Exception as e:
         Response({"status": "FAILURE", "failure": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@extend_schema(
+    request=PrescriptionOCRRunSerializer,
+    summary='OCR de foto de formula medica',
+    description=(
+        'Extrae datos estructurados desde una imagen en Google Drive. '
+        'Reutiliza el ultimo resultado completo si existe (cache).'
+    ),
+)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def prescription_ocr_run(request) -> Response:
+    """
+    Ejecutar OCR sobre la foto de formula (o devolver resultado guardado en servidor).
+
+    Flujo: validar entrada, buscar cache (completado y no descartado), bloquear por archivo
+    en Drive ante una ejecucion nueva, descargar bytes, llamar a Claude en modo streaming,
+    y guardar resultado y uso de tokens.
+    """
+    serializer = PrescriptionOCRRunSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    vd = serializer.validated_data
+
+    file_id = vd['drive_file_id_normalized']
+    rad = vd.get('radicacion_match')
+
+    try:
+        outcome: PrescriptionOCRRunOutcome = PrescriptionOCRService().run_from_drive(
+            drive_file_id=file_id,
+            image_url_normalized=vd['image_url_normalized'],
+            radicacion=rad,
+        )
+    except OcrLockBusy:
+        return Response(
+            {
+                'detail': (
+                    'Ya hay un proceso de OCR en curso para esta imagen. '
+                    'Espere unos segundos e intente nuevamente.'
+                )
+            },
+            status=status.HTTP_409_CONFLICT,
+        )
+
+    if outcome.error == 'drive':
+        return Response(
+            {'detail': 'No se pudo descargar la imagen desde Google Drive.'},
+            status=status.HTTP_502_BAD_GATEWAY,
+        )
+    if outcome.error == 'llm':
+        return Response(
+            {'detail': 'El servicio de OCR fallo. Intente de nuevo mas tarde.'},
+            status=status.HTTP_502_BAD_GATEWAY,
+        )
+
+    if outcome.error is None and outcome.cached is False:
+        # Trigger background process to find out barcodes in sap_articles table
+        ensure_barra_jobs(outcome.transaction)
+
+    resp_body = {
+        'result': outcome.transaction.result,
+        'transaction_id': outcome.transaction.id,
+        'cached': outcome.cached,
+        'input_tokens': outcome.transaction.input_tokens,
+        'output_tokens': outcome.transaction.output_tokens,
+        'cache_read_input_tokens': outcome.transaction.cache_read_input_tokens,
+        'cost_usd': str(outcome.transaction.cost_usd) if outcome.transaction.cost_usd is not None else None,
+        'barra_jobs': barra_jobs_for_api(outcome.transaction),
+    }
+    return Response(resp_body)
+
+
+@extend_schema(
+    summary='Poll job Barra SAP (ejecuta MCP si esta pendiente)',
+    description=(
+        'Consulta el estado de un job de codigo de barras. Si esta pendiente, '
+        'lo toma, llama a Claude con MCP Postgres y resuelve ``SAPArticle`` por ``barra``.'
+    ),
+)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def prescription_ocr_barra_poll(request, job_id: int) -> Response:
+    """Called by radicacion_detail.html in order to know the status of every barra job."""
+    article_nombre = request.query_params.get('article_nombre', '').upper().strip()
+    ips = request.query_params.get('ips', '').upper().strip()
+    job = SearchBarra.objects.select_related('article_sap').filter(
+        ips=ips,
+        article_nombre=article_nombre,
+        status=Status.COMPLETED.value,
+        article_sap__isnull=False,
+    ).exclude(pk=job_id).first()
+    cached = True
+    
+    if not job:
+        cached = False
+        job = get_object_or_404(
+            SearchBarra.objects.select_related('prescription_ocr_transaction', 'article_sap'),
+            pk=job_id,
+        )
+
+    log.info(f"{cached=} for {article_nombre=!r} {ips=!r} -> {job}")
+    return Response(SearchBarraSerializer(poll_barra_job(job), context={'cached': cached}).data)
+
+
+@extend_schema(
+    request=PrescriptionOCRDiscardSerializer,
+    summary='Descartar resultado OCR',
+    description=(
+        'Marca un resultado OCR como descartado (no se usara como cache). '
+        'Opcionalmente verifique drive_file_id.'
+    ),
+)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def prescription_ocr_discard(request):
+    """
+    Marcar un ``PrescriptionOCRTransaction`` como descartado (no reutilizable en cache).
+
+    No elimina el registro: conserva auditoria y permite consultar historia de intentos.
+    """
+    ser = PrescriptionOCRDiscardSerializer(data=request.data)
+    ser.is_valid(raise_exception=True)
+    vd = ser.validated_data
+
+    service = PrescriptionOCRService()
+    discard_out = service.discard_transaction(
+        transaction_id=vd['transaction_id'],
+        drive_file_id_normalized=vd['drive_file_id_normalized_optional'],
+    )
+    if not discard_out.ok:
+        if discard_out.reason == 'not_found':
+            return Response(
+                {'detail': f"Transaccion no encontrada. {vd['transaction_id']}"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        return Response(
+            {'detail': f"drive_file_id no coincide con esta transaccion. {vd['transaction_id']} {vd['drive_file_id_normalized_optional']}"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    return Response({'detail': 'Resultado marcado como descartado.'})

@@ -38,6 +38,8 @@ ALLOWED_HOSTS = [config('IP', cast=str), 'test-domicilios.logifarma.com.co',
                  'domicilios.logifarma.com.co',
                  'radicatudomicilio.herokuapp.com',
                  '*']
+#Django debug toolbar
+INTERNAL_IPS = ['127.0.0.1']
 
 LOGIN_URL = '/login/'
 
@@ -65,9 +67,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'drf_spectacular',
     'corsheaders',
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -209,6 +213,9 @@ FIREBASE_DB = FIREBASE.database()
 REST_FRAMEWORK = {
     # YOUR SETTINGS
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
 }
 
 SPECTACULAR_SETTINGS = {
@@ -236,6 +243,22 @@ MS_API_URL_VALIDADOR = config('MS_API_URL_VALIDADOR')
 
 ZONA_SER_URL = config('ZONA_SER_URL')
 ZONA_SER_NIT = config('ZONA_SER_NIT')
+
+# Anthropic (prescription OCR and other AI features)
+ANTHROPIC_API_KEY = config('ANTHROPIC_API_KEY', default='')
+# MCP Postgres connector (remote SSE URL; optional bearer via ANTHROPIC_MCP_POSTGRES_TOKEN)
+ANTHROPIC_MCP_POSTGRES_URL = config(
+    'ANTHROPIC_MCP_POSTGRES_URL',
+    default='',
+)
+ANTHROPIC_MCP_POSTGRES_NAME = config(
+    'ANTHROPIC_MCP_POSTGRES_NAME',
+    default='postgres-mcp',
+)
+ANTHROPIC_MCP_POSTGRES_TOKEN = config(
+    'ANTHROPIC_MCP_POSTGRES_TOKEN',
+    default='',
+)
 
 # PROTEGER API
 PROTEGER_URL = "https://genesis.protegereps.com"

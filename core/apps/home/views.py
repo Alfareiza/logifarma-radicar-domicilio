@@ -109,17 +109,24 @@ def radicacion_detail(request, pk: int | None = None, ref: str | None = None):
         else:
             rad = get_object_or_404(qs, numero_radicado=str(ref))
 
-    # Compute Google Drive preview URL (convert /view to /preview for embed)
-    preview_url = None
-    if rad.paciente_data and 'IMG_ID' in rad.paciente_data:
-        img_id = rad.paciente_data['IMG_ID']
-        preview_url = f"https://drive.google.com/file/d/{img_id}/preview"
+    next_rad = rad.get_next_radicacion()
+    next_rad_url = next_rad.get_absolute_url() if next_rad else None
+    next_sin_acta = rad.get_next_radicacion_sin_acta()
+    next_sin_acta_url = next_sin_acta.get_absolute_url() if next_sin_acta else None
+    previous_rad = rad.get_previous_radicacion()
+    previous_rad_url = previous_rad.get_absolute_url() if previous_rad else None
+    previous_sin_acta = rad.get_previous_radicacion_sin_acta()
+    previous_sin_acta_url = previous_sin_acta.get_absolute_url() if previous_sin_acta else None
 
     return render(request, "pages/radicacion_detail.html", {
-        'segment': 'Detalle de Radicación',
-        'parent': f'Radicación {rad.numero_autorizacion}',
+        # 'segment': 'Detalle de Radicación',
+        'parent': f'Radicación {rad.numero_autorizacion} · {rad.convenio.title()}',
         'rad': rad,
-        'preview_url': preview_url,
+        'preview_url': rad.foto_formula,
+        'next_radicacion_url': next_rad_url,
+        'next_sin_acta_url': next_sin_acta_url,
+        'previous_radicacion_url': previous_rad_url,
+        'previous_sin_acta_url': previous_sin_acta_url,
     })
 
 
