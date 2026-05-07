@@ -37,7 +37,9 @@ class AnthropicStructuredVisionProvider(AnthropicProvider):
 
     Streaming avoids SDK non-streaming timeouts on large vision + JSON responses.
     """
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
     def run_vision_json_schema(
         self, request: VisionStructuredRequest
     ) -> VisionStructuredResult:
