@@ -123,8 +123,7 @@ class BarraMcpLookupResult:
     input_raw: Any
 
 
-@runtime_checkable
-class AnthropicProvider(Protocol):
+class AnthropicProvider:
     """Protocol implemented by LLM SDK adapters."""
 
     def __init__(self, *, api_key: str | None = None, max_retries: int = 3) -> None:
