@@ -12,6 +12,7 @@ from django.db import transaction
 from django.db.models import Sum
 from django.shortcuts import get_object_or_404
 
+from core.apps.base.resources.tools import remove_accents
 from core.settings import logger
 from core.apps.base.models import (
     SearchBarra,
@@ -185,7 +186,7 @@ def ensure_barra_jobs(ocr_txn: PrescriptionOCRTransaction) -> None:
                 prescription_ocr_transaction=ocr_txn,
                 article_numero=num,
                 article_nombre=nombre[:512].upper().strip(),
-                ips=ips[:512].upper().strip(),
+                ips=remove_accents(ips[:512]).upper().strip(),
                 status=Status.PENDIENTE.value,
                 provider='anthropic',
                 model_id=BARRA_LOOKUP_GOAL.model_id,

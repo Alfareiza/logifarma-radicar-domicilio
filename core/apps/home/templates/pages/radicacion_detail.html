@@ -1258,7 +1258,7 @@
   }
 
   .ocr-table-wrap {
-    overflow-x: auto;
+    overflow: visible;
     border: 1px solid var(--color-gray-200);
     border-radius: var(--radius-md);
   }
@@ -1271,7 +1271,7 @@
   }
 
   .ocr-table thead th {
-    padding: 0.5rem 0.625rem;
+    padding: 0.5rem 0.325rem;
     background: var(--color-gray-50);
     border-bottom: 1px solid var(--color-gray-200);
     text-align: left;
@@ -1331,11 +1331,11 @@
   }
 
   .ocr-table--articulos thead th:nth-child(2) {
-    width: 20%;
+    width: 19%;
   }
 
   .ocr-table--articulos thead th:nth-child(4) {
-    width: 10%;
+    width: 12%;
   }
 
   .ocr-table--articulos tbody td {
@@ -1352,6 +1352,10 @@
   .ocr-table--articulos .ocr-article-row--primary {
     border-top: 2px solid var(--color-gray-200);
   }
+
+  .ocr-article-row--primary td:last-child {
+  text-align: center;
+}
 
   .ocr-table--articulos .ocr-article-row--secondary td {
     padding-top: 0.25rem;
@@ -1659,6 +1663,77 @@
     height: 0.875rem;
     flex-shrink: 0;
   }
+
+  /* Reusable Tooltip Component */
+  .tooltip-wrapper {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    cursor: help;
+    outline: none;
+  }
+
+  .tooltip-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    font-size: 0.65rem;
+    font-weight: 700;
+    margin-left: 0.375rem;
+    /* box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3); */
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+  }
+
+  .tooltip-wrapper:hover .tooltip-icon,
+  .tooltip-wrapper:focus .tooltip-icon {
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.5);
+  }
+
+  .tooltip-content {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    right: 0;
+    transform: none;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-normal), visibility var(--transition-normal);
+    z-index: 1050;
+  }
+
+  .tooltip-wrapper:hover .tooltip-content,
+  .tooltip-wrapper:focus .tooltip-content {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .tooltip-text {
+    display: block;
+    background: #ffffff;
+    /* border: 1px solid var(--color-primary); */
+    border-radius: var(--radius-md);
+    padding: 0.625rem 0.875rem;
+    font-size: smaller;
+    font-weight: 500;
+    color: var(--color-gray-900);
+    text-align: center;
+    line-height: 1.4;
+    max-width: 240px;
+    white-space: normal;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15), 
+                0 8px 24px rgba(0, 0, 0, 0.12);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
 </style>
 
 <div class="page-wrapper">
@@ -1890,8 +1965,8 @@
           <!-- Articles -->
           {% if rad.paciente_data.DETALLE_AUTORIZACION %}
           <section class="section-card" aria-labelledby="articles-title">
-            <div class="section-header">
-              <span class="section-header__icon" aria-hidden="true">
+            <div class="d-flex align-items-center section-header">
+              <span class="d-flex align-items-center justify-content-center section-header__icon" aria-hidden="true">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                 </svg>
@@ -2402,6 +2477,33 @@
       return result;
   }
 
+  function buildMetadataSection(payload) {
+    var mp = buildMetaPairs(payload);
+    if (!mp.headings || !mp.headings.length) return '';
+    var theadHtml =
+      '<thead><tr>' +
+      mp.headings.map(function(h) { return '<th scope="col">' + escapeHtml(h) + '</th>'; }).join('') +
+      '</tr></thead>';
+    var firstRow =
+      '<tr class="ocr-meta-data-row">' +
+      mp.headings.map(function(_, i) {
+        var v = mp.values[i];
+        return '<td>' + escapeHtml(v == null ? '' : String(v)) + '</td>';
+      }).join('') +
+      '</tr>';
+    return (
+      '<details class="ocr-json-toggle ocr-section ocr-section--tight">' +
+      '<summary><span class="ocr-json-summary-inner" style="font-size:0.6875rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;">Metadatos</span></summary>' +
+      '<div class="ocr-table-wrap" style="margin-top:0.5rem;">' +
+      '<table class="ocr-table ocr-table--kv">' +
+      theadHtml +
+      '<tbody id="ocrMetaTbody">' +
+      firstRow +
+      '<tr class="ocr-meta-totals-row"><td>Total</td><td></td><td></td><td></td></tr>' +
+      '</tbody></table></div></details>'
+    );
+  }
+
   function showAlert(text) {
     if (modalAlert) {
       modalAlert.textContent = text;
@@ -2457,7 +2559,9 @@
   function formatOcrCantidadObj(c) {
     if (!c || typeof c !== 'object') return '';
     var v = c.Valor != null && c.Valor !== '' ? String(c.Valor) : '';
-    var desc = c.Descripcion != null && c.Descripcion !== '' ? String(c.Descripcion) : '';
+    // Descripción de la cantidad no se exhibe en la UI
+    // var desc = c.Descripcion != null && c.Descripcion !== '' ? String(c.Descripcion) : '';
+    var desc = null;
     if (desc) return v ? v + ' — ' + desc : desc;
     return v;
   }
@@ -2618,11 +2722,25 @@
     );
   }
 
+  function createTooltip(iconEmoji, tooltipText) {
+    return (
+      '<span class="tooltip-wrapper" tabindex="0" role="button" aria-label="' + escapeHtml(tooltipText) + '">' +
+      '<span class="tooltip-icon">' + iconEmoji + '</span>' +
+      '<span class="tooltip-content">' +
+      '<span class="tooltip-text">' + escapeHtml(tooltipText) + '</span>' +
+      // '<span class="tooltip-arrow"></span>' +
+      '</span>' +
+      '</span>'
+    );
+  }
+
   function buildArticulos(arts, barraJobsList) {
     if (!arts || !arts.length) return '';
     var byJob = indexBarraJobsByArticleNumero(barraJobsList);
     const head =
-      '<thead><tr><th>#</th><th>Cod. Barras</th><th>Nombre</th><th>Cant.</th></tr></thead>';
+      '<thead><tr><th>#</th><th>Cod. Barras</th><th>Nombre</th><th>Cant. ' + 
+      createTooltip('?', 'Esta es la cantidad a ser dispensada') +
+      '</th></tr></thead>';
     const bodyRows = arts.map(function(a) {
       var numero = a.Numero != null ? String(a.Numero) : '';
       var barra = a.Barra != null && a.Barra !== '' ? String(a.Barra) : '';
@@ -2630,7 +2748,7 @@
       var formaFarm = a.FormaFarmaceutica || '';
       var frecuencia = a.Frecuencia || '';
       var duracionStr = formatOcrDuracionObj(a.Duracion);
-      var cantidad = formatOcrCantidadObj(a.Cantidad);
+      var cantidad = formatOcrCantidadObj(a.Cantidad.Dispensada);
       var nombreInterno =
         a.NombreInterno != null && a.NombreInterno !== ''
           ? String(a.NombreInterno)
@@ -2665,7 +2783,8 @@
         if (frecuencia) parts.push(frecuencia);
         secondaryInfo = parts.join(' ');
         if (duracionStr) {
-          secondaryInfo += ' (' + duracionStr + ')';
+          // secondaryInfo += ' (' + duracionStr + ')';
+          secondaryInfo += ' por ' + duracionStr;
         }
       } else if (duracionStr) {
         secondaryInfo = '(' + duracionStr + ')';
@@ -2760,19 +2879,7 @@
     const diags = buildDiagnosticosMerged(r.DiagnosticoPrincipal, r.OtrosDiagnosticos);
     
 
-    var metaSection = buildOcrKvSection('Metadatos', buildMetaPairs(payload), null);
-    metaSection = metaSection.replace('<tbody>', '<tbody id="ocrMetaTbody">');
-    metaSection = metaSection.replace(
-      '<tbody id="ocrMetaTbody"><tr>',
-      '<tbody id="ocrMetaTbody"><tr class="ocr-meta-data-row">'
-    );
-    var metaTotalsPlaceholder =
-      '<tr class="ocr-meta-totals-row">' +
-      '<td>Total</td><td></td><td></td><td></td></tr>';
-    metaSection = metaSection.replace(
-      '</tbody></table></div></div>',
-      metaTotalsPlaceholder + '</tbody></table></div></div>'
-    );
+    const metaSection = buildMetadataSection(payload);
 
     var raw = '';
     try {

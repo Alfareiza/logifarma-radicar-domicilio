@@ -152,7 +152,7 @@ class PrescriptionOCRService:
                     error='llm',
                 )
 
-            txn.result = prescription_ocr_result.to_dict()
+            txn.result = prescription_ocr_result.model_dump()
             txn.status = Status.COMPLETED.value
             txn.model_id = self._model_id
             txn.input_tokens = meta_tokens
