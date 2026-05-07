@@ -130,4 +130,4 @@ class AnthropicProvider(Protocol):
     def __init__(self, *, api_key: str | None = None, max_retries: int = 3) -> None:
         if not (key := settings.ANTHROPIC_API_KEY):
             raise ValueError('ANTHROPIC_API_KEY no está configurada.')
-        self._client = anthropic.Anthropic(api_key=key, max_retries=max_retries)
+        self.client = anthropic.Anthropic(api_key=key, max_retries=max_retries)
