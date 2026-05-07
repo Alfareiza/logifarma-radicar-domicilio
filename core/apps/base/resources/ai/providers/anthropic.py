@@ -75,7 +75,7 @@ class AnthropicStructuredVisionProvider(AnthropicProvider):
             ],
         }
 
-        with self._client.messages.stream(**stream_kwargs) as stream:
+        with self.client.messages.stream(**stream_kwargs) as stream:
             for _ in stream.text_stream:
                 pass
             response = stream.get_final_message()
@@ -161,7 +161,7 @@ class AnthropicBarraMcpProvider(AnthropicProvider):
         if request.system_prompt:
             kwargs['system'] = request.system_prompt
 
-        response = self._client.beta.messages.create(**kwargs)
+        response = self.client.beta.messages.create(**kwargs)
         
         text = _beta_final_text(response)
         usage: LLMUsageMeta = anthropic_usage_meta(request.model_id, response.usage)
