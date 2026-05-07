@@ -1,5 +1,6 @@
 import logging
 import pickle
+import re
 import unicodedata
 from datetime import date, datetime, timedelta
 from typing import Tuple, Any
@@ -526,3 +527,21 @@ def add_user_id_to_formatter(handler, user_id):
         defaults=new_defaults
     )
     handler.setFormatter(updated_formatter)
+
+def remove_accents(text: str) -> str:
+    """
+    Remove accents from a string.
+    :param text: The string to remove accents from.
+    :return: The string without accents.
+    """
+    # Normalize the unicode to 'NFD' (Normal Form Decomposition)
+    # This separates characters from their diacritics
+    normalized = unicodedata.normalize('NFD', text)
+    
+    # Use regex to find and remove all characters in the 'M' (Mark) category
+    # \p{M} matches any kind of combining mark
+    # Since standard 're' doesn't support \p{M}, we use a range or filter
+    result = re.sub(r'[\u0300-\u036f]', '', normalized)
+    
+    # Re-normalize back to 'NFC' (Normal Form Composition) for clean output
+    return unicodedata.normalize('NFC', result)

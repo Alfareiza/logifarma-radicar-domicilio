@@ -75,6 +75,6 @@ def prepare_image_bytes_for_anthropic_vision(
             )
             return out, 'image/jpeg'
 
-    except Exception:
-        log.exception('Could not preprocess image bytes; sending original.')
+    except Exception as e:
+        log.exception(f'Could not preprocess image bytes; sending original. Error: {e}', exc_info=True)
         return image_bytes, mt_out

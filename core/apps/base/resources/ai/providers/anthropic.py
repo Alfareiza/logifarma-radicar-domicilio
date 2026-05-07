@@ -20,8 +20,6 @@ from core.apps.base.resources.ai.providers.base import (
     VisionStructuredRequest,
     VisionStructuredResult,
     PrescriptionOCRResult,
-    Articulo,
-    Diagnostico,
 )
 from core.apps.base.resources.ai.usage import anthropic_usage_meta
 from core.apps.base.resources.ai.vision_preprocess import (
@@ -87,22 +85,12 @@ class AnthropicStructuredVisionProvider(AnthropicProvider):
 
         try:
             parsed: dict[str, Any] = json.loads(text)
-            prescription_ocr_result = PrescriptionOCRResult(
-                IPS=parsed['IPS'].upper().strip(),
-                FechaFormula=parsed['FechaFormula'],
-                TipoDocumentoPaciente=parsed['TipoDocumentoPaciente'],
-                NumeroDocumentoPaciente=parsed['NumeroDocumentoPaciente'],
-                NombrePaciente=parsed['NombrePaciente'],
-                NombreMedico=parsed['NombreMedico'],
-                Articulos=[Articulo(**articulo) for articulo in parsed['Articulos']],
-                OtrosDiagnosticos=[Diagnostico(**diagnostico) for diagnostico in parsed['OtrosDiagnosticos']] if parsed['OtrosDiagnosticos'] else None,
-                DiagnosticoPrincipal = Diagnostico(**parsed['DiagnosticoPrincipal']) if parsed['DiagnosticoPrincipal'] else None
-            )
+            prescription_ocr_result = PrescriptionOCRResult.model_validate(parsed)
         except json.JSONDecodeError as e:
             log.warning('Structured vision JSON parse failed: %s', e)
             raise ValueError('El modelo devolvió JSON inválido.') from e
-        except TypeError as e:
-            log.error("Json inesperado por parte del LLM.")
+        except Exception as e:
+            log.error('Json inesperado por parte del LLM: %s', e)
             raise ValueError('El modelo devolvió JSON inválido o información incompleta.') from e
 
         usage = anthropic_usage_meta(request.model_id, response.usage)

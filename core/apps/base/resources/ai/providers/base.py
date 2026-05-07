@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-import dataclasses
 from dataclasses import dataclass
-from typing import Any, Protocol, runtime_checkable
+from typing import Any
 
 import anthropic
+from pydantic import BaseModel, field_validator, model_validator
 
 from core import settings
 
@@ -35,9 +35,57 @@ class VisionStructuredRequest:
     max_tokens: int = 64_000
 
 
-@dataclass(frozen=True, slots=True)
-class Articulo:
-    """Articulo."""
+class Duracion(BaseModel):
+    """Treatment duration with automatic day-normalization."""
+
+    Valor: int
+    Unidad: str
+
+    @field_validator('Unidad', mode='after')
+    @classmethod
+    def capitalize_unidad(cls, v: str) -> str:
+        return v.capitalize()
+
+    @property
+    def ValorEnDias(self) -> int:
+        """Return duration expressed as a number of days."""
+        match self.Unidad:
+            case 'Dias':
+                return self.Valor
+            case 'Semanas':
+                return self.Valor * 7
+            case 'Mes':
+                return 30
+            case 'Meses':
+                return self.Valor * 30
+            case _:
+                return 0
+
+
+class CantidadDetalle(BaseModel):
+    """Single quantity slot (value + human-readable label)."""
+
+    Valor: int | None = None
+    Descripcion: str | None = None
+
+
+class Cantidad(BaseModel):
+    """Prescribed vs. dispensed quantity pair."""
+
+    Formulada: CantidadDetalle | None = None
+    Dispensada: CantidadDetalle | None = None
+
+    @model_validator(mode='before')
+    @classmethod
+    def accept_formulada_short_shape(cls, data: Any) -> Any:
+        """Accept {"Valor": ..., "Descripcion": ...} as the formulated quantity."""
+        if isinstance(data, dict) and 'Valor' in data and 'Formulada' not in data and 'Dispensada' not in data:
+            return {'Formulada': data, 'Dispensada': None}
+        return data
+
+
+class Articulo(BaseModel):
+    """Single prescription line item (one medication)."""
 
     Numero: int
     Nombre: str
@@ -51,33 +99,32 @@ class Articulo:
     Indicaciones: str | None
     PrincipioActivo: str | None
 
-@dataclass(frozen=True, slots=True)
-class Duracion:
-    """Duracion."""
+    @model_validator(mode='after')
+    def cap_dispensed_to_monthly(self) -> 'Articulo':
+        """Cap dispensed quantity to one month when treatment exceeds 30 days."""
+        if (
+            self.Duracion is not None
+            and self.Duracion.ValorEnDias > 30
+            and self.Cantidad is not None
+            and self.Cantidad.Formulada is not None
+            and self.Cantidad.Formulada.Valor is not None
+        ):
+            monthly = int(self.Cantidad.Formulada.Valor / (self.Duracion.ValorEnDias / 30))
+            self.Cantidad.Dispensada = CantidadDetalle(Valor=monthly, Descripcion='Por mes')
+        else:
+            self.Cantidad.Dispensada = self.Cantidad.Formulada.model_copy()
+        return self
 
-    Valor: int
-    Unidad: str
 
-
-@dataclass(frozen=True, slots=True)
-class Cantidad:
-    """Cantidad."""
-
-    Valor: int
-    Descripcion: str | None
-
-
-@dataclass(frozen=True, slots=True)
-class Diagnostico:
-    """Diagnostico."""
+class Diagnostico(BaseModel):
+    """ICD-10 diagnosis code and description."""
 
     Codigo: str
     Descripcion: str
 
 
-@dataclass(frozen=True, slots=True)
-class PrescriptionOCRResult:
-    """Prescription OCR result."""
+class PrescriptionOCRResult(BaseModel):
+    """Structured output of a prescription OCR extraction."""
 
     IPS: str
     FechaFormula: str
@@ -89,8 +136,11 @@ class PrescriptionOCRResult:
     OtrosDiagnosticos: list[Diagnostico] | None
     Articulos: list[Articulo]
 
-    def to_dict(self) -> dict:
-        return dataclasses.asdict(self)
+    @field_validator('IPS', mode='after')
+    @classmethod
+    def normalize_ips(cls, v: str) -> str:
+        return v.upper().strip()
+
 
 @dataclass(frozen=True, slots=True)
 class VisionStructuredResult:
@@ -124,7 +174,7 @@ class BarraMcpLookupResult:
 
 
 class AnthropicProvider:
-    """Protocol implemented by LLM SDK adapters."""
+    """Base class for Anthropic SDK adapters."""
 
     def __init__(self, *, api_key: str | None = None, max_retries: int = 3) -> None:
         if not (key := settings.ANTHROPIC_API_KEY):
