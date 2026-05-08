@@ -9,6 +9,7 @@ import anthropic
 from pydantic import BaseModel, field_validator, model_validator
 
 from core import settings
+from core.apps.base.resources.tools import remove_accents
 
 
 @dataclass(frozen=True, slots=True)
@@ -99,6 +100,12 @@ class Articulo(BaseModel):
     Indicaciones: str | None
     PrincipioActivo: str | None
 
+    @field_validator('FormaFarmaceutica', mode='after')
+    @classmethod
+    def normalize_forma_farmaceutica(cls, v: str) -> str:
+        return v.capitalize().strip()
+
+
     @model_validator(mode='after')
     def cap_dispensed_to_monthly(self) -> 'Articulo':
         """Cap dispensed quantity to one month when treatment exceeds 30 days."""
@@ -139,7 +146,7 @@ class PrescriptionOCRResult(BaseModel):
     @field_validator('IPS', mode='after')
     @classmethod
     def normalize_ips(cls, v: str) -> str:
-        return v.upper().strip()
+        return remove_accents(v.upper().strip())
 
 
 @dataclass(frozen=True, slots=True)
