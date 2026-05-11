@@ -101,6 +101,7 @@ PRESCRIPTION_OCR_OUTPUT_SCHEMA: dict[str, Any] = {
     'type': 'object',
     'properties': {
         'IPS': {'type': 'string'},
+        'NitIPS': {'type': 'string'},
         'FechaFormula': {'type': 'string'},
         'TipoDocumentoPaciente': {'type': 'string'},
         'NumeroDocumentoPaciente': {'type': 'string'},
@@ -112,6 +113,7 @@ PRESCRIPTION_OCR_OUTPUT_SCHEMA: dict[str, Any] = {
     },
     'required': [
         'IPS',
+        'NitIPS',
         'FechaFormula',
         'TipoDocumentoPaciente',
         'NumeroDocumentoPaciente',
@@ -135,7 +137,8 @@ Rules:
 - Preserve Spanish labels' meaning in the values (do not translate medical product names).
 - For lists (OtrosDiagnosticos, Articulos), include every distinct line item visible; if none, use empty arrays.
 - Each item in Articulos uses CamelCase keys: Numero (1-based line order), Nombre, Concentracion, FormaFarmaceutica, Via, Dosis, Frecuencia, Duracion { Valor integer, Unidad string e.g. dias }, Cantidad { Valor integer, Descripcion string or null }, Indicaciones string or null, PrincipioActivo string or null. Use null only for optional nullable fields when absent; otherwise use "" for unknown strings and 0 for unknown integer amounts if you cannot read them.
-- IPS = issuing institution or health provider name on the form when present; otherwise "".
+- IPS = issuing institution or health provider name on the form when present. "".
+- NitIPS = issuing institution or health provider nit on the form when present; This number is like the identification number of the institution or health provider. "".
 - NombreMedico = doctor's name as printed (string, as on the form), this is usually diferrent from the NombrePaciente.
 - NombrePaciente = patient's name as printed (string, as on the form), this is usually diferrent from the NombreMedico.
 - FechaFormula = service or prescription date as printed (string, as on the form) converted into format DD-MM-YYYY. For instance, if the date is "23/abr./2026", the output should be "23-04-2026".
