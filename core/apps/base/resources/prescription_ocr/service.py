@@ -156,7 +156,7 @@ class PrescriptionOCRService:
 
             txn.result = prescription_ocr_result.model_dump()
             if txn.result['TipoDocumentoPaciente'] != radicacion.tipo_documento_paciente or txn.result['NumeroDocumentoPaciente'] != radicacion.numero_documento_paciente:
-                logger.error("Documento escaneado no coincide con documento de radicación")
+                logger.error(f"{radicacion.numero_autorizacion} Documento escaneado no coincide con documento de radicación")
             
             txn.status = Status.COMPLETED.value
             txn.model_id = self._model_id
