@@ -2317,6 +2317,8 @@
     : 'ocr_result_rad_' + (currentNumeroRadicado || window.location.pathname);
   let lastTransactionId = null;
   let lastResultForJsonCopy = {};
+  let lastJsonBlockPayload = {};
+  let lastMedicationIndexByArticleNumero = {};
 
   ocrSection.addEventListener('click', function(e) {
     const jsonCopyBtn = e.target.closest('#ocrJsonCopyBtn');
@@ -2325,7 +2327,8 @@
     e.stopPropagation();
     var text = '';
     try {
-      text = JSON.stringify(lastResultForJsonCopy || {}, null, 2);
+      var pre = document.getElementById('ocrModalJsonPre');
+      text = pre ? pre.textContent : JSON.stringify(lastJsonBlockPayload || {}, null, 2);
     } catch (err) {
       text = '{}';
     }
@@ -2576,6 +2579,80 @@
     return m;
   }
 
+  function indexBarraJobsByJobId(list) {
+    var m = {};
+    (list || []).forEach(function(j) {
+      if (j && j.job_id != null) {
+        m[String(j.job_id)] = j;
+      }
+    });
+    return m;
+  }
+
+  function indexMedicamentosByArticleNumero(arts) {
+    var m = {};
+    (arts || []).forEach(function(a, index) {
+      if (a && a.Numero != null) {
+        m[String(a.Numero)] = index;
+      }
+    });
+    return m;
+  }
+
+  function formatJsonBlockPayload(payload) {
+    try {
+      return JSON.stringify(payload || {}, null, 2);
+    } catch (err) {
+      return '{}';
+    }
+  }
+
+  function refreshJsonBlockPayload(payload) {
+    lastJsonBlockPayload = payload || {};
+    var pre = document.getElementById('ocrModalJsonPre');
+    if (pre) {
+      pre.textContent = formatJsonBlockPayload(lastJsonBlockPayload);
+    }
+  }
+
+  function getBarraArticleNumero(data, jobsById) {
+    if (data && data.article_numero != null) return data.article_numero;
+    var job = data && data.id != null ? jobsById[String(data.id)] : null;
+    return job && job.article_numero != null ? job.article_numero : null;
+  }
+
+  function updateJsonBlockMedicamentosFromBarraResults(results, jobsById) {
+    var medicamentos =
+      lastJsonBlockPayload &&
+      lastJsonBlockPayload.formula &&
+      Array.isArray(lastJsonBlockPayload.formula.medicamentos)
+        ? lastJsonBlockPayload.formula.medicamentos
+        : null;
+    if (!medicamentos) return;
+
+    (results || []).forEach(function(data) {
+      if (!data || data.status !== 'completado') return;
+      var numero = parseInt(getBarraArticleNumero(data, jobsById), 10);
+      var mappedIndex = lastMedicationIndexByArticleNumero[String(numero)];
+      var medIndex = mappedIndex != null ? mappedIndex : numero - 1;
+      var med = isFinite(numero) ? medicamentos[medIndex] : null;
+      if (!med) return;
+
+      if (data.barra_llm != null && data.barra_llm !== '') {
+        med.plu = String(data.barra_llm);
+      }
+      if (
+        data.sap_article &&
+        data.sap_article.descripcion != null &&
+        data.sap_article.descripcion !== ''
+      ) {
+        med.articulo = String(data.sap_article.descripcion);
+      }
+    });
+
+    refreshJsonBlockPayload(lastJsonBlockPayload);
+  }
+
   function parseMetaCellNum(text) {
     if (text == null) return 0;
     var t = String(text).trim();
@@ -2658,13 +2735,14 @@
     // console.log("About to pollBarraJobOnce", jobId, articleNombre, ips, attempt);
     attempt = attempt || 0;
     if (attempt >= BARRA_POLL_MAX_ATTEMPTS) {
-      updateBarraJobDom(jobId, {
+      var timeoutData = {
         status: 'fallido',
         error_message: 'Tiempo de espera agotado',
         barra_llm: '',
         sap_article: null,
-      });
-      return;
+      };
+      updateBarraJobDom(jobId, timeoutData);
+      return Promise.resolve(timeoutData);
     }
     var barraPollUrl = API_BARRA_POLL_BASE + jobId + '/';
     var barraPollQs = new URLSearchParams();
@@ -2676,7 +2754,7 @@
     }
     var barraPollQuery = barraPollQs.toString();
     if (barraPollQuery) barraPollUrl += '?' + barraPollQuery;
-    fetch(barraPollUrl, {
+    return fetch(barraPollUrl, {
       credentials: 'same-origin',
       headers: { Accept: 'application/json' },
     })
@@ -2684,31 +2762,43 @@
         return res.json();
       })
       .then(function(data) {
-        if (!data || data.detail === 'job_not_found') return;
+        if (!data || data.detail === 'job_not_found') return null;
         if (data.status === 'completado' || data.status === 'fallido') {
           updateBarraJobDom(jobId, data);
           appendBarraJobMetaRow(data);
-          return;
+          return data;
         }
-        setTimeout(function() {
-          pollBarraJobOnce(jobId, articleNombre, ips, attempt + 1);
-        }, BARRA_POLL_INTERVAL_MS);
+        return new Promise(function(resolve) {
+          setTimeout(function() {
+            resolve(pollBarraJobOnce(jobId, articleNombre, ips, attempt + 1));
+          }, BARRA_POLL_INTERVAL_MS);
+        });
       })
       .catch(function(error) {
         console.error('Error polling barra job', jobId, articleNombre, ips, attempt,error);
-        setTimeout(function() {
-          pollBarraJobOnce(jobId, articleNombre, ips, attempt + 1);
-        }, BARRA_POLL_INTERVAL_MS);
+        return new Promise(function(resolve) {
+          setTimeout(function() {
+            resolve(pollBarraJobOnce(jobId, articleNombre, ips, attempt + 1));
+          }, BARRA_POLL_INTERVAL_MS);
+        });
       });
   }
 
   function scheduleBarraPolling(barraJobs, ips) {
     // console.log("About to scheduleBarraPolling", barraJobs, ips);
     if (!barraJobs || !barraJobs.length) return;
-    barraJobs.forEach(function(j) {
-      if (!j || !j.job_id) return;
-      if (j.status === 'fallido') return;
-      pollBarraJobOnce(j.job_id, j.article_nombre, String(ips).toUpperCase().trim(), 0);
+    var jobsById = indexBarraJobsByJobId(barraJobs);
+    var normalizedIps = String(ips).toUpperCase().trim();
+    var polls = barraJobs
+      .filter(function(j) {
+        return j && j.job_id && j.status !== 'fallido';
+      })
+      .map(function(j) {
+        return pollBarraJobOnce(j.job_id, j.article_nombre, normalizedIps, 0);
+      });
+
+    Promise.all(polls).then(function(results) {
+      updateJsonBlockMedicamentosFromBarraResults(results, jobsById);
     });
   }
 
@@ -2863,6 +2953,7 @@
   function renderResult(payload) {
     lastResultForJsonCopy = payload.result || {};
     const r = lastResultForJsonCopy;
+    lastMedicationIndexByArticleNumero = indexMedicamentosByArticleNumero(r.Articulos || []);
     
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
@@ -2883,8 +2974,11 @@
 
     var raw = '';
     try {
-      raw = JSON.stringify(r, null, 2);
+      console.log(payload.mpayload)
+      lastJsonBlockPayload = payload.mpayload || {};
+      raw = formatJsonBlockPayload(lastJsonBlockPayload);
     } catch (err) {
+      lastJsonBlockPayload = {};
       raw = '{}';
     }
 

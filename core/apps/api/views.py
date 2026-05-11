@@ -11,6 +11,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from core.apps.base.resources.medicar import MedicarFormulaSchema
+
 from .serializers import (
     PrescriptionOCRDiscardSerializer, 
     SearchBarraSerializer,
@@ -181,7 +183,10 @@ class RadicacionViewSet(viewsets.ModelViewSet):
         return Response(response_serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
-        instance = get_object_or_404(Radicacion.objects.filter(**kwargs))
+        if (numero_radicado := kwargs.get('numero_radicado')) and numero_radicado.startswith("F"):
+            instance = Radicacion.objects.filter(id=int(numero_radicado[1:])).first()
+        else:
+            instance = get_object_or_404(Radicacion.objects.filter(**kwargs))
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
@@ -318,7 +323,7 @@ def prescription_ocr_run(request) -> Response:
         )
     if outcome.error == 'llm':
         return Response(
-            {'detail': 'El servicio de OCR fallo. Intente de nuevo mas tarde.'},
+            {'detail': 'El servicio de OCR falló. Intente de nuevo más tarde.'},
             status=status.HTTP_502_BAD_GATEWAY,
         )
 
@@ -328,6 +333,7 @@ def prescription_ocr_run(request) -> Response:
 
     resp_body = {
         'result': outcome.transaction.result,
+        'mpayload': MedicarFormulaSchema.from_radicado(rad).model_dump(),
         'transaction_id': outcome.transaction.id,
         'cached': outcome.cached,
         'input_tokens': outcome.transaction.input_tokens,
