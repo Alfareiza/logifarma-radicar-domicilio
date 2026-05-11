@@ -2,7 +2,8 @@ import traceback
 from datetime import timedelta, datetime
 from enum import Enum
 from time import sleep
-
+from functools import cached_property
+from pydantic import BaseModel
 from django.db.models import Q
 from django.contrib.postgres.indexes import GinIndex
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -26,9 +27,10 @@ from django.contrib.auth.models import User
 
 from core.apps.base.scrapper_requests import MutualScrapper
 from core.apps.base.resources.medicar import obtener_datos_formula
+from core.apps.base.resources.ai.providers.base import PrescriptionOCRResult
 from core.apps.base.resources.tools import pretty_date
 from core.apps.tasks.utils.dt_utils import Timer
-from core.settings import ZONA_SER_URL
+from core.settings import FOMAG_NIT, MS_NIT, ZONA_SER_URL, PROTEGER_NIT
 
 
 class Status(str, Enum):
@@ -192,6 +194,31 @@ class Radicacion(Model):
     @property
     def is_anulado(self):
         return 'anulad' in str(self.acta_entrega).lower()
+
+    @property
+    def nit_convenio(self) -> str:
+        return {
+            'fomag': FOMAG_NIT,
+            'proteger': PROTEGER_NIT,
+            'cajacopi': PROTEGER_NIT,
+            'mutualser': MS_NIT,
+        }.get(self.convenio)
+
+    @property
+    def tipo_documento_paciente(self) -> str:
+        """Determina el tipo de documento del paciente."""
+        if not self.paciente_cc[:2].isnumeric():
+            return self.paciente_cc[:2]
+        elif self.paciente_data.get('TIPO_IDENTIFICACION'):
+            return self.paciente_data.get('TIPO_IDENTIFICACION')
+        return ''
+
+    @property
+    def numero_documento_paciente(self) -> str:
+        """Determina el número de documento del paciente."""
+        if not self.paciente_cc[:2].isnumeric():
+            return self.paciente_cc[2:]
+        return self.paciente_cc
 
 
 class Med_Controlado(Model):
@@ -703,7 +730,27 @@ class PrescriptionOCRTransaction(AITransaction):
 
     @property
     def ips(self) -> str:
-        return self.result.get('IPS', '').upper().strip() if self.result else ''
+        return self.ocr_result.IPS
+
+    @cached_property
+    def ocr_result(self) -> PrescriptionOCRResult:
+        """
+        Parses the JSON 'result' into a PrescriptionOCRResult object.
+        Returns a validated object or handles empty states.
+        """
+        if not self.result:
+            # Return an empty instance or handle as needed
+            return PrescriptionOCRResult(
+                IPS="N/A", 
+                FechaFormula="", 
+                TipoDocumentoPaciente="", 
+                NumeroDocumentoPaciente="", 
+                NombrePaciente="", 
+                NombreMedico="", 
+                Articulos=[]
+            )
+        
+        return PrescriptionOCRResult.model_validate(self.result)
 
 
 class SearchBarra(AITransaction):
