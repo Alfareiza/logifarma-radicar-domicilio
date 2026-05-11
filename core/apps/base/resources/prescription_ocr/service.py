@@ -13,6 +13,7 @@ from core.apps.base.models import PrescriptionOCRTransaction, Radicacion, Status
 from core.apps.base.resources.ai.providers.anthropic import AnthropicStructuredVisionProvider
 from core.apps.base.resources.ai.providers.base import (
     AnthropicProvider,
+    PrescriptionOCRResult,
     VisionStructuredRequest,
     VisionStructuredResult,
 )
@@ -23,6 +24,7 @@ from core.apps.base.resources.prescription_ocr.goals.prescription_extraction imp
 )
 from core.apps.base.resources.prescription_ocr.locking import prescription_ocr_file_lock
 from core.apps.tasks.utils.gdrive import GDriveHandler
+from core.settings import logger
 
 log = logging.getLogger(__name__)
 
@@ -134,7 +136,7 @@ class PrescriptionOCRService:
                     model_id=self._model_id,
                 )
                 out: VisionStructuredResult = provider.run_vision_json_schema(req)
-                prescription_ocr_result = out.prescription_ocr_result
+                prescription_ocr_result: PrescriptionOCRResult = out.prescription_ocr_result
                 usage = out.usage
                 meta_tokens = usage.input_tokens
                 meta_out_tokens = usage.output_tokens
@@ -153,6 +155,9 @@ class PrescriptionOCRService:
                 )
 
             txn.result = prescription_ocr_result.model_dump()
+            if txn.result['TipoDocumentoPaciente'] != radicacion.tipo_documento_paciente or txn.result['NumeroDocumentoPaciente'] != radicacion.numero_documento_paciente:
+                logger.error("Documento escaneado no coincide con documento de radicación")
+            
             txn.status = Status.COMPLETED.value
             txn.model_id = self._model_id
             txn.input_tokens = meta_tokens
