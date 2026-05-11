@@ -40,7 +40,7 @@ class RadicacionSerializer(serializers.ModelSerializer):
         fields = [
             'datetime', 'numero_radicado', 'municipio', 'barrio', 'cel_uno',
             'cel_dos', 'email', 'direccion', 'paciente_nombre', 'paciente_cc',
-            'estado', 'acta_entrega'
+            'estado', 'acta_entrega', 'visto'
         ]
 
 
