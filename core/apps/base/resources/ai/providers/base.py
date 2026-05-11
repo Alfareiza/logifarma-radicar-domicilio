@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from datetime import datetime
+from typing import Annotated, Any
 
 import anthropic
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, BeforeValidator, PlainSerializer, field_validator, model_validator
 
 from core import settings
 from core.apps.base.resources.tools import remove_accents
@@ -134,7 +135,12 @@ class PrescriptionOCRResult(BaseModel):
     """Structured output of a prescription OCR extraction."""
 
     IPS: str
-    FechaFormula: str
+    NitIPS: str | None = None
+    FechaFormula: Annotated[
+        datetime,
+        BeforeValidator(lambda v: datetime.strptime(v, "%d-%m-%Y") if isinstance(v, str) else v),
+        PlainSerializer(lambda v: v.strftime("%d-%m-%Y"), return_type=str)
+    ]
     TipoDocumentoPaciente: str
     NumeroDocumentoPaciente: str
     NombrePaciente: str
@@ -147,6 +153,10 @@ class PrescriptionOCRResult(BaseModel):
     @classmethod
     def normalize_ips(cls, v: str) -> str:
         return remove_accents(v.upper().strip())
+
+    @property
+    def diagnostico_principal(self) -> str:
+        return ' '.join(self.DiagnosticoPrincipal.__dict__.values())
 
 
 @dataclass(frozen=True, slots=True)
