@@ -1,7 +1,7 @@
-from typing import List, Dict
-
+import re
 from core.apps.base.resources.api_calls import call_api_medicar
 from core.settings import logger as log
+from pydantic import BaseModel, Field, field_validator
 
 
 def obtener_datos_formula(num_aut: int, nit: str = '901543211') -> dict:
@@ -79,7 +79,7 @@ def obtener_datos_formula(num_aut: int, nit: str = '901543211') -> dict:
     return resp
 
 
-def obtener_inventario(centro: int) -> List[Dict]:
+def obtener_inventario(centro: int) -> list[dict]:
     """
     Consulta el inventario a partir de un 'Centro'
     :param centro: Número de bodega a ser consultada (centro).
@@ -113,3 +113,179 @@ def obtener_inventario(centro: int) -> List[Dict]:
         return resp
     return []
 
+class EpsSchema(BaseModel):
+    nitEps: str
+
+class AfiliadoSchema(BaseModel):
+    tipo_documento: str
+    numero_documento: str
+
+class DosisSchema(BaseModel):
+    tomar: int
+    cada: int
+    unidad_cada: str
+    durante: int
+    unidad_durante: str
+
+    @classmethod
+    def from_articulo(cls, articulo: "Articulo")-> "DosisSchema":
+        return cls.from_dict(articulo.__dict__)
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "DosisSchema":
+        """
+        Convierte un diccionario de datos de un articulo en un objeto DosisSchema.
+        Ejemplo de diccionario:
+        {
+            "Via": "Oral",
+            "Dosis": "1 UND",
+            "Nombre": "METOPROLOL SUCCINATO 50mg",
+            "Numero": 1,
+            "Cantidad": {
+                "Formulada": {
+                "Valor": 90,
+                "Descripcion": null
+                },
+                "Dispensada": {
+                "Valor": 30,
+                "Descripcion": "Por mes"
+                }
+            },
+            "Duracion": {
+                "Valor": 3,
+                "Unidad": "Meses"
+            },
+            "Frecuencia": "Cada 24 horas",
+            "Indicaciones": "Ninguno",
+            "Concentracion": "50mg",
+            "PrincipioActivo": "Metoprolol Succinato",
+            "FormaFarmaceutica": ""
+        }
+        :param data: Diccionario de datos del articulo.
+        :return: Objeto DosisSchema.
+        """
+        # 1. Extract 'tomar' from "Dosis" (e.g., "1 AMP" -> 1)
+        dosis_text = data.get("Dosis", "0")
+        tomar_match = re.search(r"(\d+)", str(dosis_text))
+        tomar = int(tomar_match.group(1)) if tomar_match else 0
+
+        # 2. Extract 'cada' and 'unidad_cada' from "Frecuencia"
+        frecuencia = data.get("Frecuencia", "").strip()
+        cada = 1  # Default
+        unidad_cada = "unica"
+
+        # Regex Patterns
+        patterns = [
+            # Style: "Cada 4 horas" or "Cada 12 horas"
+            (r"(?i)cada\s+(?P<val>\d+)\s+(?P<unit>\w+)", lambda m: (int(m.group("val")), m.group("unit"))),
+            # Style: "Cada noche" or "Cada día"
+            (r"(?i)cada\s+(?P<unit>\w+)", lambda m: (1, m.group("unit"))),
+            # Style: "Dosis unica"
+            (r"(?i)dosis\s+unica", lambda m: (1, "unica")),
+        ]
+
+        for pattern, handler in patterns:
+            match = re.search(pattern, frecuencia)
+            if match:
+                cada, unidad_cada = handler(match)
+                break
+
+        # 3. Extract 'durante' and 'unidad_durante'
+        valor, unidad = data.get("Duracion").Valor, data.get("Duracion").Unidad
+        
+        return cls(
+            tomar=tomar,
+            cada=cada,
+            unidad_cada=unidad_cada,
+            durante=valor,
+            unidad_durante=unidad
+        )
+
+class MedicamentoSchema(BaseModel):
+    plu: str
+    articulo: str
+    dosis: DosisSchema
+    cantidad_formulada: int
+    cantidad_dispensada: int
+
+class FormulaDetailsSchema(BaseModel):
+    plan: str
+    subplan: str
+    fecha_formula: str  # We can validate this format later
+    medico_formulador: dict  # Or define a specific schema
+    diagnostico: str
+    medicamentos: list[MedicamentoSchema]
+
+class MedicarFormulaSchema(BaseModel):
+    """Este modelo es usado para crear el payload de la API de Medicar para la creación de una formula medica."""
+    eps: EpsSchema
+    nit_ips: str | None
+    nombre_ips: str
+    tipo_formula: str
+    afiliado: AfiliadoSchema
+    formula: FormulaDetailsSchema
+
+    @field_validator("nit_ips", mode="before")
+    @classmethod
+    def clean_strings(cls, v):
+        return v.strip() if isinstance(v, str) else v
+
+    @classmethod
+    def from_radicado(cls, radicado: 'Radicacion') -> "MedicarFormulaSchema":
+        """
+        Builds the schema from a 'Radicacion' instance.
+        Assumes the latest transaction (even if discard=True).
+        """
+        # Get the latest OCR Transaction
+        ocr_txn = radicado.prescription_ocr_transactions.latest('created_at')
+        # 2. This is now a PrescriptionOCRResult object with full type hinting
+        result: 'PrescriptionOCRResult' = ocr_txn.ocr_result
+
+        # 2. OPTIMIZATION: Fetch all barra transactions in ONE query.
+        # We use select_related('article_sap') to JOIN the SAP table immediately.
+        # We order by 'created_at' so that the latest one overwrites in the dict.
+        barras_queryset = ocr_txn.barra_transactions.select_related('article_sap').order_by('created_at')
+
+        # Create a lookup map: { 'article_nombre': search_barra_object }
+        barras_map = {b.article_nombre: b for b in barras_queryset}
+
+        return cls(
+            eps=EpsSchema(nitEps=radicado.nit_convenio),
+            nit_ips=result.NitIPS or "1111111111",
+            nombre_ips=result.IPS,
+            tipo_formula="Ambulatoria",
+            afiliado=AfiliadoSchema(
+                tipo_documento=radicado.tipo_documento_paciente,
+                numero_documento=radicado.numero_documento_paciente
+            ),
+            formula=FormulaDetailsSchema(
+                plan='',
+                subplan='',
+                fecha_formula=f"{result.FechaFormula:%Y%m%d}",
+                medico_formulador={"nombre": result.NombreMedico},
+                diagnostico=result.diagnostico_principal,
+                medicamentos=[
+                    cls._build_medicamento(art, barras_map.get(art.Nombre))
+                    for art in result.Articulos
+                ]
+            )
+        )
+    
+    @staticmethod
+    def _build_medicamento(art: 'Articulo', barra_txn: 'SearchBarra'):
+        """Helper to build MedicamentoSchema avoiding NoneType errors."""
+        # Fallbacks if the barra search failed or doesn't exist
+        descripcion = (
+            barra_txn.article_sap.descripcion 
+            if barra_txn and barra_txn.article_sap 
+            else art.Nombre
+        )
+        plu = barra_txn.result if barra_txn and barra_txn.result else ""
+        
+        return MedicamentoSchema(
+            plu=plu,
+            articulo=descripcion,
+            dosis=DosisSchema.from_articulo(art),
+            cantidad_formulada=art.Cantidad.Formulada.Valor,
+            cantidad_dispensada=art.Cantidad.Dispensada.Valor
+        )
