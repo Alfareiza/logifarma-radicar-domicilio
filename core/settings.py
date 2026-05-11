@@ -240,6 +240,7 @@ MS_USER = config('MS_USER')
 MS_PASS = config('MS_PASS')
 MS_API_URL = config('MS_API_URL')
 MS_API_URL_VALIDADOR = config('MS_API_URL_VALIDADOR')
+MS_NIT = '806008394'
 
 ZONA_SER_URL = config('ZONA_SER_URL')
 ZONA_SER_NIT = config('ZONA_SER_NIT')
@@ -262,6 +263,8 @@ ANTHROPIC_MCP_POSTGRES_TOKEN = config(
 
 # PROTEGER API
 PROTEGER_URL = "https://genesis.protegereps.com"
+PROTEGER_NIT = "900073223"
+FOMAG_NIT = " 8605251485"
 
 TIPO_USUARIO = {'f': 'fomag', 'c': 'proteger', 'm': 'mutualser', 'o': 'foneca'}
 
