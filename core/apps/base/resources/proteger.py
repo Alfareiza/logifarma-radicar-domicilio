@@ -1,6 +1,6 @@
 from core.apps.base.resources.api_calls import call_api_eps, obtener_datos_identificacion_fomag, \
     obtener_datos_identificacion_mutual_ser, obtener_datos_identificacion_foneca
-from core.settings import PROTEGER_URL
+from core.settings import PROTEGER_URL, PROTEGER_NIT
 
 
 def obtener_datos_autorizacion(num_aut: int) -> dict:
@@ -48,7 +48,7 @@ def obtener_datos_autorizacion(num_aut: int) -> dict:
     url = f"{PROTEGER_URL}/api/api_qr.php"
     payload = {"function": "p_mostrar_autorizacion",
                "serial": str(num_aut),
-               "nit": "900073223"}
+               "nit": PROTEGER_NIT}
     return call_api_eps(url, payload)
 
 

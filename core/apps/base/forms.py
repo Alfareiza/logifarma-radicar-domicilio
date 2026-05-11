@@ -17,7 +17,7 @@ from core.apps.base.validators import (
     validate_structure, validate_numero_celular, direccion_min_length_validator, validate_numeros_bloqueados,
     certify_celular, validate_usuario_restringido, validate_panales
 )
-from core.settings import logger, TIPO_USUARIO
+from core.settings import MS_NIT, logger, TIPO_USUARIO
 
 
 class Home(forms.Form):
@@ -204,7 +204,7 @@ class Orden(forms.Form):
 
         if rad := Radicacion.objects.filter(numero_radicado=str_orden).first():
             # Consulta para verificar si tiene ssc (acta)
-            resp_mcar = obtener_datos_formula(orden, '806008394')  # Nit mutual ser
+            resp_mcar = obtener_datos_formula(orden, MS_NIT)  # Nit mutual ser
             validate_status(resp_mcar, rad)
 
         return {'NUMERO_AUTORIZACION': orden}
