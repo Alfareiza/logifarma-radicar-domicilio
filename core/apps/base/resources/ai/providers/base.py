@@ -9,7 +9,7 @@ from typing import Annotated, Any
 import anthropic
 from pydantic import BaseModel, BeforeValidator, PlainSerializer, field_validator, model_validator
 
-from core import settings
+from core.settings import ANTHROPIC_API_KEY, logger
 from core.apps.base.resources.tools import remove_accents
 
 
@@ -117,7 +117,14 @@ class Articulo(BaseModel):
             and self.Cantidad.Formulada is not None
             and self.Cantidad.Formulada.Valor is not None
         ):
-            monthly = int(self.Cantidad.Formulada.Valor / (self.Duracion.ValorEnDias / 30))
+            monthly, extra = divmod(self.Cantidad.Formulada.Valor, (self.Duracion.ValorEnDias / 30))
+            if extra:
+                logger.error("Cantidad dispensada inválida", extra={
+                    "explicación": f"La cantidad formulada de {self.Cantidad.Formulada.Valor} es para {self.Duracion.ValorEnDias} días. \
+                    Entonces el valor para 30 días es de {self.Cantidad.Formulada.Valor / (self.Duracion.ValorEnDias / 30)}",
+                    **self.Cantidad.model_dump(),
+                    **self.Duracion.model_dump(),
+                })
             self.Cantidad.Dispensada = CantidadDetalle(Valor=monthly, Descripcion='Por mes')
         else:
             self.Cantidad.Dispensada = self.Cantidad.Formulada.model_copy()
@@ -157,7 +164,7 @@ class PrescriptionOCRResult(BaseModel):
     
     @field_validator('TipoDocumentoPaciente', mode='after')
     @classmethod
-    def normalize_ips(cls, v: str) -> str:
+    def normalize_tipodocumentopaciente(cls, v: str) -> str:
         tipo_documento = remove_accents(v.upper().strip())
         match tipo_documento:
             case 'cedula de ciudadania':
@@ -206,6 +213,6 @@ class AnthropicProvider:
     """Base class for Anthropic SDK adapters."""
 
     def __init__(self, *, api_key: str | None = None, max_retries: int = 3) -> None:
-        if not (key := settings.ANTHROPIC_API_KEY):
+        if not (key := ANTHROPIC_API_KEY):
             raise ValueError('ANTHROPIC_API_KEY no está configurada.')
         self.client = anthropic.Anthropic(api_key=key, max_retries=max_retries)
