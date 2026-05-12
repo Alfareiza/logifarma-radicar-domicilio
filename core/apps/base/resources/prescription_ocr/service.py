@@ -156,8 +156,8 @@ class PrescriptionOCRService:
 
             txn.result = prescription_ocr_result.model_dump()
             if (txn.result['TipoDocumentoPaciente'] and txn.result['TipoDocumentoPaciente'] != radicacion.tipo_documento_paciente) or (txn.result['NumeroDocumentoPaciente'] and txn.result['NumeroDocumentoPaciente'] != radicacion.numero_documento_paciente):
-                logger.error(f"{radicacion.numero_autorizacion} Documento escaneado no coincide con documento de radicación", 
-                extra={"OCR Result": f"Tipo Documento {txn.result['TipoDocumentoPaciente']!r}, Documento {txn.result['NumeroDocumentoPaciente']}",
+                logger.error(f"Documento escaneado no coincide con documento de radicación", 
+                extra={"numero_autorizacion": radicacion.numero_autorizacion, "convenio": radicacion.convenio, "OCR Result": f"Tipo Documento {txn.result['TipoDocumentoPaciente']!r}, Documento {txn.result['NumeroDocumentoPaciente']}",
                 "Radicación":f"Tipo Documento {radicacion.tipo_documento_paciente!r}, Documento {radicacion.numero_documento_paciente}"}
                 )
             
