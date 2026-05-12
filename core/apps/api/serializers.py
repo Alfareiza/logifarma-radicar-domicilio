@@ -5,6 +5,7 @@ from rest_framework import serializers
 
 from core.apps.base.models import Barrio, Municipio, SearchBarra, Radicacion, SAPArticle
 from core.apps.base.exceptions import DriveFileIdNormalizationError
+from core.apps.base.resources.medicar import HistoricoDispensados
 from core.apps.tasks.utils.gdrive import normalize_drive_file_id
 
 
@@ -178,4 +179,14 @@ class SearchBarraSerializer(serializers.ModelSerializer):
 
     def get_cached(self, obj) -> bool:
         return self.context.get('cached', False)
-        
+
+
+class HistoricalDispensacionesResponseSerializer(serializers.BaseSerializer):
+    """
+    Expone la lista validada de historico-dispensaciones (Medicar) como JSON.
+    La instancia debe ser ``HistoricoDispensados`` (modelo Pydantic RootModel).
+    """
+
+    def to_representation(self, instance: HistoricoDispensados) -> list[dict]:
+        return instance.model_dump_list()
+

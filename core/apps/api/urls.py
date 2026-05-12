@@ -5,6 +5,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     RadicacionViewSet,
     busca_paciente,
+    historical_dispensaciones,
     prescription_ocr_barra_poll,
     prescription_ocr_discard,
     prescription_ocr_run,
@@ -20,6 +21,11 @@ urlpatterns = [
     path('docs/', SpectacularSwaggerView.as_view(url_name='api-schema'),
          name='api-docs'),
     path("prescription-ocr/", prescription_ocr_run, name="prescription_ocr_run"),
+    path(
+        "historical-dispensations/<str:documento>/",
+        historical_dispensaciones,
+        name="historical_dispensaciones",
+    ),
     path(
         "prescription-ocr/barra/<int:job_id>/",
         prescription_ocr_barra_poll,

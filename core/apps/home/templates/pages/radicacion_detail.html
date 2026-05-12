@@ -1398,6 +1398,11 @@
     min-width: 4rem;
   }
 
+  .ocr-historico-cell--pending {
+    min-width: 2.75rem;
+    text-align: right;
+  }
+
   .ocr-inline-spinner-wrap {
     display: inline-flex;
     align-items: center;
@@ -2316,6 +2321,7 @@
   const API_RUN = '/api/v1/prescription-ocr/';
   const API_DISCARD = '/api/v1/prescription-ocr/discard/';
   const API_BARRA_POLL_BASE = '/api/v1/prescription-ocr/barra/';
+  const API_HISTORICAL_DISPENSATIONS_BASE = '/api/v1/historical-dispensations/';
   const BARRA_POLL_INTERVAL_MS = 10000;
   const BARRA_POLL_MAX_ATTEMPTS = 30;
   const currentDriveUrl = btn.getAttribute('data-drive-url') || '';
@@ -2328,6 +2334,8 @@
   let lastResultForJsonCopy = {};
   let lastJsonBlockPayload = {};
   let lastMedicationIndexByArticleNumero = {};
+  let lastOcrNumeroDocumentoPaciente = '';
+  let historicalDispByDocumento = Object.create(null);
 
   ocrSection.addEventListener('click', function(e) {
     const jsonCopyBtn = e.target.closest('#ocrJsonCopyBtn');
@@ -2748,7 +2756,7 @@
     }
   }
 
-  function pollBarraJobOnce(jobId, articleNombre, ips, attempt) {
+  function pollBarraJobOnce(jobId, articleNombre, ips, attempt, articleNumero) {
     // console.log("About to pollBarraJobOnce", jobId, articleNombre, ips, attempt);
     attempt = attempt || 0;
     if (attempt >= BARRA_POLL_MAX_ATTEMPTS) {
@@ -2759,6 +2767,9 @@
         sap_article: null,
       };
       updateBarraJobDom(jobId, timeoutData);
+      if (articleNumero != null && articleNumero !== '') {
+        restoreUltDispFromOcr(String(articleNumero));
+      }
       return Promise.resolve(timeoutData);
     }
     var barraPollUrl = API_BARRA_POLL_BASE + jobId + '/';
@@ -2783,11 +2794,35 @@
         if (data.status === 'completado' || data.status === 'fallido') {
           updateBarraJobDom(jobId, data);
           appendBarraJobMetaRow(data);
+          var an =
+            data.article_numero != null
+              ? String(data.article_numero)
+              : articleNumero != null
+                ? String(articleNumero)
+                : '';
+          if (
+            data.status === 'completado' &&
+            data.sap_article &&
+            data.sap_article.molecula_id != null &&
+            String(data.sap_article.molecula_id).trim() !== ''
+          ) {
+            applyHistoricalDispForRow(an, String(data.sap_article.molecula_id));
+          } else {
+            restoreUltDispFromOcr(an);
+          }
           return data;
         }
         return new Promise(function(resolve) {
           setTimeout(function() {
-            resolve(pollBarraJobOnce(jobId, articleNombre, ips, attempt + 1));
+            resolve(
+              pollBarraJobOnce(
+                jobId,
+                articleNombre,
+                ips,
+                attempt + 1,
+                articleNumero
+              )
+            );
           }, BARRA_POLL_INTERVAL_MS);
         });
       })
@@ -2795,7 +2830,15 @@
         console.error('Error polling barra job', jobId, articleNombre, ips, attempt,error);
         return new Promise(function(resolve) {
           setTimeout(function() {
-            resolve(pollBarraJobOnce(jobId, articleNombre, ips, attempt + 1));
+            resolve(
+              pollBarraJobOnce(
+                jobId,
+                articleNombre,
+                ips,
+                attempt + 1,
+                articleNumero
+              )
+            );
           }, BARRA_POLL_INTERVAL_MS);
         });
       });
@@ -2811,7 +2854,13 @@
         return j && j.job_id && j.status !== 'fallido';
       })
       .map(function(j) {
-        return pollBarraJobOnce(j.job_id, j.article_nombre, normalizedIps, 0);
+        return pollBarraJobOnce(
+          j.job_id,
+          j.article_nombre,
+          normalizedIps,
+          0,
+          j.article_numero
+        );
       });
 
     Promise.all(polls).then(function(results) {
@@ -2841,13 +2890,125 @@
     );
   }
 
+  function resetHistoricalDispCache() {
+    historicalDispByDocumento = Object.create(null);
+  }
+
+  function fetchHistoricalDispensacionesList(documento) {
+    var doc = String(documento || '').trim();
+    if (!doc) return Promise.resolve([]);
+    if (historicalDispByDocumento[doc] !== undefined) {
+      return historicalDispByDocumento[doc];
+    }
+    var url =
+      API_HISTORICAL_DISPENSATIONS_BASE + encodeURIComponent(doc) + '/';
+    historicalDispByDocumento[doc] = fetch(url, {
+      credentials: 'same-origin',
+      headers: {
+        Accept: 'application/json',
+        'X-CSRFToken': getCsrfToken(),
+      },
+    })
+      .then(function(res) {
+        if (!res.ok) return [];
+        return res.json();
+      })
+      .then(function(body) {
+        return Array.isArray(body) ? body : [];
+      })
+      .catch(function(err) {
+        console.error('Error historical-dispensations', doc, err);
+        return [];
+      });
+    return historicalDispByDocumento[doc];
+  }
+
+  function sumCantidadDispensadaByCodMol(historicalList, codMol) {
+    var target = String(codMol);
+    var sum = 0;
+    (historicalList || []).forEach(function(aff) {
+      (aff.SSCs || []).forEach(function(ssc) {
+        (ssc.Articulos || []).forEach(function(art) {
+          if (String(art.CodMol) !== target) return;
+          (art.Dispensaciones || []).forEach(function(d) {
+            var n = parseFloat(d.CantidadDispensada);
+            if (isFinite(n)) sum += n;
+          });
+        });
+      });
+    });
+    return Math.round(sum);
+  }
+
+  function updateUltDispCell(articleNumero, text) {
+    if (!modalContent || articleNumero == null || articleNumero === '') return;
+    var el = modalContent.querySelector(
+      '[data-ocr-historico-article-numero="' + String(articleNumero) + '"]'
+    );
+    if (!el) return;
+    el.classList.remove('ocr-historico-cell--pending');
+    el.textContent = text === undefined || text === null ? '' : String(text);
+  }
+
+  function restoreUltDispFromOcr(articleNumero) {
+    if (!modalContent || articleNumero == null || articleNumero === '') return;
+    var an = String(articleNumero);
+    var arts = (lastResultForJsonCopy && lastResultForJsonCopy.Articulos) || [];
+    var v = '';
+    for (var i = 0; i < arts.length; i++) {
+      var row = arts[i];
+      if (!row || String(row.Numero) !== an) continue;
+      if (
+        row.Cantidad &&
+        row.Cantidad.Historico &&
+        row.Cantidad.Historico.Valor != null
+      ) {
+        v = String(row.Cantidad.Historico.Valor);
+      }
+      break;
+    }
+    updateUltDispCell(an, v !== '' ? v : '—');
+  }
+
+  function applyHistoricalDispForRow(articleNumero, codMol) {
+    if (!modalContent || articleNumero == null || articleNumero === '') return;
+    var an = String(articleNumero);
+    var doc = String(lastOcrNumeroDocumentoPaciente || '').trim();
+    if (!doc || codMol == null || String(codMol).trim() === '') {
+      restoreUltDispFromOcr(an);
+      return;
+    }
+    fetchHistoricalDispensacionesList(doc).then(function(list) {
+      var total = sumCantidadDispensadaByCodMol(list, codMol);
+      updateUltDispCell(an, String(total));
+    });
+  }
+
+  function scheduleInitialHistoricalDisp(barraJobs) {
+    (barraJobs || []).forEach(function(j) {
+      if (
+        !j ||
+        j.status !== 'completado' ||
+        !j.sap_article ||
+        j.sap_article.molecula_id == null ||
+        String(j.sap_article.molecula_id).trim() === ''
+      ) {
+        return;
+      }
+      applyHistoricalDispForRow(
+        j.article_numero != null ? String(j.article_numero) : '',
+        String(j.sap_article.molecula_id)
+      );
+    });
+  }
+
   function buildArticulos(arts, barraJobsList) {
     if (!arts || !arts.length) return '';
     var byJob = indexBarraJobsByArticleNumero(barraJobsList);
     const head =
-      '<thead><tr><th>#</th><th>Nombre</th><th>Cant. Mes' +
+      '<thead><tr><th>#</th><th>Nombre</th><th>Cant.<br>Mes' +
       createTooltip('?', 'Esta es la cantidad equivalente a un mes') +
-      '</th><th>Ult. Disp' +
+      '</th><th>Ult.<br>Disp' +
       createTooltip('?', 'Cantidad dispensada en los últimos 25 días') +
       '</th></tr></thead>';
     const bodyRows = arts.map(function(a) {
@@ -2889,6 +3050,41 @@
         jobStatus !== 'fallido'
       );
 
+      var barraFailedHistorico = job && job.status === 'fallido';
+      var barraCompleteWithMol = !!(
+        job &&
+        job.status === 'completado' &&
+        job.sap_article &&
+        job.sap_article.molecula_id != null &&
+        String(job.sap_article.molecula_id).trim() !== ''
+      );
+      var jobRunningHistorico = !!(
+        jobId &&
+        jobStatus !== 'completado' &&
+        jobStatus !== 'fallido'
+      );
+      var showHistoricoSpinner = !!(
+        jobId &&
+        !barraFailedHistorico &&
+        (jobRunningHistorico || barraCompleteWithMol)
+      );
+
+      var historicoTdClass = 'ocr-historico-val';
+      var historicoCellInner = '';
+      if (!jobId) {
+        historicoCellInner = escapeHtml(historico);
+      } else if (barraFailedHistorico) {
+        historicoCellInner = escapeHtml(historico !== '' ? historico : '—');
+      } else if (showHistoricoSpinner) {
+        historicoTdClass += ' ocr-historico-cell--pending';
+        historicoCellInner =
+          '<span class="ocr-inline-spinner-wrap" aria-busy="true">' +
+          '<span class="ocr-inline-spinner"></span>' +
+          '<span class="sr-only">Cargando última dispensación</span></span>';
+      } else {
+        historicoCellInner = escapeHtml(historico !== '' ? historico : '—');
+      }
+
       var secondaryInfo = '';
       if (formaFarm || frecuencia) {
         var parts = [];
@@ -2918,7 +3114,14 @@
       }
       row1 +=
         '</td><td>' + escapeHtml(cantidad) +
-        '</td><td>' + escapeHtml(historico) +
+        '</td><td class="' +
+        historicoTdClass +
+        '"' +
+        (numero
+          ? ' data-ocr-historico-article-numero="' + escapeHtml(numero) + '"'
+          : '') +
+        '>' +
+        historicoCellInner +
         '</td></tr>';
 
       var niHtml;
@@ -2963,7 +3166,12 @@
 
   function renderResult(payload) {
     lastResultForJsonCopy = payload.result || {};
+    resetHistoricalDispCache();
     const r = lastResultForJsonCopy;
+    lastOcrNumeroDocumentoPaciente =
+      r.NumeroDocumentoPaciente != null
+        ? String(r.NumeroDocumentoPaciente).trim()
+        : '';
     lastMedicationIndexByArticleNumero = indexMedicamentosByArticleNumero(r.Articulos || []);
     
     try {
@@ -3011,6 +3219,7 @@
     recalculateOcrMetaTotals();
     
     scheduleBarraPolling(payload.barra_jobs || [], payload.result.IPS);
+    scheduleInitialHistoricalDisp(payload.barra_jobs || []);
 
     lastTransactionId = payload.transaction_id;
     discardBtn.hidden = !payload.transaction_id;
