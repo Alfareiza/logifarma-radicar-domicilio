@@ -1,5 +1,8 @@
 import re
 
+from django.http import Http404
+from rest_framework.exceptions import NotFound
+
 from core.apps.base.resources.api_calls import call_api_medicar
 from core.settings import logger as log
 from pydantic import BaseModel, ConfigDict, RootModel, field_validator
@@ -249,6 +252,9 @@ def validate_historico_dispensados(raw: object) -> HistoricoDispensados:
     :raises pydantic.ValidationError: if list items do not match the schema.
     """
     if not isinstance(raw, list):
+        if 'error' in raw and 'No se han encontrado' in raw['error']:
+            # Esto sucede cuando no se le ha dispensado nunca
+            raise NotFound(detail="Usuario no encontrado en medicar", code=404)
         msg = f"La respuesta de historico dispensaciones debe ser una lista; se recibió {raw}"
         raise TypeError(msg)
     return HistoricoDispensados.model_validate(raw)
