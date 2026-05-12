@@ -1400,7 +1400,7 @@
 
   .ocr-historico-cell--pending {
     min-width: 2.75rem;
-    text-align: right;
+    text-align: center;
   }
 
   .ocr-inline-spinner-wrap {
@@ -1834,7 +1834,7 @@
               <div class="patient-compact-col">
                 <span class="patient-compact-label">Documento</span>
                 <span class="patient-compact-value">
-                  <span class="copy-value">{{ rad.paciente_cc|default:"--" }}</span>
+                  <span class="copy-value" id="numero_documento_paciente" solo_documento="{{rad.numero_documento_paciente}}">{{ rad.tipo_documento_paciente|default:"--" }}{{ rad.numero_documento_paciente|default:"--" }}</span>
                   {% if rad.paciente_cc %}
                   <button type="button" class="copy-btn" data-copy-text="{{ rad.paciente_cc }}" aria-label="Copiar documento">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -3153,7 +3153,7 @@
         (jobRunningHistorico || barraCompleteWithMol)
       );
 
-      var historicoTdClass = 'ocr-historico-val';
+      var historicoTdClass = 'text-center ocr-historico-val';
       var historicoCellInner = '';
       if (!jobId) {
         historicoCellInner = escapeHtml(historico);
@@ -3215,7 +3215,7 @@
           '</div>';
       }
       row1 +=
-        '</td><td>' + escapeHtml(cantidad) +
+        "</td><td class='text-center'>" + escapeHtml(cantidad) +
         '</td><td class="' + historicoTdClass + '"' +
         (numero ? ' data-ocr-historico-article-numero="' + escapeHtml(numero) + '"' : '') +
         '>' + historicoCellInner +
@@ -3269,9 +3269,10 @@
     lastResultForJsonCopy = payload.result || {};
     resetHistoricalDispCache();
     const r = lastResultForJsonCopy;
+    var numero_documento_paciente = document.getElementById('numero_documento_paciente')
     lastOcrNumeroDocumentoPaciente =
-      r.NumeroDocumentoPaciente != null
-        ? String(r.NumeroDocumentoPaciente).trim()
+      numero_documento_paciente != null
+        ? String(numero_documento_paciente.getAttribute('solo_documento')).trim()
         : '';
     lastMedicationIndexByArticleNumero = indexMedicamentosByArticleNumero(r.Articulos || []);
     
