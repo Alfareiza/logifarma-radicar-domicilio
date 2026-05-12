@@ -2924,20 +2924,32 @@
   }
 
   function sumCantidadDispensadaByCodMol(historicalList, codMol) {
+    /**
+     * Suma por molécula (CodMol): total dispensado más total pendiente.
+     * Recorre el JSON de `/historical-dispensations` (SSC → Articulos) y coincide
+     * `CodMol` con `codMol`. Acumula `CantidadDispensada` de cada `Dispensaciones`
+     * y `CantidadPendiente` por línea de artículo; devuelve ambos sumandos redondeados.
+     * @param {Array<Object>} historicalList Lista de registros tipo afiliado (respuesta Medicar).
+     * @param {number|string} codMol Identificador de molécula (equiv. molecula_id SAP).
+     * @returns {number} Math.round(sumDispensada) + Math.round(sumPendiente)
+     */
     var target = String(codMol);
-    var sum = 0;
+    var sumDispensada = 0;
+    var sumPendiente = 0;
     (historicalList || []).forEach(function(aff) {
       (aff.SSCs || []).forEach(function(ssc) {
         (ssc.Articulos || []).forEach(function(art) {
           if (String(art.CodMol) !== target) return;
+          var p = parseFloat(art.CantidadPendiente);
+          if (isFinite(p)) sumPendiente += p;
           (art.Dispensaciones || []).forEach(function(d) {
             var n = parseFloat(d.CantidadDispensada);
-            if (isFinite(n)) sum += n;
+            if (isFinite(n)) sumDispensada += n;
           });
         });
       });
     });
-    return Math.round(sum);
+    return Math.round(sumDispensada) + Math.round(sumPendiente);
   }
 
   function updateUltDispCell(articleNumero, text) {
