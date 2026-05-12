@@ -36,6 +36,7 @@ class PrescriptionOCRRunOutcome:
     transaction: PrescriptionOCRTransaction
     cached: bool
     error: Literal['drive', 'llm'] | None = None
+    reason: str = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -152,6 +153,7 @@ class PrescriptionOCRService:
                     transaction=txn,
                     cached=False,
                     error='llm',
+                    reason=txn.error_message
                 )
 
             txn.result = prescription_ocr_result.model_dump()
