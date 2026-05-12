@@ -118,7 +118,7 @@ class Articulo(BaseModel):
             and self.Cantidad.Formulada.Valor is not None
         ):
             _, extra = divmod(self.Cantidad.Formulada.Valor, (self.Duracion.ValorEnDias / 30))
-            monthly_rounded = round({self.Cantidad.Formulada.Valor / (self.Duracion.ValorEnDias / 30)})
+            monthly_rounded = round(self.Cantidad.Formulada.Valor / (self.Duracion.ValorEnDias / 30))
             if extra:
                 logger.error("Cantidad dispensada inválida", extra={
                     "explicación": f"La cantidad formulada de {self.Cantidad.Formulada.Valor} es para {self.Duracion.ValorEnDias} días. \
