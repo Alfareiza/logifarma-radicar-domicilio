@@ -154,6 +154,18 @@ class PrescriptionOCRResult(BaseModel):
     def normalize_ips(cls, v: str) -> str:
         return remove_accents(v.upper().strip())
 
+    
+    @field_validator('TipoDocumentoPaciente', mode='after')
+    @classmethod
+    def normalize_ips(cls, v: str) -> str:
+        tipo_documento = remove_accents(v.upper().strip())
+        match tipo_documento:
+            case 'cedula de ciudadania':
+                return "CC"
+            case _:
+                return tipo_documento
+
+
     @property
     def diagnostico_principal(self) -> str:
         return ' '.join(self.DiagnosticoPrincipal.__dict__.values())
