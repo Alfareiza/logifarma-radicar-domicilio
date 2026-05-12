@@ -1330,12 +1330,15 @@
     width: 3%;
   }
 
-  .ocr-table--articulos thead th:nth-child(2) {
-    width: 20%;
-  }
+  /* .ocr-table--articulos thead th:nth-child(2) { */
+    /* width: 20%; */
+  /* } */
 
+  .ocr-table--articulos thead th:nth-child(3) {
+    width: 10%;
+  }
   .ocr-table--articulos thead th:nth-child(4) {
-    width: 12%;
+    width: 10%;
   }
 
   .ocr-table--articulos tbody td {
@@ -1383,6 +1386,12 @@
     font-size: 0.8rem;
     color: var(--color-gray-700);
     font-weight: 500;
+  }
+
+  .ocr-barra-inline {
+    margin-left: 0.35rem;
+    color: var(--color-gray-500);
+    font-weight: 400;
   }
 
   .ocr-barra-cell--pending {
@@ -2713,21 +2722,29 @@
   }
 
   function updateBarraJobDom(jobId, data) {
+    /**
+     * Updates the OCR nombre interno cell for a barra SAP lookup job: clears the pending style (spinner)
+     * and renders either SAP article description/barcode or an error-style message.
+     *
+     * No-op when `modalContent` is missing, `jobId` is falsy, or no cell matches `[data-ocr-nombreinterno-job="…"]`.
+     */
     if (!modalContent || !jobId) return;
-    var barraEl = modalContent.querySelector('[data-ocr-barra-job="' + jobId + '"]');
     var niEl = modalContent.querySelector('[data-ocr-nombreinterno-job="' + jobId + '"]');
+    if (!niEl) return;
+    niEl.classList.remove('ocr-barra-cell--pending');
     if (data.status === 'completado' && data.sap_article) {
-      if (barraEl) barraEl.textContent = data.sap_article.barra || '';
-      if (niEl) niEl.textContent = data.sap_article.descripcion || '';
+      var ni = data.sap_article.descripcion || '';
+      var barra = data.sap_article.barra || '';
+      niEl.innerHTML =
+        escapeHtml(ni) +
+        (barra
+          ? ' <span class="ocr-barra-inline">· ' + escapeHtml(barra) + '</span>'
+          : '');
     } else {
-      if (barraEl)
-      barraEl.textContent = data.barra_llm || (data.error_message ? 'N/A' : '—');
-      if (niEl)
-      console.log("data", data);
-        niEl.textContent = data.error_message ? (data.error_message?.includes('No encontrado') ? data.error_message : 'Sin coincidencia') : '';
-    }
-    if (barraEl) {
-      barraEl.classList.remove('ocr-barra-cell--pending');
+      var errorMsg = data.error_message
+        ? (data.error_message.includes('No encontrado') ? data.error_message : 'Sin coincidencia')
+        : '';
+      niEl.textContent = errorMsg;
     }
   }
 
@@ -2828,8 +2845,10 @@
     if (!arts || !arts.length) return '';
     var byJob = indexBarraJobsByArticleNumero(barraJobsList);
     const head =
-      '<thead><tr><th>#</th><th>Cod. Barras</th><th>Nombre</th><th>Cant. ' + 
-      createTooltip('?', 'Esta es la cantidad a ser dispensada') +
+      '<thead><tr><th>#</th><th>Nombre</th><th>Cant. Mes' +
+      createTooltip('?', 'Esta es la cantidad equivalente a un mes') +
+      '</th><th>Ult. Disp' +
+      createTooltip('?', 'Cantidad dispensada en los últimos 25 días') +
       '</th></tr></thead>';
     const bodyRows = arts.map(function(a) {
       var numero = a.Numero != null ? String(a.Numero) : '';
@@ -2839,6 +2858,10 @@
       var frecuencia = a.Frecuencia || '';
       var duracionStr = formatOcrDuracionObj(a.Duracion);
       var cantidad = formatOcrCantidadObj(a.Cantidad.Dispensada);
+      var historico =
+        a.Cantidad && a.Cantidad.Historico && a.Cantidad.Historico.Valor != null
+          ? String(a.Cantidad.Historico.Valor)
+          : '';
       var nombreInterno =
         a.NombreInterno != null && a.NombreInterno !== ''
           ? String(a.NombreInterno)
@@ -2874,37 +2897,17 @@
         secondaryInfo = parts.join(' ');
         if (duracionStr) {
           // secondaryInfo += ' (' + duracionStr + ')';
-          secondaryInfo += ' por ' + duracionStr;
+          secondaryInfo += ' por ' + duracionStr + ` (Cant. Form ${a.Cantidad.Formulada.Valor})`;
         }
       } else if (duracionStr) {
         secondaryInfo = '(' + duracionStr + ')';
-      }
-
-      var barraHtml;
-      if (showPending) {
-        barraHtml =
-          '<span class="ocr-inline-spinner-wrap" aria-busy="true">' +
-          '<span class="ocr-inline-spinner"></span>' +
-          '<span class="sr-only">Cargando código de barras</span></span>';
-      } else if (job && job.status === 'fallido') {
-        barraHtml = escapeHtml(
-          job.barra_llm || barra || '—'
-        );
-      } else {
-        barraHtml = escapeHtml(barra);
       }
 
       var row1 =
         '<tr class="ocr-article-row ocr-article-row--primary">' +
         '<td rowspan="2" class="ocr-article-numero">' +
         escapeHtml(numero) +
-        '</td><td' +
-        (jobId ? ' data-ocr-barra-job="' + jobId + '"' : '') +
-        ' class="ocr-barra-cell' +
-        (showPending ? ' ocr-barra-cell--pending' : '') +
-        '">' +
-        barraHtml +
-        '</td><td class="ocr-article-nombre-main">' + 
+        '</td><td class="ocr-article-nombre-main">' +
         escapeHtml(nombre);
 
       if (secondaryInfo) {
@@ -2913,7 +2916,10 @@
           escapeHtml(secondaryInfo) +
           '</div>';
       }
-      row1 += '</td><td>' + escapeHtml(cantidad) + '</td></tr>';
+      row1 +=
+        '</td><td>' + escapeHtml(cantidad) +
+        '</td><td>' + escapeHtml(historico) +
+        '</td></tr>';
 
       var niHtml;
       if (showPending) {
@@ -2927,11 +2933,16 @@
         );
       } else {
         niHtml = nombreInterno ? escapeHtml(nombreInterno) : '';
+        if (barra) {
+          niHtml += ' <span class="ocr-barra-inline">· ' + escapeHtml(barra) + '</span>';
+        }
       }
 
       var row2 =
         '<tr class="ocr-article-row ocr-article-row--secondary">' +
-        '<td colspan="3" class="ocr-article-nombreinterno"' +
+        '<td colspan="3" class="ocr-article-nombreinterno' +
+        (showPending ? ' ocr-barra-cell--pending' : '') +
+        '"' +
         (jobId ? ' data-ocr-nombreinterno-job="' + jobId + '"' : '') +
         '>' +
         niHtml +
@@ -2974,7 +2985,6 @@
 
     var raw = '';
     try {
-      console.log(payload.mpayload)
       lastJsonBlockPayload = payload.mpayload || {};
       raw = formatJsonBlockPayload(lastJsonBlockPayload);
     } catch (err) {
