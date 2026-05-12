@@ -11,16 +11,23 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from core.apps.base.resources.medicar import MedicarFormulaSchema
+from pydantic import ValidationError
+
+from core.apps.base.resources.medicar import (
+    MedicarFormulaSchema,
+    obtener_historico_dispensados_usuario,
+    validate_historico_dispensados,
+)
 
 from .serializers import (
-    PrescriptionOCRDiscardSerializer, 
+    HistoricalDispensacionesResponseSerializer,
+    PrescriptionOCRDiscardSerializer,
     SearchBarraSerializer,
-    PrescriptionOCRRunSerializer, 
-    RadicacionDetailSerializer, 
-    RadicacionPartialUpdateSerializer, 
-    RadicacionSerializer, 
-    RadicacionWriteSerializer
+    PrescriptionOCRRunSerializer,
+    RadicacionDetailSerializer,
+    RadicacionPartialUpdateSerializer,
+    RadicacionSerializer,
+    RadicacionWriteSerializer,
 )
 from ..base.exceptions import OcrLockBusy
 from ..base.models import Barrio, Municipio, SearchBarra, Radicacion, ScrapMutualSer, Status, OtpSMS
@@ -375,6 +382,41 @@ def prescription_ocr_barra_poll(request, job_id: int) -> Response:
 
     log.info(f"{cached=} for {article_nombre=!r} {ips=!r} -> {job}")
     return Response(SearchBarraSerializer(poll_barra_job(job), context={'cached': cached}).data)
+
+
+@extend_schema(
+    summary='Histórico de dispensaciones (Medicar)',
+    description=(
+        'Consulta el histórico de dispensaciones por número de documento del paciente. '
+        'Respuesta en el mismo formato que devuelve la API Medicar (lista de objetos).'
+    ),
+)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def historical_dispensaciones(request, documento: str) -> Response:
+    documento_clean = (documento or '').strip()
+    if not documento_clean:
+        return Response(
+            {'detail': 'Número de documento inválido.'},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+    try:
+        raw = obtener_historico_dispensados_usuario(documento_clean)
+        parsed = validate_historico_dispensados(raw)
+    except TypeError as exc:
+        log.warning('historical_dispensaciones: respuesta inesperada %s', exc)
+        return Response(
+            {'detail': str(exc)},
+            status=status.HTTP_502_BAD_GATEWAY,
+        )
+    except ValidationError:
+        log.exception('historical_dispensaciones: validación pydantic')
+        return Response(
+            {'detail': 'La respuesta del servicio externo no pudo interpretarse.'},
+            status=status.HTTP_502_BAD_GATEWAY,
+        )
+    serializer = HistoricalDispensacionesResponseSerializer(instance=parsed)
+    return Response(serializer.data)
 
 
 @extend_schema(

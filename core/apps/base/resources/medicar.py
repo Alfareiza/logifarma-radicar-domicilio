@@ -1,7 +1,8 @@
 import re
+
 from core.apps.base.resources.api_calls import call_api_medicar
 from core.settings import logger as log
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, RootModel, field_validator
 
 
 def obtener_datos_formula(num_aut: int, nit: str = '901543211') -> dict:
@@ -112,6 +113,149 @@ def obtener_inventario(centro: int) -> list[dict]:
     if isinstance(resp, list):
         return resp
     return []
+
+def obtener_historico_dispensados_usuario(documento: str, dias_dispensacion: int = 25) -> list:
+    """Busca el histórico de dispensados para un determinado usuario en los ultimos 25 días."""
+    return call_api_medicar({
+        "NumeroDocumento": documento,
+        "DiasDispensacion": dias_dispensacion,
+        "PendientesActivos": True,
+        "IdConvenio": 0
+    }, 'historico-dispensaciones/client/6')
+
+
+CodMolType = int | str
+
+
+class HistoricoDispensacionItem(BaseModel):
+    """One dispensación line inside Articulos[].Dispensaciones[]."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    CantidadDispensada: int | float = 0
+    FecDisp: str | None = None
+
+    @field_validator("CantidadDispensada", mode="before")
+    @classmethod
+    def coerce_cantidad(cls, v: object) -> int | float:
+        if v is None:
+            return 0
+        if isinstance(v, bool):
+            return int(v)
+        if isinstance(v, int | float):
+            return v
+        try:
+            return int(str(v).strip())
+        except (TypeError, ValueError):
+            return 0
+
+
+class HistoricoArticuloMedicar(BaseModel):
+    """Articulo node under SSCs[].Articulos[]."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    CodMol: CodMolType
+    Plu: str | None = None
+    Descripcion: str | None = None
+    CantidadSolicitada: int | float | None = None
+    CantidadPendiente: int | float | None = None
+    InventarioMoleculaCentro: int | float | None = None
+    TotalPendienteMoleculaCentro: int | float | None = None
+    TransitoMoleculaCentro: int | float | None = None
+    Dispensaciones: list[HistoricoDispensacionItem] = []
+
+
+class HistoricoSSCMedicar(BaseModel):
+    """SSC node under top-level SSCs[]."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    SSC: int | None = None
+    SubPlan: str | None = None
+    Autorizacion: str | None = None
+    MIPRES: str | None = None
+    FecSol: str | None = None
+    Centro: str | None = None
+    NombCaf: str | None = None
+    Articulos: list[HistoricoArticuloMedicar] = []
+
+
+class HistoricoDispensado(BaseModel):
+    """
+    One affiliate record from historico-dispensaciones (Medicar).
+
+    Use ``HistoricoDispensado(**resp)`` when ``resp`` is a single dict from the API list.
+    """
+
+    model_config = ConfigDict(extra="ignore")
+
+    TipoDoc: str | None = None
+    NumeroDocumento: str | None = None
+    Afiliado: str | None = None
+    PendientesActivos: bool | None = None
+    SSCs: list[HistoricoSSCMedicar] = []
+
+    def sum_cantidad_dispensada_por_cod_mol(self, cod_mol: CodMolType) -> int:
+        """Sum CantidadDispensada for this afiliado row, all SSCs/articulos matching CodMol."""
+        return sum_cantidad_dispensada_cod_mol_afiliado(self, cod_mol)
+
+
+class HistoricoDispensados(RootModel[list[HistoricoDispensado]]):
+    """
+    Validates the full Medicar list response.
+
+    ``HistoricoDispensados.model_validate(raw_list)`` when ``raw_list`` is the API body.
+    """
+
+    root: list[HistoricoDispensado]
+
+    def sum_cantidad_dispensada_por_cod_mol(self, cod_mol: CodMolType) -> int:
+        """Sum CantidadDispensada across all afiliado records for the given CodMol."""
+        return sum(
+            rec.sum_cantidad_dispensada_por_cod_mol(cod_mol) for rec in self.root
+        )
+
+    def model_dump_list(self) -> list[dict]:
+        """Serialize back to plain dicts with Medicar-like keys for API consumers."""
+        return [r.model_dump(mode="json") for r in self.root]
+
+
+def _cod_mol_equals(a: CodMolType, b: CodMolType) -> bool:
+    return str(a).strip() == str(b).strip()
+
+
+def sum_cantidad_dispensada_cod_mol_afiliado(
+    afiliado: HistoricoDispensado, cod_mol: CodMolType
+) -> int:
+    total = 0
+    for ssc in afiliado.SSCs:
+        for art in ssc.Articulos:
+            if not _cod_mol_equals(art.CodMol, cod_mol):
+                continue
+            for disp in art.Dispensaciones:
+                try:
+                    total += int(float(disp.CantidadDispensada))
+                except (TypeError, ValueError):
+                    continue
+    return total
+
+
+def validate_historico_dispensados(raw: object) -> HistoricoDispensados:
+    """
+    Parse Medicar historico-dispensaciones response.
+
+    :raises TypeError: if ``raw`` is not a list.
+    :raises pydantic.ValidationError: if list items do not match the schema.
+    """
+    if not isinstance(raw, list):
+        msg = (
+            "La respuesta de historico dispensaciones debe ser una lista; "
+            f"se recibió {type(raw).__name__}"
+        )
+        raise TypeError(msg)
+    return HistoricoDispensados.model_validate(raw)
+
 
 class EpsSchema(BaseModel):
     nitEps: str
