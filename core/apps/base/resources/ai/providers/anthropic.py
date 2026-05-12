@@ -11,8 +11,7 @@ from typing import Any
 import anthropic
 from django.conf import settings
 from pydantic import ValidationError
-from tenacity import retry
-from tenacity.stop import stop_after_attempt
+from tenacity import retry, retry_if_exception_type, stop_after_attempt
 
 from core.apps.base.resources.ai.providers.base import (
     LLMUsageMeta,
@@ -38,7 +37,7 @@ class AnthropicStructuredVisionProvider(AnthropicProvider):
     Streaming avoids SDK non-streaming timeouts on large vision + JSON responses.
     """
         
-    @retry(retry=retry.retry_if_exception_type(ValidationError), stop=stop_after_attempt(5), reraise=True)
+    @retry(retry=retry_if_exception_type(ValidationError), stop=stop_after_attempt(5), reraise=True)
     def run_vision_json_schema(
         self, request: VisionStructuredRequest
     ) -> VisionStructuredResult:
