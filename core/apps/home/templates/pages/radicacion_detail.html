@@ -2941,16 +2941,70 @@
   }
 
   function updateUltDispCell(articleNumero, text) {
+    /*
+    Finds the Ult. Disp <td> with data-ocr-historico-article-numero, 
+      clears the pending/historico spinner styling, 
+      and sets the cell textContent to the string you pass in (typically the dispensada total).
+    Also triggers updateCantDispCell so the derived Cant. Disp. column stays in sync.
+    */
     if (!modalContent || articleNumero == null || articleNumero === '') return;
+    var an = String(articleNumero);
     var el = modalContent.querySelector(
-      '[data-ocr-historico-article-numero="' + String(articleNumero) + '"]'
+      '[data-ocr-historico-article-numero="' + an + '"]'
     );
     if (!el) return;
     el.classList.remove('ocr-historico-cell--pending');
     el.textContent = text === undefined || text === null ? '' : String(text);
+    updateCantDispCell(an, parseFloat(String(text || '')));
+  }
+
+  function updateJsonBlockCantidadDispensada(articleNumero, cantDisp) {
+    var medicamentos =
+      lastJsonBlockPayload &&
+      lastJsonBlockPayload.formula &&
+      Array.isArray(lastJsonBlockPayload.formula.medicamentos)
+        ? lastJsonBlockPayload.formula.medicamentos
+        : null;
+    if (!medicamentos) return;
+    var numero = parseInt(articleNumero, 10);
+    if (!isFinite(numero)) return;
+    var mappedIndex = lastMedicationIndexByArticleNumero[String(numero)];
+    var medIndex = mappedIndex != null ? mappedIndex : numero - 1;
+    var med = medicamentos[medIndex];
+    if (!med) return;
+    med.cantidad_dispensada = cantDisp;
+    refreshJsonBlockPayload(lastJsonBlockPayload);
+  }
+
+  function updateCantDispCell(articleNumero, ultDispNum) {
+    /*
+    Computes max(0, cantMes - ultDispNum) using the data-ocr-cantmes attribute stored
+    on the Cant. Disp. cell, updates its textContent, and patches cantidad_dispensada
+    in the jsonBlock medicamento entry.
+    */
+    if (!modalContent || articleNumero == null || articleNumero === '') return;
+    var an = String(articleNumero);
+    var el = modalContent.querySelector('[data-ocr-cantdisp-article-numero="' + an + '"]');
+    if (!el) return;
+    el.classList.remove('ocr-historico-cell--pending');
+    var cantMesNum = parseFloat(el.getAttribute('data-ocr-cantmes') || '');
+    var cantDisp =
+      isFinite(cantMesNum) && isFinite(ultDispNum)
+        ? Math.max(0, cantMesNum - ultDispNum)
+        : null;
+    el.textContent = cantDisp !== null ? String(Math.round(cantDisp)) : '—';
+    if (cantDisp !== null) {
+      updateJsonBlockCantidadDispensada(an, Math.round(cantDisp));
+    }
   }
 
   function restoreUltDispFromOcr(articleNumero) {
+    /* 
+    Reads lastResultForJsonCopy.Articulos for that articleNumero and writes 
+      Cantidad.Historico.Valor into the Ult. Disp cell (via updateUltDispCell), 
+      or — when there is no OCR historico—used after failed barra, timeout, 
+      or complete barra without molecula_id
+    */
     if (!modalContent || articleNumero == null || articleNumero === '') return;
     var an = String(articleNumero);
     var arts = (lastResultForJsonCopy && lastResultForJsonCopy.Articulos) || [];
@@ -2971,6 +3025,12 @@
   }
 
   function applyHistoricalDispForRow(articleNumero, codMol) {
+    /*
+    For a given article row (articleNumero) and SAP molecula_id (CodMol), 
+    it asks the cached historical-dispensations list for the current patient document, 
+    computes the sum of CantidadDispensada for that CodMol, then fills the Ult. Disp cell. 
+    If there is no document or no CodMol, it falls back to restoreUltDispFromOcr
+    */
     if (!modalContent || articleNumero == null || articleNumero === '') return;
     var an = String(articleNumero);
     var doc = String(lastOcrNumeroDocumentoPaciente || '').trim();
@@ -2981,6 +3041,24 @@
     fetchHistoricalDispensacionesList(doc).then(function(list) {
       var total = sumCantidadDispensadaByCodMol(list, codMol);
       updateUltDispCell(an, String(total));
+    });
+  }
+
+  function scheduleInitialCantDisp(articles) {
+    /*
+    For articles whose Ult. Disp cell is already resolved at render time (no spinner),
+    compute and write Cant. Disp. immediately and patch the jsonBlock.
+    Articles with a pending historico spinner are handled later by updateUltDispCell.
+    */
+    if (!modalContent) return;
+    (articles || []).forEach(function(a) {
+      var numero = a.Numero != null ? String(a.Numero) : '';
+      if (!numero) return;
+      var ultDispEl = modalContent.querySelector(
+        '[data-ocr-historico-article-numero="' + numero + '"]'
+      );
+      if (!ultDispEl || ultDispEl.classList.contains('ocr-historico-cell--pending')) return;
+      updateCantDispCell(numero, parseFloat(ultDispEl.textContent));
     });
   }
 
@@ -3010,6 +3088,8 @@
       createTooltip('?', 'Esta es la cantidad equivalente a un mes') +
       '</th><th>Ult.<br>Disp' +
       createTooltip('?', 'Cantidad dispensada en los últimos 25 días') +
+      '</th><th>Cant.<br>Disp.' +
+      createTooltip('?', 'Cantidad a dispensar') +
       '</th></tr></thead>';
     const bodyRows = arts.map(function(a) {
       var numero = a.Numero != null ? String(a.Numero) : '';
@@ -3023,6 +3103,10 @@
         a.Cantidad && a.Cantidad.Historico && a.Cantidad.Historico.Valor != null
           ? String(a.Cantidad.Historico.Valor)
           : '';
+      var cantMesNum =
+        a.Cantidad && a.Cantidad.Dispensada && a.Cantidad.Dispensada.Valor != null
+          ? parseFloat(String(a.Cantidad.Dispensada.Valor))
+          : NaN;
       var nombreInterno =
         a.NombreInterno != null && a.NombreInterno !== ''
           ? String(a.NombreInterno)
@@ -3040,7 +3124,7 @@
           job.sap_article.descripcion != null &&
           job.sap_article.descripcion !== ''
         ) {
-          nombreInterno = String(job.sap_article.descripcion);
+          nombreInterno = `${String(job.sap_article.descripcion)} (${job.sap_article.molecula_id})`;
         }
       }
 
@@ -3085,6 +3169,24 @@
         historicoCellInner = escapeHtml(historico !== '' ? historico : '—');
       }
 
+      var cantDispTdClass = 'ocr-cantdisp-val';
+      var cantDispCellHtml;
+      if (showHistoricoSpinner) {
+        cantDispTdClass += ' ocr-historico-cell--pending';
+        cantDispCellHtml =
+          '<span class="ocr-inline-spinner-wrap" aria-busy="true">' +
+          '<span class="ocr-inline-spinner"></span>' +
+          '<span class="sr-only">Calculando cantidad a dispensar</span></span>';
+      } else {
+        var ultDispInitial = historico !== '' ? parseFloat(historico) : NaN;
+        var cantDispInitial =
+          isFinite(cantMesNum) && isFinite(ultDispInitial)
+            ? Math.max(0, cantMesNum - ultDispInitial)
+            : null;
+        cantDispCellHtml =
+          cantDispInitial !== null ? escapeHtml(String(Math.round(cantDispInitial))) : '—';
+      }
+
       var secondaryInfo = '';
       if (formaFarm || frecuencia) {
         var parts = [];
@@ -3114,14 +3216,13 @@
       }
       row1 +=
         '</td><td>' + escapeHtml(cantidad) +
-        '</td><td class="' +
-        historicoTdClass +
-        '"' +
-        (numero
-          ? ' data-ocr-historico-article-numero="' + escapeHtml(numero) + '"'
-          : '') +
-        '>' +
-        historicoCellInner +
+        '</td><td class="' + historicoTdClass + '"' +
+        (numero ? ' data-ocr-historico-article-numero="' + escapeHtml(numero) + '"' : '') +
+        '>' + historicoCellInner +
+        '</td><td class="' + cantDispTdClass + '"' +
+        (numero ? ' data-ocr-cantdisp-article-numero="' + escapeHtml(numero) + '"' : '') +
+        (isFinite(cantMesNum) ? ' data-ocr-cantmes="' + cantMesNum + '"' : '') +
+        '>' + cantDispCellHtml +
         '</td></tr>';
 
       var niHtml;
@@ -3143,7 +3244,7 @@
 
       var row2 =
         '<tr class="ocr-article-row ocr-article-row--secondary">' +
-        '<td colspan="3" class="ocr-article-nombreinterno' +
+        '<td colspan="4" class="ocr-article-nombreinterno' +
         (showPending ? ' ocr-barra-cell--pending' : '') +
         '"' +
         (jobId ? ' data-ocr-nombreinterno-job="' + jobId + '"' : '') +
@@ -3220,6 +3321,7 @@
     
     scheduleBarraPolling(payload.barra_jobs || [], payload.result.IPS);
     scheduleInitialHistoricalDisp(payload.barra_jobs || []);
+    scheduleInitialCantDisp(r.Articulos || []);
 
     lastTransactionId = payload.transaction_id;
     discardBtn.hidden = !payload.transaction_id;
