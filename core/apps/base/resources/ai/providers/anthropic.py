@@ -37,7 +37,7 @@ class AnthropicStructuredVisionProvider(AnthropicProvider):
     Streaming avoids SDK non-streaming timeouts on large vision + JSON responses.
     """
         
-    @retry(retry=retry_if_exception_type(ValidationError), stop=stop_after_attempt(5), reraise=True)
+    @retry(retry=retry_if_exception_type(ValidationError), stop=stop_after_attempt(2), reraise=True)
     def run_vision_json_schema(
         self, request: VisionStructuredRequest
     ) -> VisionStructuredResult:
@@ -93,7 +93,8 @@ class AnthropicStructuredVisionProvider(AnthropicProvider):
             raise ValueError('El modelo devolvió JSON inválido.') from e
         except ValidationError as e:
             log.error(f'Json inesperado por parte del LLM: {e}')
-            raise
+            missing_fields = ' '.join([error.get('loc', ("",""))[0] for error in e.errors()])
+            raise ValueError(f'Los siguientes campos no fueron encontrados al leerse la foto: {missing_fields}')
         except Exception as e:
             log.error(f'Error inesperado: {e}')
             raise ValueError(e)

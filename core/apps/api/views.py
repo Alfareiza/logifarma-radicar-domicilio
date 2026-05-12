@@ -330,7 +330,7 @@ def prescription_ocr_run(request) -> Response:
         )
     if outcome.error == 'llm':
         return Response(
-            {'detail': 'El servicio de OCR falló. Intente de nuevo más tarde.'},
+            {'detail': f'El servicio de OCR falló. {outcome.reason or ""}'},
             status=status.HTTP_502_BAD_GATEWAY,
         )
 
