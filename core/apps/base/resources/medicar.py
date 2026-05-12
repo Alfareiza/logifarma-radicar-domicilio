@@ -249,7 +249,7 @@ def validate_historico_dispensados(raw: object) -> HistoricoDispensados:
     :raises pydantic.ValidationError: if list items do not match the schema.
     """
     if not isinstance(raw, list):
-        msg = "La respuesta de historico dispensaciones debe ser una lista; se recibió {raw}"
+        msg = f"La respuesta de historico dispensaciones debe ser una lista; se recibió {raw}"
         raise TypeError(msg)
     return HistoricoDispensados.model_validate(raw)
 
