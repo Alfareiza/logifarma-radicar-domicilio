@@ -27,10 +27,9 @@ Active ingredient stems (strip salt descriptors like "clorhidrato de", "hidroclo
 - Price-regulated (regulado = 'S') — indicates official recognition in the formulary
 - Most recent purchase activity (ultima_compra) — signals real inventory movement
 Complete commercial identity — valid barcode, known brand (marca ≠ 'NA') Present the winning record with a concise justification of why it outscored the others.
-Do not return the entire record, only the "barra" value which is usually an integer with more than 5 ditigs.
+Do not return the entire record, only the "barra" value which is usually an integer with between 5 up to 20 ditigs.
 Return the value of the "barra" and no more than that. Avoid explanations and additional information besides than "barra"
 """
-
 
 def build_barra_lookup_user_prompt(*, nombre_articulo: str) -> str:
     safe = (nombre_articulo or '').strip()
