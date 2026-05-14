@@ -12,7 +12,7 @@ from core.settings import logger
 
 class MutualserManager(models.Manager):
     def get_by_doc(self, tipo, doc):
-        return self.filter(documento=doc, tipo_documento=tipo).first()
+        return self.filter(documento=doc, tipo_documento=tipo).order_by().only("nombres", "apellido").first()
 
 
 class Mutualser(models.Model):
