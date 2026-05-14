@@ -1834,7 +1834,7 @@
               <div class="patient-compact-col">
                 <span class="patient-compact-label">Documento</span>
                 <span class="patient-compact-value">
-                  <span class="copy-value" id="numero_documento_paciente" solo_documento="{{rad.numero_documento_paciente}}">{{ rad.tipo_documento_paciente|default:"--" }}{{ rad.numero_documento_paciente|default:"--" }}</span>
+                  <span class="copy-value" id="numero_documento_paciente" solo_documento="{{rad.numero_documento_paciente}}">{{ rad.tipo_documento_paciente|default:"CC" }}{{ rad.numero_documento_paciente|default:"--" }}</span>
                   {% if rad.paciente_cc %}
                   <button type="button" class="copy-btn" data-copy-text="{{ rad.paciente_cc }}" aria-label="Copiar documento">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

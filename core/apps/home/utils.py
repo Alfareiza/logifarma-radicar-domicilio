@@ -558,6 +558,18 @@ def user_is_authenticated(user):
         return user.is_authenticated()
 
 
+def month_start_datetime(year: int, month: int) -> datetime.datetime:
+    """First moment of the calendar month (naive; matches USE_TZ=False)."""
+    return datetime.datetime(year, month, 1)
+
+
+def month_end_exclusive(year: int, month: int) -> datetime.datetime:
+    """First moment of the *next* calendar month."""
+    if month == 12:
+        return datetime.datetime(year + 1, 1, 1)
+    return datetime.datetime(year, month + 1, 1)
+
+
 def get_last_month_and_year(dt: 'datetime') -> Tuple:
     if dt.month == 1:
         previous_month = 12
