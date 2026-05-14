@@ -1945,7 +1945,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
                   </svg>
                 </span>
-                <h2 id="ocr-section-title" class="section-header__title mb-0">Información de la autorización</h2>
+                <h2 id="ocr-section-title" class="section-header__title mb-0">Información de la prescripción</h2>
               </div>
               <div class="ocr-header-actions ms-auto" id="ocrHeaderActions">
                 <span id="ocrSourceBadge" class="ocr-badge ocr-badge--header" hidden></span>
@@ -2744,7 +2744,7 @@
       var ni = data.sap_article.descripcion || '';
       var barra = data.sap_article.barra || '';
       niEl.innerHTML =
-        escapeHtml(ni) +
+        escapeHtml(ni) + ` (${escapeHtml(data.sap_article.molecula_id)})` +
         (barra
           ? ' <span class="ocr-barra-inline">· ' + escapeHtml(barra) + '</span>'
           : '');
@@ -2757,7 +2757,7 @@
   }
 
   function pollBarraJobOnce(jobId, articleNombre, ips, attempt, articleNumero) {
-    // console.log("About to pollBarraJobOnce", jobId, articleNombre, ips, attempt);
+    console.log("About to pollBarraJobOnce", jobId, articleNombre, ips, attempt);
     attempt = attempt || 0;
     if (attempt >= BARRA_POLL_MAX_ATTEMPTS) {
       var timeoutData = {
@@ -2790,25 +2790,21 @@
         return res.json();
       })
       .then(function(data) {
+        // console.log(`Al llamar search-barra de ${articleNombre}, el resultado fue `, data)
         if (!data || data.detail === 'job_not_found') return null;
         if (data.status === 'completado' || data.status === 'fallido') {
+          // console.log(`Actualizando data ${articleNombre}:\n\t\t jobId=${jobId}, articleNumero=${articleNumero}, data.article_numero=${data.article_numero}`)
           updateBarraJobDom(jobId, data);
           appendBarraJobMetaRow(data);
-          var an =
-            data.article_numero != null
-              ? String(data.article_numero)
-              : articleNumero != null
-                ? String(articleNumero)
-                : '';
           if (
             data.status === 'completado' &&
             data.sap_article &&
             data.sap_article.molecula_id != null &&
             String(data.sap_article.molecula_id).trim() !== ''
           ) {
-            applyHistoricalDispForRow(an, String(data.sap_article.molecula_id));
+            applyHistoricalDispForRow(articleNumero, String(data.sap_article.molecula_id));
           } else {
-            restoreUltDispFromOcr(an);
+            restoreUltDispFromOcr(articleNumero);
           }
           return data;
         }
@@ -2827,7 +2823,7 @@
         });
       })
       .catch(function(error) {
-        console.error('Error polling barra job', jobId, articleNombre, ips, attempt,error);
+        console.error('Error polling barra job', jobId, articleNombre, ips, attempt, res, error);
         return new Promise(function(resolve) {
           setTimeout(function() {
             resolve(
@@ -2961,9 +2957,7 @@
     */
     if (!modalContent || articleNumero == null || articleNumero === '') return;
     var an = String(articleNumero);
-    var el = modalContent.querySelector(
-      '[data-ocr-historico-article-numero="' + an + '"]'
-    );
+    var el = modalContent.querySelector('[data-ocr-historico-article-numero="' + an + '"]');
     if (!el) return;
     el.classList.remove('ocr-historico-cell--pending');
     el.textContent = text === undefined || text === null ? '' : String(text);
@@ -3039,9 +3033,9 @@
   function applyHistoricalDispForRow(articleNumero, codMol) {
     /*
     For a given article row (articleNumero) and SAP molecula_id (CodMol), 
-    it asks the cached historical-dispensations list for the current patient document, 
-    computes the sum of CantidadDispensada for that CodMol, then fills the Ult. Disp cell. 
-    If there is no document or no CodMol, it falls back to restoreUltDispFromOcr
+      it asks the cached historical-dispensations list for the current patient document, 
+      calculates the sum of CantidadDispensada for that CodMol, then fills the "Ult. Disp" cell. 
+      If there is no document or no CodMol, it falls back to restoreUltDispFromOcr
     */
     if (!modalContent || articleNumero == null || articleNumero === '') return;
     var an = String(articleNumero);
@@ -3130,13 +3124,13 @@
 
       if (job && job.status === 'completado' && job.sap_article) {
         if (job.sap_article.barra != null && job.sap_article.barra !== '') {
-          barra = String(job.sap_article.barra);
+          barra = job.sap_article.barra;
         }
         if (
           job.sap_article.descripcion != null &&
           job.sap_article.descripcion !== ''
         ) {
-          nombreInterno = `${String(job.sap_article.descripcion)} (${job.sap_article.molecula_id})`;
+          nombreInterno = job.sap_article.descripcion;
         }
       }
 
@@ -3248,7 +3242,7 @@
           (job.error_message || 'Sin coincidencia').slice(0, 240)
         );
       } else {
-        niHtml = nombreInterno ? escapeHtml(nombreInterno) : '';
+        niHtml = nombreInterno;
         if (barra) {
           niHtml += ' <span class="ocr-barra-inline">· ' + escapeHtml(barra) + '</span>';
         }
