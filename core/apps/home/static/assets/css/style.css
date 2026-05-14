@@ -2301,15 +2301,6 @@ p.text-muted {
 .pcoded-navbar.navbar-collapsed .header-logo {
   width: 80px;
 }
-.pcoded-navbar.navbar-collapsed .header-logo img {
-  -webkit-transform: rotateY(-90deg);
-          transform: rotateY(-90deg);
-  -webkit-transform-origin: 0 0;
-          transform-origin: 0 0;
-  opacity: 0;
-  -webkit-transition: unset;
-  transition: unset;
-}
 .pcoded-navbar.navbar-collapsed .header-logo .logo-thumb {
   -webkit-transform: rotateY(0deg);
           transform: rotateY(0deg);
