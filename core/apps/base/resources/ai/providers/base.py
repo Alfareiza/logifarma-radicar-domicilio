@@ -166,9 +166,9 @@ class PrescriptionOCRResult(BaseModel):
     @field_validator('TipoDocumentoPaciente', mode='after')
     @classmethod
     def normalize_tipodocumentopaciente(cls, v: str) -> str:
-        tipo_documento = remove_accents(v.lower().strip())
+        tipo_documento = remove_accents(v.upper().strip())
         match tipo_documento:
-            case 'cedula de ciudadania':
+            case 'CEDULA DE CIUDADANIA':
                 return "CC"
             case _:
                 return tipo_documento
