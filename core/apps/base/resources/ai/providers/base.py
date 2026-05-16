@@ -10,7 +10,7 @@ import anthropic
 from pydantic import BaseModel, BeforeValidator, PlainSerializer, field_validator, model_validator
 
 from core.settings import ANTHROPIC_API_KEY, logger
-from core.apps.base.resources.tools import remove_accents
+from core.apps.base.resources.tools import remove_accents, purge_ocr_text
 
 
 @dataclass(frozen=True, slots=True)
@@ -172,7 +172,12 @@ class PrescriptionOCRResult(BaseModel):
                 return "CC"
             case _:
                 return tipo_documento
-
+    
+        
+    @field_validator('NombreMedico', mode='after')
+    @classmethod
+    def normalize_nombremedico(cls, v: str) -> str:
+        return purge_ocr_text(remove_accents(v.strip()))
 
     @property
     def diagnostico_principal(self) -> str:

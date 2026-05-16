@@ -545,3 +545,27 @@ def remove_accents(text: str) -> str:
     
     # Re-normalize back to 'NFC' (Normal Form Composition) for clean output
     return unicodedata.normalize('NFC', result)
+
+
+def purge_ocr_text(text: str) -> str:
+    """Remove known OCR artefacts from extracted text.
+
+    Strips each string in the unwanted list from the input, preserving
+    the original casing of any text that is kept.
+
+    Args:
+        text: Raw text returned by an OCR or AI extraction step.
+
+    Returns:
+        The cleaned text with all unwanted strings removed.
+
+    Example:
+        >>> purge_ocr_text("Paracetamol UNDEFINED 500mg")
+        'Paracetamol  500mg'
+    """
+    _OCR_UNWANTED_STRINGS: list[str] = [
+        "UNDEFINED", "N/A","NULL"
+    ]
+    for unwanted in _OCR_UNWANTED_STRINGS:
+        text = text.replace(unwanted, "")
+    return text
