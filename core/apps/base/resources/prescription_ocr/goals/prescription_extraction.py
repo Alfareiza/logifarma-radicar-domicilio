@@ -169,6 +169,9 @@ Rules:
 - The value for Descripcion in Cantidad should not contains the word "FRASCO" or "FRASCOS"
 - The value for Descripcion in Cantidad should not contains the word "SOBRES" or "SOBRE"
 - The value for Descripcion in Cantidad should not contains the word "CAJA" or "CAJAS"
+
+#### General guidelines:
+- The image has no text such as "UNDEFINED", so this text shouldn't be read in anywhere in the image
 """
 
 
