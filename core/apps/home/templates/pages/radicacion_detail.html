@@ -2443,7 +2443,7 @@
     });
     var triple = { headings: OCR_PACIENTE_TRIPLE.headings, values: vals };
     var pairs = OCR_PACIENTE_PAIRS.map(function(d) {
-      return { label: d.label, value: r[d.key] };
+      return { label: d.label, value: r[d.key] || 'No encontrado' };
     });
     return buildOcrKvSection('', triple, pairs);
   }
