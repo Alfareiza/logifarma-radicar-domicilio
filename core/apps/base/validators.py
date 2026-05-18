@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from decouple import config, Csv
 from django import forms
 from django.core.exceptions import ValidationError
-from django.db.models import Q, QuerySet
+from django.db.models import Q
 from django.template.loader import get_template
 from django.urls import reverse
 from django.utils import timezone
@@ -298,9 +298,8 @@ def validate_empty_response(resp_eps: dict, documento: str, entidad: str) -> Val
             })
 
 
-def announce_pending_radicado_and_render_buttons(existing_radicados: 'QuerySet') -> ValidationError:
+def announce_pending_radicado_and_render_buttons(rad: Radicacion) -> ValidationError:
     """Raise an exception with "entiendo" button and "solicitar fórmula nueva" button conditionally."""
-    rad = existing_radicados.first()
     template_btn = get_template('base/btn_in_modal.html')
     new_formula = template_btn.render({'id': 'new_formula', 'txt': 'Solicitar fórmula nueva',
                                        'bgcolor': 'white', 'txtcolor': '#2a57a9', 'widthbox': 22})
@@ -320,13 +319,13 @@ def announce_pending_radicado_and_render_buttons(existing_radicados: 'QuerySet')
 
 def validate_recent_radicado(tipo: str, value: str, convenio: str):
     """Check that the user with more than one radicado is notified that he has pending filings."""
-    existing_radicados = Radicacion.objects.filter(
+    pending = Radicacion.objects.filter(
         paciente_cc=f'{tipo}{value}', convenio=convenio, acta_entrega__isnull=True
-    ).only('id', 'datetime', 'paciente_data')
-    existing_radicados_count = existing_radicados.count()
-    if existing_radicados_count >= 1:
-        logger.info(f"{tipo}{value} ha sido avisado que tiene {existing_radicados_count} radicacion(es) pendiente(es).")
-        announce_pending_radicado_and_render_buttons(existing_radicados)
+    ).only('id', 'datetime', 'paciente_data', 'convenio', 'numero_radicado').order_by('-datetime')
+    if pending.exists():
+        rad = pending.first()
+        logger.info(f"{tipo}{value} ha sido avisado que tiene radicacion(es) pendiente(s).")
+        announce_pending_radicado_and_render_buttons(rad)
 
 
 def validate_resp_zona_ser(scrapper: ScrapMutualSer):
