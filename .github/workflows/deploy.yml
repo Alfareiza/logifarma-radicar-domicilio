@@ -1,0 +1,108 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  APP_DIR: /home/ubuntu/Projects/domicilios
+  SERVICE: gunicorn-domicilios
+  HEALTH_URL: https://domicilios.logifarma.com.co/login/
+  SSH_PORT: "22"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/vps_key
+          chmod 600 ~/.ssh/vps_key
+          ssh-keyscan -p "$SSH_PORT" -H "$VPS_HOST" >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Deploy over SSH
+        id: deploy
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/vps_key \
+            -p "$SSH_PORT" \
+            -o IdentitiesOnly=yes \
+            -o BatchMode=yes \
+            "${VPS_USER}@${VPS_HOST}" \
+            "APP_DIR='${APP_DIR}' SERVICE='${SERVICE}' bash -s" \
+            < .github/scripts/deploy.sh
+
+      - name: Health check
+        id: health
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          for i in 1 2 3 4 5; do
+            echo "Attempt $i/5: GET ${HEALTH_URL}"
+            code="$(curl -sS -o /tmp/health_body -w '%{http_code}' \
+              --connect-timeout 10 \
+              --max-time 30 \
+              "$HEALTH_URL" || true)"
+            echo "HTTP status: $code"
+            if [ "$code" = "200" ]; then
+              echo "Health check passed"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Health check failed after 5 attempts" >&2
+          exit 1
+
+      - name: Roll back on health-check failure
+        if: steps.health.outcome == 'failure'
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          set -euo pipefail
+          echo "Health check failed; rolling back on VPS..."
+          ssh -i ~/.ssh/vps_key \
+            -p "$SSH_PORT" \
+            -o IdentitiesOnly=yes \
+            -o BatchMode=yes \
+            "${VPS_USER}@${VPS_HOST}" \
+            "APP_DIR='${APP_DIR}' SERVICE='${SERVICE}' bash -s" \
+            < .github/scripts/rollback.sh
+
+      - name: Fail if health check failed
+        if: steps.health.outcome == 'failure'
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          set -euo pipefail
+          migrations="$(ssh -i ~/.ssh/vps_key \
+            -p "$SSH_PORT" \
+            -o IdentitiesOnly=yes \
+            -o BatchMode=yes \
+            "${VPS_USER}@${VPS_HOST}" \
+            "cat '${APP_DIR}/.deploy_migrations_changed' 2>/dev/null || echo 0")"
+          echo "::error::Deploy health check failed; code was rolled back on the VPS."
+          if [ "$migrations" = "1" ]; then
+            echo "::warning::Migrations were applied to the production database during this deploy and were NOT reversed. Inspect RDS and intervene manually if needed."
+          fi
+          exit 1
