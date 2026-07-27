@@ -219,7 +219,7 @@ class MutualSerAutorizacion(CustomSessionWizard):
             form = self.get_form(
                 step=args[0],
                 data=self.storage.get_step_data(args[0]),
-                files=self.storage.get_step_files(args[0])
+                files=self.get_step_files_safe(args[0])
             )
 
         # Set the current step
@@ -251,6 +251,8 @@ class MutualSerAutorizacion(CustomSessionWizard):
             try:
                 files = self.storage.get_step_files(form_key)
             except FileNotFoundError:
+                self._clear_stale_step_files(form_key)
+                files = None
                 logger.info(f"tmp/ -> {list(self.file_storage.base_location.iterdir())}")
                 logger.info("IMAGEN ELIMINADA... NO EXISTE MAS !!!!")
                 notify(

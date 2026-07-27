@@ -151,6 +151,38 @@ class CustomSessionWizard(SessionWizardView):
         # logger.info(f"{self.request.COOKIES.get('sessionid')[:6]} Al salir de {self.steps.current} las vistas son {list(ls_form_list)}")
         return self.get_form_step_data(form)
 
+    def _clear_stale_step_files(self, step) -> None:
+        """Drop session + in-memory refs for a step whose file is gone from disk."""
+        self.storage.data.setdefault(self.storage.step_files_key, {})[step] = {}
+        for key in [k for k in self.storage._files if k[0] == step]:
+            del self.storage._files[key]
+
+    def get_step_files_safe(self, step):
+        """
+        Like storage.get_step_files, but if the file is missing on disk clear the
+        stale session reference and return None instead of raising.
+        """
+        try:
+            return self.storage.get_step_files(step)
+        except FileNotFoundError:
+            logger.warning(
+                "Archivo ausente para paso %r; limpiando referencia en sesión",
+                step,
+            )
+            self._clear_stale_step_files(step)
+            return None
+
+    def render_next_step(self, form, **kwargs):
+        """Advance to the next step; tolerate missing wizard files on disk."""
+        next_step = self.steps.next
+        new_form = self.get_form(
+            next_step,
+            data=self.storage.get_step_data(next_step),
+            files=self.get_step_files_safe(next_step),
+        )
+        self.storage.current_step = next_step
+        return self.render(new_form, **kwargs)
+
     def render_goto_step(self, *args, **kwargs):
         """
         Es ejecutado cuando se clica en el botón "Atrás", y en caso de clicar
@@ -172,7 +204,13 @@ class CustomSessionWizard(SessionWizardView):
         form = self.get_form(data=self.request.POST, files=self.request.FILES)
         # self.storage.set_step_data(self.steps.current, self.process_step(form))
         self.storage.set_step_files(self.steps.first, self.process_step_files(form))
-        return super().render_goto_step(*args, **kwargs)
+        goto_step = args[0]
+        self.storage.current_step = goto_step
+        form = self.get_form(
+            data=self.storage.get_step_data(self.steps.current),
+            files=self.get_step_files_safe(self.steps.current),
+        )
+        return self.render(form)
 
     def get_form(self, step=None, data=None, files=None):
         """
@@ -213,6 +251,8 @@ class CustomSessionWizard(SessionWizardView):
             try:
                 files = self.storage.get_step_files(form_key)
             except FileNotFoundError:
+                self._clear_stale_step_files(form_key)
+                files = None
                 logger.info(f"tmp/ -> {list(self.file_storage.base_location.iterdir())}")
                 logger.info("IMAGEN ELIMINADA... NO EXISTE MAS !!!!")
                 notify(
