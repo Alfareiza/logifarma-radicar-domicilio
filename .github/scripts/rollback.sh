@@ -10,6 +10,15 @@ SERVICE="${SERVICE:-gunicorn-domicilios}"
 
 cd "$APP_DIR"
 
+if [[ -x .venv/bin/python3.10 ]]; then
+  PYTHON=".venv/bin/python3.10"
+elif [[ -x .venv/bin/python ]]; then
+  PYTHON=".venv/bin/python"
+else
+  echo "ERROR: no Python interpreter found under .venv/bin" >&2
+  exit 1
+fi
+
 if [[ ! -f .deploy_prev_sha ]]; then
   echo "ERROR: .deploy_prev_sha not found; cannot roll back" >&2
   exit 1
@@ -19,18 +28,19 @@ PREV_SHA="$(cat .deploy_prev_sha)"
 FAILED_SHA="$(git rev-parse HEAD)"
 
 echo "==> Rolling back from $FAILED_SHA to $PREV_SHA"
+echo "==> Using Python: $PYTHON"
 
 git reset --hard "$PREV_SHA"
 
 if ! git diff --quiet "$FAILED_SHA" "$PREV_SHA" -- requirements.txt; then
   echo "==> requirements.txt differs from failed revision; reinstalling..."
-  .venv/bin/pip install -r requirements.txt
+  "$PYTHON" -m pip install -r requirements.txt
 else
   echo "==> requirements.txt unchanged vs failed revision; skipping pip install"
 fi
 
 echo "==> Running collectstatic..."
-.venv/bin/python manage.py collectstatic --noinput
+"$PYTHON" manage.py collectstatic --noinput
 
 echo "==> Reloading $SERVICE..."
 sudo systemctl daemon-reload
