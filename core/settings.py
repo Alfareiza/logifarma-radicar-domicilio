@@ -24,6 +24,12 @@ from urllib3.exceptions import InsecureRequestWarning
 # Some EPS HTTP clients call requests with verify=False (see call_api_eps).
 warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 
+# rpaframework logs truststore/certifi INFO on import (RPA.core.certificates); filter
+# survives its init_logger() resetting the logger level during worker boot.
+logging.getLogger("RPA.core.certificates").addFilter(
+    lambda record: record.levelno > logging.INFO
+)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
