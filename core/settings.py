@@ -180,7 +180,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'tmp'
 
 # STATICFILES_DIRS = [BASE_DIR / "build/static", BASE_DIR / "build"]
-STATICFILES_DIRS = [BASE_DIR / "frontend/dist"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
