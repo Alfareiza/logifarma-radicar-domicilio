@@ -72,7 +72,6 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'corsheaders',
     'debug_toolbar',
-    'django_vite',
 ]
 
 MIDDLEWARE = [
