@@ -184,11 +184,6 @@ STATICFILES_DIRS = [BASE_DIR / "frontend/dist"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
-DJANGO_VITE = {
-  "default": {
-    "dev_mode": DEBUG
-  }
-}
 
 # logger = logging.getLogger('django')
 # logging.basicConfig(format='%(asctime)s - %(message)s')
