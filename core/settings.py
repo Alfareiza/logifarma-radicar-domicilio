@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import logging
+import warnings
 from functools import partial
 from os.path import join
 from pathlib import Path
@@ -18,6 +19,10 @@ import pyrebase
 import sentry_sdk
 from decouple import config
 from dj_database_url import parse
+from urllib3.exceptions import InsecureRequestWarning
+
+# Some EPS HTTP clients call requests with verify=False (see call_api_eps).
+warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -36,7 +41,6 @@ PRODUCTION = config("PRODUCTION", cast=bool, default=False)
 
 ALLOWED_HOSTS = [config('IP', cast=str), 'test-domicilios.logifarma.com.co',
                  'domicilios.logifarma.com.co',
-                 'radicatudomicilio.herokuapp.com',
                  '*']
 #Django debug toolbar
 INTERNAL_IPS = ['127.0.0.1']
@@ -67,7 +71,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'drf_spectacular',
     'corsheaders',
-    "debug_toolbar",
+    'debug_toolbar',
+    'django_vite',
 ]
 
 MIDDLEWARE = [
@@ -176,8 +181,15 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'tmp'
 
 # STATICFILES_DIRS = [BASE_DIR / "build/static", BASE_DIR / "build"]
+STATICFILES_DIRS = [BASE_DIR / "frontend/dist"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
+DJANGO_VITE = {
+  "default": {
+    "dev_mode": DEBUG
+  }
+}
 
 # logger = logging.getLogger('django')
 # logging.basicConfig(format='%(asctime)s - %(message)s')
