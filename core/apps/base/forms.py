@@ -171,7 +171,7 @@ class AutorizacionServicio(forms.Form):
                 params={
                     'modal_type': 'issue_api',
                     'modal_title': f"Pedimos disculpas, pero no pudimos obtener información del número de autorización {num_aut}.",
-                    'modal_body': "Puedes esperar unos minutos e intentar de nuevo o comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+                    'modal_body': "Puedes esperar unos minutos e intentar de nuevo o comunícate con nosotros al <a class='tel' href='tel:3009141888'>300 914 1888</a>.",
                 })
 
         if resp_mcar.get('autorizacion'):
@@ -183,7 +183,7 @@ class AutorizacionServicio(forms.Form):
                 params={
                     'modal_type': 'autorizacion_radicada',
                     'modal_title': f"Esta autorización ({num_aut}) se encuentra radicada en {radicada_en} con el número de acta: {resp_mcar.get('ssc')}.",
-                    'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+                    'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3009141888'>300 914 1888</a>.",
                 })
 
         resp_eps['NUMERO_AUTORIZACION'] = num_aut

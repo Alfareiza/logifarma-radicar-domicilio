@@ -81,7 +81,7 @@ def validate_status(resp_mcar: dict, rad_default: Radicacion) -> ValidationError
         params={
             'modal_type': 'status_radicado',
             'modal_title': text_resp,
-            'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+            'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3009141888'>300 914 1888</a>.",
         })
 
 
@@ -131,7 +131,7 @@ def validate_structure(resp_eps: dict, num_aut: int) -> ValidationError:
             message='Problema con respuesta de API',
             params={'modal_type': 'api_unexpected_response',
                     'modal_title': f"Detectamos un problema interno con el número de autorización {num_aut}.",
-                    'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>."
+                    'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3009141888'>300 914 1888</a>."
                     })
 
 
@@ -167,7 +167,7 @@ def validate_med_controlados(resp_eps: dict, num_aut: int) -> ValidationError:
             params={
                 'modal_type': 'medicamento_controlado',
                 'modal_title': text_resp,
-                'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+                'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3009141888'>300 914 1888</a>.",
             })
 
 
@@ -189,7 +189,7 @@ def validate_panales(resp_eps: dict, num_aut: int) -> ValidationError:
                 'modal_type': 'medicamento_controlado',
                 'modal_title': f"Disculpa {resp_eps['P_NOMBRE'].capitalize()}, no es posible atender tu solicitud por este medio,"
                                f" por favor dirigete al dispensario más cercano de entregas NO PBS.",
-                'modal_body': f"Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>."
+                'modal_body': f"Para más información comunícate con nosotros al <a class='tel' href='tel:3009141888'>300 914 1888</a>."
                               f"<p class='mt-3 text-sm text-gray-500'>Número de autorización {num_aut}.</p>",
             })
 
@@ -216,7 +216,7 @@ def validate_status_afiliado(resp_eps: dict, name_key: str, id_transaction: str)
             params={
                 'modal_type': 'estado_afiliado',
                 'modal_title': "Disculpa, el estado del afiliado no es el esperado. Por favor verifica e intenta nuevamente.",
-                'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+                'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3009141888'>300 914 1888</a>.",
             })
 
 
@@ -231,7 +231,7 @@ def validate_status_aut(resp_eps: dict, num_aut: int) -> ValidationError:
             params={
                 'modal_type': 'autorizacion_inactiva',
                 'modal_title': "El estado de la autorización no está activa.",
-                'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+                'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3009141888'>300 914 1888</a>.",
             })
 
 
@@ -251,7 +251,7 @@ def validate_identificacion_exists(entidad: str, resp: dict, info: str) -> Valid
             params={
                 'modal_type': "status_radicado",
                 'modal_title': f"No hemos podido encontrar información con ese documento en {entidad.title()}.",
-                'modal_body': "Por favor verifica e intenta nuevamente o comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+                'modal_body': "Por favor verifica e intenta nuevamente o comunícate con nosotros al <a class='tel' href='tel:3009141888'>300 914 1888</a>.",
             })
 
 
@@ -294,7 +294,7 @@ def validate_empty_response(resp_eps: dict, documento: str, entidad: str) -> Val
             params={
                 'modal_type': 'status_radicado',
                 'modal_title': "Disculpa, en estos momentos no tenemos conexión.",
-                'modal_body': "Por favor intentalo más tarde o en caso de dudas comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+                'modal_body': "Por favor intentalo más tarde o en caso de dudas comunícate con nosotros al <a class='tel' href='tel:3009141888'>300 914 1888</a>.",
             })
 
 
@@ -386,7 +386,7 @@ def validate_resp_zona_ser(scrapper: ScrapMutualSer):
             params={
                 'modal_type': 'scrapper_failed',
                 'modal_title': "No pudimos procesar tu solicitud en este momento.",
-                'modal_body': "Por favor intenta nuevamente más tarde o comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+                'modal_body': "Por favor intenta nuevamente más tarde o comunícate con nosotros al <a class='tel' href='tel:3009141888'>300 914 1888</a>.",
             })
 
     if msg := scrapper.resultado.get('MSG'):
@@ -400,7 +400,7 @@ def validate_resp_zona_ser(scrapper: ScrapMutualSer):
                              f" {scrapper.resultado.get('MSG')}")
 
         txt_mutualser = "Si consideras que tienes artículos por radicar, por favor comunícate con Mutualser EPS al número <a class='tel' href='tel:018000116882'>018000 116882</a> o <a class='tel' href='tel:#603'>#603</a>."
-        txt_logi = "Para comunicarte con Logifarma, llámanos al <a class='tel' href='tel:3330333124'>333 033 3124</a>."
+        txt_logi = "Para comunicarte con Logifarma, llámanos al <a class='tel' href='tel:3009141888'>300 914 1888</a>."
         raise forms.ValidationError(
             message='Scrapper falló y se obtuvo el mensaje de la falla.',
             params={
@@ -506,7 +506,7 @@ def validate_numeros_bloqueados(cel: int):
             params={
                 'modal_type': 'blocked_number',
                 'modal_title': f"Disculpa, el número de celular {cel} está restringido.{motivo_html}",
-                'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3330333124'>333 033 3124</a>.",
+                'modal_body': "Para más información comunícate con nosotros al <a class='tel' href='tel:3009141888'>300 914 1888</a>.",
             }
         )
 
