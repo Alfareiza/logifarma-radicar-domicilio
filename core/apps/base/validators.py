@@ -293,7 +293,7 @@ def validate_empty_response(resp_eps: dict, documento: str, entidad: str) -> Val
             message=msg,
             params={
                 'modal_type': 'status_radicado',
-                'modal_title': "Disculpa, en estos momentos no tenemos conexión.",
+                'modal_title': f"No hemos podido encontrar información con ese documento en {entidad.title()}.",
                 'modal_body': "Por favor intentalo más tarde o en caso de dudas comunícate con nosotros al <a class='tel' href='tel:3009141888'>300 914 1888</a>.",
             })
 
