@@ -133,3 +133,7 @@ staticfiles/
 stored.pickle
 
 temp/
+
+# Cursor
+.cursor/
+memory-bank/
