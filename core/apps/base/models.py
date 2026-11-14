@@ -475,6 +475,31 @@ class UsuariosRestringidos(Model):
         return super(UsuariosRestringidos, self).save(*args, **kwargs)
 
 
+class UsuariosPermitidosPanales(Model):
+    """Allowlist: documentos que pueden radicar pañales sin historial reciente."""
+    created_at = DateTimeField(auto_now_add=True)
+    tipo_documento = CharField(max_length=20)
+    documento = CharField(max_length=30)
+    registrado_por = ForeignKey(User, on_delete=CASCADE, null=True, blank=True)
+    motivo = CharField(max_length=120, blank=True, null=True)
+
+    def __str__(self):
+        return f'<Usuario Permitido Pañales : {self.tipo_documento}{self.documento}>'
+
+    class Meta:
+        db_table = 'base_usuarios_permitidos_panales'
+        constraints = [
+            UniqueConstraint(
+                fields=['tipo_documento', 'documento'],
+                name='unique_tipo_documento_documento_panales',
+            ),
+        ]
+
+    def save(self, *args, **kwargs):
+        self.motivo = self.motivo.lower() if self.motivo else None
+        return super().save(*args, **kwargs)
+
+
 from django.db import models
 
 from core.settings import logger

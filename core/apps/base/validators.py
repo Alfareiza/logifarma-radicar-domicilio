@@ -12,7 +12,7 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 
 from core.apps.base.models import Med_Controlado, Radicacion, ScrapMutualSer, Status, CelularesRestringidos, OtpSMS, \
-    UsuariosRestringidos
+    UsuariosRestringidos, UsuariosPermitidosPanales
 from core.apps.base.resources.api_calls import get_firebase_acta
 from core.apps.base.resources.sms_helpers import Sms, send_sms_verification_code
 from core.apps.base.resources.tools import encrypt, notify, pretty_date, \
@@ -175,13 +175,18 @@ def validate_panales(resp_eps: dict, num_aut: int) -> ValidationError:
     """Valida que el usuario pueda radicar pañales."""
     cutoff = timezone.now() - timedelta(days=90)
     not_allowed = []  # Lista de municipios
+    documento = resp_eps['DOCUMENTO_ID']
+    tipo = (resp_eps.get('TIPO_IDENTIFICACION') or '').strip()
+    permitido_qs = UsuariosPermitidosPanales.objects.filter(documento=documento)
+    if tipo:
+        permitido_qs = permitido_qs.filter(tipo_documento=tipo)
 
     if (
             "PANALES" in str(resp_eps['DETALLE_AUTORIZACION']) and
             resp_eps['SEDE_AFILIADO'].strip().lower() not in not_allowed and not Radicacion.objects.filter(
-        paciente_cc=resp_eps['DOCUMENTO_ID'], datetime__gte=cutoff,
+        paciente_cc=documento, datetime__gte=cutoff,
         paciente_data__DETALLE_AUTORIZACION__contains=[{"NOMBRE_PRODUCTO": "PANALES"}]
-    ).exists()):
+    ).exists() and not permitido_qs.exists()):
         logger.warning(f'{num_aut} Usuario intentando radicar pañales por primera vez')
         raise forms.ValidationError(
             message='Pañales bloqueados.',
