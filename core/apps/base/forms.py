@@ -1,6 +1,13 @@
 from django import forms
 
-from core.apps.base.models import Barrio, Municipio, Radicacion, UsuariosRestringidos
+from core.apps.base.constants import IDENTIFICACIONES
+from core.apps.base.models import (
+    Barrio,
+    Municipio,
+    Radicacion,
+    UsuariosPermitidosPanales,
+    UsuariosRestringidos,
+)
 from core.apps.base.resources.proteger import obtener_datos_identificacion, obtener_datos_autorizacion
 from core.apps.base.resources.medicar import obtener_datos_formula
 from core.apps.base.resources.tools import read_json
@@ -43,20 +50,6 @@ class SinAutorizacion(forms.Form):
     vista FotoFormulaMedica, sino  responderá con un
     mensaje (modal) de error.
     """
-    IDENTIFICACIONES = (
-        ("CC", "CC - Cédula de ciudadanía"),  # Cédula de ciudadanía
-        ("TI", "TI - Tarjeta de identidad"),  # Tarjeta de identidad
-        ("RC", "RC - Registro civil"),  # Registro civil
-        ("CN", "CN - Certificado de nacido vivo"),  # Certificado de nacido vivo
-        ("CD", "CD - Carné diplomático"),  # Carné diplomático
-        ("PA", "PA - Pasaporte"),  # Pasaporte
-        ("PE", "PE - Permiso especial de pernamencia"),  # Permiso especial de pernamencia
-        ("PT", "PT - Permiso por protección temporal"),  # Permiso por protección temporal
-        ("SC", "SC - Salvo conducto"),  # Salvo conducto
-        ("CE", "CE - Cedula de extranjería"),  # Cedula de extranjería
-        ("MS", "MS - Menor sin ID"),  # Menor sin ID
-        ("AS", "AS - Adulto sin ID"),  # Adulto sin ID
-    )
     tipo_identificacion = forms.ChoiceField(
         choices=IDENTIFICACIONES, label='Tipo de documento',
         widget=forms.Select(attrs={'class': 'custom-select'})
@@ -378,15 +371,27 @@ class DigitaCorreo(forms.Form):
 
 class UsuariosRestringidosForm(forms.ModelForm):
     """
-    Custom form for UsuariosRestringidos with dropdown for tipo_documento
-    Reuses the IDENTIFICACIONES choices from SinAutorizacion form
+    Custom form for UsuariosRestringidos with dropdown for tipo_documento.
     """
     tipo_documento = forms.ChoiceField(
-        choices=SinAutorizacion.IDENTIFICACIONES,
+        choices=IDENTIFICACIONES,
         label='Tipo de documento',
         widget=forms.Select(attrs={'class': 'form-control'})
     )
 
     class Meta:
         model = UsuariosRestringidos
+        fields = ['tipo_documento', 'documento', 'motivo']
+
+
+class UsuariosPermitidosPanalesForm(forms.ModelForm):
+    """Admin form for allowlist of first-time pañales radication."""
+    tipo_documento = forms.ChoiceField(
+        choices=IDENTIFICACIONES,
+        label='Tipo de documento',
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = UsuariosPermitidosPanales
         fields = ['tipo_documento', 'documento', 'motivo']

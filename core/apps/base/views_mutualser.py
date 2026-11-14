@@ -11,6 +11,7 @@ from django.core.exceptions import SuspiciousOperation
 from formtools.wizard.forms import ManagementForm
 
 from core import settings
+from core.apps.base.constants import IDENTIFICACIONES
 from core.apps.base.forms import *
 from core.apps.base.legacy_models import Mutualser
 from core.apps.base.models import ScrapMutualSer
@@ -33,20 +34,6 @@ class DocumentoMutualSer(forms.Form):
     vista FotoFormulaMedica, sino  responderá con un
     mensaje (modal) de error.
     """
-    IDENTIFICACIONES = (
-        ("CC", "CC - Cédula de ciudadanía"),  # Cédula de ciudadanía
-        ("TI", "TI - Tarjeta de identidad"),  # Tarjeta de identidad
-        ("RC", "RC - Registro civil"),  # Registro civil
-        ("CN", "CN - Certificado de nacido vivo"),  # Certificado de nacido vivo
-        ("CD", "CD - Carné diplomático"),  # Carné diplomático
-        ("PA", "PA - Pasaporte"),  # Pasaporte
-        ("PE", "PE - Permiso especial de pernamencia"),  # Permiso especial de pernamencia
-        ("PT", "PT - Permiso por protección temporal"),  # Permiso por protección temporal
-        ("SC", "SC - Salvo conducto"),  # Salvo conducto
-        ("CE", "CE - Cedula de extranjería"),  # Cedula de extranjería
-        ("MS", "MS - Menor sin ID"),  # Menor sin ID
-        ("AS", "AS - Adulto sin ID"),  # Adulto sin ID
-    )
     tipo_identificacion = forms.ChoiceField(
         choices=IDENTIFICACIONES, label='Tipo de documento',
         widget=forms.Select(attrs={'class': 'custom-select'})

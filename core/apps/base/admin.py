@@ -4,8 +4,15 @@ from django.contrib import admin
 from django.http import HttpResponse
 from django import forms
 
-from core.apps.base.models import Municipio, Barrio, Med_Controlado, CelularesRestringidos, UsuariosRestringidos
-from core.apps.base.forms import UsuariosRestringidosForm
+from core.apps.base.models import (
+    Municipio,
+    Barrio,
+    Med_Controlado,
+    CelularesRestringidos,
+    UsuariosRestringidos,
+    UsuariosPermitidosPanales,
+)
+from core.apps.base.forms import UsuariosRestringidosForm, UsuariosPermitidosPanalesForm
 from core.settings import logger
 
 
@@ -89,6 +96,26 @@ class CelularesRestringidosAdmin(admin.ModelAdmin):
 @admin.register(UsuariosRestringidos)
 class UsuariosRestringidosAdmin(admin.ModelAdmin):
     form = UsuariosRestringidosForm
+    list_display = ('registrado_por', 'tipo_documento', 'documento', 'motivo')
+    list_filter = ('registrado_por', 'tipo_documento')
+    search_fields = ('registrado_por__username', 'documento')
+    ordering = ('registrado_por',)
+    exclude = ('registrado_por',)
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.registrado_por = request.user
+        obj.save()
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['documento'].widget.attrs['style'] = 'width: 250px;'
+        return form
+
+
+@admin.register(UsuariosPermitidosPanales)
+class UsuariosPermitidosPanalesAdmin(admin.ModelAdmin):
+    form = UsuariosPermitidosPanalesForm
     list_display = ('registrado_por', 'tipo_documento', 'documento', 'motivo')
     list_filter = ('registrado_por', 'tipo_documento')
     search_fields = ('registrado_por__username', 'documento')
